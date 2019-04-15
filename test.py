@@ -1,10 +1,17 @@
 # coding:utf-8
+"""
 import subprocess
 import os
+import time
 
-os.chdir('D:\\YandexDisk\\Парсинг\\better')
-args = ['python', 'test.py']
-process = subprocess.Popen(args, stdout=subprocess.PIPE, shell=True)
+# os.chdir('D:\\YandexDisk\\Парсинг\\better')
+print(__file__+ ' pid ' +str(os.getpid()))
+args = ['python3.6', 'broker1.py']
+process = subprocess.Popen(args)
+time.sleep(0.25)
+process.terminate()
+print(__file__+ ' end')
+"""
 
 """
 import os
