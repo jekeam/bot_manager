@@ -1,14 +1,14 @@
 # coding: utf-8
 from peewee import *
-import datetime
+import time
 from json import dumps
 from uuid import uuid1
 
 db = SqliteDatabase('bot_manager.db')
 
 def get_trunc_sysdate(days=0):
-    dt = datetime.datetime.now()+datetime.timedelta(days=days)
-    return datetime.datetime(year=dt.year, month=dt.month, day=dt.day)
+    return round(time.time() + days*60*60*24)
+    
 
 class BaseModel(Model):
     class Meta:
@@ -16,24 +16,25 @@ class BaseModel(Model):
         
 class User(BaseModel):
     id = PrimaryKeyField(unique=True)
-    rules = CharField(null=False, default='client')
+    role = CharField(null=False, default='client')
     phone = CharField(null=False)
     email = CharField(null=False)
-    date_start = DateField(null=False, default=get_trunc_sysdate())
-    date_end = DateField(null=False, default=get_trunc_sysdate(30))
+    date_start = IntegerField(null=False, default=get_trunc_sysdate())
+    date_end = IntegerField(null=False, default=get_trunc_sysdate(30))
     
 class Account(BaseModel):
     id = AutoField
     key = CharField(unique=True)
     user = ForeignKeyField(User, backref='accounts')
+    status = CharField(null=False, default='active')
+    work_stat = CharField(null=False, default='stop')
+    pid = IntegerField(null=True)
     work_dir = CharField(null=False)
     properties = CharField(null=False)
     proxies = CharField(null=False)
     accounts = CharField(null=False)
-    status = CharField(null=False, default='active')
-    work_stat = CharField(null=False, default='stop')
-    date_start = DateField(null=False, default=get_trunc_sysdate())
-    date_end = DateField(null=False, default=get_trunc_sysdate(30))
+    date_start = IntegerField(null=False, default=get_trunc_sysdate())
+    date_end = IntegerField(null=False, default=get_trunc_sysdate(30))
 
 
 #API
