@@ -2,3 +2,4 @@ pyTelegramBotAPI
 peewee
 requests
 requests[socks]
+requests[socks5]
