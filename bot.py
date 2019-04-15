@@ -9,7 +9,6 @@ import telegram
 from telegram.error import NetworkError, Unauthorized
 from time import sleep
 
-
 update_id = None
 
 
@@ -18,7 +17,7 @@ def main():
     global update_id
     # Telegram Bot Authorization Token
     TOKEN = '843081630:AAFmVT4hi5R71mgJpojVxOmTGEaZJA-LWYI'
-    request = telegram.utils.request.Request( proxy_url='http://shaggy:hzsyk4@5.188.84.73:8656' )
+    request = telegram.utils.request.Request(proxy_url='http://shaggy:hzsyk4@5.188.84.73:8656')
     bot = telegram.Bot(token=TOKEN, request=request)
 
     # get the first pending update_id, this is so we can skip over it in case
