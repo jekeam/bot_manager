@@ -40,6 +40,15 @@ class Account(BaseModel):
     time_stop = IntegerField(null=True)
     date_start = IntegerField(null=False, default=get_trunc_sysdate())
     date_end = IntegerField(null=False, default=get_trunc_sysdate(30))
+    
+class Message(BaseModel):
+    id = AutoField
+    to_user = IntegerField(null=False)
+    text = CharField(null=True)
+    blob = BlobField(null=True)
+    file_name = CharField(null=True)
+    file_type = CharField(null=True)
+    date_send = IntegerField(null=True)
 
 
 # API
