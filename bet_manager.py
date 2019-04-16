@@ -20,7 +20,7 @@ from meta_ol import ol_url_api, ol_payload, ol_headers, get_xtoken_bet
 from meta_fb import fb_payload, fb_payload_bet, get_random_str, get_dumped_payload, get_urls, get_common_url
 from meta_fb import fb_headers, get_new_bets_fonbet, payload_req, payload_coupon_sum, payload_coupon_sell
 from meta_fb import payload_sell_check_result
-from utils import prnt, package_dir, write_file, read_file, get_account_info, get_prop
+from utils import prnt, package_dir, write_file, read_file, get_account_info, get_proxies, get_prop
 from fork_recheck import get_olimp_info, get_fonbet_info
 
 from exceptions import BetIsLost, SessionNotDefined, BkOppBetError, NoMoney, BetError, SessionExpired, SaleError
@@ -86,7 +86,7 @@ class BetManager:
 
         self.strat_name = None
 
-        self.account = get_account_info(self.bk_name)
+        self.account = get_account_info.get(self.bk_name)
         self.timeout = 20
         self.match_id = None
         self.reg_id = None
@@ -1050,7 +1050,6 @@ class BetManager:
                 raise BetIsLost(err_msg)
 
     def get_proxy(self) -> str:
-
         return get_proxies().get(self.bk_name)
 
     def check_max_bet(self, shared: dict):

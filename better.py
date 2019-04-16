@@ -752,7 +752,7 @@ if __name__ == '__main__':
         prnt(str(e))
         last_fork_time_diff = int(time.time()) - last_fork_time
         prnt(str(last_fork_time_diff) + ' секунд прошло с момента последней ставки')
-        wait_before_exp = max(60 * 60 * 2 - last_fork_time_diff, 0)
+        wait_before_exp = 0# max(60 * 60 * 2 - last_fork_time_diff, 0)
         prnt('Ожидание ' + str(wait_before_exp / 60) + ' минут, до выгрузки')
         time.sleep(wait_before_exp)
         export_hist(OLIMP_USER, FONBET_USER)
