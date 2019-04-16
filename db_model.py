@@ -9,7 +9,7 @@ db = SqliteDatabase('bot_manager.db')
 
 def get_trunc_sysdate(days=0):
     return round(time.time() + days * 60 * 60 * 24)
-
+    
 
 class BaseModel(Model):
     class Meta:
@@ -31,11 +31,13 @@ class Account(BaseModel):
     user = ForeignKeyField(User, backref='accounts')
     status = CharField(null=False, default='active')
     work_stat = CharField(null=False, default='stop')
-    pid = IntegerField(null=True)
-    work_dir = CharField(null=False)
+    pid = IntegerField(null=False, default=0)
+    work_dir = CharField(null=True)
     properties = CharField(null=False)
     proxies = CharField(null=False)
     accounts = CharField(null=False)
+    time_start = IntegerField(null=True)
+    time_stop = IntegerField(null=True)
     date_start = IntegerField(null=False, default=get_trunc_sysdate())
     date_end = IntegerField(null=False, default=get_trunc_sysdate(30))
 
