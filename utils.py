@@ -72,25 +72,27 @@ except:
     pass
 
 if KEY:
-    acc_info  = Account.select().where(Account.key==KEY)
+    acc_info = Account.select().where(Account.key == KEY)
     if acc_info:
         ACCOUNTS = loads(acc_info.get().accounts)
         PROPERTIES = loads(acc_info.get().properties)
         PROXIES = loads(acc_info.get().proxies)
         ACC_ID = acc_info.get().id
+        USER_ID = acc_info.get().user_id
+
 
 def prnt(vstr=None, hide=None):
     if vstr:
         global dtOld
         global ACC_ID
-        
+
         if not hide:
             dtDeff = round((datetime.datetime.now() - dtOld).total_seconds())
             strLog = datetime.datetime.now().strftime('%d %H:%M:%S.%f ') + \
                      '[' + str(dtDeff).rjust(2, '0') + ']    ' + str(vstr)
             print(strLog)
             dtOld = datetime.datetime.now()
-            Outfile = open( str(ACC_ID) + '_client.log', "a+", encoding='utf-8')
+            Outfile = open(str(ACC_ID) + '_client.log', "a+", encoding='utf-8')
             Outfile.write(strLog + '\n')
             Outfile.close()
         else:
@@ -98,7 +100,8 @@ def prnt(vstr=None, hide=None):
             Outfile = open(str(ACC_ID) + '_client_hide.log', "a+", encoding='utf-8')
             Outfile.write(strLog + '\n\n')
             Outfile.close()
-            
+
+
 prnt('KEY: ' + str(KEY))
 
 
@@ -199,7 +202,7 @@ def read_file(filename):
 def get_account_info(bk=None, param=None):
     global ACCOUNTS
     if bk and param:
-        return ACCOUNTS.get(bk,{}).get(param, None)
+        return ACCOUNTS.get(bk, {}).get(param, None)
     if bk and not param:
         return ACCOUNTS.get(bk)
     else:
@@ -268,7 +271,8 @@ def get_session_with_proxy(name):
     session.proxies = session_proxies
     # scraper = cfscrape.create_scraper(sess=session)
     return session
-    
+
+
 def get_proxies():
     global PROXIES
     return PROXIES
