@@ -586,7 +586,8 @@ if __name__ == '__main__':
         prnt('Ожидание 15 сек.')
         time.sleep(15)
 
-        while True:
+        while Account.select().where(Account.key == KEY).get().work_stat == 'start':
+            print(Account.select().where(Account.key == KEY).get().work_stat)
             balance_line = (bal1 + bal2) / 2 / 100 * 30
 
             shutdown_minutes = 60 * (60 * get_prop('work_hour'))  # секунды * на кол-во (60*1) - это час
@@ -744,6 +745,7 @@ if __name__ == '__main__':
             else:
                 pass
             time.sleep(0.25)
+        shutdown = True
 
     except (Shutdown, MaxFail, MaxFork) as e:
         shutdown = True

@@ -86,7 +86,7 @@ class BetManager:
 
         self.strat_name = None
 
-        self.account = self.get_account_info()
+        self.account = get_account_info(self.bk_name)
         self.timeout = 20
         self.match_id = None
         self.reg_id = None
@@ -110,7 +110,7 @@ class BetManager:
         self.proxies = self.get_proxy()
         self.server_olimp = 10
         self.server_fb = {}
-        self.mirror = self.get_account_info().get('mirror')
+        self.mirror = self.account.get('mirror')
 
         self.session_file = 'session.' + self.bk_name
         self.session = {}
@@ -123,7 +123,7 @@ class BetManager:
         if self.bk_name not in bk_work or self.bk_name_opposite not in bk_work:
             err_msg = 'bk not defined: bk1={}, bk2={}'.format(self.bk_name, self.bk_name_opposite)
 
-        elif self.mirror is None:
+        elif not self.mirror:
             err_msg = 'mirror not defined: {}'.format(self.mirror)
 
         if err_msg != '':
@@ -1052,12 +1052,6 @@ class BetManager:
     def get_proxy(self) -> str:
 
         return get_proxies().get(self.bk_name)
-
-    def get_account_info(self) -> str:
-
-        with open(path.join(package_dir, 'account.json')) as file:
-            account = load(file)
-        return account.get(self.bk_name, {})
 
     def check_max_bet(self, shared: dict):
         self.opposite_stat_get(shared)

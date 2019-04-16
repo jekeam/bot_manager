@@ -196,9 +196,12 @@ def read_file(filename):
         pass
 
 
-def get_account_info(bk, param):
+def get_account_info(bk, param=None):
     global ACCOUNTS
-    return ACCOUNTS[bk].get(param, None)
+    if param:
+        return ACCOUNTS[bk].get(param, None)
+    else:
+        return ACCOUNTS
 
 
 def get_prop(param):
