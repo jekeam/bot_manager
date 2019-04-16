@@ -32,7 +32,7 @@ USER_ID = None
 @bot.message_handler(commands=['start'])
 def send_user_info(message):
     print('chat_id: ' + str(message.chat.id))
-    bot.reply_to(message, prnt_user_str(message.from_user.id), parse_mode='Markdown')
+    bot.reply_to(message, prnt_user_str(message.from_user.id))
 
 
 @bot.message_handler(commands=['hello'])

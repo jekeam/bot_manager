@@ -61,7 +61,7 @@ def prnt_user_str(id):
     res = ''
     data = get_user(id).__data__
     for key, val in data.items():
-        res = res + '*' + str(key) + '*: ' + str(val) + '\n'
+        res = res + str(key) + ': ' + str(val) + '\n'
     return res
 
 
