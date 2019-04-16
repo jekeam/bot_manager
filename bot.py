@@ -137,7 +137,8 @@ def starter():
 
 def sender():
     for msg in Message.select():
-        print(msg.id)
+        if msg.file_type == 'document':
+            bot.send_document(msg.to_user, msg.blob, file_name='xx.x')
 
 if __name__ == '__main__':
     sender()
