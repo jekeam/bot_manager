@@ -3,3 +3,12 @@ peewee
 requests
 requests[socks]
 requests[socks5]
+cfscrape
+urllib3
+requests
+fake_useragent
+proxybroker
+pandas
+pytz
+beautifulsoup4
+asyncio
