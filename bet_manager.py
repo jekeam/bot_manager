@@ -86,7 +86,7 @@ class BetManager:
 
         self.strat_name = None
 
-        self.account = get_account_info.get(self.bk_name)
+        self.account = get_account_info().get(self.bk_name)
         self.timeout = 20
         self.match_id = None
         self.reg_id = None

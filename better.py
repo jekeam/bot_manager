@@ -587,6 +587,7 @@ if __name__ == '__main__':
         time.sleep(15)
 
         while Account.select().where(Account.key == KEY).get().work_stat == 'start':
+            print(Account.select().where(Account.key == KEY).get().work_stat)
             balance_line = (bal1 + bal2) / 2 / 100 * 30
 
             shutdown_minutes = 60 * (60 * get_prop('work_hour'))  # секунды * на кол-во (60*1) - это час
@@ -745,6 +746,7 @@ if __name__ == '__main__':
                 pass
             time.sleep(0.5)
         shutdown = True
+        Account.update(pid=0, work_stat='stop').where(Account.key == KEY).execute()
 
     except (Shutdown, MaxFail, MaxFork) as e:
         shutdown = True
