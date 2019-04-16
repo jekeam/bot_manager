@@ -17,9 +17,12 @@ import json
 import re
 import sys
 import traceback
+import os
 
 if __name__ == '__main__':
     from history import export_hist
+
+global KEY, ACC_ID
 
 shutdown = False
 if get_prop('debug'):
@@ -502,6 +505,8 @@ last_fork_time = 0
 
 if __name__ == '__main__':
     try:
+        Account.update(pid=os.getpid()).where(Account.key == KEY).execute()
+        
         prnt('DEBUG: ' + str(DEBUG))
 
         time_get_balance = datetime.datetime.now()
@@ -526,7 +531,7 @@ if __name__ == '__main__':
 
         MIN_L = get_prop('min_l')
         prnt(' ')
-        prnt('Название аккаунта: ' + get_prop('account_name'))
+        prnt('ID аккаунта: ' + str(ACC_ID))
         prnt('IP-адрес сервера: ' + server_ip + ':80')
         prnt('Баланс в БК Олимп: ' + str(bal1))
         prnt('Баланс в БК Фонбет: ' + str(bal2))
@@ -562,7 +567,7 @@ if __name__ == '__main__':
         prnt('Минимальный профит вилки от (%): ' + str(round((1 - MIN_L) * 100, 3)))
         prnt(' ')
         try:
-            with open('id_forks.txt') as f:
+            with open(str(ACC_ID) + '_id_forks.txt') as f:
                 for line in f:
                     js = json.loads(line)
                     for key, val in js.items():
@@ -582,7 +587,6 @@ if __name__ == '__main__':
         time.sleep(15)
 
         while True:
-
             balance_line = (bal1 + bal2) / 2 / 100 * 30
 
             shutdown_minutes = 60 * (60 * get_prop('work_hour'))  # секунды * на кол-во (60*1) - это час
@@ -757,3 +761,6 @@ if __name__ == '__main__':
         exc_type, exc_value, exc_traceback = sys.exc_info()
         err_str = str(e) + ' ' + str(repr(traceback.format_exception(exc_type, exc_value, exc_traceback)))
         prnt('better: ' + str(e.__class__.__name__) + ' - ' + str(err_str))
+        
+    finally:
+        Account.update(pid=0, work_stat='stop').where(Account.key == KEY).execute()

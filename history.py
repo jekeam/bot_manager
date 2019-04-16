@@ -10,8 +10,9 @@ import random
 import json
 import os
 from utils import DEBUG, get_prop
+global ACC_ID
 
-file_name = 'id_forks.txt'
+file_name = str(ACC_ID) + '_id_forks.txt'
 olimp_bet_min = 1000000000
 fonbet_bet_min = 999999999999999999999
 

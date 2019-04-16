@@ -68,18 +68,20 @@ opposition = {
 def prnt(vstr=None, hide=None):
     if vstr:
         global dtOld
+        global ACC_ID
+        
         if not hide:
             dtDeff = round((datetime.datetime.now() - dtOld).total_seconds())
             strLog = datetime.datetime.now().strftime('%d %H:%M:%S.%f ') + \
                      '[' + str(dtDeff).rjust(2, '0') + ']    ' + str(vstr)
             print(strLog)
             dtOld = datetime.datetime.now()
-            Outfile = open('client.log', "a+", encoding='utf-8')
+            Outfile = open( str(ACC_ID) + '_client.log', "a+", encoding='utf-8')
             Outfile.write(strLog + '\n')
             Outfile.close()
         else:
             strLog = datetime.datetime.now().strftime('%d %H:%M:%S.%f ') + '    ' + str(vstr)
-            Outfile = open('client_hide.log', "a+", encoding='utf-8')
+            Outfile = open(str(ACC_ID) + '_client_hide.log', "a+", encoding='utf-8')
             Outfile.write(strLog + '\n\n')
             Outfile.close()
             
@@ -94,7 +96,8 @@ if KEY:
     if acc_info:
         ACCOUNTS = loads(acc_info.get().accounts)
         PROPERTIES = loads(acc_info.get().properties)
-        PROXIES = loads(acc_info.get().proxies)                
+        PROXIES = loads(acc_info.get().proxies)
+        ACC_ID = acc_info.get().id
 
 
 def get_vector(bet_type, sc1=None, sc2=None):
@@ -232,7 +235,7 @@ def prnts(vstr=None, hide=None):
 
 def save_fork(fork_info):
     prnt('SAVE FORK:' + str(fork_info))
-    f = open('id_forks.txt', 'a+', encoding='utf-8')
+    f = open(str(ACC_ID) + '_id_forks.txt', 'a+', encoding='utf-8')
     f.write(dumps(fork_info) + '\n')
 
 
