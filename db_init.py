@@ -2,7 +2,7 @@
 from db_model import *
 
 db.connect()
-db.create_tables([User, Account])
+db.create_tables([User, Account, Message])
 
 try:
     sasha = User.create(

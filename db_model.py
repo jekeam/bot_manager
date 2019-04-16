@@ -9,7 +9,7 @@ db = SqliteDatabase('bot_manager.db')
 
 def get_trunc_sysdate(days=0):
     return round(time.time() + days * 60 * 60 * 24)
-    
+
 
 class BaseModel(Model):
     class Meta:
@@ -40,7 +40,8 @@ class Account(BaseModel):
     time_stop = IntegerField(null=True)
     date_start = IntegerField(null=False, default=get_trunc_sysdate())
     date_end = IntegerField(null=False, default=get_trunc_sysdate(30))
-    
+
+
 class Message(BaseModel):
     id = AutoField
     to_user = IntegerField(null=False)
