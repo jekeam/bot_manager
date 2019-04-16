@@ -196,10 +196,12 @@ def read_file(filename):
         pass
 
 
-def get_account_info(bk, param=None):
+def get_account_info(bk=None, param=None):
     global ACCOUNTS
-    if param:
-        return ACCOUNTS[bk].get(param, None)
+    if bk and param:
+        return ACCOUNTS.get(bk,{}).get(param, None)
+    if bk and not param:
+        return ACCOUNTS.get(bk)
     else:
         return ACCOUNTS
 
