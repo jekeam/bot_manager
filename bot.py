@@ -149,4 +149,4 @@ if __name__ == '__main__':
             for admin in ADMINS:
                 bot.send_message(admin, str(e), parse_mode='Markdown')
         finally:
-            time.sleep(60)
+            time.sleep(5)
