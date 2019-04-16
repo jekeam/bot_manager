@@ -15,6 +15,7 @@ from bot_prop import *
 import telebot
 from telebot import types
 from telebot import apihelper
+from emoji import emojize
 
 from multiprocessing import Process
 import subprocess
@@ -51,9 +52,9 @@ def send_bot_list(message, msg: str = 'Выберите ваш аккаунт', 
         if acc.status == 'inactive':
             work_stat = 'Не активен ❌'
         elif acc.work_stat == 'start':
-            work_stat = 'Работает ▶️'
+            work_stat = 'Работает ' + emojize(":arrow_forward:", use_aliases=True)
         else:
-            work_stat = 'Остановлен ⏹'
+            work_stat = 'Остановлен ' + emojize(":stop_button:", use_aliases=True)
         callback_button = types.InlineKeyboardButton(text=str(n) + ': ' + work_stat, callback_data=acc.key)
         keyboard.add(callback_button)
         n = n + 1
@@ -79,9 +80,9 @@ def callback_inline(call):
     def prnt_acc_stat():
         keyboard_acc = types.InlineKeyboardMarkup(row_width=2)
         if acc_info.get().work_stat == 'stop':
-            start_stop = 'Запустить ▶️'
+            start_stop = 'Запустить ' + emojize(":arrow_forward:", use_aliases=True)
         else:
-            start_stop = 'Остановить ⏹'
+            start_stop = 'Остановить ' + emojize(":stop_button:", use_aliases=True)
         callback_button = types.InlineKeyboardButton(text=start_stop, callback_data=call.data)
         keyboard_acc.row(callback_button)
 
