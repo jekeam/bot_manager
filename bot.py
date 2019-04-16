@@ -124,7 +124,8 @@ def starter():
             subprocess.call(call_str, shell=True)
         else:
             print('file better.py not found in ' + str(os.getcwd()))
-
+    
+    Account.update(pid=0).where(Account.pid > 0).execute()
     while True:
         for acc in Account.select().where((Account.status == 'active') & (Account.work_stat == 'start') & (Account.pid == 0)):
             print(''.ljust(120, '*'))
@@ -158,14 +159,13 @@ def sender():
 
 
 if __name__ == '__main__':
-    Account.update(pid=0).where(Account.key == KEY).execute()
     prc_acc = Process(target=starter)
     prc_acc.start()
     prc_sender = Process(target=sender)
     prc_sender.start()
     while True:
         try:
-            bot.polling(none_stop=True, timeout=60, interval=3)
+            bot.polling(none_stop=True, timeout=60)
         except Exception as e:
             exc_type, exc_value, exc_traceback = sys.exc_info()
             err_str = str(e) + ' ' + str(repr(traceback.format_exception(exc_type, exc_value, exc_traceback)))
