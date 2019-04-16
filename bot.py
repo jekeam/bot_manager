@@ -135,8 +135,13 @@ def starter():
                 time.sleep(2)
         time.sleep(2)
 
+def sender():
+    for msg in Message.select():
+        print(msg.id)
 
 if __name__ == '__main__':
+    sender()
+    time.sleep(55)
 
     starter_acc = Process(target=starter)
     starter_acc.start()

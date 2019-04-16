@@ -244,4 +244,13 @@ def export_hist(OLIMP_USER, FONBET_USER):
 
 
 if __name__ == "__main__":
-    export_hist(OLIMP_USER, FONBET_USER)
+    #export_hist(OLIMP_USER, FONBET_USER)
+    csv_name = '1_16_04_2019_statistics.csv'
+    with open(csv_name, 'r', encoding='utf-8') as b:
+            Message.insert({
+                Message.to_user: USER_ID,
+                Message.blob: b,
+                Message.file_name: csv_name,
+                Message.file_type: 'document',
+                Message.date_send: int(round(time.time()))
+            })
