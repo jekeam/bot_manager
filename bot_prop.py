@@ -9,4 +9,4 @@ PROXY2 = {
     "https": "https://shaggy:hzsyk4@191.101.104.71:4487"
 }
 ROLE = None
-ADMINS = [381868674,33847743]
+ADMINS = [381868674, 33847743]

@@ -19,8 +19,8 @@ if __name__ == '__main__':
 
     try:
         acc = Account.create(
-            #user=33847743,
-            user = 381868674,
+            # user=33847743,
+            user=381868674,
             key='a28ad3f4-5f9e-11e9-8d15-2cfda1739afe',
             date_end=get_trunc_sysdate(30000),
             status='active',
