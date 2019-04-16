@@ -65,6 +65,20 @@ opposition = {
     'ННН': 'ННД'
 }
 
+KEY = ''
+try:
+    KEY = sys.argv[2]
+except:
+    pass
+
+if KEY:
+    acc_info  = Account.select().where(Account.key==KEY)
+    if acc_info:
+        ACCOUNTS = loads(acc_info.get().accounts)
+        PROPERTIES = loads(acc_info.get().properties)
+        PROXIES = loads(acc_info.get().proxies)
+        ACC_ID = acc_info.get().id
+
 def prnt(vstr=None, hide=None):
     if vstr:
         global dtOld
@@ -85,19 +99,7 @@ def prnt(vstr=None, hide=None):
             Outfile.write(strLog + '\n\n')
             Outfile.close()
             
-KEY = ''
-try:
-    KEY = sys.argv[2]
-except:
-    pass
 prnt('KEY: ' + str(KEY))
-if KEY:
-    acc_info  = Account.select().where(Account.key==KEY)
-    if acc_info:
-        ACCOUNTS = loads(acc_info.get().accounts)
-        PROPERTIES = loads(acc_info.get().properties)
-        PROXIES = loads(acc_info.get().proxies)
-        ACC_ID = acc_info.get().id
 
 
 def get_vector(bet_type, sc1=None, sc2=None):
