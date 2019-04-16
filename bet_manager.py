@@ -33,7 +33,6 @@ else:
 
 # disable: InsecureRequestWarning: Unverified HTTPS request is being made.
 # See: https://urllib3.readthedocs.io/en/latest/advanced-usage.html#ssl-warningsInsecureRequestWarning)
-
 urllib3.disable_warnings(urllib3.exceptions.InsecureRequestWarning)
 
 package_dir = path.dirname(path.abspath(__file__))

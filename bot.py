@@ -1,4 +1,10 @@
 # coding:utf-8
+import urllib3
+
+# disable: InsecureRequestWarning: Unverified HTTPS request is being made.
+# See: https://urllib3.readthedocs.io/en/latest/advanced-usage.html#ssl-warningsInsecureRequestWarning)
+urllib3.disable_warnings(urllib3.exceptions.InsecureRequestWarning)
+
 import logging
 import sys
 import traceback
@@ -20,8 +26,8 @@ apihelper.proxy = PROXY2
 USER_ID = None
 
 
-#logger = telebot.logger
-#telebot.logger.setLevel(logging.DEBUG) # Outputs debug messages to console.
+# logger = telebot.logger
+# telebot.logger.setLevel(logging.DEBUG) # Outputs debug messages to console.
 
 @bot.message_handler(commands=['start'])
 def send_user_info(message):
@@ -106,9 +112,10 @@ def callback_inline(call):
                     prnt_acc_stat()
                 else:
                     bot.answer_callback_query(call.id, show_alert=True, text="Аккаунт не активен")
-                    
+
+
 def starter():
-    def start(key:str): # abs_path:str
+    def start(key: str):  # abs_path:str
         # os.chdir(abs_path)
         if os.path.isfile('better.py'):
             call_str = 'python3.6 better.py --key ' + key
@@ -116,25 +123,26 @@ def starter():
             subprocess.call(call_str, shell=True)
         else:
             print('file better.py not found in ' + str(os.getcwd()))
-        
+
     while True:
-        for acc in Account.select().where((Account.status == 'active')&(Account.work_stat == 'start')&(Account.pid == 0)):
+        for acc in Account.select().where((Account.status == 'active') & (Account.work_stat == 'start') & (Account.pid == 0)):
             print(''.ljust(120, '*'))
-            print('start: ', acc.key) # acc.work_dir,
-            acc_start = Process(target=start, args=(acc.key, )) # acc.work_dir,
+            print('start: ', acc.key)  # acc.work_dir,
+            acc_start = Process(target=start, args=(acc.key,))  # acc.work_dir,
             acc_start.start()
-            while Account.select().where(Account.key==acc.key).get().pid == 0:
+            while Account.select().where(Account.key == acc.key).get().pid == 0:
                 print('wait start: ' + str(acc.key))
                 time.sleep(2)
         time.sleep(2)
 
+
 if __name__ == '__main__':
-    
+
     starter_acc = Process(target=starter)
     starter_acc.start()
     while True:
         try:
-            bot.polling(none_stop=True, timeout=20)
+            bot.polling(none_stop=True, timeout=60, interval=3)
         except Exception as e:
             exc_type, exc_value, exc_traceback = sys.exc_info()
             err_str = str(e) + ' ' + str(repr(traceback.format_exception(exc_type, exc_value, exc_traceback)))
