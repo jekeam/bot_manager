@@ -135,17 +135,32 @@ def starter():
                 time.sleep(2)
         time.sleep(2)
 
+
 def sender():
-    for msg in Message.select():
-        if msg.file_type == 'document':
-            bot.send_document(msg.to_user, msg.blob, file_name='xx.x')
+    while True:
+        for msg in Message.select().where(Message.date_send.is_null()):
+            if msg.file_type == 'document':
+                if msg.blob:
+
+                    if not os.path.isfile(msg.file_name):
+                        with open(msg.file_name, 'w', encoding='utf-8') as b:
+                            b.write(msg.blob.decode())
+
+                    doc = open(msg.file_name, 'rb')
+                    bot.send_document(msg.to_user, doc)
+                    doc.close()
+
+                    if os.path.isfile(msg.file_name):
+                        os.remove(msg.file_name)
+                    Message.update(date_send=round(time.time())).where(Message.id == msg.id).execute()
+        time.sleep(10)
+
 
 if __name__ == '__main__':
-    sender()
-    time.sleep(55)
-
-    starter_acc = Process(target=starter)
-    starter_acc.start()
+    prc_acc = Process(target=starter)
+    prc_acc.start()
+    prc_sender = Process(target=sender)
+    prc_sender.start()
     while True:
         try:
             bot.polling(none_stop=True, timeout=60, interval=3)

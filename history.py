@@ -228,8 +228,7 @@ def export_hist(OLIMP_USER, FONBET_USER):
                 Message.to_user: USER_ID,
                 Message.blob: b,
                 Message.file_name: csv_name,
-                Message.file_type: 'document',
-                Message.date_send: int(round(time.time()))
+                Message.file_type: 'document'
             })
 
     try:
@@ -246,11 +245,10 @@ def export_hist(OLIMP_USER, FONBET_USER):
 if __name__ == "__main__":
     # export_hist(OLIMP_USER, FONBET_USER)
     csv_name = '1_16_04_2019_statistics.csv'
-    with open(csv_name, 'r', encoding='utf-8') as b:
+    with open(csv_name, 'r', encoding='utf-8') as f:
         msg = (Message.insert(
             to_user=USER_ID,
-            blob=str(list(b)).encode(),
+            blob=f.read(),
             file_name=csv_name,
-            file_type='document',
-            date_send=int(round(time.time()))
+            file_type='document'
         ).execute())
