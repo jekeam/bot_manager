@@ -746,7 +746,7 @@ if __name__ == '__main__':
                 pass
             time.sleep(0.5)
         shutdown = True
-        Account.update(pid=0, work_stat='stop').where(Account.key == KEY).execute()
+        Account.update(pid=0).where(Account.key == KEY).execute()
 
     except (Shutdown, MaxFail, MaxFork) as e:
         shutdown = True
