@@ -158,6 +158,7 @@ def sender():
 
 
 if __name__ == '__main__':
+    Account.update(pid=0).where(Account.key == KEY).execute()
     prc_acc = Process(target=starter)
     prc_acc.start()
     prc_sender = Process(target=sender)
