@@ -1,8 +1,6 @@
 # coding:utf-8
-import urllib3
-
 # disable: InsecureRequestWarning: Unverified HTTPS request is being made.
-# See: https://urllib3.readthedocs.io/en/latest/advanced-usage.html#ssl-warningsInsecureRequestWarning)
+import urllib3
 urllib3.disable_warnings(urllib3.exceptions.InsecureRequestWarning)
 
 import logging
@@ -22,8 +20,8 @@ import subprocess
 import os
 
 bot = telebot.TeleBot(TOKEN)
-print('set proxy: ' + str(PROXY2))
-apihelper.proxy = PROXY2
+print('set proxy: ' + str(PROXY))
+apihelper.proxy = PROXY
 USER_ID = None
 
 
@@ -165,7 +163,7 @@ if __name__ == '__main__':
     prc_sender = Process(target=sender)
     prc_sender.start()
     try:
-        bot.polling(none_stop=True, timeout=60)
+        bot.polling()
     except Exception as e:
         exc_type, exc_value, exc_traceback = sys.exc_info()
         err_str = str(e) + ' ' + str(repr(traceback.format_exception(exc_type, exc_value, exc_traceback)))
