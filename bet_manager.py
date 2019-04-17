@@ -83,7 +83,7 @@ class BetManager:
         self.cur_minute = None
         self.total_stock = None
 
-        self.strat_name = None
+        self.strat_name = 'main'
 
         self.account = get_account_info(self.bk_name)
         self.timeout = 20
@@ -549,20 +549,18 @@ class BetManager:
                     prnt(self.msg.format(sys._getframe().f_code.co_name,
                                          'Ошибка при проставлении ставки в ' + self.bk_name +
                                          ', делаю выкуп ставки в ' + self.bk_name_opposite))
-
-                    # if (self.total_stock is not None and self.total_stock <= 0) or cnt_attempt_sale < 0:
-                    # raise BetIsLost(err_msg)
                     try:
                         shared[self.bk_name_opposite].get('self', {}).sale_bet(shared)
                         is_go = False
                         break
                     except CouponBlocked as e:
-                        # cnt_attempt_sale = cnt_attempt_sale - 1
                         prnt(self.msg.format(
                             sys._getframe().f_code.co_name,
                             'Ошибка: ' + e.__class__.__name__ + ' - ' + str(e) +
                             '. Пробую проставить и пробую выкупить еще!'))
                         sleep(5)
+                    if self.total_stock is not None and self.total_stock <= 0:
+                        raise BetIsLost(err_msg)
 
             except SessionExpired as e:
                 prnt(self.msg.format(
