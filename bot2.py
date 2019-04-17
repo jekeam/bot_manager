@@ -50,15 +50,10 @@ def botlist(update, context, edit=False):
     for acc in acc_list:
         if acc.status == 'inactive':
             work_stat = 'Не активен ❌'
+        elif acc.work_stat == 'start':
+            work_stat = 'Работает ' + emojize(":arrow_forward:", use_aliases=True)
         else:
-            if acc.work_stat == 'stop' and acc.pid == 0:
-                work_stat = 'Остановлен ' + emojize(":stop_button:", use_aliases=True)
-            elif acc.work_stat == 'start' and acc.pid == 0:
-                work_stat = 'Запускается ' + emojize(":arrows_counterclockwise:", use_aliases=True)
-            elif acc.work_stat == 'stop' and acc.pid != 0:
-                work_stat = 'Останавливается ' + emojize(":double_vertical_bar:", use_aliases=True)
-            elif acc.work_stat == 'start' and acc.pid != 0:
-                work_stat = 'Работает ' + emojize(":arrow_forward:", use_aliases=True)
+            work_stat = 'Остановлен ' + emojize(":stop_button:", use_aliases=True)
         keyboard.append([InlineKeyboardButton(text=str(n) + ': ' + work_stat, callback_data=acc.key)])
         n = n + 1
 
@@ -73,16 +68,9 @@ def botlist(update, context, edit=False):
 def button(update, context):
     def prnt_acc_stat():
         keyboard = []
-        work_stat = acc_info.get().work_stat
-        pid = acc_info.get().pid
-        start_stop = ''
-        if work_stat == 'stop' and pid == 0:
+        if acc_info.get().work_stat == 'stop':
             start_stop = 'Запустить ' + emojize(":arrow_forward:", use_aliases=True)
-        elif work_stat == 'start' and pid == 0:
-            start_stop = 'Запуск ' + emojize(":arrows_counterclockwise:", use_aliases=True)
-        elif work_stat == 'stop' and pid != 0:
-            start_stop = 'Остановка ' + emojize(":double_vertical_bar:", use_aliases=True)
-        elif work_stat == 'start' and pid != 0:
+        else:
             start_stop = 'Остановить ' + emojize(":stop_button:", use_aliases=True)
 
         keyboard.append([InlineKeyboardButton(text=start_stop, callback_data=query.data)])
@@ -101,9 +89,9 @@ def button(update, context):
         acc_info = Account.select().where(Account.key == query.data)
         if acc_info:
             if query.message.text == MSG_START_STOP:
-                if acc_info.get().work_stat == 'start' and acc_info.get() != 0:
+                if acc_info.get().work_stat == 'start':
                     Account.update(work_stat='stop').where(Account.key == query.data).execute()
-                elif acc_info.get().work_stat == 'stop' and acc_info.get() == 0:
+                else:
                     Account.update(work_stat='start').where(Account.key == query.data).execute()
                 prnt_acc_stat()
             elif query.message.text == MSG_CHANGE_ACC:
@@ -166,10 +154,10 @@ def sender(update, context):
 
 
 def main():
-    # prc_acc = Process(target=starter)
-    # prc_acc.start()
-    # prc_sender = Process(target=sender)
-    # prc_sender.start()
+    prc_acc = Process(target=starter)
+    prc_acc.start()
+    prc_sender = Process(target=sender)
+    prc_sender.start()
 
     # Create the Updater and pass it your bot's token.
     # Make sure to set use_context=True to use the new context based callbacks
