@@ -171,5 +171,3 @@ if __name__ == '__main__':
         err_str = str(e) + ' ' + str(repr(traceback.format_exception(exc_type, exc_value, exc_traceback)))
         for admin in ADMINS:
             bot.send_message(admin, str(e))
-    finally:
-        time.sleep(15)
