@@ -63,7 +63,7 @@ class BetManager:
         #     self.flex_bet = False
         # else:
         #     self.flex_bet = True
-        self.flex_bet = False
+        self.hard_bet = True
 
         self.msg_err = self.bk_name + '. {}, err: {}'
         self.msg = self.bk_name + '. {}, msg: {}'
@@ -709,7 +709,7 @@ class BetManager:
             payload = copy.deepcopy(ol_payload)
 
             save_any = 3
-            if self.flex_bet:
+            if self.hard_bet:
                 save_any = 2
 
             payload.update({
@@ -815,7 +815,7 @@ class BetManager:
 
             self.payload['requestId'] = self.reqId
 
-            if self.flex_bet:
+            if self.hard_bet:
                 self.payload['coupon']['flexBet'] = 'up'
 
             self.opposite_stat_get(shared)
