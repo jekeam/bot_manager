@@ -218,7 +218,7 @@ def export_hist(OLIMP_USER, FONBET_USER):
                      'o_status;f_kof_type;o_kof_type;fb_vector;ol_vector;fb_time_bet;ol_time_bet;' \
                      'fb_new_bet_sum;ol_new_bet_sum;fb_bal;ol_bal;fb_max_bet;fb_bet_delay;fb_err;ol_err;\n'
 
-        csv_name = str(ACC_ID) + '_' + datetime.now().strftime("%d_%m_%Y") + '_statistics.csv'
+        csv_name = datetime.now().strftime("%d_%m_%Y") + '_' + str(ACC_ID) + '_statistics.csv'
         with open(csv_name, 'w', encoding='utf-8') as f:
             f.write(header + out)
         # send to tg
