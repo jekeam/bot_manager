@@ -1,6 +1,6 @@
-from emoji import emojize
-print(emojize(":cake:", use_aliases=True))
-# from db_model import *
+from db_model import *
 
-# for acc in Account.select().where((Account.status == 'active')):
-#     print(acc.pid, acc.id)
+Message.update(date_send=None).where(1==1).execute
+msg = Message.select().where(Message.date_send.is_null())
+for x in msg:
+    print(x)
