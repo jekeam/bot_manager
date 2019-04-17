@@ -22,8 +22,8 @@ import os
 
 import json
 
-logging.basicConfig(format='%(asctime)s - %(name)s - %(levelname)s - %(message)s', level=logging.DEBUG)
-logger = logging.getLogger(__name__)
+#logging.basicConfig(format='%(asctime)s - %(name)s - %(levelname)s - %(message)s', level=logging.DEBUG)
+#logger = logging.getLogger(__name__)
 
 
 def start(update, context):
@@ -133,7 +133,7 @@ def starter():
         time.sleep(2)
 
 
-def sender(update, context):
+def sender(context):
     while True:
         for msg in Message.select().where(Message.date_send.is_null()):
             if msg.file_type == 'document':
@@ -154,15 +154,12 @@ def sender(update, context):
 
 
 def main():
+    updater = Updater(TOKEN2, use_context=True, request_kwargs=REQUEST_KWARGS)
+    
     prc_acc = Process(target=starter)
     prc_acc.start()
-    prc_sender = Process(target=sender)
+    prc_sender = Process(target=sender, args=(updater.job_queue, ))
     prc_sender.start()
-
-    # Create the Updater and pass it your bot's token.
-    # Make sure to set use_context=True to use the new context based callbacks
-    # Post version 12 this will no longer be necessary
-    updater = Updater(TOKEN2, use_context=True, request_kwargs=REQUEST_KWARGS)
 
     updater.dispatcher.add_handler(CommandHandler('start', start))
     updater.dispatcher.add_handler(CommandHandler('hello', send_text))
