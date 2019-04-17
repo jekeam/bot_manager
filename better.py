@@ -565,6 +565,7 @@ if __name__ == '__main__':
         prnt('Максимальное кол-во успешных вилок: ' + str(get_prop('max_fork')))
         prnt('Максимально допустимое количество ошибок/выкупов: ' + str(get_prop('max_fail')))
         prnt('Минимальный профит вилки от (%): ' + str(round((1 - MIN_L) * 100, 3)))
+        prnt('Жесткая ставка второго плеча: ' + str(get_prop('hard_bet_right')))
         prnt(' ')
         try:
             with open(str(ACC_ID) + '_id_forks.txt') as f:
