@@ -1,5 +1,6 @@
 # disable: InsecureRequestWarning: Unverified HTTPS request is being made.
 import urllib3
+
 urllib3.disable_warnings(urllib3.exceptions.InsecureRequestWarning)
 
 import sys
@@ -27,17 +28,25 @@ logger = logging.getLogger(__name__)
 
 def start(update, context):
     update.message.reply_text(prnt_user_str(update.message.chat.id), parse_mode=telegram.ParseMode.MARKDOWN)
-    
+
+
+def send_text(update, context, msg: str = 'Привет мой господин!'):
+    acc_list = User.select().where(User.role == 'admin')
+    for admin in acc_list:
+        try:
+            context.bot.send_message(admin.id, msg)
+        except:
+            pass
+
+
 def botlist(update, context, edit=False):
     keyboard = []
-    
+
     if edit:
         update = update.callback_query
     user = update.message.chat
     acc_list = Account.select().where(Account.user == user.id).order_by(Account.id)
     n = 1
-    print(''.ljust(150, '-'))
-    print(update)
     for acc in acc_list:
         if acc.status == 'inactive':
             work_stat = 'Не активен ❌'
@@ -53,28 +62,27 @@ def botlist(update, context, edit=False):
     if not edit:
         update.message.reply_text(text=MSG_CHANGE_ACC, reply_markup=reply_markup)
     else:
-        update.message.edit_reply_markup(text=MSG_CHANGE_ACC, reply_markup=reply_markup)
+        update.message.edit_text(text=MSG_CHANGE_ACC, reply_markup=reply_markup)
 
 
 def button(update, context):
-    
     def prnt_acc_stat():
         keyboard = []
         if acc_info.get().work_stat == 'stop':
             start_stop = 'Запустить ' + emojize(":arrow_forward:", use_aliases=True)
         else:
             start_stop = 'Остановить ' + emojize(":stop_button:", use_aliases=True)
-            
+
         keyboard.append([InlineKeyboardButton(text=start_stop, callback_data=query.data)])
         keyboard.append([InlineKeyboardButton(text='« Back to Bots List', callback_data='botlist')])
-        
+
         reply_markup = InlineKeyboardMarkup(keyboard)
-        query.message.edit_reply_markup(text = MSG_START_STOP, reply_markup = reply_markup)
-    
+        query.message.edit_text(text=MSG_START_STOP, reply_markup=reply_markup)
+
     query = update.callback_query
 
-    #query.edit_message_text(text="Selected option: {}".format(query.data))
-    
+    # query.edit_message_text(text="Selected option: {}".format(query.data))
+
     if query:
         if query.data == 'botlist':
             botlist(update, context, 'Edit')
@@ -83,7 +91,6 @@ def button(update, context):
             if query.message.text == MSG_START_STOP:
                 if acc_info.get().work_stat == 'start':
                     Account.update(work_stat='stop').where(Account.key == query.data).execute()
-                    Account.update(work_stat='stop').where(Account.key == query.data).execute()
                 else:
                     Account.update(work_stat='start').where(Account.key == query.data).execute()
                 prnt_acc_stat()
@@ -91,8 +98,7 @@ def button(update, context):
                 if acc_info.get().status == 'active':
                     prnt_acc_stat()
                 else:
-                    pass
-                    #bot.answer_callback_query(call.id, show_alert=True, text="Аккаунт не активен")
+                    update.callback_query.answer(show_alert=True, text="Аккаунт не активен")
 
 
 def help(update, context):
@@ -104,13 +110,62 @@ def error(update, context):
     logger.warning('Update "%s" caused error "%s"', update, context.error)
 
 
+def starter():
+    def start(key: str):  # abs_path:str
+        # os.chdir(abs_path)
+        if os.path.isfile('better.py'):
+            call_str = 'python3.6 better.py --key ' + key
+            print('dir: ' + str(os.getcwd()) + ', command: ' + call_str)
+            subprocess.call(call_str, shell=True)
+        else:
+            print('file better.py not found in ' + str(os.getcwd()))
+
+    Account.update(pid=0).where(Account.pid > 0).execute()
+    while True:
+        for acc in Account.select().where((Account.status == 'active') & (Account.work_stat == 'start') & (Account.pid == 0)):
+            print(''.ljust(120, '*'))
+            print('start: ', acc.key)  # acc.work_dir,
+            acc_start = Process(target=start, args=(acc.key,))  # acc.work_dir,
+            acc_start.start()
+            while Account.select().where(Account.key == acc.key).get().pid == 0:
+                print('wait start: ' + str(acc.key))
+                time.sleep(2)
+        time.sleep(2)
+
+
+def sender(update, context):
+    while True:
+        for msg in Message.select().where(Message.date_send.is_null()):
+            if msg.file_type == 'document':
+                if msg.blob:
+
+                    if not os.path.isfile(msg.file_name):
+                        with open(msg.file_name, 'w', encoding='utf-8') as b:
+                            b.write(msg.blob.decode())
+
+                    doc = open(msg.file_name, 'rb')
+                    context.bot.send_document(msg.to_user, doc)
+                    doc.close()
+
+                    if os.path.isfile(msg.file_name):
+                        os.remove(msg.file_name)
+                    Message.update(date_send=round(time.time())).where(Message.id == msg.id).execute()
+        time.sleep(10)
+
+
 def main():
+    prc_acc = Process(target=starter)
+    prc_acc.start()
+    prc_sender = Process(target=sender)
+    prc_sender.start()
+
     # Create the Updater and pass it your bot's token.
     # Make sure to set use_context=True to use the new context based callbacks
     # Post version 12 this will no longer be necessary
     updater = Updater(TOKEN2, use_context=True, request_kwargs=REQUEST_KWARGS)
 
     updater.dispatcher.add_handler(CommandHandler('start', start))
+    updater.dispatcher.add_handler(CommandHandler('hello', send_text))
     updater.dispatcher.add_handler(CommandHandler('botlist', botlist))
     updater.dispatcher.add_handler(CallbackQueryHandler(button))
     updater.dispatcher.add_handler(CommandHandler('help', help))
