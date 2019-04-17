@@ -27,8 +27,9 @@ apihelper.proxy = PROXY2
 USER_ID = None
 
 
-# logger = telebot.logger
-# telebot.logger.setLevel(logging.DEBUG) # Outputs debug messages to console.
+logging.basicConfig(filename='bot.log', level=logging.DEBUG)
+logger = telebot.logger
+telebot.logger.setLevel(logging.DEBUG) # Outputs debug messages to console.
 
 @bot.message_handler(commands=['start'])
 def send_user_info(message):
@@ -170,6 +171,6 @@ if __name__ == '__main__':
             exc_type, exc_value, exc_traceback = sys.exc_info()
             err_str = str(e) + ' ' + str(repr(traceback.format_exception(exc_type, exc_value, exc_traceback)))
             for admin in ADMINS:
-                bot.send_message(admin, str(e), parse_mode='Markdown')
+                bot.send_message(admin, str(e))
         finally:
-            time.sleep(5)
+            time.sleep(15)
