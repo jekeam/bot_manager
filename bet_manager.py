@@ -453,8 +453,9 @@ class BetManager:
 
         prnt(self.msg.format(sys._getframe().f_code.co_name, 'Завершающий принял работу'))
         
-        self.hard_bet = False
-        prnt(self.msg.format(sys._getframe().f_code.co_name, 'hard_bet set: ' + str(self.hard_bet)))
+        if not get_prop('hard_bet_right'):
+            self.hard_bet = False
+        prnt(self.msg.format(sys._getframe().f_code.co_name, 'Жесткая ставка второго плеча: ' + str(self.hard_bet)))
 
         is_go = True
         cnt_attempt_sale = 5
