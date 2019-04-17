@@ -222,32 +222,33 @@ def export_hist(OLIMP_USER, FONBET_USER):
         with open(csv_name, 'w', encoding='utf-8') as f:
             f.write(header + out)
         # send to tg
-        with open(csv_name, 'rb', encoding='utf-8') as b:
+        with open(csv_name, 'r', encoding='utf-8') as f:
             Message.insert({
                 Message.to_user: USER_ID,
-                Message.blob: b,
+                Message.blob: f.read(),
                 Message.file_name: csv_name,
                 Message.file_type: 'document'
-            })
+            }).execute()
 
     try:
-        os.rename('client.log', str(ACC_ID) + '_' + cur_date_str + '_' + 'client.log')
+        os.rename(str(ACC_ID) + '_client.log', cur_date_str + '_' + str(ACC_ID) + '_' + 'client.log')
     except:
         pass
     try:
-        os.rename('client_hide.log', str(ACC_ID) + '_' + cur_date_str + '_' + 'client_hide.log')
+        os.rename(str(ACC_ID) + '_client_hide.log', cur_date_str + '_' + str(ACC_ID) + '_' + 'client_hide.log')
     except:
         pass
-    os.rename(file_name, str(ACC_ID) + '_' + cur_date_str + '_' + file_name)
+    os.rename(file_name, cur_date_str + '_' + file_name)
 
 
 if __name__ == "__main__":
+    pass
     # export_hist(OLIMP_USER, FONBET_USER)
-    csv_name = '1_16_04_2019_statistics.csv'
-    with open(csv_name, 'r', encoding='utf-8') as f:
-        msg = (Message.insert(
-            to_user=USER_ID,
-            blob=f.read(),
-            file_name=csv_name,
-            file_type='document'
-        ).execute())
+    # csv_name = '1_16_04_2019_statistics.csv'
+    # with open(csv_name, 'r', encoding='utf-8') as f:
+    #     msg = (Message.insert(
+    #         to_user=USER_ID,
+    #         blob=f.read(),
+    #         file_name=csv_name,
+    #         file_type='document'
+    #     ).execute())
