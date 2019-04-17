@@ -11,6 +11,7 @@ import logging
 import telegram
 from telegram import InlineKeyboardButton, InlineKeyboardMarkup
 from telegram.ext import Updater, CommandHandler, CallbackQueryHandler
+from telegram.ext.callbackcontext import CallbackContext
 
 from db_model import *
 from bot_prop import *
@@ -27,10 +28,6 @@ import json
 
 
 def start(update, context):
-    
-    #job = context.job_queue.run_once(sender, 10, context=update.message.chat_id)
-    #context.chat_data['job'] = job
-    
     update.message.reply_text(prnt_user_str(update.message.chat.id), parse_mode=telegram.ParseMode.MARKDOWN)
 
 
@@ -159,11 +156,13 @@ def sender(context):
 
 def main():
     updater = Updater(TOKEN2, use_context=True, request_kwargs=REQUEST_KWARGS)
+    dispatcher = updater.dispatcher
+    context = CallbackContext(dispatcher)
     
     prc_acc = Process(target=starter)
     prc_acc.start()
     
-    prc_sender = Process(target=sender, args=(Updater, ))
+    prc_sender = Process(target=sender, args=(context, ))
     prc_sender.start()
 
     updater.dispatcher.add_handler(CommandHandler('start', start))
