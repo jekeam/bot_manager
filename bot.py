@@ -164,13 +164,12 @@ if __name__ == '__main__':
     prc_acc.start()
     prc_sender = Process(target=sender)
     prc_sender.start()
-    while True:
-        try:
-            bot.polling(none_stop=True, timeout=60)
-        except Exception as e:
-            exc_type, exc_value, exc_traceback = sys.exc_info()
-            err_str = str(e) + ' ' + str(repr(traceback.format_exception(exc_type, exc_value, exc_traceback)))
-            for admin in ADMINS:
-                bot.send_message(admin, str(e))
-        finally:
-            time.sleep(15)
+    try:
+        bot.polling(none_stop=True, timeout=60)
+    except Exception as e:
+        exc_type, exc_value, exc_traceback = sys.exc_info()
+        err_str = str(e) + ' ' + str(repr(traceback.format_exception(exc_type, exc_value, exc_traceback)))
+        for admin in ADMINS:
+            bot.send_message(admin, str(e))
+    finally:
+        time.sleep(15)
