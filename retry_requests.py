@@ -1,6 +1,6 @@
 # coding:utf-8
 import requests
-from requests.exceptions import ProxyError, ConnectTimeout
+from requests.exceptions import ProxyError, Timeout
 from requests.adapters import HTTPAdapter
 # from requests.packages.urllib3.util.retry import Retry
 # from urllib3.util import Retry
@@ -70,7 +70,7 @@ def retry(exceptions, delay=0, times=2):
     return outer_wrapper
 
 
-@retry(exceptions=(ConnectTimeout, ProxyError), delay=1, times=4)
+@retry(exceptions=(Timeout, ProxyError), delay=1, times=4)
 def requests_retry_session_post(url: str, headers=None, data=None, json=None, verify=None, timeout=None, proxies=None):
     prnt('retry_requests: execute requests_retry_session_post, url={}'.format(url))
     resp = requests_retry_session().post(url=url, headers=headers, data=data, json=json, verify=False, timeout=25, proxies=proxies)

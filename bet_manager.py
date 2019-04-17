@@ -732,7 +732,7 @@ class BetManager:
 
             prnt(self.msg.format(sys._getframe().f_code.co_name, 'rq: ' + str(payload) + ' ' + str(headers)), 'hide')
             self.opposite_stat_get(shared)
-            resp = requests_retry_session_post(
+            resp = requests_retry_session(
                 ol_url_api.format(str(self.server_olimp), 'basket/fast'),
                 headers=headers,
                 data=payload,
