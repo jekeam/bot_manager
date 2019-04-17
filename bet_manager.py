@@ -452,6 +452,9 @@ class BetManager:
         self.time_left = -1
 
         prnt(self.msg.format(sys._getframe().f_code.co_name, 'Завершающий принял работу'))
+        
+        self.hard_bet = False
+        prnt(self.msg.format(sys._getframe().f_code.co_name, 'hard_bet set: ' + str(self.hard_bet)))
 
         is_go = True
         cnt_attempt_sale = 5
