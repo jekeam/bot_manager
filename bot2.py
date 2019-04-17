@@ -155,7 +155,7 @@ def sender(context):
 
 
 def main():
-    updater = Updater(TOKEN2, use_context=True, request_kwargs=REQUEST_KWARGS)
+    updater = Updater(TOKEN, use_context=True, request_kwargs=REQUEST_KWARGS)
     dispatcher = updater.dispatcher
     context = CallbackContext(dispatcher)
     
