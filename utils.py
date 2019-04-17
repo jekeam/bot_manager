@@ -66,6 +66,8 @@ opposition = {
 }
 
 KEY = ''
+ACC_ID = 0
+USER_ID = 0
 try:
     KEY = sys.argv[2]
 except:
