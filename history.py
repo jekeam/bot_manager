@@ -112,7 +112,6 @@ def export_hist(OLIMP_USER, FONBET_USER):
     global ACC_ID, USER_ID
 
     cur_date_str = datetime.now().strftime("%d_%m_%Y")
-    acc_name = get_prop('account_name')
 
     with open(file_name, encoding='utf-8') as f:
         for line in f.readlines():
@@ -219,7 +218,7 @@ def export_hist(OLIMP_USER, FONBET_USER):
                      'o_status;f_kof_type;o_kof_type;fb_vector;ol_vector;fb_time_bet;ol_time_bet;' \
                      'fb_new_bet_sum;ol_new_bet_sum;fb_bal;ol_bal;fb_max_bet;fb_bet_delay;fb_err;ol_err;\n'
 
-        csv_name = acc_name + '_' + datetime.now().strftime("%d_%m_%Y") + '_statistics.csv'
+        csv_name = str(ACC_ID) + '_' + datetime.now().strftime("%d_%m_%Y") + '_statistics.csv'
         with open(csv_name, 'w', encoding='utf-8') as f:
             f.write(header + out)
         # send to tg
@@ -232,14 +231,14 @@ def export_hist(OLIMP_USER, FONBET_USER):
             })
 
     try:
-        os.rename('client.log', acc_name + '_' + cur_date_str + '_' + 'client.log')
+        os.rename('client.log', str(ACC_ID) + '_' + cur_date_str + '_' + 'client.log')
     except:
         pass
     try:
-        os.rename('client_hide.log', acc_name + '_' + cur_date_str + '_' + 'client_hide.log')
+        os.rename('client_hide.log', str(ACC_ID) + '_' + cur_date_str + '_' + 'client_hide.log')
     except:
         pass
-    os.rename(file_name, acc_name + '_' + cur_date_str + '_' + file_name)
+    os.rename(file_name, str(ACC_ID) + '_' + cur_date_str + '_' + file_name)
 
 
 if __name__ == "__main__":
