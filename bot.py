@@ -153,8 +153,8 @@ def sender():
                     bot.send_document(msg.to_user, doc)
                     doc.close()
 
-                    #if os.path.isfile(msg.file_name):
-                        #os.remove(msg.file_name)
+                    if os.path.isfile(msg.file_name):
+                        os.remove(msg.file_name)
                     Message.update(date_send=round(time.time())).where(Message.id == msg.id).execute()
         time.sleep(10)
 
