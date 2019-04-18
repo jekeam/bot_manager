@@ -194,7 +194,7 @@ def upd_last_fork_time():
 
 
 def set_statistics(key, err_bk1, err_bk2, fork_info=None, init=False):
-    global cnt_fail, black_list_matches, cnt_fork_skip, cnt_fork_success
+    global cnt_fail, black_list_matches, cnt_fork_success
     bet_skip = False
     if err_bk1 and err_bk2:
         if 'BkOppBetError' in err_bk1 and 'BkOppBetError' in err_bk2:
@@ -210,19 +210,16 @@ def set_statistics(key, err_bk1, err_bk2, fork_info=None, init=False):
             black_list_matches.append(key.split('@')[1])
             # Добавим доп инфу о проставлении
             upd_last_fork_time()
-        elif bet_skip:
-            cnt_fork_skip.append(key)
     elif not bet_skip:
         cnt_fork_success.append(key)
         upd_last_fork_time()
 
 
 def get_statistics():
-    global cnt_fail, black_list_matches, cnt_fork_skip, cnt_fork_success
+    global cnt_fail, black_list_matches, cnt_fork_success
 
     prnt('Успешных ставок: ' + str(len(cnt_fork_success)))
     prnt('Кол-во ставок с ошибками/выкупом: ' + str(cnt_fail))
-    prnt('Пропущенных ставок: ' + str(len(cnt_fork_skip)))
     prnt('Черный список матчей: ' + str(black_list_matches))
     
 def check_statistics():
@@ -498,7 +495,6 @@ time_live = datetime.datetime.now()
 cnt_fail = 0
 black_list_matches = []
 cnt_fork_success = []
-cnt_fork_skip = []
 printed = False
 last_fork_time = 0
 
@@ -613,7 +609,6 @@ if __name__ == '__main__':
                 prnt(' ')
                 prnt('Кол-во успешно проставленных вилок: ' + str(len(cnt_fork_success)))
                 prnt('Кол-во вилок с ошибками: ' + str(cnt_fail))
-                prnt('Кол-во пропущенных вилок: ' + str(len(cnt_fork_skip)))
                 prnt('Работаю еще: ' + str(round((shutdown_minutes - (datetime.datetime.now() - time_live).total_seconds()) / 60 / 60, 2)) + ' ч.')
                 printed = True
             elif cur_min % 15 != 0 and printed:
