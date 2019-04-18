@@ -1031,7 +1031,7 @@ class BetManager:
                                          'sell, delay: ' + str(sell_delay_sec) + ' sec.'))
                     sleep(sell_delay_sec)
 
-                return self.check_sell_result()
+                return self.check_sell_result(shared)
 
     def check_responce(self, err_msg):
 
@@ -1278,7 +1278,7 @@ class BetManager:
             self.reqId = res['requestId']
             prnt(self.msg.format(sys._getframe().f_code.co_name, 'get requestId=' + str(self.reqId)))
 
-    def check_sell_result(self):
+    def check_sell_result(self, shared: dict):
         if not self.server_fb:
             self.server_fb = get_urls(self.mirror, self.proxies)
 
@@ -1310,13 +1310,13 @@ class BetManager:
             err_str = 'Get temporary unknown result: ' + str(msg_str)
             prnt(self.msg.format(sys._getframe().f_code.co_name, err_str))
             sleep(5)
-            return self.check_sell_result()
+            return self.check_sell_result(shared)
 
         elif result == 'sellDelay':
             sell_delay_sec = (float(res.get('sellDelay')) / 1000)
             prnt(self.msg.format(sys._getframe().f_code.co_name, 'sell, delay: ' + str(sell_delay_sec) + ' sec.'))
             sleep(sell_delay_sec)
-            return self.check_sell_result()
+            return self.check_sell_result(shared)
 
         elif result == 'unableToSellCoupon':
             if res.get('reason') == 2:
