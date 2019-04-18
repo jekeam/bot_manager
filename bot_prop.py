@@ -10,7 +10,11 @@ PROXY2 = {
 }
 
 TOKEN2 = '598446286:AAEhbB2RDQ7oEe7pX2vif-IENIdIVIZ9xVk'
-REQUEST_KWARGS = {'proxy_url': 'https://shaggy:hzsyk4@191.101.104.71:4487'}
+REQUEST_KWARGS = {
+    'proxy_url': 'https://shaggy:hzsyk4@191.101.104.71:4487',
+    'read_timeout': 60, 
+    'connect_timeout': 30
+}
 
 ROLE = None
 ADMINS = [381868674]  # , 33847743
