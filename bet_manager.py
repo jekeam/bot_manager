@@ -411,7 +411,7 @@ class BetManager:
                 prnt(self.msg.format(sys._getframe().f_code.co_name, 'Сумма выкупа неизвестна'))
 
             # RECALC SUM BET
-            if self.old_val_bet and self.cur_val_bet and self.old_val_bet != self.cur_val_bet:
+            if self.cur_val_bet and self.old_val_bet != self.cur_val_bet:
                 prnt(' ')
                 prnt(self.msg.format(sys._getframe().f_code.co_name, 'RECALC SUM BET'))
 
