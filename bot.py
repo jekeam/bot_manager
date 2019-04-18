@@ -1,52 +1,51 @@
+# coding:utf-8
 # disable: InsecureRequestWarning: Unverified HTTPS request is being made.
 import urllib3
-
 urllib3.disable_warnings(urllib3.exceptions.InsecureRequestWarning)
 
+import logging
 import sys
 import traceback
 
-import logging
-
-import telegram
-from telegram import InlineKeyboardButton, InlineKeyboardMarkup
-from telegram.ext import Updater, CommandHandler, CallbackQueryHandler
-from telegram.ext.callbackcontext import CallbackContext
-
 from db_model import *
 from bot_prop import *
+
+import telebot
+from telebot import types
+from telebot import apihelper
 from emoji import emojize
 
 from multiprocessing import Process
 import subprocess
 import os
 
-import json
-
-#logging.basicConfig(format='%(asctime)s - %(name)s - %(levelname)s - %(message)s', level=logging.DEBUG)
-#logger = logging.getLogger(__name__)
-
-
-def start(update, context):
-    update.message.reply_text(prnt_user_str(update.message.chat.id), parse_mode=telegram.ParseMode.MARKDOWN)
+bot = telebot.TeleBot(TOKEN)
+print('set proxy: ' + str(PROXY))
+apihelper.proxy = PROXY
+USER_ID = None
 
 
-def send_text(update, context, msg: str = 'Привет мой господин!'):
+logging.basicConfig(filename='bot.log', level=logging.DEBUG)
+logger = telebot.logger
+telebot.logger.setLevel(logging.DEBUG) # Outputs debug messages to console.
+
+@bot.message_handler(commands=['start'])
+def send_user_info(message):
+    print('chat_id: ' + str(message.chat.id))
+    bot.reply_to(message, prnt_user_str(message.from_user.id))
+
+
+@bot.message_handler(commands=['hello'])
+def send_message(msg: str = 'Привет админ, я работаю!'):
     acc_list = User.select().where(User.role == 'admin')
     for admin in acc_list:
-        try:
-            context.bot.send_message(admin.id, msg)
-        except:
-            pass
+        bot.send_message(admin.id, msg)
 
 
-def botlist(update, context, edit=False):
-    keyboard = []
-
-    if edit:
-        update = update.callback_query
-    user = update.message.chat
-    acc_list = Account.select().where(Account.user == user.id).order_by(Account.id)
+@bot.message_handler(commands=['botlist'])
+def send_bot_list(message, msg: str = 'Выберите ваш аккаунт', edit=False):
+    keyboard = types.InlineKeyboardMarkup(row_width=2)
+    acc_list = Account.select().where(Account.user == message.from_user.id).order_by(Account.id)
     n = 1
     for acc in acc_list:
         if acc.status == 'inactive':
@@ -55,60 +54,64 @@ def botlist(update, context, edit=False):
             work_stat = 'Работает ' + emojize(":arrow_forward:", use_aliases=True)
         else:
             work_stat = 'Остановлен ' + emojize(":stop_button:", use_aliases=True)
-        keyboard.append([InlineKeyboardButton(text=str(n) + ': ' + work_stat, callback_data=acc.key)])
+        callback_button = types.InlineKeyboardButton(text=str(n) + ': ' + work_stat, callback_data=acc.key)
+        keyboard.add(callback_button)
         n = n + 1
-
-    reply_markup = InlineKeyboardMarkup(keyboard)
-
     if not edit:
-        update.message.reply_text(text=MSG_CHANGE_ACC, reply_markup=reply_markup)
+        bot.send_message(message.from_user.id, msg, reply_markup=keyboard)
     else:
-        update.message.edit_text(text=MSG_CHANGE_ACC, reply_markup=reply_markup)
+        bot.edit_message_text(
+            chat_id=message.from_user.id,
+            message_id=message.message.message_id,
+            text=msg,
+            reply_markup=keyboard
+        )
 
 
-def button(update, context):
+@bot.message_handler(func=lambda message: True)
+def echo_all(message):
+    print(message.text)
+    # bot.reply_to(message, message.text)
+
+
+@bot.callback_query_handler(func=lambda call: True)
+def callback_inline(call):
     def prnt_acc_stat():
-        keyboard = []
+        keyboard_acc = types.InlineKeyboardMarkup(row_width=2)
         if acc_info.get().work_stat == 'stop':
             start_stop = 'Запустить ' + emojize(":arrow_forward:", use_aliases=True)
         else:
             start_stop = 'Остановить ' + emojize(":stop_button:", use_aliases=True)
+        callback_button = types.InlineKeyboardButton(text=start_stop, callback_data=call.data)
+        keyboard_acc.row(callback_button)
 
-        keyboard.append([InlineKeyboardButton(text=start_stop, callback_data=query.data)])
-        keyboard.append([InlineKeyboardButton(text='« Back to Bots List', callback_data='botlist')])
+        callback_bot_list = types.InlineKeyboardButton(text='« Back to Bots List', callback_data='botlist')
+        keyboard_acc.row(callback_bot_list)
+        bot.edit_message_text(
+            chat_id=call.message.chat.id,
+            message_id=call.message.message_id,
+            text='Запуск / Остановка',
+            reply_markup=keyboard_acc
+        )
 
-        reply_markup = InlineKeyboardMarkup(keyboard)
-        query.message.edit_text(text=MSG_START_STOP, reply_markup=reply_markup)
-
-    query = update.callback_query
-
-    # query.edit_message_text(text="Selected option: {}".format(query.data))
-
-    if query:
-        if query.data == 'botlist':
-            botlist(update, context, 'Edit')
-        acc_info = Account.select().where(Account.key == query.data)
+    # Если сообщение из чата с ботом
+    if call.message:
+        if call.data == 'botlist':
+            send_bot_list(call, edit=True)
+        acc_info = Account.select().where(Account.key == call.data)
         if acc_info:
-            if query.message.text == MSG_START_STOP:
+            if call.message.text == 'Запуск / Остановка':
                 if acc_info.get().work_stat == 'start':
-                    Account.update(work_stat='stop').where(Account.key == query.data).execute()
+                    Account.update(work_stat='stop').where(Account.key == call.data).execute()
+                    Account.update(work_stat='stop').where(Account.key == call.data).execute()
                 else:
-                    Account.update(work_stat='start').where(Account.key == query.data).execute()
+                    Account.update(work_stat='start').where(Account.key == call.data).execute()
                 prnt_acc_stat()
-            elif query.message.text == MSG_CHANGE_ACC:
+            elif call.message.text == 'Выберите ваш аккаунт':
                 if acc_info.get().status == 'active':
                     prnt_acc_stat()
                 else:
-                    update.callback_query.answer(show_alert=True, text="Аккаунт не активен")
-
-
-def help(update, context):
-    update.message.reply_text("Use /start to run bot.")
-
-
-def error(update, context):
-    """Log Errors caused by Updates."""
-    logger.warning('Update "%s" caused error "%s"', update, context.error)
+                    bot.answer_callback_query(call.id, show_alert=True, text="Аккаунт не активен")
 
 
 def starter():
@@ -120,7 +123,7 @@ def starter():
             subprocess.call(call_str, shell=True)
         else:
             print('file better.py not found in ' + str(os.getcwd()))
-
+    
     Account.update(pid=0).where(Account.pid > 0).execute()
     while True:
         for acc in Account.select().where((Account.status == 'active') & (Account.work_stat == 'start') & (Account.pid == 0)):
@@ -134,7 +137,7 @@ def starter():
         time.sleep(2)
 
 
-def sender(context):
+def sender():
     while True:
         for msg in Message.select().where(Message.date_send.is_null()):
             if msg.file_type == 'document':
@@ -145,7 +148,7 @@ def sender(context):
                             b.write(msg.blob.decode())
 
                     doc = open(msg.file_name, 'rb')
-                    context.bot.send_document(msg.to_user, doc)
+                    bot.send_document(msg.to_user, doc)
                     doc.close()
 
                     if os.path.isfile(msg.file_name):
@@ -154,31 +157,15 @@ def sender(context):
         time.sleep(10)
 
 
-def main():
-    updater = Updater(TOKEN, use_context=True, request_kwargs=REQUEST_KWARGS)
-    dispatcher = updater.dispatcher
-    context = CallbackContext(dispatcher)
-    
+if __name__ == '__main__':
     prc_acc = Process(target=starter)
     prc_acc.start()
-    
-    prc_sender = Process(target=sender, args=(context, ))
+    prc_sender = Process(target=sender)
     prc_sender.start()
-
-    updater.dispatcher.add_handler(CommandHandler('start', start))
-    updater.dispatcher.add_handler(CommandHandler('hello', send_text))
-    updater.dispatcher.add_handler(CommandHandler('botlist', botlist))
-    updater.dispatcher.add_handler(CallbackQueryHandler(button))
-    updater.dispatcher.add_handler(CommandHandler('help', help))
-    updater.dispatcher.add_error_handler(error)
-
-    # Start the Bot
-    updater.start_polling()
-
-    # Run the bot until the user presses Ctrl-C or the process receives SIGINT,
-    # SIGTERM or SIGABRT
-    updater.idle()
-
-
-if __name__ == '__main__':
-    main()
+    try:
+        bot.polling()
+    except Exception as e:
+        exc_type, exc_value, exc_traceback = sys.exc_info()
+        err_str = str(e) + ' ' + str(repr(traceback.format_exception(exc_type, exc_value, exc_traceback)))
+        for admin in ADMINS:
+            bot.send_message(admin, str(e))
