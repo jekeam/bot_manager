@@ -421,8 +421,10 @@ def go_bets(wag_ol, wag_fb, total_bet, key, deff_max, vect1, vect2, sc1, sc2):
         # CALC/SET STATISTICS
         set_statistics(key, shared.get('olimp_err'), shared.get('fonbet_err'), fork_info=fork_info[fork_id])
         get_statistics()
-        # SAVE INFO
-        save_fork(fork_info)
+        msg_errs = ' ' + shared.get('olimp_err') + shared.get('fonbet_err')
+        if not 'BkOppBetError'.lower() in msg_errs.lower():
+            # SAVE INFO
+            save_fork(fork_info)
         # CHECK FAILS
         check_statistics()
         # WAITING AFTER BET
