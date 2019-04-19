@@ -377,14 +377,14 @@ class BetManager:
 
             prnt(self.msg.format(
                 sys._getframe().f_code.co_name,
-                'Получил данные: bet_type:{}, vector:{}, total:{}, half:{}, val_bet:{},minute:{}, sc_main:{}, sc:{}'.
-                    format(self.bet_type, self.vector, self.cur_total, self.cur_half, self.cur_val_bet, self.cur_minute, self.cur_sc_main,
-                           self.cur_sc)))
+                'Получил данные: bet_type:{}, vector:{}, total:{}, half:{}, val_bet:{}({}),minute:{}, sc_main:{}, sc:{}'.
+                    format(self.bet_type, self.vector, self.cur_total, self.cur_half, self.cur_val_bet, self.old_val_bet, self.cur_minute,
+                    self.cur_sc_main, self.cur_sc)))
 
             prnt(self.msg.format(sys._getframe().f_code.co_name,
                                  'Запас тотала: total_stock:{}, total_bet:{}, cur_total:{}'.format(self.total_stock, self.total_bet, self.cur_total)))
 
-            # check sum sell
+            # CHECK SUM SELL
             prnt(' ')
             prnt(self.msg.format(sys._getframe().f_code.co_name, 'GET SUM SELL'))
             self_opp_data = shared[self.bk_name_opposite].get('self', {})
@@ -395,7 +395,7 @@ class BetManager:
             except CouponBlocked as e:
                 prnt(self.msg.format(sys._getframe().f_code.co_name, 'Ошибка: ' + e.__class__.__name__ + ' - ' + str(e)))
 
-            # calc profit if exists summ sell
+            # CALC PROFIT IF EXISTS SUMM SELL
             if self_opp_data.sum_sell:
                 sell_profit = (self_opp_data.sum_sell / self_opp_data.sum_sell_divider) - sum_opp
                 if sell_profit > 0:
