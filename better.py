@@ -600,9 +600,10 @@ if __name__ == '__main__':
                 bal1 = OlimpBot(OLIMP_USER).get_balance()  # Баланс в БК1
                 bal2 = FonbetBot(FONBET_USER).get_balance()  # Баланс в БК2
 
-            # Показываем каждые 15 минут
+            # Показываем каждые 30 минут
             cur_min = int(datetime.datetime.now().strftime('%M'))
-            if cur_min % 15 == 0 and not printed:
+            ref_min = 30
+            if cur_min % ref_min  == 0 and not printed:
                 prnt(' ')
                 msg_str = str(ACC_ID) + ': ' + \
                 'Кол-во успешно проставленных вилок: ' + str(len(cnt_fork_success)) + '\n' + \
@@ -612,7 +613,7 @@ if __name__ == '__main__':
                 printed = True
                 
                 send_message_bot(USER_ID, msg_str)
-            elif cur_min % 15 != 0 and printed:
+            elif cur_min % ref_min != 0 and printed:
                 printed = False
 
             if server_forks:
