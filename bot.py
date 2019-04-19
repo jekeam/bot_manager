@@ -175,10 +175,10 @@ def sender(update, context):
                         Message.update(date_send=round(time.time())).where(Message.id == msg.id).execute()
                 except Exception as e:
                     for admin in ADMINS:
-                        context.bot.send_message(admin, 'Возникла ошибка:{}, msg:{} - сообщение не отправлено.'.format(str(e), msg))
+                        context.bot.send_message(admin,
+                                                 'Возникла ошибка:{}, msg:{} - сообщение не отправлено.'
+                                                 .format(str(e), 'msg_id: ' + str(msg.id) + ', user_id:' + msg.to_user))
                         Message.update(date_send=-1).where(Message.id == msg.id).execute()
-                        run = False
-
             time.sleep(1)
         except Exception as e:
             for admin in ADMINS:
