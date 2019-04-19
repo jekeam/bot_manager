@@ -49,7 +49,6 @@ def botlist(update, context, edit=False):
         update = update.callback_query
     user = update.message.chat
     acc_list = Account.select().where(Account.user == user.id).order_by(Account.id)
-    n = 1
     for acc in acc_list:
 
         date_end = datetime.datetime.fromtimestamp(acc.date_end)
@@ -61,8 +60,7 @@ def botlist(update, context, edit=False):
             work_stat = emojize(':arrow_forward:', use_aliases=True) + ' Работает ' + date_end_str
         else:
             work_stat = emojize(':stop_button:', use_aliases=True) + ' Остановлен ' + date_end_str
-        keyboard.append([InlineKeyboardButton(text=str(n) + ': ' + work_stat, callback_data=acc.key)])
-        n = n + 1
+        keyboard.append([InlineKeyboardButton(text=str(acc.id) + ': ' + work_stat, callback_data=acc.key)])
 
     reply_markup = InlineKeyboardMarkup(keyboard)
 
