@@ -1304,9 +1304,7 @@ class BetManager:
 
         if result == 'error' and 'temporary unknown result' in msg_str:
             err_str = 'Get temporary unknown result: ' + str(msg_str)
-            prnt(self.msg.format(sys._getframe().f_code.co_name, err_str))
-            sleep(5)
-            return self.check_sell_result(shared)
+            raise CouponBlocked(err_str)
 
         elif result == 'sellDelay':
             sell_delay_sec = (float(res.get('sellDelay')) / 1000)
@@ -1322,13 +1320,12 @@ class BetManager:
                 err_msg = 'coupon ' + str(self.reg_id) + ' blocked'
                 raise CouponBlocked(err_msg)
             else:
-                prnt(self.msg.format(sys._getframe().f_code.co_name, 'new actualSellSum: ' + str(res.get('actualSellSum') / 10)))
-                return self.sale_bet(shared)
+                err_str = self.msg.format(sys._getframe().f_code.co_name, 'new actualSellSum: ' + str(res.get('actualSellSum') / 100))
+                raise CouponBlocked(err_str)
 
         elif result == 'couponCompletelySold':
             sold_sum = res.get('soldSum')
-            prnt(self.msg.format(sys._getframe().f_code.co_name,
-                                 'sell successful, sum sold: ' + str(sold_sum / 100)))
+            prnt(self.msg.format(sys._getframe().f_code.co_name, 'sell successful, sum sold: ' + str(sold_sum / 100)))
         else:
             raise BetIsLost
 
