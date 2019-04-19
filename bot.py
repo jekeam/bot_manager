@@ -52,7 +52,7 @@ def botlist(update, context, edit=False):
     for acc in acc_list:
 
         date_end = datetime.datetime.fromtimestamp(acc.date_end)
-        date_end_str = '(до ' + date_end.strftime('%d.%M.%Y') + ')'
+        date_end_str = '(до ' + date_end.strftime('%d.%m.%Y') + ')'
 
         if acc.status == 'inactive':
             work_stat = emojize(':x:', use_aliases=True) + ' Не активен' + ' ' + date_end_str
