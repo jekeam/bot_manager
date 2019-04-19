@@ -147,13 +147,12 @@ def starter():
             print('start: ', acc.key)  # acc.work_dir,
             acc_start = Process(target=start, args=(acc.key,))  # acc.work_dir,
             acc_start.start()
-        time.sleep(2)
+        time.sleep(3)
 
 
 def sender(update, context):
-    run = True
-    while run:
-        try:
+    try:
+        while True:
             for msg in Message.select().where(Message.date_send.is_null()):
                 try:
                     if msg.file_type == 'document':
@@ -175,15 +174,19 @@ def sender(update, context):
                         Message.update(date_send=round(time.time())).where(Message.id == msg.id).execute()
                 except Exception as e:
                     for admin in ADMINS:
-                        context.bot.send_message(admin,
-                                                 'Возникла ошибка:{}, msg:{} - сообщение не отправлено.'
-                                                 .format(str(e), 'msg_id: ' + str(msg.id) + ', user_id:' + str(msg.to_user)))
+                        if str(e) == 'database is locked':
+                            context.bot.send_message(admin,
+                                                     'Возникла ошибка:{}, msg:{} - сообщение будет отправлено повторно'
+                                                     .format(str(e), 'msg_id: ' + str(msg.id) + ', user_id:' + str(msg.to_user)))
+                        elif str(e) == 'Chat not found':
+                            context.bot.send_message(admin,
+                                                     'Возникла ошибка:{}, msg:{} - сообщение исключено'
+                                                     .format(str(e), 'msg_id: ' + str(msg.id) + ', user_id:' + str(msg.to_user)))
                         Message.update(date_send=-1).where(Message.id == msg.id).execute()
-            time.sleep(1)
-        except Exception as e:
-            for admin in ADMINS:
-                context.bot.send_message(admin, 'Возникла ошибка, рассыльшик остановлен: ' + str(e))
-            run = False
+            time.sleep(3)
+    except Exception as e:
+        for admin in ADMINS:
+            context.bot.send_message(admin, 'Возникла ошибка, но рассыльщик продолжает работу: ' + str(e))
 
 
 def main():
