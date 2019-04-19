@@ -21,7 +21,6 @@ class User(BaseModel):
     role = CharField(null=False, default='client')
     phone = CharField(null=False)
     email = CharField(null=False)
-    status = CharField(null=False, default='active')
     date_start = IntegerField(null=False, default=get_trunc_sysdate())
     date_end = IntegerField(null=True)
 
