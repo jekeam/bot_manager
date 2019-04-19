@@ -106,6 +106,11 @@ def button(update, context):
             if query.message.text == MSG_START_STOP:
                 if acc_info.get().work_stat == 'start':
                     Account.update(work_stat='stop').where(Account.key == query.data).execute()
+                    send_message_bot(
+                        Account.user_id,
+                        str(Account.id) + ': Аккаунт в процессе остановки, остановка может занять несколько минут, пожалуйста подождите... ',
+                        ADMINS
+                    )
                 else:
                     Account.update(work_stat='start').where(Account.key == query.data).execute()
                 prnt_acc_stat()
