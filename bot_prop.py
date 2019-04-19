@@ -17,7 +17,7 @@ REQUEST_KWARGS = {
 }
 
 ROLE = None
-ADMINS = [381868674]  # , 33847743
+ADMINS = [381868674 , 33847743]
 
 MSG_START_STOP = 'Информация об аккаунте: TODO'
 MSG_CHANGE_ACC = 'Пожалуйста, выберите аккаунт:'
