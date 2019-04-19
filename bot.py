@@ -134,7 +134,7 @@ def starter():
         time.sleep(2)
 
 
-def sender(context):
+def sender(update, context):
     while True:
         for msg in Message.select().where(Message.date_send.is_null()):
             if msg.file_type == 'document':
@@ -152,9 +152,8 @@ def sender(context):
                     #     os.remove(msg.file_name)
                     Message.update(date_send=round(time.time())).where(Message.id == msg.id).execute()
             elif msg.file_type == 'message':
-                #context.bot.send_document(msg.to_user, msg.text)
-                #Message.update(date_send=round(time.time())).where(Message.id == msg.id).execute()
-                pass
+                context.bot.send_message(msg.to_user, msg.text)
+                Message.update(date_send=round(time.time())).where(Message.id == msg.id).execute()
         time.sleep(5)
 
 
@@ -166,7 +165,7 @@ def main():
     prc_acc = Process(target=starter)
     prc_acc.start()
     
-    prc_sender = Process(target=sender, args=(context, ))
+    prc_sender = Process(target=sender, args=(updater, context, ))
     prc_sender.start()
 
     updater.dispatcher.add_handler(CommandHandler('start', start))
