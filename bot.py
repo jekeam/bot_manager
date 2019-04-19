@@ -176,6 +176,7 @@ def sender(update, context):
                 except Exception as e:
                     for admin in ADMINS:
                         context.bot.send_message(admin, 'Возникла ошибка:{}, msg:{} - сообщение не отправлено.'.format(str(e), msg))
+                        Message.update(date_send=-1).where(Message.id == msg.id).execute()
                         run = False
 
             time.sleep(1)
