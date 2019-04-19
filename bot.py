@@ -20,6 +20,7 @@ from emoji import emojize
 from multiprocessing import Process
 import subprocess
 import os
+import time
 
 import json
 
@@ -128,9 +129,6 @@ def starter():
             print('start: ', acc.key)  # acc.work_dir,
             acc_start = Process(target=start, args=(acc.key,))  # acc.work_dir,
             acc_start.start()
-            while Account.select().where(Account.key == acc.key).get().pid == 0:
-                print('wait start: ' + str(acc.key))
-                time.sleep(2)
         time.sleep(2)
 
 

@@ -3,7 +3,6 @@ from bet_fonbet import *
 from bet_olimp import *
 import datetime
 from fork_recheck import get_kof_olimp, get_kof_fonbet
-from utils import prnt, get_account_info, get_prop
 # from client import run_client
 import threading
 from multiprocessing import Manager, Process, Pipe
@@ -21,10 +20,78 @@ import os
 from db_model import send_message_bot
 from bot_prop import ADMINS
 
+
+ACC_ID = 0
+USER_ID = 0
+ACCOUNTS = dict()
+PROPERTIES = dict()
+PROXIES = dict()
+
+
+KEY = ''
+try:
+    KEY = sys.argv[2]
+except:
+    pass
+print('KEY: ' + str(KEY))
+
+if KEY:
+    acc_info = Account.select().where(Account.key == KEY)
+    if acc_info:
+        if not ACCOUNTS:
+            ACCOUNTS = loads(acc_info.get().accounts)
+            print('ACCOUNTS: ' + str(ACCOUNTS))
+        if not PROPERTIES:
+            pror_dict = {}
+            for prop in acc_info.get().properties:
+                print(prop.key, prop.val)
+                pror_dict.update({prop.key: prop.val})
+            PROPERTIES.update(pror_dict)
+            print('PROPERTIES: ' + str(PROPERTIES))
+        if not PROXIES:
+            PROXIES = loads(acc_info.get().proxies)
+            print('PROXIES: ' + str(PROXIES))
+        if not ACC_ID:
+            ACC_ID = acc_info.get().id
+            print('ACC_ID: ' + str(ACC_ID))
+        if not USER_ID:
+            USER_ID = acc_info.get().user_id
+            print('USER_ID: ' + str(USER_ID))
+
+from utils import prnt, get_account_info, get_prop
+
+
+
+FONBET_USER = {'login': get_account_info('fonbet', 'login'), 'password': get_account_info('fonbet', 'password')}
+OLIMP_USER = {'login': get_account_info('olimp', 'login'), 'password': get_account_info('olimp', 'password')}
+
+bet1 = 0.  # Сумма ставки в БК1
+bet2 = 0.  # Сумма ставки в БК2
+total_bet = 0.  # Величина общей ставки;
+betMax1 = 3000.  # Максимальная ставка в БК1 на данную позицию
+betMax2 = 3000.  # Максимальная ставка в БК2 на данную позицию
+betMin1 = 30.  # Минимальная ставка в БК1 на данную позицию
+betMin2 = 30.  # Минимальная ставка в БК2 на данную позицию
+pf1 = 0.  # Прибыль в БК1
+pf2 = 0.  # Прибыль в БК2
+pf = 0.  # минимальная прибыль;
+bal1 = 0
+bal2 = 0
+N = 0  # счетчик (количество, проставленных вилок)
+F = 0  # счетчик (количество, найденых вилок)
+balance_line = 0  # (bal1 + bal2) / 2 / 100 * 60
+time_get_balance = datetime.datetime.now()
+time_live = datetime.datetime.now()
+
+cnt_fail = 0
+black_list_matches = []
+cnt_fork_success = []
+printed = False
+last_fork_time = 0
+            
+
 if __name__ == '__main__':
     from history import export_hist
-
-global KEY, ACC_ID
 
 shutdown = False
 if get_prop('debug'):
@@ -466,37 +533,6 @@ def run_client():
         time.sleep(10)
         return run_client()
 
-
-FONBET_USER = {'login': get_account_info('fonbet', 'login'), 'password': get_account_info('fonbet', 'password')}
-OLIMP_USER = {'login': get_account_info('olimp', 'login'), 'password': get_account_info('olimp', 'password')}
-
-bet1 = 0.  # Сумма ставки в БК1
-bet2 = 0.  # Сумма ставки в БК2
-total_bet = 0.  # Величина общей ставки;
-betMax1 = 3000.  # Максимальная ставка в БК1 на данную позицию
-betMax2 = 3000.  # Максимальная ставка в БК2 на данную позицию
-betMin1 = 30.  # Минимальная ставка в БК1 на данную позицию
-betMin2 = 30.  # Минимальная ставка в БК2 на данную позицию
-pf1 = 0.  # Прибыль в БК1
-pf2 = 0.  # Прибыль в БК2
-pf = 0.  # минимальная прибыль;
-bal1 = 0
-bal2 = 0
-N = 0  # счетчик (количество, проставленных вилок)
-F = 0  # счетчик (количество, найденых вилок)
-balance_line = 0  # (bal1 + bal2) / 2 / 100 * 60
-time_get_balance = datetime.datetime.now()
-time_live = datetime.datetime.now()
-
-cnt_fail = 0
-black_list_matches = []
-cnt_fork_success = []
-printed = False
-last_fork_time = 0
-
-# wag_fb:{'event': '12797479', 'factor': '921', 'param': '', 'score': '0:0', 'value': '2.35'}
-# wag_fb:{'apid': '1144260386:45874030:1:3:-9999:3:NULL:NULL:1', 'factor': '1.66', 'sport_id': 1, 'event': '45874030'}
-
 if __name__ == '__main__':
     try:
         Account.update(pid=os.getpid()).where(Account.key == KEY).execute()
@@ -525,7 +561,7 @@ if __name__ == '__main__':
         MIN_L = get_prop('min_l')
         prnt(' ')
         prnt('ID аккаунта: ' + str(ACC_ID))
-        prnt('IP-адрес сервера: ' + server_ip + ':80')
+        prnt('IP-адрес сервера: ' + str(server_ip) + ':80')
         prnt('Баланс в БК Олимп: ' + str(bal1))
         prnt('Баланс в БК Фонбет: ' + str(bal2))
 

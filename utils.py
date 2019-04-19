@@ -65,24 +65,6 @@ opposition = {
     'ННН': 'ННД'
 }
 
-KEY = ''
-ACC_ID = 0
-USER_ID = 0
-try:
-    KEY = sys.argv[2]
-except:
-    pass
-
-if KEY:
-    acc_info = Account.select().where(Account.key == KEY)
-    if acc_info:
-        ACCOUNTS = loads(acc_info.get().accounts)
-        PROPERTIES = loads(acc_info.get().properties)
-        PROXIES = loads(acc_info.get().proxies)
-        ACC_ID = acc_info.get().id
-        USER_ID = acc_info.get().user_id
-
-
 def prnt(vstr=None, hide=None):
     if vstr:
         global dtOld
@@ -102,10 +84,6 @@ def prnt(vstr=None, hide=None):
             Outfile = open(str(ACC_ID) + '_client_hide.log', "a+", encoding='utf-8')
             Outfile.write(strLog + '\n\n')
             Outfile.close()
-
-
-prnt('KEY: ' + str(KEY))
-
 
 def get_vector(bet_type, sc1=None, sc2=None):
     def raise_err(VECT, sc1, sc2):
@@ -213,7 +191,7 @@ def get_account_info(bk=None, param=None):
 
 def get_prop(param):
     global PROPERTIES
-    return PROPERTIES.get(param)
+    return PROPERTIES.get(param.lower())
 
 
 def serv_log(filename: str, vstr: str):

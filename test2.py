@@ -1,5 +1,5 @@
-if type(4) is int:
-    print('i')
+# from db_model import *
 
-if type('4') is str:
-    print('s')
+# acc = Account.select().where(Account.id==1).get()
+# for pror in acc.properties:
+#     print(pror.key)

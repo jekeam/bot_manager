@@ -38,8 +38,7 @@ if __name__ == '__main__':
             proxies=r'{ "fonbet": { "http": "http://shaggy:hzsyk4@5.188.84.73:8656", "https": "https://shaggy:hzsyk4@5.188.84.73:8656" }, "olimp": { "http": "http://shaggy:hzsyk4@5.188.84.73:8656", "https": "https://shaggy:hzsyk4@5.188.84.73:8656" } }',
             accounts=r'{ "olimp": { "login": "3318188", "password": "6ya8y4eK", "mirror": "olimp.com" }, "fonbet": { "login": 5989155, "password": "6ya8y4eK", "mirror": "fonbet.com" } }'
         )
-        
-        prop = Properties.create({
+        p = {
             "SUMM": 560, 
             "RANDOM_SUMM_PROC": 30, 
             "FORK_LIFE_TIME": 3, 
@@ -50,7 +49,10 @@ if __name__ == '__main__':
             "MAX_FORK": 30, 
             "MAX_FAIL": 4, 
             "MIN_L": 1
-        })
+        }
+        for k, v in p.items():
+            prop = Properties.create(acc=acc.id, key=k, val=v)
+            
     except Exception as e:
         print(e)
 
@@ -65,7 +67,7 @@ if __name__ == '__main__':
             accounts=r'{"olimp": {"login": "6265127","password": "qvF3BwrNcRcJtB6","mirror": "olimp.com"},"fonbet": {"login": 5699838,"password": "NTe2904H11","mirror": "fonbet.com"}}'
         )
          
-        prop = Properties.create({
+        p = {
             "SUMM": 400,
             "RANDOM_SUMM_PROC": 30,
             "FORK_LIFE_TIME": 3,
@@ -77,7 +79,9 @@ if __name__ == '__main__':
             "MAX_FAIL": 6,
             "MIN_L": 1,
             "HARD_BET_RIGHT": 1
-        })
+        }
+        for k, v in p.items():
+            prop = Properties.create(acc=acc.id, key=k, val=v)
     except Exception as e:
         print(e)
 

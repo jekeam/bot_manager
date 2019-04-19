@@ -51,9 +51,13 @@ class Message(BaseModel):
     date_send = IntegerField(null=True)
     
 class Properties(BaseModel):
-    acc = ForeignKeyField(Account, backref='prop')
-    name = CharField(null=False, constraints=[Check('name == name.lower()')])
+    acc = ForeignKeyField(Account, backref='properties')
+    key = CharField(null=False)
     val = CharField(null=True)
+    
+    class Meta:
+        indexes = ( (('acc', 'key'), True), )
+            
 
 
 # API
