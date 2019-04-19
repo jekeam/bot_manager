@@ -71,8 +71,6 @@ def botlist(update, context, edit=False):
 
 
 ACC_ACTIVE = 0
-
-
 def button(update, context):
     global ACC_ACTIVE
 
@@ -98,19 +96,19 @@ def button(update, context):
         if query.data == 'botlist':
             botlist(update, context, 'Edit')
         acc_info = Account.select().where(Account.key == query.data)
-        # if query.data == 'pror_edit':
-        #     props = 
-        #     reply_markup = InlineKeyboardMarkup(keyboard)
-        #     query.message.edit_text(text=MSG_START_STOP, reply_markup=reply_markup)
+        if query.data == 'pror_edit':
+            print('pror_edit: ' + str(query))
         if acc_info:
+            ACC_ACTIVE = acc_info.get().id
+            print('ACC_ACTIVE: ' + str(ACC_ACTIVE))
             if query.message.text == MSG_START_STOP:
                 if acc_info.get().work_stat == 'start':
                     Account.update(work_stat='stop').where(Account.key == query.data).execute()
-                    # send_message_bot(
-                    #     Account.user,
-                    #     str(Account.id) + ': Аккаунт в процессе остановки, остановка может занять несколько минут, пожалуйста подождите... ',
-                    #     ADMINS
-                    # )
+                    send_message_bot(
+                        acc_info.get().user_id,
+                        str(acc_info.get().id) + ': Аккаунт в процессе остановки, это может занять несколько минут, пожалуйста подождите... ',
+                        ADMINS
+                    )
                 else:
                     Account.update(work_stat='start').where(Account.key == query.data).execute()
                 prnt_acc_stat()
