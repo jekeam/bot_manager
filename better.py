@@ -493,6 +493,7 @@ black_list_matches = []
 cnt_fork_success = []
 printed = False
 last_fork_time = 0
+wait_before_start = 15
 
 # wag_fb:{'event': '12797479', 'factor': '921', 'param': '', 'score': '0:0', 'value': '2.35'}
 # wag_fb:{'apid': '1144260386:45874030:1:3:-9999:3:NULL:NULL:1', 'factor': '1.66', 'sport_id': 1, 'event': '45874030'}
@@ -500,6 +501,7 @@ last_fork_time = 0
 if __name__ == '__main__':
     try:
         Account.update(pid=os.getpid()).where(Account.key == KEY).execute()
+        send_message_bot(USER_ID, str(ACC_ID) + ': Аккаунт запущен, начну работу через ' + str(wait_before_start) + ' сек.')
         
         prnt('DEBUG: ' + str(DEBUG))
 
@@ -577,8 +579,7 @@ if __name__ == '__main__':
         start_see_fork = threading.Thread(target=run_client)  # , args=(server_forks,))
         start_see_fork.start()
         
-        prnt('Ожидание 15 сек.')
-        time.sleep(15)
+        time.sleep(wait_before_start)
         send_message_bot(USER_ID, str(ACC_ID) + ': Начал работу')
 
         while Account.select().where(Account.key == KEY).get().work_stat == 'start':
@@ -603,7 +604,7 @@ if __name__ == '__main__':
             cur_min = int(datetime.datetime.now().strftime('%M'))
             if cur_min % 15 == 0 and not printed:
                 prnt(' ')
-                msg_str = \
+                msg_str = str(ACC_ID) + ': ' + \
                 'Кол-во успешно проставленных вилок: ' + str(len(cnt_fork_success)) + '\n' + \
                 'Кол-во вилок с выкупами: ' + str(cnt_fail) + '\n' + \
                 'Работаю еще: ' + str(round((shutdown_minutes - (datetime.datetime.now() - time_live).total_seconds()) / 60 / 60, 2)) + ' ч.'

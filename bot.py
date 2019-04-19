@@ -22,6 +22,8 @@ import subprocess
 import os
 
 import json
+import datetime
+from utils import prop_abr
 
 logging.basicConfig(filename='bot.log', format='%(asctime)s - %(name)s - %(levelname)s - %(message)s', level=logging.DEBUG)
 logger = logging.getLogger(__name__)
@@ -49,12 +51,16 @@ def botlist(update, context, edit=False):
     acc_list = Account.select().where(Account.user == user.id).order_by(Account.id)
     n = 1
     for acc in acc_list:
+        
+        date_end = datetime.datetime.fromtimestamp(acc.date_end)
+        date_end_str = '(до ' + date_end.strftime('%d.%M.%Y') + ')'
+        
         if acc.status == 'inactive':
-            work_stat = 'Не активен ❌'
+            work_stat = emojize(':x:', use_aliases=True) + ' Не активен' + ' ' + date_end_str
         elif acc.work_stat == 'start':
-            work_stat = 'Работает ' + emojize(":arrow_forward:", use_aliases=True)
+            work_stat = emojize(':arrow_forward:', use_aliases=True) + ' Работает ' + date_end_str
         else:
-            work_stat = 'Остановлен ' + emojize(":stop_button:", use_aliases=True)
+            work_stat = emojize(':stop_button:', use_aliases=True) + ' Остановлен ' + date_end_str
         keyboard.append([InlineKeyboardButton(text=str(n) + ': ' + work_stat, callback_data=acc.key)])
         n = n + 1
 
@@ -66,16 +72,19 @@ def botlist(update, context, edit=False):
         update.message.edit_text(text=MSG_CHANGE_ACC, reply_markup=reply_markup)
 
 
+ACC_ACTIVE = 0
 def button(update, context):
+    global ACC_ACTIVE
     def prnt_acc_stat():
         keyboard = []
         if acc_info.get().work_stat == 'stop':
-            start_stop = 'Запустить ' + emojize(":arrow_forward:", use_aliases=True)
+            start_stop = emojize(":arrow_forward:", use_aliases=True) + ' Запустить'
         else:
-            start_stop = 'Остановить ' + emojize(":stop_button:", use_aliases=True)
+            start_stop = emojize(":stop_button:", use_aliases=True) + 'Остановить'
 
         keyboard.append([InlineKeyboardButton(text=start_stop, callback_data=query.data)])
-        keyboard.append([InlineKeyboardButton(text='« Back to Bots List', callback_data='botlist')])
+        keyboard.append([InlineKeyboardButton(text=emojize(':wrench:', use_aliases=True) + ' Настройки', callback_data='pror_edit')])
+        keyboard.append([InlineKeyboardButton(text=emojize(':back:', use_aliases=True) + ' Back to Bots List', callback_data='botlist')])
 
         reply_markup = InlineKeyboardMarkup(keyboard)
         query.message.edit_text(text=MSG_START_STOP, reply_markup=reply_markup)
@@ -88,6 +97,10 @@ def button(update, context):
         if query.data == 'botlist':
             botlist(update, context, 'Edit')
         acc_info = Account.select().where(Account.key == query.data)
+        # if query.data == 'pror_edit':
+        #     props = 
+        #     reply_markup = InlineKeyboardMarkup(keyboard)
+        #     query.message.edit_text(text=MSG_START_STOP, reply_markup=reply_markup)
         if acc_info:
             if query.message.text == MSG_START_STOP:
                 if acc_info.get().work_stat == 'start':
@@ -151,7 +164,7 @@ def sender(update, context):
             elif msg.file_type == 'message':
                 context.bot.send_message(msg.to_user, msg.text)
                 Message.update(date_send=round(time.time())).where(Message.id == msg.id).execute()
-        time.sleep(5)
+        time.sleep(1)
 
 
 def main():

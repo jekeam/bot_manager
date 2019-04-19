@@ -60,6 +60,21 @@ if __name__ == '__main__':
         acc = Account.create(
             # user=33847743,
             user=381868674,
+            key='a28ad3f4-5f9e-11e9-8d15-DELETE',
+            date_end=get_trunc_sysdate(30000),
+            status='inactive',
+            proxies=r'{"fonbet": {"http": "http://suineg:8veh34@212.90.108.153:3597","https": "https://suineg:8veh34@212.90.108.153:3597"},"olimp": {"http": "http://suineg:8veh34@212.90.108.153:3597","https": "https://suineg:8veh34@212.90.108.153:3597"},"bet365": {"http": "","https": ""}}',
+            accounts=r'{"olimp": {"login": "6265127","password": "qvF3BwrNcRcJtB6","mirror": "olimp.com"},"fonbet": {"login": 5699838,"password": "NTe2904H11","mirror": "fonbet.com"}}'
+        )
+         
+    except Exception as e:
+        print(e)
+        
+
+    try:
+        acc = Account.create(
+            # user=33847743,
+            user=381868674,
             key='a28ad3f4-5f9e-11e9-8d15-2cfda1739afe',
             date_end=get_trunc_sysdate(30000),
             status='active',
@@ -83,7 +98,7 @@ if __name__ == '__main__':
         for k, v in p.items():
             prop = Properties.create(acc=acc.id, key=k, val=v)
     except Exception as e:
-        print(e)
+        print(e)        
 
     for x in Account().select():
         js = x.__dict__.get('__data__')
