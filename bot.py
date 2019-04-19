@@ -186,7 +186,8 @@ def sender(update, context):
             time.sleep(3)
     except Exception as e:
         for admin in ADMINS:
-            context.bot.send_message(admin, 'Возникла ошибка, но рассыльщик продолжает работу: ' + str(e))
+            context.bot.send_message(admin, 'Возникла ошибка, рассыльщик продолжит работу через минуту: ' + str(e))
+        time.sleep(60)
 
 
 def main():
