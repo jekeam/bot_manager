@@ -603,10 +603,14 @@ if __name__ == '__main__':
             cur_min = int(datetime.datetime.now().strftime('%M'))
             if cur_min % 15 == 0 and not printed:
                 prnt(' ')
-                prnt('Кол-во успешно проставленных вилок: ' + str(len(cnt_fork_success)))
-                prnt('Кол-во вилок с ошибками: ' + str(cnt_fail))
-                prnt('Работаю еще: ' + str(round((shutdown_minutes - (datetime.datetime.now() - time_live).total_seconds()) / 60 / 60, 2)) + ' ч.')
+                msg_str = \
+                'Кол-во успешно проставленных вилок: ' + str(len(cnt_fork_success)) + '\n' + \
+                'Кол-во вилок с выкупами: ' + str(cnt_fail) + '\n' + \
+                'Работаю еще: ' + str(round((shutdown_minutes - (datetime.datetime.now() - time_live).total_seconds()) / 60 / 60, 2)) + ' ч.'
+                prnt(msg_str)
                 printed = True
+                
+                send_message_bot(USER_ID, msg_str)
             elif cur_min % 15 != 0 and printed:
                 printed = False
 
