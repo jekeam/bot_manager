@@ -3,6 +3,7 @@ from bet_fonbet import *
 from bet_olimp import *
 import datetime
 from fork_recheck import get_kof_olimp, get_kof_fonbet
+from utils import prnt, get_account_info, get_prop
 # from client import run_client
 import threading
 from multiprocessing import Manager, Process, Pipe
@@ -20,78 +21,10 @@ import os
 from db_model import send_message_bot
 from bot_prop import ADMINS
 
-
-ACC_ID = 0
-USER_ID = 0
-ACCOUNTS = dict()
-PROPERTIES = dict()
-PROXIES = dict()
-
-
-KEY = ''
-try:
-    KEY = sys.argv[2]
-except:
-    pass
-print('KEY: ' + str(KEY))
-
-if KEY:
-    acc_info = Account.select().where(Account.key == KEY)
-    if acc_info:
-        if not ACCOUNTS:
-            ACCOUNTS = loads(acc_info.get().accounts)
-            print('ACCOUNTS: ' + str(ACCOUNTS))
-        if not PROPERTIES:
-            pror_dict = {}
-            for prop in acc_info.get().properties:
-                print(prop.key, prop.val)
-                pror_dict.update({prop.key: prop.val})
-            PROPERTIES.update(pror_dict)
-            print('PROPERTIES: ' + str(PROPERTIES))
-        if not PROXIES:
-            PROXIES = loads(acc_info.get().proxies)
-            print('PROXIES: ' + str(PROXIES))
-        if not ACC_ID:
-            ACC_ID = acc_info.get().id
-            print('ACC_ID: ' + str(ACC_ID))
-        if not USER_ID:
-            USER_ID = acc_info.get().user_id
-            print('USER_ID: ' + str(USER_ID))
-
-from utils import prnt, get_account_info, get_prop
-
-
-
-FONBET_USER = {'login': get_account_info('fonbet', 'login'), 'password': get_account_info('fonbet', 'password')}
-OLIMP_USER = {'login': get_account_info('olimp', 'login'), 'password': get_account_info('olimp', 'password')}
-
-bet1 = 0.  # Сумма ставки в БК1
-bet2 = 0.  # Сумма ставки в БК2
-total_bet = 0.  # Величина общей ставки;
-betMax1 = 3000.  # Максимальная ставка в БК1 на данную позицию
-betMax2 = 3000.  # Максимальная ставка в БК2 на данную позицию
-betMin1 = 30.  # Минимальная ставка в БК1 на данную позицию
-betMin2 = 30.  # Минимальная ставка в БК2 на данную позицию
-pf1 = 0.  # Прибыль в БК1
-pf2 = 0.  # Прибыль в БК2
-pf = 0.  # минимальная прибыль;
-bal1 = 0
-bal2 = 0
-N = 0  # счетчик (количество, проставленных вилок)
-F = 0  # счетчик (количество, найденых вилок)
-balance_line = 0  # (bal1 + bal2) / 2 / 100 * 60
-time_get_balance = datetime.datetime.now()
-time_live = datetime.datetime.now()
-
-cnt_fail = 0
-black_list_matches = []
-cnt_fork_success = []
-printed = False
-last_fork_time = 0
-            
-
 if __name__ == '__main__':
     from history import export_hist
+
+global KEY, ACC_ID
 
 shutdown = False
 if get_prop('debug'):
@@ -101,7 +34,7 @@ else:
 
 
 def get_sum_bets(k1, k2, total_bet, hide=False):
-    round_fork = get_prop('round_fork')
+    round_fork = int(get_prop('round_fork'))
 
     k1 = float(k1)
     k2 = float(k2)
@@ -244,7 +177,7 @@ def check_fork(key, L, k1, k2, live_fork, bk1_score, bk2_score, minute, time_bre
             fork_exclude_text + 'Вилка ' + str(round((1 - L) * 100, 2)) + '% исключена т.к. идет ' + str(minute) + ' минута матча \n'
 
     # Вилка живет достаточно
-    long_livers = get_prop('fork_life_time')
+    long_livers = int(get_prop('fork_life_time'))
     if live_fork < long_livers:
         fork_exclude_text = fork_exclude_text + 'Вилка ' + str(round((1 - L) * 100, 2)) + \
                             '% исключена т.к. живет меньше ' + str(long_livers) + ' сек. \n'
@@ -294,12 +227,12 @@ def get_statistics():
 def check_statistics():
     global cnt_fail, cnt_fork_success
     
-    max_fail = get_prop('max_fail')
+    max_fail = int(get_prop('max_fail'))
     if cnt_fail >= max_fail:
         msg_str = 'Кол-во ошибок больше допустимого (' + str(max_fail) + '), работа завершена.'
         raise MaxFail(msg_str)
 
-    max_fork = get_prop('max_fork')
+    max_fork = int(get_prop('max_fork'))
     if len(cnt_fork_success) >= max_fork:
         msg_str = 'Кол-во успешно просталвенных вилок достигнуто (' + str(max_fork) + '), работа завершена.'
         raise MaxFork(msg_str)    
@@ -533,6 +466,37 @@ def run_client():
         time.sleep(10)
         return run_client()
 
+
+FONBET_USER = {'login': get_account_info('fonbet', 'login'), 'password': get_account_info('fonbet', 'password')}
+OLIMP_USER = {'login': get_account_info('olimp', 'login'), 'password': get_account_info('olimp', 'password')}
+
+bet1 = 0.  # Сумма ставки в БК1
+bet2 = 0.  # Сумма ставки в БК2
+total_bet = 0.  # Величина общей ставки;
+betMax1 = 3000.  # Максимальная ставка в БК1 на данную позицию
+betMax2 = 3000.  # Максимальная ставка в БК2 на данную позицию
+betMin1 = 30.  # Минимальная ставка в БК1 на данную позицию
+betMin2 = 30.  # Минимальная ставка в БК2 на данную позицию
+pf1 = 0.  # Прибыль в БК1
+pf2 = 0.  # Прибыль в БК2
+pf = 0.  # минимальная прибыль;
+bal1 = 0
+bal2 = 0
+N = 0  # счетчик (количество, проставленных вилок)
+F = 0  # счетчик (количество, найденых вилок)
+balance_line = 0  # (bal1 + bal2) / 2 / 100 * 60
+time_get_balance = datetime.datetime.now()
+time_live = datetime.datetime.now()
+
+cnt_fail = 0
+black_list_matches = []
+cnt_fork_success = []
+printed = False
+last_fork_time = 0
+
+# wag_fb:{'event': '12797479', 'factor': '921', 'param': '', 'score': '0:0', 'value': '2.35'}
+# wag_fb:{'apid': '1144260386:45874030:1:3:-9999:3:NULL:NULL:1', 'factor': '1.66', 'sport_id': 1, 'event': '45874030'}
+
 if __name__ == '__main__':
     try:
         Account.update(pid=os.getpid()).where(Account.key == KEY).execute()
@@ -550,7 +514,7 @@ if __name__ == '__main__':
         else:
             bal1 = OlimpBot(OLIMP_USER).get_balance()  # Баланс в БК1
             bal2 = FonbetBot(FONBET_USER).get_balance()  # Баланс в БК2
-            total_bet = get_prop('summ')
+            total_bet = int(get_prop('summ'))
 
         balance_line = (bal1 + bal2) / 2 / 100 * 30
         if not DEBUG:
@@ -558,21 +522,21 @@ if __name__ == '__main__':
         else:
             server_ip = get_prop('server_ip_test')
 
-        MIN_L = get_prop('min_l')
+        MIN_L = float(get_prop('min_l'))
         prnt(' ')
         prnt('ID аккаунта: ' + str(ACC_ID))
-        prnt('IP-адрес сервера: ' + str(server_ip) + ':80')
+        prnt('IP-адрес сервера: ' + server_ip + ':80')
         prnt('Баланс в БК Олимп: ' + str(bal1))
         prnt('Баланс в БК Фонбет: ' + str(bal2))
 
-        get_round_fork = get_prop('round_fork')
+        get_round_fork = int(get_prop('round_fork'))
         if get_round_fork not in (5, 10, 50, 100, 1000):
             err_msg = 'Недопустимое округление ставки={}'.format(get_round_fork)
             raise ValueError(err_msg)
         else:
             prnt('Округление вилки и суммы ставки до: ' + str(get_round_fork))
 
-        random_summ_proc = get_prop('random_summ_proc')
+        random_summ_proc = int(get_prop('random_summ_proc'))
         if random_summ_proc > 30:
             err_msg = 'Отклонение от общей суммы ставки не должно привышать 30%'
             raise ValueError(err_msg)
@@ -588,11 +552,11 @@ if __name__ == '__main__':
                 prnt('Полученный диапазон общей суммы ставки (в валюте): ' + str(total_bet_min) + '-' + str(total_bet_max))
 
         prnt('Пропускаем ставки > 1.2, если баланс БК меньше: ' + str(balance_line))
-        prnt('Время жизни вилки от (сек.): ' + str(get_prop('fork_life_time')))
+        prnt('Время жизни вилки от (сек.): ' + str(int(get_prop('fork_life_time'))))
         prnt('Исключаем низшие команды: ' + str(get_prop('junior_team_exclude')))
-        prnt('Работаю (ч.): ' + str(get_prop('work_hour')))
-        prnt('Максимальное кол-во успешных вилок: ' + str(get_prop('max_fork')))
-        prnt('Максимально допустимое количество ошибок/выкупов: ' + str(get_prop('max_fail')))
+        prnt('Работаю (ч.): ' + str(int(get_prop('work_hour'))))
+        prnt('Максимальное кол-во успешных вилок: ' + str(int(get_prop('max_fork'))))
+        prnt('Максимально допустимое количество ошибок/выкупов: ' + str(int(get_prop('max_fail'))))
         prnt('Минимальный профит вилки от (%): ' + str(round((1 - MIN_L) * 100, 3)))
         prnt('Жесткая ставка второго плеча: ' + str(get_prop('hard_bet_right')))
         prnt(' ')
@@ -621,7 +585,7 @@ if __name__ == '__main__':
             print(str(Account.select().where(Account.key == KEY).get().id) + ': ' + Account.select().where(Account.key == KEY).get().work_stat)
             balance_line = (bal1 + bal2) / 2 / 100 * 30
 
-            shutdown_minutes = 60 * (60 * get_prop('work_hour'))  # секунды * на кол-во (60*1) - это час
+            shutdown_minutes = 60 * (60 * int(get_prop('work_hour')))  # секунды * на кол-во (60*1) - это час
             if (datetime.datetime.now() - time_live).total_seconds() > shutdown_minutes:
                 msg_str = 'Прошло ' + str(round(shutdown_minutes / 60 / 60, 2)) + ' ч., я завершил работу'
                 raise Shutdown(msg_str)
@@ -738,7 +702,7 @@ if __name__ == '__main__':
 
                     if vect1 and vect2:
                         if (0.0 <= l < l_temp or DEBUG) and deff_max < 10 and k1 > 0 < k2:
-                            round_bet = get_prop('round_fork')
+                            round_bet = int(get_prop('round_fork'))
                             total_bet = round(randint(total_bet_min, total_bet_max) / round_bet) * round_bet
 
                             bet1, bet2 = get_sum_bets(k1, k2, total_bet, 'hide')
@@ -771,7 +735,7 @@ if __name__ == '__main__':
                                                val.get('total_bet'), key, val.get('deff_max'), val.get('vect1'),
                                                val.get('vect2'), val.get('sc1'), val.get('sc2'))
                         break
-                    total_bet = get_prop('summ')
+                    total_bet = int(get_prop('summ'))
                     go_bet_key.clear()
                     server_forks.clear()
                 else:

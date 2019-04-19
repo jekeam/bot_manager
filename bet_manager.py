@@ -418,8 +418,8 @@ class BetManager:
                 new_l = (k_opp * self.cur_val_bet) / (k_opp + self.cur_val_bet)
                 old_l = (k_opp * self.old_val_bet) / (k_opp + self.old_val_bet)
 
-                round_rang = get_prop('round_fork')
-                total_bet = get_prop('summ')
+                round_rang = int(get_prop('round_fork'))
+                total_bet = int(get_prop('summ'))
                 self.sum_bet = round(((total_bet / new_l) / (self.cur_val_bet / new_l)) / round_rang) * round_rang
                 shared[self.bk_name]['new_bet_sum'] = self.sum_bet
 

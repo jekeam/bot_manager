@@ -6,6 +6,7 @@ import cfscrape
 import requests
 import datetime
 import statistics
+import copy
 
 from db_model import *
 import sys
@@ -65,6 +66,28 @@ opposition = {
     'ННН': 'ННД'
 }
 
+KEY = ''
+ACC_ID = 0
+USER_ID = 0
+try:
+    KEY = sys.argv[2]
+except:
+    pass
+
+if KEY:
+    acc_info = Account.select().where(Account.key == KEY)
+    if acc_info:
+        ACCOUNTS = loads(acc_info.get().accounts)
+        pror_dict = {}
+        for prop in acc_info.get().properties:
+            pror_dict.update({prop.key: prop.val})
+        PROPERTIES = copy.deepcopy(pror_dict)
+            
+        PROXIES = loads(acc_info.get().proxies)
+        ACC_ID = acc_info.get().id
+        USER_ID = acc_info.get().user_id
+
+
 def prnt(vstr=None, hide=None):
     if vstr:
         global dtOld
@@ -84,6 +107,10 @@ def prnt(vstr=None, hide=None):
             Outfile = open(str(ACC_ID) + '_client_hide.log', "a+", encoding='utf-8')
             Outfile.write(strLog + '\n\n')
             Outfile.close()
+
+
+prnt('KEY: ' + str(KEY))
+
 
 def get_vector(bet_type, sc1=None, sc2=None):
     def raise_err(VECT, sc1, sc2):
@@ -191,7 +218,8 @@ def get_account_info(bk=None, param=None):
 
 def get_prop(param):
     global PROPERTIES
-    return PROPERTIES.get(param.lower())
+    print('PROPERTIES: ' + str(PROPERTIES))
+    return PROPERTIES.get(param.upper())
 
 
 def serv_log(filename: str, vstr: str):
