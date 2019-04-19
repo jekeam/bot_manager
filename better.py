@@ -584,7 +584,7 @@ if __name__ == '__main__':
         send_message_bot(USER_ID, str(ACC_ID) + ': Начал работу', ADMINS)
 
         while Account.select().where(Account.key == KEY).get().work_stat == 'start':
-            print(str(Account.select().where(Account.key == KEY).get().id) + ': ' + Account.select().where(Account.key == KEY).get().work_stat)
+            # print(str(Account.select().where(Account.key == KEY).get().id) + ': ' + Account.select().where(Account.key == KEY).get().work_stat)
             balance_line = (bal1 + bal2) / 2 / 100 * 30
 
             shutdown_minutes = 60 * (60 * int(get_prop('work_hour')))  # секунды * на кол-во (60*1) - это час
