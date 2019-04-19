@@ -581,7 +581,7 @@ if __name__ == '__main__':
         start_see_fork.start()
 
         time.sleep(wait_before_start)
-        send_message_bot(USER_ID, str(ACC_ID) + ': Начал работу')
+        send_message_bot(USER_ID, str(ACC_ID) + ': Начал работу', ADMINS)
 
         while Account.select().where(Account.key == KEY).get().work_stat == 'start':
             print(str(Account.select().where(Account.key == KEY).get().id) + ': ' + Account.select().where(Account.key == KEY).get().work_stat)
@@ -777,5 +777,5 @@ if __name__ == '__main__':
 
     finally:
         msg_str = str(ACC_ID) + ': Завершил работу'
-        send_message_bot(USER_ID, msg_str)
+        send_message_bot(USER_ID, msg_str, ADMINS)
         Account.update(pid=0, work_stat='stop').where(Account.key == KEY).execute()
