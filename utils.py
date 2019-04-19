@@ -66,6 +66,7 @@ opposition = {
     'ННН': 'ННД'
 }
 
+print('___________________INIT____________________')
 KEY = ''
 ACC_ID = 0
 USER_ID = 0
@@ -218,7 +219,6 @@ def get_account_info(bk=None, param=None):
 
 def get_prop(param):
     global PROPERTIES
-    print('PROPERTIES: ' + str(PROPERTIES))
     return PROPERTIES.get(param.upper())
 
 

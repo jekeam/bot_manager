@@ -20,7 +20,6 @@ from emoji import emojize
 from multiprocessing import Process
 import subprocess
 import os
-import time
 
 import json
 
