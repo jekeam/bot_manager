@@ -438,11 +438,7 @@ class BetManager:
                     prnt(err_str)
                     raise BetIsLost(err_str)
                 else:
-                    prnt(' ')
-                    prnt(''.ljust(100, '*'))
-                    prnt(self.msg.format(sys._getframe().f_code.co_name, 'Случилась необдуманная ситуация, посмотри!'))
-                    prnt(''.ljust(100, '*'))
-                    prnt(' ')
+                    prnt(self.msg.format(sys._getframe().f_code.co_name, 'Ставка выгоднее выкупа, работаю дальше'))
 
             if self.cur_val_bet:
                 self.old_val_bet = self.cur_val_bet
