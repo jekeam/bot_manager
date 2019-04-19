@@ -182,7 +182,7 @@ def sender(update, context):
                             context.bot.send_message(admin,
                                                      'Возникла ошибка:{}, msg:{} - сообщение исключено'
                                                      .format(str(e), 'msg_id: ' + str(msg.id) + ', user_id:' + str(msg.to_user)))
-                        Message.update(date_send=-1).where(Message.id == msg.id).execute()
+                            Message.update(date_send=-1).where(Message.id == msg.id).execute()
             time.sleep(3)
     except Exception as e:
         for admin in ADMINS:
