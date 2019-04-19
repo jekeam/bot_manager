@@ -151,7 +151,8 @@ def starter():
 
 
 def sender(update, context):
-    while True:
+    run = True
+    while run:
         try:
             for msg in Message.select().where(Message.date_send.is_null()):
                 if msg.file_type == 'document':
@@ -174,7 +175,8 @@ def sender(update, context):
             time.sleep(1)
         except Exception as e:
             for admin in ADMINS:
-                context.bot.send_message(admin, 'Возникла ошибка: ' + str(e))
+                context.bot.send_message(admin, 'Возникла ошибка, рассыльшик остановлен: ' + str(e))
+            run = False
 
 
 def main():
