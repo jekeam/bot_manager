@@ -223,10 +223,11 @@ def get_statistics():
     prnt('Успешных ставок: ' + str(len(cnt_fork_success)))
     prnt('Кол-во ставок с ошибками/выкупом: ' + str(cnt_fail))
     prnt('Черный список матчей: ' + str(black_list_matches))
-    
+
+
 def check_statistics():
     global cnt_fail, cnt_fork_success
-    
+
     max_fail = int(get_prop('max_fail'))
     if cnt_fail >= max_fail:
         msg_str = 'Кол-во ошибок больше допустимого (' + str(max_fail) + '), работа завершена.'
@@ -235,7 +236,7 @@ def check_statistics():
     max_fork = int(get_prop('max_fork'))
     if len(cnt_fork_success) >= max_fork:
         msg_str = 'Кол-во успешно просталвенных вилок достигнуто (' + str(max_fork) + '), работа завершена.'
-        raise MaxFork(msg_str)    
+        raise MaxFork(msg_str)
 
 
 def go_bets(wag_ol, wag_fb, total_bet, key, deff_max, vect1, vect2, sc1, sc2):
@@ -502,7 +503,7 @@ if __name__ == '__main__':
     try:
         Account.update(pid=os.getpid()).where(Account.key == KEY).execute()
         send_message_bot(USER_ID, str(ACC_ID) + ': Аккаунт запущен, начну работу через ' + str(wait_before_start) + ' сек.')
-        
+
         prnt('DEBUG: ' + str(DEBUG))
 
         time_get_balance = datetime.datetime.now()
@@ -574,11 +575,11 @@ if __name__ == '__main__':
         except:
             pass
         check_statistics()
-        
+
         server_forks = dict()
         start_see_fork = threading.Thread(target=run_client)  # , args=(server_forks,))
         start_see_fork.start()
-        
+
         time.sleep(wait_before_start)
         send_message_bot(USER_ID, str(ACC_ID) + ': Начал работу')
 
@@ -603,15 +604,16 @@ if __name__ == '__main__':
             # Показываем каждые 30 минут
             cur_min = int(datetime.datetime.now().strftime('%M'))
             ref_min = 30
-            if cur_min % ref_min  == 0 and not printed:
+            if cur_min % ref_min == 0 and not printed:
                 prnt(' ')
                 msg_str = str(ACC_ID) + ': ' + \
-                'Кол-во успешно проставленных вилок: ' + str(len(cnt_fork_success)) + '\n' + \
-                'Кол-во вилок с выкупами: ' + str(cnt_fail) + '\n' + \
-                'Работаю еще: ' + str(round((shutdown_minutes - (datetime.datetime.now() - time_live).total_seconds()) / 60 / 60, 2)) + ' ч.'
+                          'Кол-во успешно проставленных вилок: ' + str(len(cnt_fork_success)) + '\n' + \
+                          'Кол-во вилок с выкупами: ' + str(cnt_fail) + '\n' + \
+                          'Работаю еще: ' + str(
+                    round((shutdown_minutes - (datetime.datetime.now() - time_live).total_seconds()) / 60 / 60, 2)) + ' ч.'
                 prnt(msg_str)
                 printed = True
-                
+
                 send_message_bot(USER_ID, msg_str)
             elif cur_min % ref_min != 0 and printed:
                 printed = False
@@ -753,14 +755,15 @@ if __name__ == '__main__':
         prnt(' ')
         prnt(str(e))
         send_message_bot(USER_ID, str(ACC_ID) + ': ' + str(e))
-        
+
         last_fork_time_diff = int(time.time()) - last_fork_time
         wait_before_exp = max(60 * 60 * 2 - last_fork_time_diff, 0)
-        msg_str = str(ACC_ID) + ': ' + str(last_fork_time_diff) + ' секунд прошло с момента последней ставки\nОжидание ' + str(wait_before_exp / 60) + ' минут, до выгрузки'
-        
+        msg_str = str(ACC_ID) + ': ' + str(last_fork_time_diff) + ' секунд прошло с момента последней ставки\nОжидание ' + str(
+            wait_before_exp / 60) + ' минут, до выгрузки'
+
         prnt(msg_str)
         send_message_bot(USER_ID, msg_str)
-        
+
         time.sleep(wait_before_exp)
         export_hist(OLIMP_USER, FONBET_USER)
 
@@ -768,10 +771,10 @@ if __name__ == '__main__':
         shutdown = True
         exc_type, exc_value, exc_traceback = sys.exc_info()
         err_str = str(e) + ' ' + str(repr(traceback.format_exception(exc_type, exc_value, exc_traceback)))
-        err_str = str(ACC_ID) + ': Возникла ошибка! ' + str(e.__class__.__name__) + ' - ' + str(err_str)        
+        err_str = str(ACC_ID) + ': Возникла ошибка! ' + str(e.__class__.__name__) + ' - ' + str(err_str)
         prnt(err_str)
         send_message_bot(USER_ID, err_str, ADMINS)
-        
+
     finally:
         msg_str = str(ACC_ID) + ': Завершил работу'
         send_message_bot(USER_ID, msg_str)

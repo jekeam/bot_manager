@@ -51,10 +51,10 @@ def botlist(update, context, edit=False):
     acc_list = Account.select().where(Account.user == user.id).order_by(Account.id)
     n = 1
     for acc in acc_list:
-        
+
         date_end = datetime.datetime.fromtimestamp(acc.date_end)
         date_end_str = '(до ' + date_end.strftime('%d.%M.%Y') + ')'
-        
+
         if acc.status == 'inactive':
             work_stat = emojize(':x:', use_aliases=True) + ' Не активен' + ' ' + date_end_str
         elif acc.work_stat == 'start':
@@ -73,8 +73,11 @@ def botlist(update, context, edit=False):
 
 
 ACC_ACTIVE = 0
+
+
 def button(update, context):
     global ACC_ACTIVE
+
     def prnt_acc_stat():
         keyboard = []
         if acc_info.get().work_stat == 'stop':
@@ -171,11 +174,11 @@ def main():
     updater = Updater(TOKEN, use_context=True, request_kwargs=REQUEST_KWARGS)
     dispatcher = updater.dispatcher
     context = CallbackContext(dispatcher)
-    
+
     prc_acc = Process(target=starter)
     prc_acc.start()
-    
-    prc_sender = Process(target=sender, args=(updater, context, ))
+
+    prc_sender = Process(target=sender, args=(updater, context,))
     prc_sender.start()
 
     updater.dispatcher.add_handler(CommandHandler('start', start))

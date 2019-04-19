@@ -22,7 +22,7 @@ class User(BaseModel):
     phone = CharField(null=False)
     email = CharField(null=False)
     date_start = IntegerField(null=False, default=get_trunc_sysdate())
-    date_end = IntegerField(null=False, default=get_trunc_sysdate(30))
+    date_end = IntegerField(null=True)
 
 
 class Account(BaseModel):
@@ -33,8 +33,8 @@ class Account(BaseModel):
     work_stat = CharField(null=False, default='stop')
     pid = IntegerField(null=False, default=0)
     work_dir = CharField(null=True)
-    proxies = CharField(null=False)
-    accounts = CharField(null=False)
+    proxies = CharField(null=False, unique=True)
+    accounts = CharField(null=False, unique=True)
     time_start = IntegerField(null=True)
     time_stop = IntegerField(null=True)
     date_start = IntegerField(null=False, default=get_trunc_sysdate())
