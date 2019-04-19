@@ -71,6 +71,8 @@ def botlist(update, context, edit=False):
 
 
 ACC_ACTIVE = 0
+
+
 def button(update, context):
     global ACC_ACTIVE
 
@@ -153,23 +155,29 @@ def sender(update, context):
     while run:
         try:
             for msg in Message.select().where(Message.date_send.is_null()):
-                if msg.file_type == 'document':
-                    if msg.blob:
+                try:
+                    if msg.file_type == 'document':
+                        if msg.blob:
 
-                        if not os.path.isfile(msg.file_name):
-                            with open(msg.file_name, 'w', encoding='utf-8') as b:
-                                b.write(msg.blob.decode())
+                            if not os.path.isfile(msg.file_name):
+                                with open(msg.file_name, 'w', encoding='utf-8') as b:
+                                    b.write(msg.blob.decode())
 
-                        doc = open(msg.file_name, 'rb')
-                        context.bot.send_document(msg.to_user, doc)
-                        doc.close()
+                            doc = open(msg.file_name, 'rb')
+                            context.bot.send_document(msg.to_user, doc)
+                            doc.close()
 
-                        # if os.path.isfile(msg.file_name):
-                        #     os.remove(msg.file_name)
+                            # if os.path.isfile(msg.file_name):
+                            #     os.remove(msg.file_name)
+                            Message.update(date_send=round(time.time())).where(Message.id == msg.id).execute()
+                    elif msg.file_type == 'message':
+                        context.bot.send_message(msg.to_user, msg.text)
                         Message.update(date_send=round(time.time())).where(Message.id == msg.id).execute()
-                elif msg.file_type == 'message':
-                    context.bot.send_message(msg.to_user, msg.text)
-                    Message.update(date_send=round(time.time())).where(Message.id == msg.id).execute()
+                except Exception as e:
+                    for admin in ADMINS:
+                        context.bot.send_message(admin, 'Возникла ошибка:{}, msg:{} - сообщение не отправлено.'.format(str(e), msg))
+                        run = False
+
             time.sleep(1)
         except Exception as e:
             for admin in ADMINS:
