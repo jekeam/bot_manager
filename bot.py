@@ -185,8 +185,8 @@ def main():
     prc_acc = Process(target=starter)
     prc_acc.start()
 
-    prc_sender = Process(target=sender, args=(updater, context,))
-    prc_sender.start()
+    # prc_sender = Process(target=sender, args=(updater, context,))
+    # prc_sender.start()
 
     updater.dispatcher.add_handler(CommandHandler('start', start))
     updater.dispatcher.add_handler(CommandHandler('hello', send_text))
