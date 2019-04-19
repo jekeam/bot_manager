@@ -4,7 +4,7 @@ import time
 from json import dumps
 from uuid import uuid1
 
-db = SqliteDatabase('bot_manager.db')
+db = SqliteDatabase('bot_manager.db', threadlocals=True)
 
 
 def get_trunc_sysdate(days=0):
@@ -49,15 +49,15 @@ class Message(BaseModel):
     file_name = CharField(null=True)
     file_type = CharField(null=True)
     date_send = IntegerField(null=True)
-    
+
+
 class Properties(BaseModel):
     acc = ForeignKeyField(Account, backref='properties')
     key = CharField(null=False)
     val = CharField(null=True)
-    
+
     class Meta:
-        indexes = ( (('acc', 'key'), True), )
-            
+        indexes = ((('acc', 'key'), True),)
 
 
 # API
@@ -72,14 +72,15 @@ def prnt_user_str(id):
         if key and val:
             res = res + '*' + str(key) + '*: ' + str(val) + '\n'
     return res
-    
-def send_message_bot(user_id:int, msg: str, admin_list:dict=None):
+
+
+def send_message_bot(user_id: int, msg: str, admin_list: dict = None):
     Message.insert({
         Message.to_user: user_id,
         Message.text: msg,
         Message.file_type: 'message'
     }).execute()
-    
+
     if admin_list:
         for admin_id in admin_list:
             if admin_id != user_id:
@@ -88,7 +89,6 @@ def send_message_bot(user_id:int, msg: str, admin_list:dict=None):
                     Message.text: msg,
                     Message.file_type: 'message'
                 }).execute()
-        
 
 
 if __name__ == '__main__':
