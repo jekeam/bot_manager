@@ -33,7 +33,6 @@ class Account(BaseModel):
     work_stat = CharField(null=False, default='stop')
     pid = IntegerField(null=False, default=0)
     work_dir = CharField(null=True)
-    properties = CharField(null=False)
     proxies = CharField(null=False)
     accounts = CharField(null=False)
     time_start = IntegerField(null=True)
@@ -50,6 +49,11 @@ class Message(BaseModel):
     file_name = CharField(null=True)
     file_type = CharField(null=True)
     date_send = IntegerField(null=True)
+    
+class Properties(BaseModel):
+    acc = ForeignKeyField(Account, backref='prop')
+    name = CharField(null=False, constraints=[Check('name == name.lower()')])
+    val = CharField(null=True)
 
 
 # API

@@ -1,6 +1,5 @@
-from db_model import *
+if type(4) is int:
+    print('i')
 
-Message.update(date_send).where(1==1).execute
-msg = Message.select().where(Message.date_send.is_null())
-for x in msg:
-    print(x)
+if type('4') is str:
+    print('s')
