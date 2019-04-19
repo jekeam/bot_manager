@@ -64,6 +64,13 @@ def prnt_user_str(id):
         if key and val:
             res = res + '*' + str(key) + '*: ' + str(val) + '\n'
     return res
+    
+def send_message_bot(user_id:int, msg: str):
+    Message.insert({
+        Message.to_user: user_id,
+        Message.text: msg,
+        Message.file_type: 'message'
+    }).execute()
 
 
 if __name__ == '__main__':

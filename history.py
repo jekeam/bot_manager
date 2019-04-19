@@ -2,14 +2,13 @@
 from bet_olimp import *
 from bet_fonbet import *
 from better import OLIMP_USER, FONBET_USER
-from utils import prnt
 from math import ceil
 from datetime import datetime
 import time
 import random
 import json
 import os
-from utils import DEBUG, get_prop
+from utils import DEBUG, get_prop, prnt
 from db_model import *
 
 global ACC_ID, USER_ID

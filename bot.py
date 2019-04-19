@@ -148,10 +148,14 @@ def sender(context):
                     context.bot.send_document(msg.to_user, doc)
                     doc.close()
 
-                    if os.path.isfile(msg.file_name):
-                        os.remove(msg.file_name)
+                    # if os.path.isfile(msg.file_name):
+                    #     os.remove(msg.file_name)
                     Message.update(date_send=round(time.time())).where(Message.id == msg.id).execute()
-        time.sleep(60)
+            elif msg.file_type == 'message':
+                #context.bot.send_document(msg.to_user, msg.text)
+                #Message.update(date_send=round(time.time())).where(Message.id == msg.id).execute()
+                pass
+        time.sleep(5)
 
 
 def main():

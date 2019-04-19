@@ -18,6 +18,7 @@ import re
 import sys
 import traceback
 import os
+from db_model import send_message_bot
 
 if __name__ == '__main__':
     from history import export_hist
@@ -583,6 +584,7 @@ if __name__ == '__main__':
         start_see_fork.start()
         
         prnt('Ожидание 15 сек.')
+        send_message_bot(USER_ID, 'sadfasd')
         time.sleep(15)
 
         while Account.select().where(Account.key == KEY).get().work_stat == 'start':
