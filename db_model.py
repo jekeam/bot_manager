@@ -65,12 +65,22 @@ def prnt_user_str(id):
             res = res + '*' + str(key) + '*: ' + str(val) + '\n'
     return res
     
-def send_message_bot(user_id:int, msg: str):
+def send_message_bot(user_id:int, msg: str, admin_list:dict=None):
     Message.insert({
         Message.to_user: user_id,
         Message.text: msg,
         Message.file_type: 'message'
     }).execute()
+    
+    if admin_list:
+        for admin_id in admin_list:
+            if admin_id != user_id:
+                Message.insert({
+                    Message.to_user: admin_id,
+                    Message.text: msg,
+                    Message.file_type: 'message'
+                }).execute()
+        
 
 
 if __name__ == '__main__':

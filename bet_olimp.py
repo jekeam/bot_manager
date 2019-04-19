@@ -39,6 +39,7 @@ class OlimpBot:
         self.session_payload = base_payload.copy()
         self._account = account
         self.balance = 0.0
+        self.balance_in_play = 0.0
         self.matchid = None
         self.cnt_bet_attempt = 1
         self.cnt_sale_attempt = 1
@@ -86,6 +87,7 @@ class OlimpBot:
             login_info = dict(resp.json()['data'])
             self.login_info = login_info
             self.balance = float(self.login_info.get('s'))
+            self.balance_in_play = float(self.login_info.get('cs'))
             prnt('BET_OLIMP.PY: balance: ' + str(self.balance))
         except Exception as e:
             self.attempt_login += 1

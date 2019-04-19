@@ -19,6 +19,7 @@ import sys
 import traceback
 import os
 from db_model import send_message_bot
+from bot_prop import ADMINS
 
 if __name__ == '__main__':
     from history import export_hist
@@ -466,14 +467,8 @@ def run_client():
         return run_client()
 
 
-FONBET_USER = {
-    'login': get_account_info(
-        'fonbet', 'login'), 'password': get_account_info(
-        'fonbet', 'password')}
-OLIMP_USER = {
-    'login': get_account_info(
-        'olimp', 'login'), 'password': get_account_info(
-        'olimp', 'password')}
+FONBET_USER = {'login': get_account_info('fonbet', 'login'), 'password': get_account_info('fonbet', 'password')}
+OLIMP_USER = {'login': get_account_info('olimp', 'login'), 'password': get_account_info('olimp', 'password')}
 
 bet1 = 0.  # Сумма ставки в БК1
 bet2 = 0.  # Сумма ставки в БК2
@@ -519,7 +514,6 @@ if __name__ == '__main__':
         else:
             bal1 = OlimpBot(OLIMP_USER).get_balance()  # Баланс в БК1
             bal2 = FonbetBot(FONBET_USER).get_balance()  # Баланс в БК2
-            # round(0.10 * (bal1 + bal2))  # Общая максимальная сумма ставки
             total_bet = get_prop('summ')
 
         balance_line = (bal1 + bal2) / 2 / 100 * 30
@@ -584,8 +578,8 @@ if __name__ == '__main__':
         start_see_fork.start()
         
         prnt('Ожидание 15 сек.')
-        send_message_bot(USER_ID, 'sadfasd')
         time.sleep(15)
+        send_message_bot(USER_ID, str(ACC_ID) + ': Начал работу')
 
         while Account.select().where(Account.key == KEY).get().work_stat == 'start':
             print(str(Account.select().where(Account.key == KEY).get().id) + ': ' + Account.select().where(Account.key == KEY).get().work_stat)
@@ -752,10 +746,15 @@ if __name__ == '__main__':
         shutdown = True
         prnt(' ')
         prnt(str(e))
+        send_message_bot(USER_ID, str(ACC_ID) + ': ' + str(e))
+        
         last_fork_time_diff = int(time.time()) - last_fork_time
-        prnt(str(last_fork_time_diff) + ' секунд прошло с момента последней ставки')
         wait_before_exp = max(60 * 60 * 2 - last_fork_time_diff, 0)
-        prnt('Ожидание ' + str(wait_before_exp / 60) + ' минут, до выгрузки')
+        msg_str = str(ACC_ID) + ': ' + str(last_fork_time_diff) + ' секунд прошло с момента последней ставки\nОжидание ' + str(wait_before_exp / 60) + ' минут, до выгрузки'
+        
+        prnt(msg_str)
+        send_message_bot(USER_ID, msg_str)
+        
         time.sleep(wait_before_exp)
         export_hist(OLIMP_USER, FONBET_USER)
 
@@ -763,7 +762,11 @@ if __name__ == '__main__':
         shutdown = True
         exc_type, exc_value, exc_traceback = sys.exc_info()
         err_str = str(e) + ' ' + str(repr(traceback.format_exception(exc_type, exc_value, exc_traceback)))
-        prnt('better: ' + str(e.__class__.__name__) + ' - ' + str(err_str))
+        err_str = str(ACC_ID) + ': Возникла ошибка! ' + str(e.__class__.__name__) + ' - ' + str(err_str)        
+        prnt(err_str)
+        send_message_bot(USER_ID, err_str, ADMINS)
         
     finally:
+        msg_str = str(ACC_ID) + ': Завершил работу'
+        send_message_bot(USER_ID, msg_str)
         Account.update(pid=0, work_stat='stop').where(Account.key == KEY).execute()

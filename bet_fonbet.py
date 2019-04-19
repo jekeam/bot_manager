@@ -46,6 +46,7 @@ class FonbetBot:
         self.attempt_login = 0
         self.account = account
         self.balance = 0.0
+        self.balance_in_play = 0.0
         # self.session = get_session_with_proxy('fonbet')
         self.reg_id = None
         self.wager = None
@@ -234,6 +235,7 @@ class FonbetBot:
             sign = hmac.new(key=self.account['password'].encode(), msg=msg.encode(), digestmod=sha512).hexdigest()
             payload["sign"] = sign
             data = get_dumped_payload(payload)
+            prnt('BET_FONBET.PY: Fonbet, sign_in request', 'hide')
             resp = requests_retry_session_post(
                 self.common_url.format("login"),
                 headers=self.fonbet_headers,
@@ -242,6 +244,7 @@ class FonbetBot:
                 timeout=self.timeout,
                 proxies=self.proxies
             )
+            prnt('BET_FONBET.PY: Fonbet, sign_in responce: ' + str(resp.status_code) + ' ' + resp.text, 'hide')
             check_status_with_resp(resp)
             res = resp.json()
             prnt('BET_FONBET.PY: Fonbet, sign_in request: ' + str(resp.status_code))
@@ -254,6 +257,7 @@ class FonbetBot:
             self.fsid = res["fsid"]
 
             self.balance = float(res.get("saldo"))
+            # self.balance_in_play = 0.0
             self.payload = payload
             prnt('BET_FONBET.PY: balance: ' + str(self.balance))
 
