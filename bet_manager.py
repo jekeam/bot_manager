@@ -379,7 +379,7 @@ class BetManager:
                 sys._getframe().f_code.co_name,
                 'Получил данные: bet_type:{}, vector:{}, total:{}, half:{}, val_bet:{}({}),minute:{}, sc_main:{}, sc:{}'.
                     format(self.bet_type, self.vector, self.cur_total, self.cur_half, self.cur_val_bet, self.old_val_bet, self.cur_minute,
-                    self.cur_sc_main, self.cur_sc)))
+                           self.cur_sc_main, self.cur_sc)))
 
             prnt(self.msg.format(sys._getframe().f_code.co_name,
                                  'Запас тотала: total_stock:{}, total_bet:{}, cur_total:{}'.format(self.total_stock, self.total_bet, self.cur_total)))
@@ -396,9 +396,10 @@ class BetManager:
                 prnt(self.msg.format(sys._getframe().f_code.co_name, 'Ошибка: ' + e.__class__.__name__ + ' - ' + str(e)))
 
             # CALC PROFIT IF EXISTS SUMM SELL
+            sell_profit = 0
             if self_opp_data.sum_sell:
                 sell_profit = (self_opp_data.sum_sell / self_opp_data.sum_sell_divider) - sum_opp
-                if sell_profit > 0:
+                if sell_profit:
                     err_str = self.msg_err.format(
                         sys._getframe().f_code.co_name,
                         'Сумма выкупа больше чем ставка на ' + str(sell_profit) + ', пробую выкупить'
@@ -432,9 +433,10 @@ class BetManager:
 
                 if bet_profit >= 0:
                     prnt(self.msg.format(sys._getframe().f_code.co_name, 'Сумма ставки не изменилась или уменьшилась, делаем ставку'))
-                elif sell_profit > bet_profit:
+                elif sell_profit and sell_profit > bet_profit:
                     # sell bet
-                    err_str = 'Выкуп за {} выгоднее, чем возможные потери после перерасчета, на {}(сумма перерасчета разделена на 2)'.format(sell_profit, bet_profit)
+                    err_str = 'Выкуп за {} выгоднее, чем возможные потери после перерасчета, на {}(сумма перерасчета разделена на 2)'.format(
+                        sell_profit, bet_profit)
                     prnt(err_str)
                     raise BetIsLost(err_str)
                 else:
@@ -448,7 +450,7 @@ class BetManager:
         self.time_left = -1
 
         prnt(self.msg.format(sys._getframe().f_code.co_name, 'Завершающий принял работу'))
-        
+
         if not get_prop('hard_bet_right'):
             self.hard_bet = False
         prnt(self.msg.format(sys._getframe().f_code.co_name, 'Жесткая ставка второго плеча: ' + str(self.hard_bet)))
