@@ -399,7 +399,7 @@ class BetManager:
             sell_profit = 0
             if self_opp_data.sum_sell:
                 sell_profit = (self_opp_data.sum_sell / self_opp_data.sum_sell_divider) - sum_opp
-                if sell_profit:
+                if sell_profit > 0:
                     err_str = self.msg_err.format(
                         sys._getframe().f_code.co_name,
                         'Сумма выкупа больше чем ставка на ' + str(sell_profit) + ', пробую выкупить'
