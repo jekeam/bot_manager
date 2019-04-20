@@ -13,19 +13,23 @@ from telegram import InlineKeyboardButton, InlineKeyboardMarkup
 from telegram.ext import Updater, CommandHandler, CallbackQueryHandler
 from telegram.ext.callbackcontext import CallbackContext
 
-from db_model import *
+from db_model import Account, Message, User, prnt_user_str, send_message_bot
 from bot_prop import *
 from emoji import emojize
 
 from multiprocessing import Process
+from threading import Thread
 import subprocess
 import os
 
 import json
 import datetime
+import time
 from utils import prop_abr
 
-logging.basicConfig(filename='bot.log', format='%(asctime)s - %(name)s - %(levelname)s - %(message)s', level=logging.ERROR)
+import copy
+
+logging.basicConfig(format='%(asctime)s - %(name)s - %(levelname)s - %(message)s', level=logging.ERROR)
 logger = logging.getLogger(__name__)
 
 
@@ -140,17 +144,18 @@ def starter():
         else:
             print('file better.py not found in ' + str(os.getcwd()))
 
-    Account.update(pid=0).where(Account.pid > 0).execute()
-    while True:
-        for acc in Account.select().where((Account.status == 'active') & (Account.work_stat == 'start') & (Account.pid == 0)):
-            print(''.ljust(120, '*'))
-            print('start: ', acc.key)  # acc.work_dir,
-            acc_start = Process(target=start, args=(acc.key,))  # acc.work_dir,
-            acc_start.start()
-        time.sleep(3)
+    if __name__ == '__main__':
+        Account.update(pid=0).where(Account.pid > 0).execute()
+        while True:
+            for acc in Account.select().where((Account.status == 'active') & (Account.work_stat == 'start') & (Account.pid == 0)):
+                print(''.ljust(120, '*'))
+                print('start: ', acc.key)  # acc.work_dir,
+                acc_start = Process(target=start, args=(acc.key,))  # acc.work_dir,
+                acc_start.start()
+            time.sleep(3)
 
 
-def sender(update, context):
+def sender(context):
     try:
         while True:
             for msg in Message.select().where(Message.date_send.is_null()):
@@ -183,23 +188,31 @@ def sender(update, context):
                                                      'Возникла ошибка:{}, msg:{} - сообщение исключено'
                                                      .format(str(e), 'msg_id: ' + str(msg.id) + ', user_id:' + str(msg.to_user)))
                             Message.update(date_send=-1).where(Message.id == msg.id).execute()
-            time.sleep(3)
     except Exception as e:
         for admin in ADMINS:
             context.bot.send_message(admin, 'Возникла ошибка, рассыльщик продолжит работу через минуту: ' + str(e))
         time.sleep(60)
 
 
-def main():
+# def test_send():
+#     for acc in User.select().where(User.id == 381868674):
+#         n = 1
+#         while n < 30:
+#             send_message_bot(acc.id, 'Test #' + str(n))
+#             n = n + 1
+
+if __name__ == '__main__':
     updater = Updater(TOKEN_TEST, use_context=True, request_kwargs=REQUEST_KWARGS)
     dispatcher = updater.dispatcher
     context = CallbackContext(dispatcher)
 
     prc_acc = Process(target=starter)
     prc_acc.start()
-
-    prc_sender = Process(target=sender, args=(updater, context,))
+    prc_sender = Thread(target=sender, args=(context,))
     prc_sender.start()
+
+    # prc_sender = Thread(target=test_send)
+    # prc_sender.start()
 
     updater.dispatcher.add_handler(CommandHandler('start', start))
     updater.dispatcher.add_handler(CommandHandler('hello', send_text))
@@ -214,7 +227,3 @@ def main():
     # Run the bot until the user presses Ctrl-C or the process receives SIGINT,
     # SIGTERM or SIGABRT
     updater.idle()
-
-
-if __name__ == '__main__':
-    main()

@@ -4,7 +4,8 @@ import time
 from json import dumps
 from uuid import uuid1
 
-db = SqliteDatabase('bot_manager.db', thread_safe=False)
+db = SqliteDatabase('bot_manager.db', thread_safe=True, check_same_thread=False)
+print('init DB')
 
 
 def get_trunc_sysdate(days=0):
