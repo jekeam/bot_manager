@@ -3,8 +3,18 @@ from peewee import *
 import time
 from json import dumps
 from uuid import uuid1
+from playhouse.sqlite_ext import SqliteExtDatabase
 
-db = SqliteDatabase('bot_manager.db', thread_safe=True, check_same_thread=False)
+# db = SqliteExtDatabase(
+#     'bot_manager.db',
+#     pragmas=(
+#         ('cache_size', -1024 * 64),  # 64MB page-cache.
+#         ('journal_mode', 'wal'),  # Use WAL-mode (you should always use this!).
+#         ('foreign_keys', 1)),
+#     timeout=10
+# )  # Enforce foreign-key constraints.
+
+db = SqliteDatabase('bot_manager.db', thread_safe=False, check_same_thread=False, )
 print('init DB')
 
 
