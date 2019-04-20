@@ -75,11 +75,14 @@ def prnt_user_str(id):
 
 
 def send_message_bot(user_id: int, msg: str, admin_list: dict = None):
-    Message.insert({
-        Message.to_user: user_id,
-        Message.text: msg,
-        Message.file_type: 'message'
-    }).execute()
+    send_stat = Properties.select().where((Properties.key == 'SEND_MESSAGE') & (Properties.acc_id == 2)).get().val
+
+    if send_stat:
+        Message.insert({
+            Message.to_user: user_id,
+            Message.text: msg,
+            Message.file_type: 'message'
+        }).execute()
 
     if admin_list:
         for admin_id in admin_list:
@@ -93,3 +96,4 @@ def send_message_bot(user_id: int, msg: str, admin_list: dict = None):
 
 if __name__ == '__main__':
     print(uuid1())
+    send_message_bot(381868674, 'HI')
