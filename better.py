@@ -791,7 +791,6 @@ if __name__ == '__main__':
 
     finally:
         shutdown = True
-        msg_str = str(ACC_ID) + ': Завершил работу!'
-        send_message_bot(USER_ID, msg_str, ADMINS)
+        msg_str = str(ACC_ID) + ': Завершил работу'
         Account.update(pid=0, work_stat='stop', time_stop=round(time.time())).where(Account.key == KEY).execute()
         send_message_bot(USER_ID, msg_str, ADMINS)
