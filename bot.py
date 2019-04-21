@@ -29,7 +29,7 @@ from utils import prop_abr
 
 import copy
 
-logging.basicConfig(format='%(asctime)s - %(name)s - %(levelname)s - %(message)s', level=logging.DEBUG)
+logging.basicConfig(format='%(asctime)s - %(name)s - %(levelname)s - %(message)s', level=logging.ERROR)
 logger = logging.getLogger(__name__)
 
 
@@ -195,15 +195,8 @@ def sender(context):
         time.sleep(60)
 
 
-# def test_send():
-#     for acc in User.select().where(User.id == 381868674):
-#         n = 1
-#         while n < 30:
-#             send_message_bot(acc.id, 'Test #' + str(n))
-#             n = n + 1
-
 if __name__ == '__main__':
-    updater = Updater(TOKEN_TEST, use_context=True, request_kwargs=REQUEST_KWARGS)
+    updater = Updater(TOKEN, use_context=True, request_kwargs=REQUEST_KWARGS)
     dispatcher = updater.dispatcher
     context = CallbackContext(dispatcher)
 
@@ -211,9 +204,6 @@ if __name__ == '__main__':
     prc_acc.start()
     prc_sender = Thread(target=sender, args=(context,))
     prc_sender.start()
-
-    # prc_sender = Thread(target=test_send)
-    # prc_sender.start()
 
     updater.dispatcher.add_handler(CommandHandler('start', start))
     updater.dispatcher.add_handler(CommandHandler('hello', send_text))
