@@ -91,7 +91,12 @@ def send_message_bot(user_id: int, msg: str, admin_list: dict = None):
     except Exception:
         send_stat = '0'
 
-    if send_stat != '0' and user_id not in admin_list:
+    is_send_admin = False
+    if admin_list:
+        is_send_admin = user_id in admin_list
+    print('is_send_admin: ' + str(is_send_admin))
+    
+    if send_stat != '0' and not is_send_admin:
         Message.insert({
             Message.to_user: user_id,
             Message.text: msg,
