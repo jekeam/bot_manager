@@ -4,6 +4,7 @@ import urllib3
 urllib3.disable_warnings(urllib3.exceptions.InsecureRequestWarning)
 
 from db_model import Account
+from bot_prop import PY_PATH
 
 from threading import Thread
 import subprocess
@@ -15,7 +16,7 @@ if __name__ == '__main__':
         # os.chdir(abs_path)
         print('1')
         if os.path.isfile('better.py'):
-            call_str = 'D:\\YandexDisk\\Парсинг\\bot_manager\\venv\\Scripts\\python better.py --key ' + key
+            call_str = PY_PATH + ' better.py --key ' + key
             print('dir: ' + str(os.getcwd()) + ', command: ' + call_str)
             subprocess.call(call_str, shell=True)
         else:

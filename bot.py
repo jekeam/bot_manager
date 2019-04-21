@@ -50,8 +50,11 @@ def botlist(update, context, edit=False):
     acc_list = Account.select().where(Account.user == user.id).order_by(Account.id)
     for acc in acc_list:
 
-        date_end = datetime.datetime.fromtimestamp(acc.date_end)
-        date_end_str = '(до ' + date_end.strftime('%d.%m.%Y') + ')'
+        if acc.date_end:
+            date_end = datetime.datetime.fromtimestamp(acc.date_end)
+            date_end_str = '(до ' + date_end.strftime('%d.%m.%Y') + ')'
+        else:
+            date_end_str = '(бессрочно)'
 
         if acc.status == 'inactive':
             work_stat = emojize(':x:', use_aliases=True) + ' Не активен' + ' ' + date_end_str
@@ -165,7 +168,11 @@ def sender(context):
             time.sleep(1)
     except Exception as e:
         for admin in ADMINS:
-            context.bot.send_message(admin, 'Возникла ошибка, рассыльщик продолжит работу через минуту: ' + str(e))
+            try:
+                context.bot.send_message(admin, 'Возникла ошибка, рассыльщик продолжит работу через минуту: ' + str(e))
+            except Exception as e:
+                if str(e) == 'Chat not found':
+                    print('Chat not found: ' + str(e) + ', admin: ' + str(admin))
         time.sleep(60)
 
 

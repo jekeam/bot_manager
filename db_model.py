@@ -45,12 +45,12 @@ class Account(BaseModel):
     work_stat = CharField(null=False, default='stop')
     pid = IntegerField(null=False, default=0)
     work_dir = CharField(null=True)
-    proxies = BlobField(default='')
-    accounts = BlobField(default='')
+    proxies = CharField(null=True, max_length=4096)
+    accounts = CharField(null=True, max_length=4096)
     time_start = IntegerField(null=True)
     time_stop = IntegerField(null=True)
     date_start = IntegerField(null=False, default=get_trunc_sysdate())
-    date_end = IntegerField(null=False, default=get_trunc_sysdate(30))
+    date_end = IntegerField(null=True)
 
 
 class Message(BaseModel):

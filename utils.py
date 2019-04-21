@@ -23,7 +23,7 @@ prop_abr = {
     "FORK_LIFE_TIME": "Время жизни вилки от (сек.)",
     "SERVER_IP_TEST": "IP-адрес тестового сервера",
     "SERVER_IP": "IP-адрес сервера",
-    "WORK_HOUR": "Работаю (ч.)", 
+    "WORK_HOUR": "Работаю (ч.)",
     "ROUND_FORK": "Округление вилки и суммы ставки до",
     "MAX_FORK": "Максимальное кол-во успешных вилок",
     "MAX_FAIL": "Максимально допустимое количество ошибок/выкупов",
@@ -92,13 +92,13 @@ except:
 if KEY:
     acc_info = Account.select().where(Account.key == KEY)
     if acc_info:
-        ACCOUNTS = loads(acc_info.get().accounts)
+        ACCOUNTS = loads(acc_info.get().accounts.replace('`', '"'))
         pror_dict = {}
         for prop in acc_info.get().properties:
             pror_dict.update({prop.key: prop.val})
         PROPERTIES = copy.deepcopy(pror_dict)
-            
-        PROXIES = loads(acc_info.get().proxies)
+
+        PROXIES = loads(acc_info.get().proxies.replace('`', '"'))
         ACC_ID = acc_info.get().id
         USER_ID = acc_info.get().user_id
 

@@ -1,4 +1,6 @@
 # coding:utf-8
+PY_PATH = 'D:\\YandexDisk\\Парсинг\\bot_manager\\venv\\Scripts\\python'
+
 TOKEN = '843081630:AAFmVT4hi5R71mgJpojVxOmTGEaZJA-LWYI'
 PROXY = {
     'http': 'socks5://shaggy:hzsyk4@191.101.104.71:14487',
