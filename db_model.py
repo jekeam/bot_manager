@@ -15,7 +15,7 @@ from playhouse.sqlite_ext import SqliteExtDatabase
 # )  # Enforce foreign-key constraints.
 
 # db = SqliteDatabase('bot_manager.db', thread_safe=False, check_same_thread=False, )
-db = MySQLDatabase('bot_manager', user='root', password='admin', host='127.0.0.1', port=3306)
+db = MySQLDatabase('bot_manager', user='root', password='131189_Ak13', host='127.0.0.1', port=3306)
 print('init DB')
 
 
