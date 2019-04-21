@@ -600,11 +600,12 @@ if __name__ == '__main__':
                 msg_str = 'Прошло ' + str(round(shutdown_minutes / 60 / 60, 2)) + ' ч., я завершил работу'
                 raise Shutdown(msg_str)
 
-            shutdown_hour = int(get_prop('work_hour_end'))
-            cur_hour = int(datetime.datetime.now().strftime('%H'))
-            if cur_hour >= shutdown_hour:
-                msg_str = 'Роботаю до:{} ч., сейчас:{} ч., я завершил работу'.format(shutdown_hour, cur_hour)
-                raise Shutdown(msg_str)
+            if cur_hour < 12:
+                shutdown_hour = int(get_prop('work_hour_end'))
+                cur_hour = int(datetime.datetime.now().strftime('%H'))
+                if cur_hour >= shutdown_hour:
+                    msg_str = 'Роботаю до:{} ч., сейчас:{} ч., я завершил работу'.format(shutdown_hour, cur_hour)
+                    raise Shutdown(msg_str)
 
             # Обновление баланса каждые 30 минут
             ref_balace = 30
