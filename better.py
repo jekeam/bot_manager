@@ -3,11 +3,9 @@ from bet_fonbet import *
 from bet_olimp import *
 import datetime
 from fork_recheck import get_kof_olimp, get_kof_fonbet
-from utils import prnt, get_account_info, get_prop
-# from client import run_client
+from utils import prnt, get_account_info, get_prop, prop_abr
 import threading
-from multiprocessing import Manager, Process, Pipe
-from math import floor, ceil
+from multiprocessing import Manager, Process
 import time
 from random import randint
 import platform
@@ -558,7 +556,8 @@ if __name__ == '__main__':
         prnt('Пропускаем ставки > 1.2, если баланс БК меньше: ' + str(balance_line))
         prnt('Время жизни вилки от (сек.): ' + str(int(get_prop('fork_life_time'))))
         prnt('Исключаем низшие команды: ' + str(get_prop('junior_team_exclude')))
-        prnt('Работаю (ч.): ' + str(int(get_prop('work_hour'))))
+        prnt('Работаю максимум (ч.): ' + str(int(get_prop('work_hour'))))
+        prnt('Работаю до (ч.): ' + str(int(get_prop('work_hour_end'))))
         prnt('Максимальное кол-во успешных вилок: ' + str(int(get_prop('max_fork'))))
         prnt('Максимально допустимое количество ошибок/выкупов: ' + str(int(get_prop('max_fail'))))
         prnt('Минимальный профит вилки от (%): ' + str(round((1 - MIN_L) * 100, 3)))
@@ -599,6 +598,12 @@ if __name__ == '__main__':
             shutdown_minutes = 60 * (60 * int(get_prop('work_hour')))  # секунды * на кол-во (60*1) - это час
             if (datetime.datetime.now() - time_live).total_seconds() > shutdown_minutes:
                 msg_str = 'Прошло ' + str(round(shutdown_minutes / 60 / 60, 2)) + ' ч., я завершил работу'
+                raise Shutdown(msg_str)
+
+            shutdown_hour = int(get_prop('work_hour_end'))
+            cur_hour = int(datetime.datetime.now().strftime('%H'))
+            if cur_hour >= shutdown_hour:
+                msg_str = 'Роботаю до:{} ч., сейчас:{} ч., я завершил работу'.format(shutdown_hour, cur_hour)
                 raise Shutdown(msg_str)
 
             # Обновление баланса каждые 30 минут

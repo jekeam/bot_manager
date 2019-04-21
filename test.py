@@ -1,3 +1,5 @@
+import datetime
+print('Время: ' + datetime.datetime.now().strftime('%H'))
 # from db_model import Message, db
 # from multiprocessing import Process
 # from threading import Thread

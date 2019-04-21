@@ -18,17 +18,18 @@ package_dir = os.path.dirname(__file__)
 dtOld = datetime.datetime.now()
 
 prop_abr = {
-    "SUMM": "Общая сумма ставки",
-    "RANDOM_SUMM_PROC": "Отклонение от общей суммы ставки (в %)",
-    "FORK_LIFE_TIME": "Время жизни вилки от (сек.)",
-    "SERVER_IP_TEST": "IP-адрес тестового сервера",
-    "SERVER_IP": "IP-адрес сервера",
-    "WORK_HOUR": "Работаю (ч.)",
-    "ROUND_FORK": "Округление вилки и суммы ставки до",
-    "MAX_FORK": "Максимальное кол-во успешных вилок",
-    "MAX_FAIL": "Максимально допустимое количество ошибок/выкупов",
-    "MIN_L": "Минимальный профит вилки от (%)",
-    "HARD_BET_RIGHT": "Жесткая ставка второго плеча"
+    "SUMM": {"abr": "Общая сумма ставки", "type": "", "max": "", "min": "", "access_list": []},
+    "RANDOM_SUMM_PROC": {"abr": "Отклонение от общей суммы ставки (в %)", "type": "", "max": "", "min": "", "access_list": []},
+    "FORK_LIFE_TIME": {"abr": "Время жизни вилки от (сек.)", "type": "", "max": "", "min": "", "access_list": []},
+    "SERVER_IP_TEST": {"abr": "IP-адрес тестового сервера", "type": "", "max": "", "min": "", "access_list": []},
+    "SERVER_IP": {"abr": "IP-адрес сервера", "type": "", "max": "", "min": "", "access_list": []},
+    "WORK_HOUR": {"abr": "Работаю (ч.)", "type": "", "max": "", "min": "", "access_list": []},
+    "WORK_HOUR_END": {"abr": "Работаю до (ч.)", "type": "", "max": "", "min": "", "access_list": []},
+    "ROUND_FORK": {"abr": "Округление вилки и суммы ставки до", "type": "", "max": "", "min": "", "access_list": []},
+    "MAX_FORK": {"abr": "Максимальное кол-во успешных вилок", "type": "", "max": "", "min": "", "access_list": []},
+    "MAX_FAIL": {"abr": "Максимально допустимое количество ошибок/выкупов", "type": "", "max": "", "min": "", "access_list": []},
+    "MIN_L": {"abr": "Минимальный профит вилки от (%)", "type": "", "max": "", "min": "", "access_list": []},
+    "HARD_BET_RIGHT": {"abr": "Жесткая ставка второго плеча", "type": "", "max": "", "min": "", "access_list": []},
 }
 
 opposition = {
@@ -80,7 +81,6 @@ opposition = {
     'ННН': 'ННД'
 }
 
-print('___________________INIT____________________')
 KEY = ''
 ACC_ID = 0
 USER_ID = 0
@@ -92,6 +92,7 @@ except:
 if KEY:
     acc_info = Account.select().where(Account.key == KEY)
     if acc_info:
+        print('___________________INIT____________________')
         ACCOUNTS = loads(acc_info.get().accounts.replace('`', '"'))
         pror_dict = {}
         for prop in acc_info.get().properties:

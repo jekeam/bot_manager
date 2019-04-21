@@ -84,7 +84,6 @@ def send_message_bot(user_id: int, msg: str, admin_list: dict = None):
     is_send_admin = False
     if admin_list:
         is_send_admin = user_id in admin_list
-    print('is_send_admin: ' + str(is_send_admin))
 
     if send_stat != '0' and not is_send_admin:
         Message.insert({
