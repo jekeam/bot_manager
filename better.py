@@ -764,6 +764,9 @@ if __name__ == '__main__':
             time.sleep(0.5)
         Account.update(pid=0).where(Account.key == KEY).execute()
         shutdown = True
+        msg_str = str(ACC_ID) + ': Завершил работу'
+        send_message_bot(USER_ID, msg_str, ADMINS)
+        Account.update(pid=0, work_stat='stop', time_stop=round(time.time())).where(Account.key == KEY).execute()
 
     except (Shutdown, MaxFail, MaxFork) as e:
         shutdown = True
