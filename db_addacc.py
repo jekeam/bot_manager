@@ -60,7 +60,6 @@ if __name__ == '__main__':
         acc = Account.create(
             user=381868674,
             key='48447db4-5f9f-11e9-9fcf-2cfda1739afe',
-            date_end=get_trunc_sysdate(30000),
             status='active',
             work_status='start',
             proxies=r'{"fonbet":{"http":"http://shaggy:hzsyk4@5.188.84.73:8656","https":"https://shaggy:hzsyk4@5.188.84.73:8656"},"olimp":{"http":"http://shaggy:hzsyk4@5.188.84.73:8656","https":"https://shaggy:hzsyk4@5.188.84.73:8656"}}',
@@ -82,6 +81,7 @@ if __name__ == '__main__':
             prop = Properties.create(acc=acc.id, key=k, val=v)
 
     except Exception as e:
+        print('1')
         print(e)
 
     # 2
@@ -89,10 +89,9 @@ if __name__ == '__main__':
         acc = Account.create(
             user=381868674,
             key='a28ad3f4-5f9e-11e9-8d15-DELETE',
-            date_end=get_trunc_sysdate(30000),
+            date_end=get_trunc_sysdate(),
             status='inactive',
-            proxies=r'Х',
-            accounts=r'Х'
+            accounts=r'{}'
         )
 
     except Exception as e:
@@ -102,7 +101,6 @@ if __name__ == '__main__':
         acc = Account.create(
             user=381868674,
             key='a28ad3f4-5f9e-11e9-8d15-2cfda1739afe',
-            date_end=get_trunc_sysdate(30000),
             status='active',
             proxies=r'{"fonbet":{"http":"http://suineg:8veh34@212.90.108.153:3597","https":"https://suineg:8veh34@212.90.108.153:3597"},"olimp":{"http":"http://suineg:8veh34@212.90.108.153:3597","https":"https://suineg:8veh34@212.90.108.153:3597"},"bet365":{"http":"","https":""}}',
             accounts=r'{"olimp":{"login":"6265127","password":"qvF3BwrNcRcJtB6","mirror":"olimp.com"},"fonbet":{"login":5699838,"password":"NTe2904H11","mirror":"fonbet.com"}}'
@@ -124,6 +122,7 @@ if __name__ == '__main__':
         for k, v in p.items():
             prop = Properties.create(acc=acc.id, key=k, val=v)
     except Exception as e:
+        print('2')
         print(e)
 
     # 1
@@ -132,7 +131,6 @@ if __name__ == '__main__':
         acc = Account.create(
             user=33847743,
             key='bbf009d6-62a8-11e9-b379-0242ac110019',
-            date_end=get_trunc_sysdate(30000),
             status='active',
             proxies=r'{"fonbet":{"http":"http://shaggy:hzsyk4@191.101.104.71:4487","https":"https://shaggy:hzsyk4@191.101.104.71:4487"},"olimp":{"http":"http://shaggy:hzsyk4@191.101.104.71:4487","https":"https://shaggy:hzsyk4@191.101.104.71:4487"}}',
             accounts=r'{"olimp":{"login":"8834798","password":"!qRVcRUXz23","mirror":"olimp.com"},"fonbet":{"login":5987993,"password":"qRVcRUXz23","mirror":"fonbet.com"}}'
@@ -154,6 +152,7 @@ if __name__ == '__main__':
         for k, v in p.items():
             prop = Properties.create(acc=acc.id, key=k, val=v)
     except Exception as e:
+        print('3')
         print(e)
 
     # 7
@@ -162,7 +161,6 @@ if __name__ == '__main__':
         acc = Account.create(
             user=33847743,
             key='16cb113c-62ab-11e9-a9f6-0242ac110019',
-            date_end=get_trunc_sysdate(30000),
             status='active',
             proxies=r'{"fonbet":{"http":"http://shaggy:hzsyk4@185.20.187.33:6293","https":"https://shaggy:hzsyk4@185.20.187.33:6293"},"olimp":{"http":"http://shaggy:hzsyk4@185.20.187.33:6293","https":"https://shaggy:hzsyk4@185.20.187.33:6293"}}',
             accounts=r'{"olimp":{"login":"7751409","password":"KbqNK7m6","mirror":"olimp.com"},"fonbet":{"login":6690827,"password":"KbqNK7m6","mirror":"fonbet.com"}}'
@@ -184,6 +182,7 @@ if __name__ == '__main__':
         for k, v in p.items():
             prop = Properties.create(acc=acc.id, key=k, val=v)
     except Exception as e:
+        print('4')
         print(e)
 
     # 9
@@ -192,7 +191,6 @@ if __name__ == '__main__':
         acc = Account.create(
             user=33847743,
             key='4ccb9568-62ab-11e9-bdab-0242ac110019',
-            date_end=get_trunc_sysdate(30000),
             status='active',
             proxies=r'{"fonbet":{"http":"http://suineg:8veh34@193.22.96.101:4003","https":"https://suineg:8veh34@193.22.96.101:4003"},"olimp":{"http":"http://suineg:8veh34@193.22.96.101:4003","https":"https://suineg:8veh34@193.22.96.101:4003"}}',
             accounts=r'{"olimp":{"login":"5511370","password":"1n7vGT52","mirror":"olimp.com"},"fonbet":{"login":6698906,"password":"1n7vGT52","mirror":"fonbet.com"}}'
@@ -214,6 +212,7 @@ if __name__ == '__main__':
         for k, v in p.items():
             prop = Properties.create(acc=acc.id, key=k, val=v)
     except Exception as e:
+        print('5')
         print(e)
 
     # 10
@@ -244,6 +243,7 @@ if __name__ == '__main__':
         for k, v in p.items():
             prop = Properties.create(acc=acc.id, key=k, val=v)
     except Exception as e:
+        print('6')
         print(e)
 
     # 11
@@ -274,6 +274,7 @@ if __name__ == '__main__':
         for k, v in p.items():
             prop = Properties.create(acc=acc.id, key=k, val=v)
     except Exception as e:
+        print('7')
         print(e)
 
     # 12
@@ -284,7 +285,7 @@ if __name__ == '__main__':
             key='c8f8f470-62ae-11e9-8a2c-0242ac110019',
             date_end=get_trunc_sysdate(30),
             status='active',
-            proxies=r'{"fonbet":{"http":"http://user23688:unprt4@185.20.184.48:1482",""},"olimp":{"https://user23688:unprt4@185.20.184.48:1482","https":""}}',
+            proxies=r'{"fonbet":{"http":"http://user23688:unprt4@185.20.184.48:1482", {"https":"https://user23688:unprt4@185.20.184.48:1482"},"olimp":{"http":"http://user23688:unprt4@185.20.184.48:1482","https":"https://user23688:unprt4@185.20.184.48:1482"}}',
             accounts=r'{"olimp":{"login":"436652","password":"kUemDVnCTkhpkg68","mirror":"olimp.com"},"fonbet":{"login":6840364,"password":"bwzRNq48vK9rxpBt","mirror":"fonbet.com"}}'
         )
 
@@ -304,6 +305,7 @@ if __name__ == '__main__':
         for k, v in p.items():
             prop = Properties.create(acc=acc.id, key=k, val=v)
     except Exception as e:
+        print('8')
         print(e)
 
     for x in Account().select():

@@ -9,7 +9,6 @@ def read1():
         while True:
             for acc in Message.select():
                 Message.update(text='x').where(Message.id == 135).execute()
-                time.sleep(1)
                 # print('1: ' + str(acc))
     except Exception as e:
         print('1: ' + str(e))
@@ -29,7 +28,6 @@ def read3():
     try:
         while True:
             Message.insert(to_user=1, text='x').execute()
-            time.sleep(1)
             # print('1: ' + str(acc))
     except Exception as e:
         print('3: ' + str(e))

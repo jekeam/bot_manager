@@ -1,6 +1,7 @@
 telegram
 python-telegram-bot==12.0.0b1
 peewee
+mysqlclient
 requests
 requests[socks]
 requests[socks5]

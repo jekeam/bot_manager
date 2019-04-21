@@ -14,7 +14,8 @@ from playhouse.sqlite_ext import SqliteExtDatabase
 #     timeout=10
 # )  # Enforce foreign-key constraints.
 
-db = SqliteDatabase('bot_manager.db', thread_safe=False, check_same_thread=False, )
+# db = SqliteDatabase('bot_manager.db', thread_safe=False, check_same_thread=False, )
+db = MySQLDatabase('bot_manager', user='root', password='admin', host='127.0.0.1', port=3306)
 print('init DB')
 
 
@@ -44,7 +45,7 @@ class Account(BaseModel):
     work_stat = CharField(null=False, default='stop')
     pid = IntegerField(null=False, default=0)
     work_dir = CharField(null=True)
-    proxies = CharField(null=False, unique=True)
+    proxies = BlobField(null=True, unique=True)
     accounts = CharField(null=False, unique=True)
     time_start = IntegerField(null=True)
     time_stop = IntegerField(null=True)
@@ -55,7 +56,7 @@ class Account(BaseModel):
 class Message(BaseModel):
     id = AutoField
     to_user = IntegerField(null=False)
-    text = CharField(null=True)
+    text = CharField(null=True, max_length=4096)
     blob = BlobField(null=True)
     file_name = CharField(null=True)
     file_type = CharField(null=True)
@@ -107,4 +108,4 @@ def send_message_bot(user_id: int, msg: str, admin_list: dict = None):
 
 if __name__ == '__main__':
     print(uuid1())
-    send_message_bot(381868674, 'HI')
+    # send_message_bot(381868674, 'HI')
