@@ -5,16 +5,6 @@ from json import dumps
 from uuid import uuid1
 from playhouse.sqlite_ext import SqliteExtDatabase
 
-# db = SqliteExtDatabase(
-#     'bot_manager.db',
-#     pragmas=(
-#         ('cache_size', -1024 * 64),  # 64MB page-cache.
-#         ('journal_mode', 'wal'),  # Use WAL-mode (you should always use this!).
-#         ('foreign_keys', 1)),
-#     timeout=10
-# )  # Enforce foreign-key constraints.
-
-# db = SqliteDatabase('bot_manager.db', thread_safe=False, check_same_thread=False, )
 db = MySQLDatabase('bot_manager', user='root', password='131189_Ak13', host='127.0.0.1', port=3306)
 
 
@@ -95,7 +85,7 @@ def send_message_bot(user_id: int, msg: str, admin_list: dict = None):
     if admin_list:
         is_send_admin = user_id in admin_list
     print('is_send_admin: ' + str(is_send_admin))
-    
+
     if send_stat != '0' and not is_send_admin:
         Message.insert({
             Message.to_user: user_id,
