@@ -773,7 +773,7 @@ if __name__ == '__main__':
         err_str = str(e) + ' ' + str(repr(traceback.format_exception(exc_type, exc_value, exc_traceback)))
         err_str = str(ACC_ID) + ': Возникла ошибка! ' + str(e.__class__.__name__) + ' - ' + str(err_str)
         prnt(err_str)
-        send_message_bot(USER_ID, e, ADMINS)
+        send_message_bot(USER_ID, str(e), ADMINS)
 
     finally:
         msg_str = str(ACC_ID) + ': Завершил работу'
