@@ -196,7 +196,7 @@ def sender(context):
 
 
 if __name__ == '__main__':
-    updater = Updater(TOKEN_TEST, use_context=True, request_kwargs=REQUEST_KWARGS)
+    updater = Updater(TOKEN, use_context=True, request_kwargs=REQUEST_KWARGS)
     dispatcher = updater.dispatcher
     context = CallbackContext(dispatcher)
 

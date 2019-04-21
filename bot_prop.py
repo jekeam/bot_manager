@@ -1,5 +1,5 @@
 # coding:utf-8
-PY_PATH = 'D:\\YandexDisk\\Парсинг\\bot_manager\\venv\\Scripts\\python.exe'
+PY_PATH = 'python3.6'
 ADMINS = [381868674, 33847743]
 
 TOKEN = '843081630:AAFmVT4hi5R71mgJpojVxOmTGEaZJA-LWYI'
