@@ -16,7 +16,6 @@ from playhouse.sqlite_ext import SqliteExtDatabase
 
 # db = SqliteDatabase('bot_manager.db', thread_safe=False, check_same_thread=False, )
 db = MySQLDatabase('bot_manager', user='root', password='131189_Ak13', host='127.0.0.1', port=3306)
-print('init DB')
 
 
 def get_trunc_sysdate(days=0):
@@ -87,13 +86,11 @@ def prnt_user_str(id):
 
 
 def send_message_bot(user_id: int, msg: str, admin_list: dict = None):
-    print('send_message_bot')
     try:
         send_stat = str(Properties.select().where((Properties.key == 'SEND_MESSAGE') & (Properties.acc_id == 2)).get().val)
     except Exception:
         send_stat = '0'
 
-    print('send_stat: ' + str(send_stat) + ' ' + str(type(send_stat)))
     if send_stat != '0' and user_id not in admin_list:
         Message.insert({
             Message.to_user: user_id,

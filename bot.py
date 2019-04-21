@@ -25,7 +25,7 @@ import datetime
 import time
 from utils import prop_abr
 
-logging.basicConfig(format='%(asctime)s - %(name)s - %(levelname)s - %(message)s', level=logging.ERROR)
+logging.basicConfig(filename='bot.log', format='%(asctime)s - %(name)s - %(levelname)s - %(message)s', level=logging.DEBUG)
 logger = logging.getLogger(__name__)
 
 
@@ -196,7 +196,7 @@ def sender(context):
 
 
 if __name__ == '__main__':
-    updater = Updater(TOKEN_TEST, use_context=True, request_kwargs=REQUEST_KWARGS)
+    updater = Updater(TOKEN, use_context=True, request_kwargs=REQUEST_KWARGS)
     dispatcher = updater.dispatcher
     context = CallbackContext(dispatcher)
 
