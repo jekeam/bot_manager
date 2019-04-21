@@ -4,11 +4,10 @@ from bet_fonbet import *
 from better import OLIMP_USER, FONBET_USER
 from math import ceil
 from datetime import datetime
-import time
 import random
 import json
 import os
-from utils import DEBUG, get_prop, prnt
+from utils import prnt
 from db_model import *
 
 global ACC_ID, USER_ID
@@ -241,8 +240,8 @@ def export_hist(OLIMP_USER, FONBET_USER):
 
 
 if __name__ == "__main__":
-    pass
-    export_hist(OLIMP_USER, FONBET_USER)
+    if os.path.isfile(file_name):
+        export_hist(OLIMP_USER, FONBET_USER)
     # csv_name = '1_16_04_2019_statistics.csv'
     # with open(csv_name, 'r', encoding='utf-8') as f:
     #     msg = (Message.insert(
