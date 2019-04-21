@@ -242,7 +242,7 @@ def export_hist(OLIMP_USER, FONBET_USER):
 
 if __name__ == "__main__":
     pass
-    # export_hist(OLIMP_USER, FONBET_USER)
+    export_hist(OLIMP_USER, FONBET_USER)
     # csv_name = '1_16_04_2019_statistics.csv'
     # with open(csv_name, 'r', encoding='utf-8') as f:
     #     msg = (Message.insert(
