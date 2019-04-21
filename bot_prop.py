@@ -1,5 +1,5 @@
 # coding:utf-8
-PY_PATH = 'D:\\YandexDisk\\Парсинг\\bot_manager\\venv\\Scripts\\python'
+PY_PATH = 'python3.6'
 
 TOKEN = '843081630:AAFmVT4hi5R71mgJpojVxOmTGEaZJA-LWYI'
 PROXY = {
