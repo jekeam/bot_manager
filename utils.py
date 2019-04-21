@@ -18,18 +18,18 @@ package_dir = os.path.dirname(__file__)
 dtOld = datetime.datetime.now()
 
 prop_abr = {
-    "SUMM": {"abr": "Общая сумма ставки", "type": "", "max": "", "min": "", "access_list": []},
-    "RANDOM_SUMM_PROC": {"abr": "Отклонение от общей суммы ставки (в %)", "type": "", "max": "", "min": "", "access_list": []},
-    "FORK_LIFE_TIME": {"abr": "Время жизни вилки от (сек.)", "type": "", "max": "", "min": "", "access_list": []},
-    "SERVER_IP_TEST": {"abr": "IP-адрес тестового сервера", "type": "", "max": "", "min": "", "access_list": []},
-    "SERVER_IP": {"abr": "IP-адрес сервера", "type": "", "max": "", "min": "", "access_list": []},
-    "WORK_HOUR": {"abr": "Работаю (ч.)", "type": "", "max": "", "min": "", "access_list": []},
-    "WORK_HOUR_END": {"abr": "Работаю до (ч.)", "type": "", "max": "", "min": "", "access_list": []},
-    "ROUND_FORK": {"abr": "Округление вилки и суммы ставки до", "type": "", "max": "", "min": "", "access_list": []},
-    "MAX_FORK": {"abr": "Максимальное кол-во успешных вилок", "type": "", "max": "", "min": "", "access_list": []},
-    "MAX_FAIL": {"abr": "Максимально допустимое количество ошибок/выкупов", "type": "", "max": "", "min": "", "access_list": []},
-    "MIN_L": {"abr": "Минимальный профит вилки от (%)", "type": "", "max": "", "min": "", "access_list": []},
-    "HARD_BET_RIGHT": {"abr": "Жесткая ставка второго плеча", "type": "", "max": "", "min": "", "access_list": []},
+    "SUMM": {"abr": "Общая сумма ставки", "type": "", "max": "", "min": "", "access_list": [], "error": ""},
+    "RANDOM_SUMM_PROC": {"abr": "Отклонение от общей суммы ставки (в %)", "type": "", "max": "", "min": "", "access_list": [], "error": ""},
+    "FORK_LIFE_TIME": {"abr": "Время жизни вилки от (сек.)", "type": "", "max": "", "min": "", "access_list": [], "error": ""},
+    "SERVER_IP_TEST": {"abr": "IP-адрес тестового сервера", "type": "", "max": "", "min": "", "access_list": [], "error": ""},
+    "SERVER_IP": {"abr": "IP-адрес сервера", "type": "", "max": "", "min": "", "access_list": [], "error": ""},
+    "WORK_HOUR": {"abr": "Работаю (ч.)", "type": "", "max": "", "min": "", "access_list": [], "error": ""},
+    "WORK_HOUR_END": {"abr": "Работаю до (ч.)", "type": "", "max": "", "min": "", "access_list": [], "error": ""},
+    "ROUND_FORK": {"abr": "Округление вилки и суммы ставки до", "type": "", "max": "", "min": "", "access_list": [], "error": ""},
+    "MAX_FORK": {"abr": "Максимальное кол-во успешных вилок", "type": "", "max": "", "min": "", "access_list": [], "error": ""},
+    "MAX_FAIL": {"abr": "Максимально допустимое количество ошибок/выкупов", "type": "", "max": "", "min": "", "access_list": [], "error": ""},
+    "MIN_L": {"abr": "Минимальный профит вилки от (%)", "type": "", "max": "", "min": "", "access_list": [], "error": ""},
+    "HARD_BET_RIGHT": {"abr": "Жесткая ставка второго плеча", "type": "", "max": "", "min": "", "access_list": [], "error": ""},
 }
 
 opposition = {
