@@ -33,4 +33,4 @@ if __name__ == '__main__':
                 print('start: ', acc.key)  # acc.work_dir,
                 acc_start = Thread(target=start, args=(acc.key,))  # acc.work_dir,
                 acc_start.start()
-            # time.sleep(1)
+            time.sleep(1)
