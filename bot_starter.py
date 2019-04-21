@@ -3,8 +3,8 @@ import urllib3
 
 urllib3.disable_warnings(urllib3.exceptions.InsecureRequestWarning)
 
-from db_model import Account
-from bot_prop import PY_PATH
+from db_model import Account, send_message_bot
+from bot_prop import PY_PATH, ADMINS
 
 from threading import Thread
 import subprocess
@@ -27,8 +27,10 @@ if __name__ == '__main__':
         Account.update(pid=0).where(Account.pid > 0).execute()
         while True:
             for acc in Account.select().where((Account.status == 'active') & (Account.work_stat == 'start') & (Account.pid == 0)):
+                Account.update(pid=1).where(Account.id == acc.id).execute()
+                send_message_bot(acc.user_id, str(acc.id) + ': Аккаунт запущен, начну работу через 15 сек.', ADMINS)
                 print(''.ljust(120, '*'))
                 print('start: ', acc.key)  # acc.work_dir,
                 acc_start = Thread(target=start, args=(acc.key,))  # acc.work_dir,
                 acc_start.start()
-            time.sleep(1)
+            # time.sleep(1)

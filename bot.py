@@ -11,6 +11,7 @@ import logging
 import telegram
 from telegram import InlineKeyboardButton, InlineKeyboardMarkup
 from telegram.ext import Updater, CommandHandler, CallbackQueryHandler
+from telegram.error import BadRequest
 from telegram.ext.callbackcontext import CallbackContext
 
 from db_model import Account, Message, User, prnt_user_str, send_message_bot
@@ -24,7 +25,7 @@ import datetime
 import time
 from utils import prop_abr
 
-logging.basicConfig(filename='bot.log', format='%(asctime)s - %(name)s - %(levelname)s - %(message)s', level=logging.DEBUG)
+logging.basicConfig(format='%(asctime)s - %(name)s - %(levelname)s - %(message)s', level=logging.ERROR)
 logger = logging.getLogger(__name__)
 
 
@@ -132,48 +133,66 @@ def error(update, context):
     logger.warning('Update "%s" caused error "%s"', update, context.error)
 
 
-def sender(context):
+def error_callback(bot, update, error):
     try:
-        while True:
-            for msg in Message.select().where(Message.date_send.is_null()):
-                try:
-                    if msg.file_type == 'document':
-                        if msg.blob:
+        raise error
+    # except Unauthorized:
+    #     # remove update.message.chat_id from conversation list
+    except BadRequest as e:
+        print('BadRequest: ' + str(e))
+        # handle malformed requests - read more below!
+    # except TimedOut:
+    #     # handle slow connection problems
+    # except NetworkError:
+    #     # handle other connection problems
+    # except ChatMigrated as e:
+    #     # the chat_id of a group has changed, use e.new_chat_id instead
+    # except TelegramError:
+    #     # handle all other telegram related errors
 
-                            if not os.path.isfile(msg.file_name):
-                                with open(msg.file_name, 'w', encoding='utf-8') as b:
-                                    b.write(msg.blob.decode())
 
-                            doc = open(msg.file_name, 'rb')
-                            context.bot.send_document(msg.to_user, doc)
-                            doc.close()
+def sender(context):
+    while True:
+        for msg in Message.select().where(Message.date_send.is_null()):
+            try:
+                if msg.file_type == 'document':
+                    if msg.blob:
+                        if not os.path.isfile(msg.file_name):
+                            with open(msg.file_name, 'w', encoding='utf-8') as b:
+                                b.write(msg.blob.decode())
 
-                            # if os.path.isfile(msg.file_name):
-                            #     os.remove(msg.file_name)
-                            Message.update(date_send=round(time.time())).where(Message.id == msg.id).execute()
-                    elif msg.file_type == 'message':
+                        doc = open(msg.file_name, 'rb')
+                        context.bot.send_document(msg.to_user, doc)
+                        doc.close()
+
+                        # if os.path.isfile(msg.file_name):
+                        #     os.remove(msg.file_name)
+                        Message.update(date_send=round(time.time())).where(Message.id == msg.id).execute()
+                elif msg.file_type == 'message':
+                    try:
                         context.bot.send_message(msg.to_user, msg.text[0:4000])
                         Message.update(date_send=round(time.time())).where(Message.id == msg.id).execute()
-                except Exception as e:
-                    for admin in ADMINS:
-                        if str(e) == 'database is locked':
-                            context.bot.send_message(admin,
-                                                     'Возникла ошибка:{}, msg:{} - сообщение будет отправлено повторно'
-                                                     .format(str(e), 'msg_id: ' + str(msg.id) + ', user_id:' + str(msg.to_user)))
-                        elif str(e) == 'Chat not found':
+                    except Exception as e:
+                        Message.update(date_send=-1).where(Message.id == msg.id).execute()
+                        for admin in ADMINS:
+                            if str(e) == 'Chat not found':
+                                try:
+                                    context.bot.send_message(admin,
+                                                             'Возникла ошибка:{}, msg:{} - сообщение исключено'
+                                                             .format(str(e), 'msg_id: ' + str(msg.id) + ', user_id:' + str(msg.to_user)))
+                                except Exception as e:
+                                    print(e)
+            except Exception as e:
+                Message.update(date_send=-1).where(Message.id == msg.id).execute()
+                for admin in ADMINS:
+                    if str(e) == 'Chat not found':
+                        try:
                             context.bot.send_message(admin,
                                                      'Возникла ошибка:{}, msg:{} - сообщение исключено'
                                                      .format(str(e), 'msg_id: ' + str(msg.id) + ', user_id:' + str(msg.to_user)))
-                            Message.update(date_send=-1).where(Message.id == msg.id).execute()
-            time.sleep(1)
-    except Exception as e:
-        for admin in ADMINS:
-            try:
-                context.bot.send_message(admin, 'Возникла ошибка, рассыльщик продолжит работу через минуту: ' + str(e))
-            except Exception as e:
-                if str(e) == 'Chat not found':
-                    print('Chat not found: ' + str(e) + ', admin: ' + str(admin))
-        time.sleep(60)
+                        except Exception as e:
+                            print(e)
+        time.sleep(1)
 
 
 if __name__ == '__main__':
@@ -189,7 +208,7 @@ if __name__ == '__main__':
     updater.dispatcher.add_handler(CommandHandler('botlist', botlist))
     updater.dispatcher.add_handler(CallbackQueryHandler(button))
     updater.dispatcher.add_handler(CommandHandler('help', help))
-    updater.dispatcher.add_error_handler(error)
+    updater.dispatcher.add_error_handler(error_callback)
 
     # Start the Bot
     updater.start_polling()

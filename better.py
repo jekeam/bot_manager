@@ -501,9 +501,7 @@ wait_before_start = 15
 
 if __name__ == '__main__':
     try:
-        Account.update(pid=os.getpid()).where(Account.key == KEY).execute()
-        send_message_bot(USER_ID, str(ACC_ID) + ': Аккаунт запущен, начну работу через ' + str(wait_before_start) + ' сек.')
-
+        Account.update(pid=os.getpid(), time_start=round(time.time())).where(Account.key == KEY).execute()
         prnt('DEBUG: ' + str(DEBUG))
 
         time_get_balance = datetime.datetime.now()
@@ -581,7 +579,9 @@ if __name__ == '__main__':
         start_see_fork.start()
 
         time.sleep(wait_before_start)
-        send_message_bot(USER_ID, str(ACC_ID) + ': Начал работу', ADMINS)
+
+        if Account.select().where(Account.key == KEY).get().work_stat == 'start':
+            send_message_bot(USER_ID, str(ACC_ID) + ': Начал работу', ADMINS)
 
         while Account.select().where(Account.key == KEY).get().work_stat == 'start':
             # print(str(Account.select().where(Account.key == KEY).get().id) + ': ' + Account.select().where(Account.key == KEY).get().work_stat)
@@ -778,4 +778,4 @@ if __name__ == '__main__':
     finally:
         msg_str = str(ACC_ID) + ': Завершил работу'
         send_message_bot(USER_ID, msg_str, ADMINS)
-        Account.update(pid=0, work_stat='stop').where(Account.key == KEY).execute()
+        Account.update(pid=0, work_stat='stop', time_stop=round(time.time())).where(Account.key == KEY).execute()

@@ -87,15 +87,14 @@ def prnt_user_str(id):
 
 
 def send_message_bot(user_id: int, msg: str, admin_list: dict = None):
+    print('send_message_bot')
     try:
         send_stat = str(Properties.select().where((Properties.key == 'SEND_MESSAGE') & (Properties.acc_id == 2)).get().val)
-    except Exception as e:
-        print(e)
+    except Exception:
         send_stat = '0'
 
-    print('send_stat: ' + str(send_stat) + ' ' + type(send_stat))
-    if send_stat != '0':
-        print('send_stat - send')
+    print('send_stat: ' + str(send_stat) + ' ' + str(type(send_stat)))
+    if send_stat != '0' and user_id not in admin_list:
         Message.insert({
             Message.to_user: user_id,
             Message.text: msg,
@@ -104,12 +103,11 @@ def send_message_bot(user_id: int, msg: str, admin_list: dict = None):
 
     if admin_list:
         for admin_id in admin_list:
-            if admin_id != user_id:
-                Message.insert({
-                    Message.to_user: admin_id,
-                    Message.text: msg,
-                    Message.file_type: 'message'
-                }).execute()
+            Message.insert({
+                Message.to_user: admin_id,
+                Message.text: msg,
+                Message.file_type: 'message'
+            }).execute()
 
 
 if __name__ == '__main__':
