@@ -94,7 +94,13 @@ if __name__ == '__main__':
             accounts=r'{}'
         )
 
+        p = {
+            "SEND_MESSAGE": 0
+        }
+        for k, v in p.items():
+            prop = Properties.create(acc=acc.id, key=k, val=v)
     except Exception as e:
+        print('FIX')
         print(e)
     # 3
     try:
@@ -102,7 +108,7 @@ if __name__ == '__main__':
             user=381868674,
             key='a28ad3f4-5f9e-11e9-8d15-2cfda1739afe',
             status='active',
-            proxies=r'{"fonbet":{"http":"http://suineg:8veh34@212.90.108.153:3597","https":"https://suineg:8veh34@212.90.108.153:3597"},"olimp":{"http":"http://suineg:8veh34@212.90.108.153:3597","https":"https://suineg:8veh34@212.90.108.153:3597"},"bet365":{"http":"","https":""}}',
+            proxies=r'{"fonbet":{"http":"http://suineg:8veh34@212.90.108.153:3597","https":"https://suineg:8veh34@212.90.108.153:3597"},"olimp":{"http":"http://suineg:8veh34@212.90.108.153:3597","https":"https://suineg:8veh34@212.90.108.153:3597"}',
             accounts=r'{"olimp":{"login":"6265127","password":"qvF3BwrNcRcJtB6","mirror":"olimp.com"},"fonbet":{"login":5699838,"password":"NTe2904H11","mirror":"fonbet.com"}}'
         )
 

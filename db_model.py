@@ -45,8 +45,8 @@ class Account(BaseModel):
     work_stat = CharField(null=False, default='stop')
     pid = IntegerField(null=False, default=0)
     work_dir = CharField(null=True)
-    proxies = BlobField(null=True, unique=True)
-    accounts = CharField(null=False, unique=True)
+    proxies = BlobField(default='')
+    accounts = BlobField(default='')
     time_start = IntegerField(null=True)
     time_stop = IntegerField(null=True)
     date_start = IntegerField(null=False, default=get_trunc_sysdate())
@@ -57,7 +57,7 @@ class Message(BaseModel):
     id = AutoField
     to_user = IntegerField(null=False)
     text = CharField(null=True, max_length=4096)
-    blob = BlobField(null=True)
+    blob = BlobField(default='')
     file_name = CharField(null=True)
     file_type = CharField(null=True)
     date_send = IntegerField(null=True)
@@ -87,7 +87,11 @@ def prnt_user_str(id):
 
 
 def send_message_bot(user_id: int, msg: str, admin_list: dict = None):
-    send_stat = Properties.select().where((Properties.key == 'SEND_MESSAGE') & (Properties.acc_id == 2)).get().val
+    try:
+        send_stat = Properties.select().where((Properties.key == 'SEND_MESSAGE') & (Properties.acc_id == 2)).get().val
+    except Exception as e:
+        print(e)
+        send_stat = 0
 
     if send_stat:
         Message.insert({
