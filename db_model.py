@@ -93,7 +93,9 @@ def send_message_bot(user_id: int, msg: str, admin_list: dict = None):
         print(e)
         send_stat = '0'
 
+    print('send_stat: ' + str(send_stat) + ' ' + type(send_stat))
     if send_stat != '0':
+        print('send_stat - send')
         Message.insert({
             Message.to_user: user_id,
             Message.text: msg,
