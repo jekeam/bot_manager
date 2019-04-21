@@ -1,8 +1,14 @@
 # coding:utf-8
-PY_PATH = 'python3.6'
-ADMINS = [381868674, 33847743]
+# BOI
+# PY_PATH = 'python3.6'
+# TOKEN = '843081630:AAFmVT4hi5R71mgJpojVxOmTGEaZJA-LWYI'
+# ADMINS = [381868674, 33847743]
 
-TOKEN = '843081630:AAFmVT4hi5R71mgJpojVxOmTGEaZJA-LWYI'
+# TEST
+PY_PATH = 'D:\\YandexDisk\\Парсинг\\bot_manager\\venv\\Scripts\\python.exe'
+TOKEN = '598446286:AAEhbB2RDQ7oEe7pX2vif-IENIdIVIZ9xVk'
+ADMINS = [381868674]
+
 PROXY = {
     'http': 'socks5://shaggy:hzsyk4@191.101.104.71:14487',
     'https': 'socks5://shaggy:hzsyk4@191.101.104.71:14487'
@@ -11,8 +17,6 @@ PROXY2 = {
     "http": "http://shaggy:hzsyk4@191.101.104.71:4487",
     "https": "https://shaggy:hzsyk4@191.101.104.71:4487"
 }
-
-TOKEN_TEST = '598446286:AAEhbB2RDQ7oEe7pX2vif-IENIdIVIZ9xVk'
 REQUEST_KWARGS = {
     'proxy_url': 'https://shaggy:hzsyk4@191.101.104.71:4487',
     'read_timeout': 60,
