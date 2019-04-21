@@ -29,7 +29,7 @@ from utils import prop_abr
 
 import copy
 
-logging.basicConfig(format='%(asctime)s - %(name)s - %(levelname)s - %(message)s', level=logging.ERROR)
+logging.basicConfig(format='%(asctime)s - %(name)s - %(levelname)s - %(message)s', level=logging.DEBUG)
 logger = logging.getLogger(__name__)
 
 
@@ -175,7 +175,7 @@ def sender(context):
                             #     os.remove(msg.file_name)
                             Message.update(date_send=round(time.time())).where(Message.id == msg.id).execute()
                     elif msg.file_type == 'message':
-                        context.bot.send_message(msg.to_user, msg.text)
+                        context.bot.send_message(msg.to_user, msg.text[0:4000])
                         Message.update(date_send=round(time.time())).where(Message.id == msg.id).execute()
                 except Exception as e:
                     for admin in ADMINS:
@@ -188,6 +188,7 @@ def sender(context):
                                                      'Возникла ошибка:{}, msg:{} - сообщение исключено'
                                                      .format(str(e), 'msg_id: ' + str(msg.id) + ', user_id:' + str(msg.to_user)))
                             Message.update(date_send=-1).where(Message.id == msg.id).execute()
+            time.sleep(3)
     except Exception as e:
         for admin in ADMINS:
             context.bot.send_message(admin, 'Возникла ошибка, рассыльщик продолжит работу через минуту: ' + str(e))
