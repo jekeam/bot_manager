@@ -88,12 +88,12 @@ def prnt_user_str(id):
 
 def send_message_bot(user_id: int, msg: str, admin_list: dict = None):
     try:
-        send_stat = Properties.select().where((Properties.key == 'SEND_MESSAGE') & (Properties.acc_id == 2)).get().val
+        send_stat = str(Properties.select().where((Properties.key == 'SEND_MESSAGE') & (Properties.acc_id == 2)).get().val)
     except Exception as e:
         print(e)
-        send_stat = 0
+        send_stat = '0'
 
-    if send_stat:
+    if send_stat != '0':
         Message.insert({
             Message.to_user: user_id,
             Message.text: msg,
