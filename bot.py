@@ -15,7 +15,7 @@ from telegram.error import BadRequest
 from telegram.ext.callbackcontext import CallbackContext
 
 from db_model import Account, Message, User, prnt_user_str, send_message_bot
-from bot_prop import *
+import bot_prop
 from emoji import emojize
 
 from threading import Thread
@@ -25,7 +25,8 @@ import datetime
 import time
 from utils import prop_abr
 
-logging.basicConfig(filename='bot.log', format='%(asctime)s - %(name)s - %(levelname)s - %(message)s', level=logging.DEBUG)
+# logging.basicConfig(filename='bot.log', format='%(asctime)s - %(name)s - %(levelname)s - %(message)s', level=logging.DEBUG)
+logging.basicConfig(format='%(asctime)s - %(name)s - %(levelname)s - %(message)s', level=logging.DEBUG)
 logger = logging.getLogger(__name__)
 
 
@@ -68,9 +69,9 @@ def botlist(update, context, edit=False):
     reply_markup = InlineKeyboardMarkup(keyboard)
 
     if not edit:
-        update.message.reply_text(text=MSG_CHANGE_ACC, reply_markup=reply_markup)
+        update.message.reply_text(text=bot_prop.MSG_CHANGE_ACC, reply_markup=reply_markup)
     else:
-        update.message.edit_text(text=MSG_CHANGE_ACC, reply_markup=reply_markup)
+        update.message.edit_text(text=bot_prop.MSG_CHANGE_ACC, reply_markup=reply_markup)
 
 
 ACC_ACTIVE = 0
@@ -91,7 +92,7 @@ def button(update, context):
         keyboard.append([InlineKeyboardButton(text=emojize(':back:', use_aliases=True) + ' Back to Bots List', callback_data='botlist')])
 
         reply_markup = InlineKeyboardMarkup(keyboard)
-        query.message.edit_text(text=MSG_START_STOP, reply_markup=reply_markup)
+        query.message.edit_text(text=bot_prop.MSG_START_STOP, reply_markup=reply_markup)
 
     query = update.callback_query
 
@@ -106,18 +107,20 @@ def button(update, context):
         if acc_info:
             ACC_ACTIVE = acc_info.get().id
             print('ACC_ACTIVE: ' + str(ACC_ACTIVE))
-            if query.message.text == MSG_START_STOP:
+            if query.message.text == bot_prop.MSG_START_STOP:
                 if acc_info.get().work_stat == 'start':
                     Account.update(work_stat='stop').where(Account.key == query.data).execute()
+                    update.callback_query.answer(text=bot_prop.MSG_ACC_STOP_WAIT)
                     send_message_bot(
                         acc_info.get().user_id,
-                        str(acc_info.get().id) + ': Аккаунт в процессе остановки, это может занять несколько минут, пожалуйста подождите... ',
-                        ADMINS
+                        str(acc_info.get().id) + ': ' + bot_prop.MSG_ACC_STOP_WAIT_EXT,
+                        bot_prop.ADMINS
                     )
                 else:
                     Account.update(work_stat='start').where(Account.key == query.data).execute()
+                    update.callback_query.answer(text=bot_prop.MSG_ACC_START_WAIT)
                 prnt_acc_stat()
-            elif query.message.text == MSG_CHANGE_ACC:
+            elif query.message.text == bot_prop.MSG_CHANGE_ACC:
                 if acc_info.get().status == 'active':
                     prnt_acc_stat()
                 else:
@@ -174,7 +177,7 @@ def sender(context):
                         Message.update(date_send=round(time.time())).where(Message.id == msg.id).execute()
                     except Exception as e:
                         Message.update(date_send=-1).where(Message.id == msg.id).execute()
-                        for admin in ADMINS:
+                        for admin in bot_prop.ADMINS:
                             if str(e) == 'Chat not found':
                                 try:
                                     context.bot.send_message(admin,
@@ -184,7 +187,7 @@ def sender(context):
                                     print(e)
             except Exception as e:
                 Message.update(date_send=-1).where(Message.id == msg.id).execute()
-                for admin in ADMINS:
+                for admin in bot_prop.ADMINS:
                     if str(e) == 'Chat not found':
                         try:
                             context.bot.send_message(admin,
@@ -196,7 +199,7 @@ def sender(context):
 
 
 if __name__ == '__main__':
-    updater = Updater(TOKEN, use_context=True, request_kwargs=REQUEST_KWARGS)
+    updater = Updater(bot_prop.TOKEN, use_context=True, request_kwargs=bot_prop.REQUEST_KWARGS)
     dispatcher = updater.dispatcher
     context = CallbackContext(dispatcher)
 
