@@ -762,10 +762,6 @@ if __name__ == '__main__':
             else:
                 pass
             time.sleep(0.5)
-        Account.update(pid=0, time_stop=round(time.time())).where(Account.key == KEY).execute()
-        shutdown = True
-        msg_str = str(ACC_ID) + ': Завершил работу'
-        send_message_bot(USER_ID, msg_str, ADMINS)
 
     except (Shutdown, MaxFail, MaxFork) as e:
         shutdown = True
@@ -794,6 +790,8 @@ if __name__ == '__main__':
         send_message_bot(USER_ID, str(e), ADMINS)
 
     finally:
+        shutdown = True
         msg_str = str(ACC_ID) + ': Завершил работу'
         send_message_bot(USER_ID, msg_str, ADMINS)
         Account.update(pid=0, work_stat='stop', time_stop=round(time.time())).where(Account.key == KEY).execute()
+        send_message_bot(USER_ID, msg_str, ADMINS)
