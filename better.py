@@ -190,9 +190,12 @@ def check_fork(key, L, k1, k2, live_fork, bk1_score, bk2_score, minute, time_bre
     return v
 
 
-def upd_last_fork_time():
+def upd_last_fork_time(v_time: int = None):
     global last_fork_time
-    last_fork_time = int(time.time())
+    if v_time:
+        last_fork_time = v_time
+    else:
+        last_fork_time = int(time.time())
 
 
 def set_statistics(key, err_bk1, err_bk2, fork_info=None, init=False):
@@ -565,13 +568,19 @@ if __name__ == '__main__':
             with open(str(ACC_ID) + '_id_forks.txt') as f:
                 for line in f:
                     js = json.loads(line)
+                    last_time_temp = 0
                     for key, val in js.items():
                         bet_key = str(val.get('olimp', {}).get('id')) + '@' + str(val.get('fonbet', {}).get('id')) + '@' + \
                                   val.get('olimp', {}).get('bet_type') + '@' + val.get('fonbet', {}).get('bet_type')
                         set_statistics(bet_key, val.get('olimp').get('err'), val.get('fonbet').get('err'))
+
+                        if int(key) > last_time_temp:
+                            last_time_temp = int(key)
                 get_statistics()
-        except:
-            pass
+                if last_time_temp:
+                    upd_last_fork_time(last_time_temp)
+        except Exception as e:
+            prnt(e)
         check_statistics()
 
         server_forks = dict()
@@ -758,8 +767,9 @@ if __name__ == '__main__':
 
         last_fork_time_diff = int(time.time()) - last_fork_time
         wait_before_exp = max(60 * 60 * 2 - last_fork_time_diff, 0)
-        msg_str = str(ACC_ID) + ': ' + str(last_fork_time_diff) + ' секунд прошло с момента последней ставки\nОжидание ' + str(
-            wait_before_exp / 60) + ' минут, до выгрузки'
+        msg_str = str(ACC_ID) + ': ' + \
+                  str(last_fork_time_diff) + ' секунд прошло с момента последней ставки\nОжидание ' + \
+                  str(wait_before_exp / 60) + ' минут, до выгрузки'
 
         prnt(msg_str)
         send_message_bot(USER_ID, msg_str)
