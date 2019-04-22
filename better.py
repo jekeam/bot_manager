@@ -621,9 +621,7 @@ if __name__ == '__main__':
                 prnt(' ')
                 msg_str = str(ACC_ID) + ': ' + \
                           'Кол-во успешно проставленных вилок: ' + str(len(cnt_fork_success)) + '\n' + \
-                          'Кол-во вилок с выкупами: ' + str(cnt_fail) + '\n' + \
-                          'Работаю еще: ' + str(
-                    round((shutdown_minutes - (datetime.datetime.now() - time_live).total_seconds()) / 60 / 60, 2)) + ' ч.'
+                          'Кол-во вилок с выкупами: ' + str(cnt_fail) + '\n' 
                 prnt(msg_str)
                 printed = True
     
