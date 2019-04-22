@@ -604,7 +604,7 @@ if __name__ == '__main__':
             if cur_hour < 12:
                 shutdown_hour = int(get_prop('work_hour_end'))
                 if cur_hour >= shutdown_hour:
-                    msg_str = 'Роботаю до:{} ч., сейчас:{} ч., я завершил работу'.format(shutdown_hour, cur_hour)
+                    msg_str = 'Работаю до: {} ч., сейчас: {} ч., я завершил работу'.format(shutdown_hour, cur_hour)
                     raise Shutdown(msg_str)
 
             # Обновление баланса каждые 30 минут
