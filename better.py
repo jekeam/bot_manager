@@ -586,7 +586,7 @@ if __name__ == '__main__':
         start_see_fork = threading.Thread(target=run_client)  # , args=(server_forks,))
         start_see_fork.start()
     
-        time.sleep(wait_before_start)
+        # time.sleep(wait_before_start)
     
         if Account.select().where(Account.key == KEY).get().work_stat == 'start':
             send_message_bot(USER_ID, str(ACC_ID) + ': Начал работу', ADMINS)
@@ -786,17 +786,17 @@ if __name__ == '__main__':
             send_message_bot(USER_ID, str(ACC_ID) + ': Делаю выгрузку, пожалуйста подождите...')
             export_hist(OLIMP_USER, FONBET_USER)
 
-    except Exception as e:
-        exc_type, exc_value, exc_traceback = sys.exc_info()
-        err_str = str(e) + ' ' + str(repr(traceback.format_exception(exc_type, exc_value, exc_traceback)))
-        err_str = str(ACC_ID) + ': Возникла ошибка! ' + str(e.__class__.__name__) + ' - ' + str(err_str)
-        prnt(err_str)
-        shutdown = True
+    # except Exception as e:
+    #     exc_type, exc_value, exc_traceback = sys.exc_info()
+    #     err_str = str(e) + ' ' + str(repr(traceback.format_exception(exc_type, exc_value, exc_traceback)))
+    #     err_str = str(ACC_ID) + ': Возникла ошибка! ' + str(e.__class__.__name__) + ' - ' + str(err_str)
+    #     prnt(err_str)
+    #     shutdown = True
         
-        send_message_bot(USER_ID, str(e), ADMINS)
+    #     send_message_bot(USER_ID, str(e), ADMINS)
 
-    finally:
-        shutdown = True
-        msg_str = str(ACC_ID) + ': Завершил работу'
-        Account.update(pid=0, work_stat='stop', time_stop=round(time.time())).where(Account.key == KEY).execute()
-        send_message_bot(USER_ID, msg_str, ADMINS)
+    # finally:
+    #     shutdown = True
+    #     msg_str = str(ACC_ID) + ': Завершил работу'
+    #     Account.update(pid=0, work_stat='stop', time_stop=round(time.time())).where(Account.key == KEY).execute()
+    #     send_message_bot(USER_ID, msg_str, ADMINS)
