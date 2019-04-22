@@ -156,7 +156,7 @@ def error_callback(bot, update, error):
 
 def sender(context):
     while True:
-        for msg in Message.select().where(Message.date_send.is_null()):
+        for msg in Message.select().where(Message.date_send.is_null()).order_by(Message.id):
             try:
                 if msg.file_type == 'document':
                     if msg.blob:
