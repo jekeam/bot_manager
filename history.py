@@ -8,8 +8,9 @@ import json
 import os
 from utils import prnt
 import db_model
+from bot_prop import ADMINS
 
-global ACC_ID, USER_ID, ADMINS
+global ACC_ID, USER_ID
 
 file_name = str(ACC_ID) + '_id_forks.txt'
 csv_name = datetime.now().strftime("%d_%m_%Y") + '_' + str(ACC_ID) + '_statistics.csv'
@@ -54,8 +55,9 @@ def olimp_get_hist(OLIMP_USER):
 
     coupot_list = dict()
     olimp = OlimpBot(OLIMP_USER)
-    if olimp.balance >= 0:
-        balance_str = balance_str + 'Баланс в Олимп: ' + str(olimp.balance) + '\n'
+    if olimp.get_balance() >= 0:
+        balance_str = 'Баланс в Олимп: ' + str(olimp.get_balance())
+        db_model.send_message_bot(USER_ID, str(ACC_ID) + ': ' + balance_str, ADMINS)
     data = olimp.get_history_bet(filter="0011", offset=0)
     count = data.get('count')
     offset = ceil(count / 10) + 1
@@ -78,8 +80,9 @@ def fonbet_get_hist(FONBET_USER):
     is_get_list = list()
     coupon_list = dict()
     fonbet = FonbetBot(FONBET_USER)
-    if fonbet.balance >= 0:
-        balance_str = balance_str + 'Баланс в Фонбет: ' + str(fonbet.balance) + '\n'
+    if fonbet.get_balance() >= 0:
+        balance_str = 'Баланс в Фонбет: ' + str(fonbet.get_balance())
+        db_model.send_message_bot(USER_ID, str(ACC_ID) + ': ' + balance_str, ADMINS)
     fonbet.sign_in()
     data = fonbet.get_operations(500)
     for operation in data.get('operations'):
@@ -133,9 +136,6 @@ def export_hist(OLIMP_USER, FONBET_USER):
         out = ""
         o_list = olimp_get_hist(OLIMP_USER)
         f_list = fonbet_get_hist(FONBET_USER)
-
-        if balance_str:
-            db_model.send_message_bot(USER_ID, str(ACC_ID) + ': ' + balance_str, ADMINS)
 
         ol_list = json.loads(json.dumps(o_list, ensure_ascii=False))
         fb_list = json.loads(json.dumps(f_list, ensure_ascii=False))
