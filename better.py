@@ -762,6 +762,7 @@ if __name__ == '__main__':
             time.sleep(0.5)
     
     except (Shutdown, MaxFail, MaxFork) as e:
+        prnt('xxxxxxxx')
         prnt(' ')
         prnt(str(e))
         shutdown = True
