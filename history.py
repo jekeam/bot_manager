@@ -135,7 +135,7 @@ def export_hist(OLIMP_USER, FONBET_USER):
         f_list = fonbet_get_hist(FONBET_USER)
 
         if balance_str:
-            db_model.send_message_bot(USER_ID, balance_str, ADMINS)
+            db_model.send_message_bot(USER_ID, str(ACC_ID) + ': ' + balance_str, ADMINS)
 
         ol_list = json.loads(json.dumps(o_list, ensure_ascii=False))
         fb_list = json.loads(json.dumps(f_list, ensure_ascii=False))
