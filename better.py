@@ -768,7 +768,7 @@ if __name__ == '__main__':
         
         send_message_bot(USER_ID, str(ACC_ID) + ': ' + str(e))
     
-        last_fork_time_diff = round(int(time.time() - last_fork_time))
+        last_fork_time_diff = round(int(time.time()) - last_fork_time)
         wait_before_exp = rount(max(60 * 60 * 2 - last_fork_time_diff, 0))
         prnt(str(last_fork_time_diff) + ' секунд прошло с момента последней ставки')
         msg_str = str(ACC_ID) + ': Ожидание ' + str(wait_before_exp / 60) + ' минут, до выгрузки'
