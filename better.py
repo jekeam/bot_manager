@@ -761,23 +761,23 @@ if __name__ == '__main__':
             pass
         time.sleep(0.5)
 
-except (Shutdown, MaxFail, MaxFork) as e:
-    shutdown = True
-    prnt(' ')
-    prnt(str(e))
-    send_message_bot(USER_ID, str(ACC_ID) + ': ' + str(e))
-
-    last_fork_time_diff = int(time.time()) - last_fork_time
-    wait_before_exp = max(60 * 60 * 2 - last_fork_time_diff, 0)
-    prnt(str(last_fork_time_diff) + ' секунд прошло с момента последней ставки')
-    msg_str = str(ACC_ID) + ': Ожидание ' + str(wait_before_exp / 60) + ' минут, до выгрузки'
-
-    prnt(msg_str)
-    send_message_bot(USER_ID, msg_str)
-
-    time.sleep(wait_before_exp)
-    send_message_bot(USER_ID, str(ACC_ID) + ': Делаю выгрузку, пожалуйста подождите...')
-    export_hist(OLIMP_USER, FONBET_USER)
+    # except (Shutdown, MaxFail, MaxFork) as e:
+    #     shutdown = True
+    #     prnt(' ')
+    #     prnt(str(e))
+    #     send_message_bot(USER_ID, str(ACC_ID) + ': ' + str(e))
+    
+    #     last_fork_time_diff = int(time.time()) - last_fork_time
+    #     wait_before_exp = max(60 * 60 * 2 - last_fork_time_diff, 0)
+    #     prnt(str(last_fork_time_diff) + ' секунд прошло с момента последней ставки')
+    #     msg_str = str(ACC_ID) + ': Ожидание ' + str(wait_before_exp / 60) + ' минут, до выгрузки'
+    
+    #     prnt(msg_str)
+    #     send_message_bot(USER_ID, msg_str)
+    
+    #     time.sleep(wait_before_exp)
+    #     send_message_bot(USER_ID, str(ACC_ID) + ': Делаю выгрузку, пожалуйста подождите...')
+    #     export_hist(OLIMP_USER, FONBET_USER)
 
     # except Exception as e:
     #     shutdown = True
