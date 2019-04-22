@@ -558,7 +558,7 @@ if __name__ == '__main__':
         prnt('Исключаем низшие команды: ' + str(get_prop('junior_team_exclude')))
         prnt('Работаю максимум (ч.): ' + str(get_prop('work_hour')))
         prnt('Работаю до (ч.): ' + str(get_prop('work_hour_end')))
-        prnt('Максимальное кол-во успешных вилок: ' + str(get_prop('max_fork'))))
+        prnt('Максимальное кол-во успешных вилок: ' + str(get_prop('max_fork')))
         prnt('Максимально допустимое количество ошибок/выкупов: ' + str(int(get_prop('max_fail'))))
         prnt('Минимальный профит вилки от (%): ' + str(round((1 - MIN_L) * 100, 3)))
         prnt('Жесткая ставка второго плеча: ' + str(get_prop('hard_bet_right')))
