@@ -24,7 +24,7 @@ prop_abr = {
     "SERVER_IP_TEST": {"abr": "IP-адрес тестового сервера", "type": "", "max": "", "min": "", "access_list": [], "error": ""},
     "SERVER_IP": {"abr": "IP-адрес сервера", "type": "", "max": "", "min": "", "access_list": [], "error": ""},
     "WORK_HOUR": {"abr": "Работаю (ч.)", "type": "", "max": "", "min": "", "access_list": [], "error": ""},
-    "WORK_HOUR_END": {"abr": "Работаю до (ч.)", "type": "", "max": "", "min": "", "access_list": [], "error": ""},
+    "WORK_HOUR_END": {"abr": "Остановка для выгрузки в (ч.)", "type": "", "max": "", "min": "", "access_list": [], "error": ""},
     "ROUND_FORK": {"abr": "Округление вилки и суммы ставки до", "type": "", "max": "", "min": "", "access_list": [], "error": ""},
     "MAX_FORK": {"abr": "Максимальное кол-во успешных вилок", "type": "", "max": "", "min": "", "access_list": [], "error": ""},
     "MAX_FAIL": {"abr": "Максимально допустимое количество ошибок/выкупов", "type": "", "max": "", "min": "", "access_list": [], "error": ""},

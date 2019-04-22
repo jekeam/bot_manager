@@ -557,7 +557,7 @@ if __name__ == '__main__':
         prnt('Время жизни вилки от (сек.): ' + str(get_prop('fork_life_time')))
         prnt('Исключаем низшие команды: ' + str(get_prop('junior_team_exclude')))
         prnt('Работаю максимум (ч.): ' + str(get_prop('work_hour')))
-        prnt('Работаю до (ч.): ' + str(get_prop('work_hour_end')))
+        prnt('Остановка для выгрузки в (ч.): ' + str(get_prop('work_hour_end')))
         prnt('Максимальное кол-во успешных вилок: ' + str(get_prop('max_fork')))
         prnt('Максимально допустимое количество ошибок/выкупов: ' + str(int(get_prop('max_fail'))))
         prnt('Минимальный профит вилки от (%): ' + str(round((1 - MIN_L) * 100, 3)))
@@ -791,19 +791,19 @@ if __name__ == '__main__':
             err_str = str(e) + ' ' + str(repr(traceback.format_exception(exc_type, exc_value, exc_traceback)))
             prnt(err_str)
 
-    # except Exception as e:
-    #     shutdown = True
+    except Exception as e:
+        shutdown = True
         
-    #     exc_type, exc_value, exc_traceback = sys.exc_info()
-    #     err_str = str(e) + ' ' + str(repr(traceback.format_exception(exc_type, exc_value, exc_traceback)))
-    #     err_str = str(ACC_ID) + ': Возникла ошибка! ' + str(e.__class__.__name__) + ' - ' + str(err_str)
-    #     prnt(err_str)
+        exc_type, exc_value, exc_traceback = sys.exc_info()
+        err_str = str(e) + ' ' + str(repr(traceback.format_exception(exc_type, exc_value, exc_traceback)))
+        err_str = str(ACC_ID) + ': Возникла ошибка! ' + str(e.__class__.__name__) + ' - ' + str(err_str)
+        prnt(err_str)
         
-    #     send_message_bot(USER_ID, str(e), ADMINS)
+        send_message_bot(USER_ID, str(e), ADMINS)
 
-    # finally:
-    #     shutdown = True
+    finally:
+        shutdown = True
         
-    #     msg_str = str(ACC_ID) + ': Завершил работу'
-    #     Account.update(pid=0, work_stat='stop', time_stop=round(time.time())).where(Account.key == KEY).execute()
-    #     send_message_bot(USER_ID, msg_str, ADMINS)
+        msg_str = str(ACC_ID) + ': Завершил работу'
+        Account.update(pid=0, work_stat='stop', time_stop=round(time.time())).where(Account.key == KEY).execute()
+        send_message_bot(USER_ID, msg_str, ADMINS)
