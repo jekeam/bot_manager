@@ -1,25 +1,25 @@
 # -*- coding: utf-8 -*-
 from bet_olimp import *
 from bet_fonbet import *
-from better import OLIMP_USER, FONBET_USER
 from math import ceil
 from datetime import datetime
 import random
 import json
 import os
 from utils import prnt
-from db_model import *
+import db_model
 
-global ACC_ID, USER_ID
+global ACC_ID, USER_ID, ADMINS
 
 file_name = str(ACC_ID) + '_id_forks.txt'
 csv_name = datetime.now().strftime("%d_%m_%Y") + '_' + str(ACC_ID) + '_statistics.csv'
+balance_str = ''
 olimp_bet_min = 1000000000
 fonbet_bet_min = 999999999999999999999
 
 
 def olimp_get_hist(OLIMP_USER):
-    global olimp_bet_min
+    global olimp_bet_min, balance_str
     prnt('Олимп: делаю выгрузку')
     """
     # 0111 не расчитанные, выигранные и проигранные
@@ -54,6 +54,8 @@ def olimp_get_hist(OLIMP_USER):
 
     coupot_list = dict()
     olimp = OlimpBot(OLIMP_USER)
+    if olimp.balance >= 0:
+        balance_str = balance_str + 'Баланс в Олимп: ' + str(olimp.balance) + '\n'
     data = olimp.get_history_bet(filter="0011", offset=0)
     count = data.get('count')
     offset = ceil(count / 10) + 1
@@ -71,11 +73,13 @@ def olimp_get_hist(OLIMP_USER):
 
 
 def fonbet_get_hist(FONBET_USER):
-    global fonbet_bet_min
+    global fonbet_bet_min, balance_str
     prnt('Фонбет: делаю выгрузку')
     is_get_list = list()
     coupon_list = dict()
     fonbet = FonbetBot(FONBET_USER)
+    if fonbet.balance >= 0:
+        balance_str = balance_str + 'Баланс в Фонбет: ' + str(fonbet.balance) + '\n'
     fonbet.sign_in()
     data = fonbet.get_operations(500)
     for operation in data.get('operations'):
@@ -109,9 +113,9 @@ def export_hist(OLIMP_USER, FONBET_USER):
     global olimp_bet_min
     global fonbet_bet_min
     global ACC_ID, USER_ID
+    global balance_str
 
     if os.path.isfile(file_name):
-        export_hist(OLIMP_USER, FONBET_USER)
 
         cur_date_str = datetime.now().strftime("%d_%m_%Y")
 
@@ -129,6 +133,10 @@ def export_hist(OLIMP_USER, FONBET_USER):
         out = ""
         o_list = olimp_get_hist(OLIMP_USER)
         f_list = fonbet_get_hist(FONBET_USER)
+
+        if balance_str:
+            db_model.send_message_bot(USER_ID, balance_str, ADMINS)
+
         ol_list = json.loads(json.dumps(o_list, ensure_ascii=False))
         fb_list = json.loads(json.dumps(f_list, ensure_ascii=False))
         # print(json.dumps(ol_list, ensure_ascii=False))
@@ -242,11 +250,11 @@ def export_hist(OLIMP_USER, FONBET_USER):
     if os.path.isfile(csv_name):
         # send to tg
         with open(csv_name, 'r', encoding='utf-8') as f:
-            Message.insert({
-                Message.to_user: USER_ID,
-                Message.blob: f.read(),
-                Message.file_name: csv_name,
-                Message.file_type: 'document'
+            db_model.Message.insert({
+                db_model.Message.to_user: USER_ID,
+                db_model.Message.blob: f.read(),
+                db_model.Message.file_name: csv_name,
+                db_model.Message.file_type: 'document'
             }).execute()
 
 
