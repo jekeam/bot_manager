@@ -13,6 +13,7 @@ from db_model import *
 global ACC_ID, USER_ID
 
 file_name = str(ACC_ID) + '_id_forks.txt'
+csv_name = datetime.now().strftime("%d_%m_%Y") + '_' + str(ACC_ID) + '_statistics.csv'
 olimp_bet_min = 1000000000
 fonbet_bet_min = 999999999999999999999
 
@@ -104,7 +105,7 @@ def fonbet_get_hist(FONBET_USER):
 
 
 def export_hist(OLIMP_USER, FONBET_USER):
-    global file_name
+    global file_name, csv_name
     global olimp_bet_min
     global fonbet_bet_min
     global ACC_ID, USER_ID
@@ -216,17 +217,8 @@ def export_hist(OLIMP_USER, FONBET_USER):
                      'o_status;f_kof_type;o_kof_type;fb_vector;ol_vector;fb_time_bet;ol_time_bet;' \
                      'fb_new_bet_sum;ol_new_bet_sum;fb_bal;ol_bal;fb_max_bet;fb_bet_delay;fb_err;ol_err;\n'
 
-        csv_name = datetime.now().strftime("%d_%m_%Y") + '_' + str(ACC_ID) + '_statistics.csv'
         with open(csv_name, 'w', encoding='utf-8') as f:
             f.write(header + out)
-        # send to tg
-        with open(csv_name, 'r', encoding='utf-8') as f:
-            Message.insert({
-                Message.to_user: USER_ID,
-                Message.blob: f.read(),
-                Message.file_name: csv_name,
-                Message.file_type: 'document'
-            }).execute()
 
     try:
         os.rename(str(ACC_ID) + '_client.log', cur_date_str + '_' + str(ACC_ID) + '_' + 'client.log')
@@ -242,11 +234,13 @@ def export_hist(OLIMP_USER, FONBET_USER):
 if __name__ == "__main__":
     if os.path.isfile(file_name):
         export_hist(OLIMP_USER, FONBET_USER)
-    # csv_name = '1_16_04_2019_statistics.csv'
-    # with open(csv_name, 'r', encoding='utf-8') as f:
-    #     msg = (Message.insert(
-    #         to_user=USER_ID,
-    #         blob=f.read(),
-    #         file_name=csv_name,
-    #         file_type='document'
-    #     ).execute())
+
+    if os.path.isfile(csv_name):
+        # send to tg
+        with open(csv_name, 'r', encoding='utf-8') as f:
+            Message.insert({
+                Message.to_user: USER_ID,
+                Message.blob: f.read(),
+                Message.file_name: csv_name,
+                Message.file_type: 'document'
+            }).execute()
