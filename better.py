@@ -776,7 +776,7 @@ if __name__ == '__main__':
         
             prnt(msg_str)
             send_message_bot(USER_ID, msg_str)
-        
+            time.sleep(999)
             while Account.select().where(Account.key == KEY).get().pid > 0 and + \
                   Account.select().where(Account.key == KEY).get().work_stat == 'start' and + \
                   wait_before_exp > 0:
