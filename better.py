@@ -767,7 +767,6 @@ if __name__ == '__main__':
         shutdown = True
         
         send_message_bot(USER_ID, str(ACC_ID) + ': ' + str(e))
-        time.sleep(999)
     
         last_fork_time_diff = int(time.time()) - last_fork_time
         wait_before_exp = rount(max(60 * 60 * 2 - last_fork_time_diff, 0))
@@ -777,7 +776,9 @@ if __name__ == '__main__':
         prnt(msg_str)
         send_message_bot(USER_ID, msg_str)
     
-        while Account.select().where(Account.key == KEY).get().pid > 0 and wait_before_exp > 0:
+        while Account.select().where(Account.key == KEY).get().pid > 0 and + \
+              Account.select().where(Account.key == KEY).get().work_stat == 'start' and + \
+              wait_before_exp > 0:
             wait_before_exp = wait_before_exp-10
             time.sleep(10)
             
