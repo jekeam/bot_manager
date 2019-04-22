@@ -601,7 +601,7 @@ if __name__ == '__main__':
                 raise Shutdown(msg_str)
     
         
-            if get_prop('work_hour_end') and get_prop('work_hour_end') == datetime.datetime.now().strftime('%H'):
+            if get_prop('work_hour_end') and int(get_prop('work_hour_end')) == int(datetime.datetime.now().strftime('%H')):
                 msg_str = 'Время выгрузки: {} ч., я завершил работу'.format(get_prop('work_hour_end'))
                 raise Shutdown(msg_str)
     
