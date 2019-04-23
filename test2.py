@@ -1,5 +1,2 @@
-# from db_model import *
-
-# acc = Account.select().where(Account.id==1).get()
-# for pror in acc.properties:
-#     print(pror.key)
+CHOOSING, TYPING_REPLY, TYPING_CHOICE = range(3)
+print(CHOOSING, TYPING_REPLY, TYPING_CHOICE )
