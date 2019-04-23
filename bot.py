@@ -43,6 +43,7 @@ if patterns:
 
 def set_prop(update, context):
     print(context.user_data, update.message.text)
+    # TODO
     # if exists pro
     # set prop
     # clean context.user_data['choice']
@@ -56,6 +57,7 @@ def choose_prop(update, context):
                               reply_markup=markup,
                               parse_mode=telegram.ParseMode.MARKDOWN)
     context.user_data['choice'] = text
+    # TODO DISP ACCESS VALUE AND MAX MIN
 
 
 def start(update, context):
