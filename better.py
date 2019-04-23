@@ -3,7 +3,7 @@ from bet_fonbet import *
 from bet_olimp import *
 import datetime
 from fork_recheck import get_kof_olimp, get_kof_fonbet
-from utils import prnt, get_account_info, get_prop, prop_abr
+from utils import prnt, get_account_info, get_prop
 import threading
 from multiprocessing import Manager, Process
 import time
