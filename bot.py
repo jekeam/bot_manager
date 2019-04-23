@@ -14,7 +14,7 @@ from telegram.ext import Updater, CommandHandler, CallbackQueryHandler
 from telegram.error import BadRequest
 from telegram.ext.callbackcontext import CallbackContext
 
-from db_model import Account, Message, User, prnt_user_str, send_message_bot
+from db_model import Account, Message, User, get_user_str, send_message_bot, get_prop_str
 import bot_prop
 from emoji import emojize
 
@@ -23,14 +23,13 @@ import os
 
 import datetime
 import time
-from utils import prop_abr
 
 logging.basicConfig(filename='bot.log', format='%(asctime)s - %(name)s - %(levelname)s - %(message)s', level=logging.DEBUG)
 logger = logging.getLogger(__name__)
 
 
 def start(update, context):
-    update.message.reply_text(prnt_user_str(update.message.chat.id), parse_mode=telegram.ParseMode.MARKDOWN)
+    update.message.reply_text(get_user_str(update.message.chat.id), parse_mode=telegram.ParseMode.MARKDOWN)
 
 
 def send_text(update, context, msg: str = 'Привет мой господин!'):
@@ -91,7 +90,9 @@ def button(update, context):
         keyboard.append([InlineKeyboardButton(text=emojize(':back:', use_aliases=True) + ' Back to Bots List', callback_data='botlist')])
 
         reply_markup = InlineKeyboardMarkup(keyboard)
-        query.message.edit_text(text=bot_prop.MSG_START_STOP, reply_markup=reply_markup)
+        query.message.edit_text(text=bot_prop.MSG_START_STOP + '\n' + get_prop_str(acc_info.get().id),
+                                reply_markup=reply_markup,
+                                parse_mode=telegram.ParseMode.MARKDOWN)
 
     query = update.callback_query
 

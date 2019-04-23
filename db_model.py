@@ -7,6 +7,21 @@ from playhouse.sqlite_ext import SqliteExtDatabase
 
 db = MySQLDatabase('bot_manager', user='root', password='131189_Ak13', host='127.0.0.1', port=3306)
 
+prop_abr = {
+    "SUMM": {"abr": "Общая ставка", "type": "", "max": "", "min": "", "access_list": [], "error": ""},
+    "RANDOM_SUMM_PROC": {"abr": "Отклонение от общей ставки (в %)", "type": "", "max": "", "min": "", "access_list": [], "error": ""},
+    "FORK_LIFE_TIME": {"abr": "Время жизни вилки от (сек.)", "type": "", "max": "", "min": "", "access_list": [], "error": ""},
+    "SERVER_IP_TEST": {"abr": "IP-адрес тест. сервера", "type": "", "max": "", "min": "", "access_list": [], "error": ""},
+    "SERVER_IP": {"abr": "IP-адрес бой сервера", "type": "", "max": "", "min": "", "access_list": [], "error": ""},
+    "WORK_HOUR": {"abr": "Работаю (ч.)", "type": "", "max": "", "min": "", "access_list": [], "error": ""},
+    "WORK_HOUR_END": {"abr": "Остановка в (ч.)", "type": "", "max": "", "min": "", "access_list": [], "error": ""},
+    "ROUND_FORK": {"abr": "Округление вилки/ставки до", "type": "", "max": "", "min": "", "access_list": [], "error": ""},
+    "MAX_FORK": {"abr": "MAX кол-во успешных вилок", "type": "", "max": "", "min": "", "access_list": [], "error": ""},
+    "MAX_FAIL": {"abr": "MAX кол-во выкупов", "type": "", "max": "", "min": "", "access_list": [], "error": ""},
+    "MIN_L": {"abr": "MIN профит вилки от (%)", "type": "", "max": "", "min": "", "access_list": [], "error": ""},
+    # "HARD_BET_RIGHT": {"abr": "Жесткая ставка второго плеча", "type": "", "max": "", "min": "", "access_list": [], "error": ""},
+}
+
 
 def get_trunc_sysdate(days=0):
     return round(time.time() + days * 60 * 60 * 24)
@@ -62,16 +77,32 @@ class Properties(BaseModel):
 
 
 # API
-def get_user(id):
+def get_user(id: int):
     return User.get_by_id(id)
 
 
-def prnt_user_str(id):
+def get_user_str(id: int) -> str:
     res = ''
     data = get_user(id).__data__
     for key, val in data.items():
         if key and val:
             res = res + '*' + str(key) + '*: ' + str(val) + '\n'
+    return res
+
+
+def get_val_prop_id(id: int, key: str) -> str:
+    res = '—'
+    try:
+        res = str(Properties.select().where((Properties.acc_id == id) & (Properties.key == key)).get().val)
+    except Exception as e:
+        print('key:' + key + ', ' + str(e))
+    return res
+
+
+def get_prop_str(id: int) -> str:
+    res = ''
+    for key, val in prop_abr.items():
+        res += '' + str(val.get('abr', '')) + ': *' + get_val_prop_id(id, key) + '*\n'
     return res
 
 
@@ -103,4 +134,4 @@ def send_message_bot(user_id: int, msg: str, admin_list: dict = None):
 
 if __name__ == '__main__':
     print(uuid1())
-    # send_message_bot(381868674, 'HI')
+    print(get_prop_str(1))
