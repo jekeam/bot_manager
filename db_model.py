@@ -13,7 +13,7 @@ prop_abr = {
     "FORK_LIFE_TIME": {"abr": "Время жизни вилки от (сек.)", "type": "", "max": "", "min": "", "access_list": [], "error": ""},
     "SERVER_IP_TEST": {"abr": "IP-адрес тест. сервера", "type": "", "max": "", "min": "", "access_list": [], "error": ""},
     "SERVER_IP": {"abr": "IP-адрес бой сервера", "type": "", "max": "", "min": "", "access_list": [], "error": ""},
-    "WORK_HOUR": {"abr": "Работаю (ч.)", "type": "", "max": "", "min": "", "access_list": [], "error": ""},
+    # "WORK_HOUR": {"abr": "Работаю (ч.)", "type": "", "max": "", "min": "", "access_list": [], "error": ""},
     "WORK_HOUR_END": {"abr": "Остановка в (ч.)", "type": "", "max": "", "min": "", "access_list": [], "error": ""},
     "ROUND_FORK": {"abr": "Округление вилки/ставки до", "type": "", "max": "", "min": "", "access_list": [], "error": ""},
     "MAX_FORK": {"abr": "MAX кол-во успешных вилок", "type": "", "max": "", "min": "", "access_list": [], "error": ""},

@@ -556,7 +556,6 @@ if __name__ == '__main__':
         prnt('Пропускаем ставки > 1.2, если баланс БК меньше: ' + str(balance_line))
         prnt('Время жизни вилки от (сек.): ' + str(get_prop('fork_life_time')))
         prnt('Исключаем низшие команды: ' + str(get_prop('junior_team_exclude')))
-        prnt('Работаю максимум (ч.): ' + str(get_prop('work_hour')))
         prnt('Остановка для выгрузки в (ч.): ' + str(get_prop('work_hour_end')))
         prnt('Максимальное кол-во успешных вилок: ' + str(get_prop('max_fork')))
         prnt('Максимально допустимое количество ошибок/выкупов: ' + str(int(get_prop('max_fail'))))
@@ -594,12 +593,6 @@ if __name__ == '__main__':
         while Account.select().where(Account.key == KEY).get().work_stat == 'start':
             # print(str(Account.select().where(Account.key == KEY).get().id) + ': ' + Account.select().where(Account.key == KEY).get().work_stat)
             balance_line = (bal1 + bal2) / 2 / 100 * 30
-    
-            shutdown_minutes = 60 * (60 * int(get_prop('work_hour')))  # секунды * на кол-во (60*1) - это час
-            if (datetime.datetime.now() - time_live).total_seconds() > shutdown_minutes:
-                msg_str = 'Прошло ' + str(round(shutdown_minutes / 60 / 60, 2)) + ' ч., я завершил работу'
-                raise Shutdown(msg_str)
-    
         
             if get_prop('work_hour_end') and int(get_prop('work_hour_end')) == int(datetime.datetime.now().strftime('%H')):
                 msg_str = 'Время выгрузки: {} ч., я завершил работу'.format(get_prop('work_hour_end'))
