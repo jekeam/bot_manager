@@ -125,8 +125,6 @@ def button(update, context):
 
     query = update.callback_query
 
-    # query.edit_message_text(text="Selected option: {}".format(query.data))
-
     if query:
         if query.data == 'botlist':
             botlist(update, context, 'Edit')
@@ -143,7 +141,7 @@ def button(update, context):
         if acc_info:
             ACC_ACTIVE = acc_info.get().id
             context.user_data['acc_id'] = ACC_ACTIVE
-            if query.message.text == bot_prop.MSG_START_STOP:
+            if bot_prop.MSG_START_STOP in query.message.text:
                 if acc_info.get().work_stat == 'start':
                     Account.update(work_stat='stop').where(Account.key == query.data).execute()
                     update.callback_query.answer(text=bot_prop.MSG_ACC_STOP_WAIT)
