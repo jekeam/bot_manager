@@ -18,7 +18,7 @@ prop_abr = {
     "ROUND_FORK": {"abr": "Округление вилки/ставки до", "type": "", "max": "", "min": "", "access_list": [], "error": ""},
     "MAX_FORK": {"abr": "Max успешных вилок", "type": "", "max": "", "min": "", "access_list": [], "error": ""},
     "MAX_FAIL": {"abr": "Max выкупов", "type": "", "max": "", "min": "", "access_list": [], "error": ""},
-    "MIN_L": {"abr": "Min профит вилки от (%)", "type": "", "max": "", "min": "", "access_list": [], "error": ""},
+    "MIN_L": {"abr": "Min профит вилки (L: 0.90-0.995)", "type": "", "max": "", "min": "", "access_list": [], "error": ""},
     # "HARD_BET_RIGHT": {"abr": "Жесткая ставка второго плеча", "type": "", "max": "", "min": "", "access_list": [], "error": ""},
 }
 
