@@ -48,6 +48,7 @@ def set_prop(update, context):
     # set prop
     # clean context.user_data['choice']
     # send ms
+    # upd # ? button(update, context)
 
 
 def choose_prop(update, context):
@@ -236,7 +237,7 @@ def sender(context):
 def close_prop(update, context):
     markup = ReplyKeyboardRemove()
     update.message.reply_text(text='Настройка завершена', reply_markup=markup)
-    # button(update, context)
+    # ? button(update, context)
 
 
 if __name__ == '__main__':
