@@ -10,7 +10,7 @@ url_fonbet_matchs = "https://line-02.ccf4ab51771cacd46d.com/live/currentLine/en/
 url_fonbet_match = "https://23.111.80.222/line/eventView?eventId="
 UA = 'Mozilla/5.0 (Windows NT 10; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/70.3163.100 Safari/537.36'
 fonbet_header = {
-    'User-Agent': 'Fonbet/5.2.2b (Android 21; Phone; com.bkfonbet)',
+    'User-Agent': 'Fonbet/5.1.3b (Android 21; Phone; com.bkfonbet)',
     'Connection': 'Keep-Alive',
     'Accept-Encoding': 'gzip'
 }
