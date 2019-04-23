@@ -16,9 +16,9 @@ prop_abr = {
     # "WORK_HOUR": {"abr": "Работаю (ч.)", "type": "", "max": "", "min": "", "access_list": [], "error": ""},
     "WORK_HOUR_END": {"abr": "Остановка в (ч.)", "type": "", "max": "", "min": "", "access_list": [], "error": ""},
     "ROUND_FORK": {"abr": "Округление вилки/ставки до", "type": "", "max": "", "min": "", "access_list": [], "error": ""},
-    "MAX_FORK": {"abr": "MAX кол-во успешных вилок", "type": "", "max": "", "min": "", "access_list": [], "error": ""},
-    "MAX_FAIL": {"abr": "MAX кол-во выкупов", "type": "", "max": "", "min": "", "access_list": [], "error": ""},
-    "MIN_L": {"abr": "MIN профит вилки от (%)", "type": "", "max": "", "min": "", "access_list": [], "error": ""},
+    "MAX_FORK": {"abr": "Max успешных вилок", "type": "", "max": "", "min": "", "access_list": [], "error": ""},
+    "MAX_FAIL": {"abr": "Max выкупов", "type": "", "max": "", "min": "", "access_list": [], "error": ""},
+    "MIN_L": {"abr": "Min профит вилки от (%)", "type": "", "max": "", "min": "", "access_list": [], "error": ""},
     # "HARD_BET_RIGHT": {"abr": "Жесткая ставка второго плеча", "type": "", "max": "", "min": "", "access_list": [], "error": ""},
 }
 
