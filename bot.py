@@ -9,12 +9,12 @@ import traceback
 import logging
 
 import telegram
-from telegram import InlineKeyboardButton, InlineKeyboardMarkup
-from telegram.ext import Updater, CommandHandler, CallbackQueryHandler
+from telegram import InlineKeyboardButton, InlineKeyboardMarkup, ReplyKeyboardMarkup, ReplyKeyboardRemove
+from telegram.ext import Updater, CommandHandler, CallbackQueryHandler, MessageHandler, Filters, RegexHandler
 from telegram.error import BadRequest
 from telegram.ext.callbackcontext import CallbackContext
 
-from db_model import Account, Message, User, get_user_str, send_message_bot, get_prop_str
+from db_model import Account, Message, User, get_user_str, send_message_bot, get_prop_str, prop_abr
 import bot_prop
 from emoji import emojize
 
@@ -23,10 +23,39 @@ import os
 
 import datetime
 import time
+import re
 
-# logging.basicConfig(filename='bot.log', format='%(asctime)s - %(name)s - %(levelname)s - %(message)s', level=logging.DEBUG)
-logging.basicConfig(format='%(asctime)s - %(name)s - %(levelname)s - %(message)s', level=logging.INFO)
+logging.basicConfig(filename='bot.log', format='%(asctime)s - %(name)s - %(levelname)s - %(message)s', level=logging.DEBUG)
+# logging.basicConfig(format='%(asctime)s - %(name)s - %(levelname)s - %(message)s', level=logging.INFO)
 logger = logging.getLogger(__name__)
+
+patterns = ''
+for val in prop_abr.values():
+    abr = re.escape(val.get('abr'))
+    if abr:
+        if patterns:
+            patterns += '|' + abr
+        else:
+            patterns += '(' + abr
+if patterns:
+    patterns += ')'
+
+
+def set_prop(update, context):
+    print(context.user_data, update.message.text)
+    # if exists pro
+    # set prop
+    # clean context.user_data['choice']
+    # send ms
+
+
+def choose_prop(update, context):
+    markup = ReplyKeyboardRemove()
+    text = update.message.text
+    update.message.reply_text(text='Редактируется *' + text + '*\n' + bot_prop.MSG_PUT_VAL,
+                              reply_markup=markup,
+                              parse_mode=telegram.ParseMode.MARKDOWN)
+    context.user_data['choice'] = text
 
 
 def start(update, context):
@@ -73,9 +102,6 @@ def botlist(update, context, edit=False):
         update.message.edit_text(text=bot_prop.MSG_CHANGE_ACC, reply_markup=reply_markup)
 
 
-ACC_ACTIVE = 0
-
-
 def button(update, context):
     global ACC_ACTIVE
 
@@ -104,10 +130,17 @@ def button(update, context):
             botlist(update, context, 'Edit')
         acc_info = Account.select().where(Account.key == query.data)
         if query.data == 'pror_edit':
-            print('pror_edit: ' + str(query))
+            prop_btn = []
+            for val in prop_abr.values():
+                abr = val.get('abr')
+                if abr:
+                    prop_btn.append([abr])
+            reply_keyboard = prop_btn
+            markup = ReplyKeyboardMarkup(reply_keyboard)
+            query.message.reply_text(bot_prop.MSG_PROP_LIST, reply_markup=markup)
         if acc_info:
             ACC_ACTIVE = acc_info.get().id
-            print('ACC_ACTIVE: ' + str(ACC_ACTIVE))
+            context.user_data['acc_id'] = ACC_ACTIVE
             if query.message.text == bot_prop.MSG_START_STOP:
                 if acc_info.get().work_stat == 'start':
                     Account.update(work_stat='stop').where(Account.key == query.data).execute()
@@ -207,6 +240,8 @@ if __name__ == '__main__':
     updater.dispatcher.add_handler(CommandHandler('hello', send_text))
     updater.dispatcher.add_handler(CommandHandler('botlist', botlist))
     updater.dispatcher.add_handler(CallbackQueryHandler(button))
+    updater.dispatcher.add_handler(RegexHandler(patterns, choose_prop))
+    updater.dispatcher.add_handler(MessageHandler(Filters.text, set_prop))
     updater.dispatcher.add_handler(CommandHandler('help', help))
     updater.dispatcher.add_error_handler(error_callback)
 
