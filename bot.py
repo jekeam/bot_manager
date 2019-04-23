@@ -51,6 +51,8 @@ def set_prop(update, context):
 
 
 def choose_prop(update, context):
+    close_prop(update, context)
+
     markup = ReplyKeyboardRemove()
     text = update.message.text
     update.message.reply_text(text='Редактируется *' + text + '*\n' + bot_prop.MSG_PUT_VAL,
@@ -116,10 +118,10 @@ def button(update, context):
 
         keyboard.append([InlineKeyboardButton(text=start_stop, callback_data=query.data)])
         keyboard.append([InlineKeyboardButton(text=emojize(':wrench:', use_aliases=True) + ' Настройки', callback_data='pror_edit')])
-        keyboard.append([InlineKeyboardButton(text=emojize(':back:', use_aliases=True) + ' Back to Bots List', callback_data='botlist')])
+        keyboard.append([InlineKeyboardButton(text=bot_prop.BTN_BACK, callback_data='botlist')])
 
         reply_markup = InlineKeyboardMarkup(keyboard)
-        query.message.edit_text(text='*'+bot_prop.MSG_START_STOP + '*\n' + get_prop_str(acc_info.get().id),
+        query.message.edit_text(text='*' + bot_prop.MSG_START_STOP + '*\n' + get_prop_str(acc_info.get().id),
                                 reply_markup=reply_markup,
                                 parse_mode=telegram.ParseMode.MARKDOWN)
 
@@ -130,7 +132,8 @@ def button(update, context):
             botlist(update, context, 'Edit')
         acc_info = Account.select().where(Account.key == query.data)
         if query.data == 'pror_edit':
-            prop_btn = []
+            print('x')
+            prop_btn = [[bot_prop.BTN_CLOSE]]
             for val in prop_abr.values():
                 abr = val.get('abr')
                 if abr:
@@ -141,7 +144,9 @@ def button(update, context):
         if acc_info:
             ACC_ACTIVE = acc_info.get().id
             context.user_data['acc_id'] = ACC_ACTIVE
+            print(query.message.text)
             if bot_prop.MSG_START_STOP in query.message.text:
+                print('x')
                 if acc_info.get().work_stat == 'start':
                     Account.update(work_stat='stop').where(Account.key == query.data).execute()
                     update.callback_query.answer(text=bot_prop.MSG_ACC_STOP_WAIT)
@@ -228,6 +233,12 @@ def sender(context):
         time.sleep(1)
 
 
+def close_prop(update, context):
+    markup = ReplyKeyboardRemove()
+    update.message.reply_text(text='Настройка завершена', reply_markup=markup)
+    # button(update, context)
+
+
 if __name__ == '__main__':
     updater = Updater(bot_prop.TOKEN, use_context=True, request_kwargs=bot_prop.REQUEST_KWARGS)
     dispatcher = updater.dispatcher
@@ -241,6 +252,7 @@ if __name__ == '__main__':
     updater.dispatcher.add_handler(CommandHandler('botlist', botlist))
     updater.dispatcher.add_handler(CallbackQueryHandler(button))
     updater.dispatcher.add_handler(RegexHandler(patterns, choose_prop))
+    updater.dispatcher.add_handler(RegexHandler('^(' + bot_prop.BTN_CLOSE + ')$', close_prop))
     updater.dispatcher.add_handler(MessageHandler(Filters.text, set_prop))
     updater.dispatcher.add_handler(CommandHandler('help', help))
     updater.dispatcher.add_error_handler(error_callback)

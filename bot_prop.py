@@ -1,4 +1,6 @@
 # coding:utf-8
+from emoji import emojize
+
 # BOI
 PY_PATH = 'python3.6'
 TOKEN = '843081630:AAFmVT4hi5R71mgJpojVxOmTGEaZJA-LWYI'
@@ -32,3 +34,6 @@ MSG_ACC_STOP_WAIT = 'Аккаунт останавливается, пожалу
 MSG_ACC_STOP_WAIT_EXT = 'Аккаунт останавливается, это может занять несколько минут, пожалуйста подождите...'
 MSG_PROP_LIST = 'Пожалуйста, выберите настройку'
 MSG_PUT_VAL = 'Введите новое значение:'
+
+BTN_CLOSE = emojize(':heavy_check_mark:', use_aliases=True) + ' Завершить'
+BTN_BACK = emojize(':back:', use_aliases=True) + ' Назад'
