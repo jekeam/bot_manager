@@ -110,11 +110,7 @@ def button(update, context):
                 if acc_info.get().work_stat == 'start':
                     Account.update(work_stat='stop').where(Account.key == query.data).execute()
                     update.callback_query.answer(text=bot_prop.MSG_ACC_STOP_WAIT)
-                    send_message_bot(
-                        acc_info.get().user_id,
-                        str(acc_info.get().id) + ': ' + bot_prop.MSG_ACC_STOP_WAIT_EXT,
-                        bot_prop.ADMINS
-                    )
+                    send_message_bot(acc_info.get().user_id, str(acc_info.get().id) + ': ' + bot_prop.MSG_ACC_STOP_WAIT_EXT)
                 else:
                     Account.update(work_stat='start').where(Account.key == query.data).execute()
                     update.callback_query.answer(text=bot_prop.MSG_ACC_START_WAIT)
