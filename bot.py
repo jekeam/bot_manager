@@ -204,9 +204,9 @@ def button(update, context):
     query = update.callback_query
 
     if query:
+        acc_info = Account.select().where(Account.key == query.data)
         if query.data == 'botlist':
             botlist(update, context, 'Edit')
-        acc_info = Account.select().where(Account.key == query.data)
         if query.data == 'pror_edit':
             if acc_info.get().work_stat == 'start':
                 update.callback_query.answer(show_alert=True, text="Сначала остановите аккаунт!")
