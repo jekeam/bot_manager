@@ -94,7 +94,7 @@ def set_prop(update, context):
     markup = ReplyKeyboardRemove()
     # TODO
     if prop_name:
-        for val in prop_abr.values():
+        for key, val in prop_abr.items():
             if val.get('abr') == prop_name:
                 err_msg = check_type(prop_val, val.get('type'), val.get('min'), val.get('max'), val.get('access_list'))
                 if err_msg != '':
@@ -103,7 +103,7 @@ def set_prop(update, context):
                 else:
                     acc_id = context.user_data.get('acc_id')
                     if acc_id:
-                        Properties.update(val=prop_val).where((Properties.acc_id==acc_id)&(Properties.key==prop_name)).execute() 
+                        Properties.update(val=prop_val).where((Properties.acc_id==acc_id)&(Properties.key==key)).execute() 
                         update.message.reply_text(
                             text='Новое значение установлено:\n' + '*' + prop_name + '*: ' + prop_val, 
                             parse_mode=telegram.ParseMode.MARKDOWN
@@ -192,7 +192,7 @@ def button(update, context):
 
         reply_markup = InlineKeyboardMarkup(keyboard)
         query.message.edit_text(
-            text='*' + bot_prop.MSG_START_STOP + '\nID=' + str(acc_info.get().id) + '*\n\n' + 
+            text='*' + bot_prop.MSG_START_STOP + '\nID=' + str(acc_info.get().id) + '*\n' + 
             get_prop_str(acc_info.get().id),
             reply_markup=reply_markup,
             parse_mode=telegram.ParseMode.MARKDOWN
