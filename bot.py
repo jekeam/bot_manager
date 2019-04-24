@@ -94,7 +94,7 @@ def set_prop(update, context):
         if val.get('abr') == prop_name:
             print('ok')
             print(val, val.get('type'), val.get('min'), val.get('max'), val.get('access_list'))
-            err_msg = check_type(val, val.get('type'), val.get('min'), val.get('max'), val.get('access_list'))
+            err_msg = check_type(prop_val, val.get('type'), val.get('min'), val.get('max'), val.get('access_list'))
             print('err_msg: ' + err_msg)
             if err_msg != '':
                 print('send')

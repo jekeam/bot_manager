@@ -51,4 +51,4 @@ prop_abr = {
 
 for key, val in prop_abr.items():
     print(key)
-    print(check_type('1', val.get('type'), val.get('min'), val.get('max'), val.get('access_list')))
+    print(check_type(1, val.get('type'), val.get('min'), val.get('max'), val.get('access_list')))
