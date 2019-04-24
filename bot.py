@@ -52,7 +52,6 @@ def check_limits(val, type_, min_, max_, access_list):
     if access_list:
         access_list = list(map(type_, access_list))
       
-    print(min_, val, max_)
     if val < min_ or val > max_:
         err_str = 'Нарушены границы пределов, min: {}, max: {}'.format(min_, max_) + '\n'
         
