@@ -72,13 +72,13 @@ def check_type(val:str, type_:str, min_:str, max_:str, access_list):
             type_ = float
         val = type_(val)
     except Exception:
-        err_str = 'Неверный тип значения, val:{}, type:{}'.format(val, type_)
+        err_str = 'Неверный тип значения, ожидается: {}'.format(str(type_))
        
-    print('err_str: ' + err_str)
+    print('err_str1: ' + err_str)
     err_limits = check_limits(val, type_, min_, max_, access_list) 
     if err_limits:
         err_str = err_str + '\n' + err_limits
-    
+    print('err_str2: ' + err_str)
     return err_str.strip()
     
 
