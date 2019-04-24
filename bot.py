@@ -89,21 +89,25 @@ def check_type(val:str, type_:str, min_:str, max_:str, access_list):
 
 def set_prop(update, context):
     prop_val = update.message.text
-    prop_name = context.user_data['choice']
-    print(context.user_data, update.message.text)
+    prop_name = context.user_data.get('choice')
+    prop_name = context.user_data.get('choice')
     # TODO
-    for val in prop_abr.values():
-        if val.get('abr') == prop_name:
-            err_msg = check_type(prop_val, val.get('type'), val.get('min'), val.get('max'), val.get('access_list'))
-            if err_msg != '':
-                markup = ReplyKeyboardRemove()
-                update.message.reply_text(text=err_msg, parse_mode=telegram.ParseMode.MARKDOWN)
-                
-            
-    # set prop
-    # clean context.user_data['choice']
-    # send ms
-    # upd # ? button(update, context)
+    if prop_name:
+        for val in prop_abr.values():
+            if val.get('abr') == prop_name:
+                err_msg = check_type(prop_val, val.get('type'), val.get('min'), val.get('max'), val.get('access_list'))
+                if err_msg != '':
+                    markup = ReplyKeyboardRemove()
+                    update.message.reply_text(text=err_msg, parse_mode=telegram.ParseMode.MARKDOWN)
+                # set prop
+                else:
+                    acc_id = context.user_data.get('acc_id')
+                    if acc_id:
+                        Properties().update(val=prop_val).where(Properties.acc_id==acc_id) 
+                        markup = ReplyKeyboardRemove()
+                        update.message.reply_text(text='Новое значение установлено:\n' + '*' + prop_name + '*: ' + prop_val, parse_mode=telegram.ParseMode.MARKDOWN)
+        del context.user_data['choice']
+        # upd # ? button(update, context)
 
 
 def choose_prop(update, context):
@@ -119,7 +123,7 @@ def choose_prop(update, context):
     
     update.message.reply_text(
         text='*' + text + '*\n\n'
-        '*Ограничения по настройке*:\n ' + dop_indo + '\n\n' + bot_prop.MSG_PUT_VAL,
+        '*Ограничения по настройке*:\n' + dop_indo + '\n\n' + bot_prop.MSG_PUT_VAL,
         reply_markup=markup,
         parse_mode=telegram.ParseMode.MARKDOWN
     )
