@@ -178,7 +178,6 @@ def botlist(update, context, edit=False):
 
 
 def button(update, context):
-    global ACC_ACTIVE
 
     def prnt_acc_stat():
         keyboard = []
@@ -192,9 +191,12 @@ def button(update, context):
         keyboard.append([InlineKeyboardButton(text=bot_prop.BTN_BACK, callback_data='botlist')])
 
         reply_markup = InlineKeyboardMarkup(keyboard)
-        query.message.edit_text(text='*' + bot_prop.MSG_START_STOP + '*\n' + get_prop_str(acc_info.get().id),
-                                reply_markup=reply_markup,
-                                parse_mode=telegram.ParseMode.MARKDOWN)
+        query.message.edit_text(
+            text='*' + bot_prop.MSG_START_STOP + ', ID=' + str(acc_info.get().work_stat) + '*\n' + 
+            get_prop_str(acc_info.get().id),
+            reply_markup=reply_markup,
+            parse_mode=telegram.ParseMode.MARKDOWN
+        )
 
     query = update.callback_query
 
