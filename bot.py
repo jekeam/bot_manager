@@ -118,8 +118,8 @@ def choose_prop(update, context):
                 dop_indo = dop_indo + ', допустимые значения: ' + str(val.get('access_list'))
     
     update.message.reply_text(
-        text='Редактируется *' + text + '*\n' + bot_prop.MSG_PUT_VAL + '\n' + 
-        'Ограничения по настройке: ' + dop_indo,
+        text='Редактируется: *' + text + '*\n\n'
+        'Ограничения по настройке: ' + dop_indo + '\n\n' + bot_prop.MSG_PUT_VAL,
         reply_markup=markup,
         parse_mode=telegram.ParseMode.MARKDOWN
     )
