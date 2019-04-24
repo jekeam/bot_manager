@@ -108,8 +108,8 @@ def set_prop(update, context):
                             text='Новое значение установлено:\n' + '*' + prop_name + '*: ' + prop_val, 
                             parse_mode=telegram.ParseMode.MARKDOWN
                         )
+                        button(update, context)
         del context.user_data['choice']
-        # upd # ? button(update, context)
 
 
 def choose_prop(update, context):
