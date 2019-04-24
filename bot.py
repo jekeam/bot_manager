@@ -116,7 +116,6 @@ def set_prop(update, context):
 
 
 def choose_prop(update, context):
-    close_prop(update, context)
 
     markup = ReplyKeyboardRemove()
     text = update.message.text
