@@ -68,7 +68,7 @@ def check_type(val:str, type_:str, min_:str, max_:str, access_list):
         elif type_ == 'float':
             type_ = float
         val = type_(val)
-    except ValueError as e:
+    except Exception:
         err_str = 'Неверный тип значения, val:{}, type:{}'.format(val, type_)
        
     err_limits = check_limits(val, type_, min_, max_, access_list) 
