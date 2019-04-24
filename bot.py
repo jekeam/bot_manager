@@ -54,11 +54,11 @@ def check_limits(val, type_, min_, max_, access_list):
       
     print(min_, val, max_)
     if val < min_ or val > max_:
-        err_str = 'Нарушены границы пределов, min: {}, max: {}, вы указали: {}'.format(min_, max_, val) + '\n'
+        err_str = 'Нарушены границы пределов, min: {}, max: {}'.format(min_, max_) + '\n'
         
     if access_list:
         if val not in access_list:
-            err_str = err_str + 'Недопустимое значение: {}, резрешено: {}'.format(val, access_list)
+            err_str = err_str + 'Недопустимое значение, резрешено: {}'.format(access_list)
         
     return err_str
 
@@ -90,14 +90,9 @@ def set_prop(update, context):
     print(context.user_data, update.message.text)
     # TODO
     for val in prop_abr.values():
-        print(val.get('abr'), prop_name)
         if val.get('abr') == prop_name:
-            print('ok')
-            print(val, val.get('type'), val.get('min'), val.get('max'), val.get('access_list'))
             err_msg = check_type(prop_val, val.get('type'), val.get('min'), val.get('max'), val.get('access_list'))
-            print('err_msg: ' + err_msg)
             if err_msg != '':
-                print('send')
                 markup = ReplyKeyboardRemove()
                 update.message.reply_text(text=err_msg, parse_mode=telegram.ParseMode.MARKDOWN)
                 
