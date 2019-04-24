@@ -44,9 +44,11 @@ if patterns:
 def check_limits(val, type_, min_, max_, access_list):
     err_str = ''
     if max_:
-            max_ = type_(max_)
+        max_ = type_(max_)
+            
     if min_:
         min_ = type_(min_)
+        
     if access_list:
         access_list = list(map(type_, access_list))
         
@@ -63,10 +65,12 @@ def check_type(val:str, type_:str, min_:str, max_:str, access_list):
     err_str = ''
     
     try:
+        
         if type_ == 'int':
             type_ = int
         elif type_ == 'float':
             type_ = float
+            
         val = type_(val)
     except Exception:
         err_str = 'Неверный тип значения, val:{}, type:{}'.format(val, type_)
