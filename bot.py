@@ -84,7 +84,7 @@ def set_prop(update, context):
     prop_name = context.user_data['choice']
     print(context.user_data, update.message.text)
     # TODO
-    for val in db_model.prop_abr.values():
+    for val in prop_abr.values():
         print(val.get('abr'), prop_name)
         if val.get('abr') == prop_name:
             print('ok')
