@@ -98,14 +98,18 @@ def set_prop(update, context):
             if val.get('abr') == prop_name:
                 err_msg = check_type(prop_val, val.get('type'), val.get('min'), val.get('max'), val.get('access_list'))
                 if err_msg != '':
-                    update.message.reply_text(text=err_msg, parse_mode=telegram.ParseMode.MARKDOWN)
+                    update.message.reply_text(
+                        text=err_msg + '\n\nДля провторной попытки, выберите аккаунт из /botlist и нажмите : ' + bot_prop.BTN_SETTINGS,
+                        parse_mode=telegram.ParseMode.MARKDOWN
+                    )
                 # set prop
                 else:
                     acc_id = context.user_data.get('acc_id')
                     if acc_id:
                         Properties.update(val=prop_val).where((Properties.acc_id==acc_id)&(Properties.key==key)).execute() 
                         update.message.reply_text(
-                            text='Новое значение установлено:\n' + '*' + prop_name + '*: ' + prop_val, 
+                            text='Новое значение установлено:\n' + '*' + prop_name + '*: ' + prop_val + '\n\n' + \
+                            'Если хотите задать еще настройки, выберите аккаунт из /botlist и нажмите : ' + bot_prop.BTN_SETTINGS,
                             parse_mode=telegram.ParseMode.MARKDOWN
                         )
         del context.user_data['choice']
@@ -186,7 +190,7 @@ def button(update, context):
             start_stop = emojize(":stop_button:", use_aliases=True) + 'Остановить'
 
         keyboard.append([InlineKeyboardButton(text=start_stop, callback_data=query.data)])
-        keyboard.append([InlineKeyboardButton(text=emojize(':wrench:', use_aliases=True) + ' Настройки', callback_data='pror_edit')])
+        keyboard.append([InlineKeyboardButton(text=bot_prop.BTN_SETTINGS, callback_data='pror_edit')])
         keyboard.append([InlineKeyboardButton(text=bot_prop.BTN_BACK, callback_data='botlist')])
 
         reply_markup = InlineKeyboardMarkup(keyboard)

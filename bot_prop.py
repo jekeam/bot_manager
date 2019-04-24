@@ -37,3 +37,4 @@ MSG_PUT_VAL = 'Введите новое значение:'
 
 BTN_CLOSE = emojize(':heavy_check_mark:', use_aliases=True) + ' Закрыть'
 BTN_BACK = emojize(':back:', use_aliases=True) + ' Назад'
+BTN_SETTINGS = emojize(':wrench:', use_aliases=True) + ' Настройки'
