@@ -312,8 +312,8 @@ def sender(context):
 
 def close_prop(update, context):
     markup = ReplyKeyboardRemove()
-    update.message.reply_text(text='Настройка завершена', reply_markup=markup)
-    # ? button(update, context)
+    update.message.reply_text(text='Настройка завершена.\n\n'
+    'Если хотите задать еще настройки, выберите аккаунт из /botlist и нажмите : ' + bot_prop.BTN_SETTINGS, reply_markup=markup)
 
 
 if __name__ == '__main__':
