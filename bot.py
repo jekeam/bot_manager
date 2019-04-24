@@ -208,14 +208,17 @@ def button(update, context):
             botlist(update, context, 'Edit')
         acc_info = Account.select().where(Account.key == query.data)
         if query.data == 'pror_edit':
-            prop_btn = [[bot_prop.BTN_CLOSE]]
-            for val in prop_abr.values():
-                abr = val.get('abr')
-                if abr:
-                    prop_btn.append([abr])
-            reply_keyboard = prop_btn
-            markup = ReplyKeyboardMarkup(reply_keyboard)
-            query.message.reply_text(bot_prop.MSG_PROP_LIST, reply_markup=markup)
+            if acc_info.get().work_stat == 'start':
+                update.callback_query.answer(show_alert=True, text="Аккаунт не активен")
+            else:
+                prop_btn = [[bot_prop.BTN_CLOSE]]
+                for val in prop_abr.values():
+                    abr = val.get('abr')
+                    if abr:
+                        prop_btn.append([abr])
+                reply_keyboard = prop_btn
+                markup = ReplyKeyboardMarkup(reply_keyboard)
+                query.message.reply_text(bot_prop.MSG_PROP_LIST, reply_markup=markup)
         if acc_info:
             ACC_ACTIVE = acc_info.get().id
             context.user_data['acc_id'] = ACC_ACTIVE
