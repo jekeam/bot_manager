@@ -91,21 +91,23 @@ def set_prop(update, context):
     prop_val = update.message.text
     prop_name = context.user_data.get('choice')
     prop_name = context.user_data.get('choice')
+    markup = ReplyKeyboardRemove()
     # TODO
     if prop_name:
         for val in prop_abr.values():
             if val.get('abr') == prop_name:
                 err_msg = check_type(prop_val, val.get('type'), val.get('min'), val.get('max'), val.get('access_list'))
                 if err_msg != '':
-                    markup = ReplyKeyboardRemove()
                     update.message.reply_text(text=err_msg, parse_mode=telegram.ParseMode.MARKDOWN)
                 # set prop
                 else:
                     acc_id = context.user_data.get('acc_id')
                     if acc_id:
                         Properties.update(val=prop_val).where(Properties.acc_id==acc_id) 
-                        markup = ReplyKeyboardRemove()
-                        update.message.reply_text(text='Новое значение установлено:\n' + '*' + prop_name + '*: ' + prop_val, parse_mode=telegram.ParseMode.MARKDOWN)
+                        update.message.reply_text(
+                            text='Новое значение установлено:\n' + '*' + prop_name + '*: ' + prop_val, 
+                            parse_mode=telegram.ParseMode.MARKDOWN
+                        )
         del context.user_data['choice']
         # upd # ? button(update, context)
 
