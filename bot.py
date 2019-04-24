@@ -133,7 +133,6 @@ def button(update, context):
             botlist(update, context, 'Edit')
         acc_info = Account.select().where(Account.key == query.data)
         if query.data == 'pror_edit':
-            print('x')
             prop_btn = [[bot_prop.BTN_CLOSE]]
             for val in prop_abr.values():
                 abr = val.get('abr')
@@ -145,9 +144,7 @@ def button(update, context):
         if acc_info:
             ACC_ACTIVE = acc_info.get().id
             context.user_data['acc_id'] = ACC_ACTIVE
-            print(query.message.text)
             if bot_prop.MSG_START_STOP in query.message.text:
-                print('x')
                 if acc_info.get().work_stat == 'start':
                     Account.update(work_stat='stop').where(Account.key == query.data).execute()
                     update.callback_query.answer(text=bot_prop.MSG_ACC_STOP_WAIT)
