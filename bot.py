@@ -209,7 +209,7 @@ def button(update, context):
         acc_info = Account.select().where(Account.key == query.data)
         if query.data == 'pror_edit':
             if acc_info.get().work_stat == 'start':
-                update.callback_query.answer(show_alert=True, text="Аккаунт не активен")
+                update.callback_query.answer(show_alert=True, text="Сначала остановите аккаунт!")
             else:
                 prop_btn = [[bot_prop.BTN_CLOSE]]
                 for val in prop_abr.values():
