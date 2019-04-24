@@ -87,7 +87,7 @@ def set_prop(update, context):
     for val in db_model.prop_abr.values():
         if val.get('abr') == prop_name:
             err_msg = check_type(val, val.get('type'), val.get('min'), val.get('max'), val.get('access_list'))
-            if err_msg:
+            if err_msg != '':
                     markup = ReplyKeyboardMarkup()
                     update.message.reply_text(text=err_msg, parse_mode=telegram.ParseMode.MARKDOWN)
                 
