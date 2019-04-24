@@ -64,6 +64,7 @@ def check_limits(val, type_, min_, max_, access_list):
 
 def check_type(val:str, type_:str, min_:str, max_:str, access_list):
     err_str = ''
+    err_limits = ''
     
     try:
         if type_ == 'int':
@@ -74,11 +75,15 @@ def check_type(val:str, type_:str, min_:str, max_:str, access_list):
     except Exception:
         err_str = 'Неверный тип значения, ожидается: {}'.format(str(type_))
        
-    print('err_str1: ' + err_str)
-    err_limits = check_limits(val, type_, min_, max_, access_list) 
+    
+    try:
+        err_limits = check_limits(val, type_, min_, max_, access_list) 
+    except TypeError as e:
+        print(e)
+        
     if err_limits:
         err_str = err_str + '\n' + err_limits
-    print('err_str2: ' + err_str)
+    
     return err_str.strip()
     
 
