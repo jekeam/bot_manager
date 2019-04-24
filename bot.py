@@ -98,7 +98,7 @@ def set_prop(update, context):
             print('err_msg: ' + err_msg)
             if err_msg != '':
                 print('send')
-                markup = ReplyKeyboardMarkup()
+                markup = ReplyKeyboardRemove()
                 update.message.reply_text(text=err_msg, parse_mode=telegram.ParseMode.MARKDOWN)
                 
             
