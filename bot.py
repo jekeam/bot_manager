@@ -71,6 +71,8 @@ def check_type(val:str, type_:str, min_:str, max_:str, access_list):
             type_ = int
         elif type_ == 'float':
             type_ = float
+        else: 
+            raise ValueError('str')
             
         val = type_(val)
     except Exception:
