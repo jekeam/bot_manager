@@ -72,7 +72,7 @@ def check_type(val:str, type_:str, min_:str, max_:str, access_list):
         elif type_ == 'float':
             type_ = float
         else: 
-            raise ValueError('str')
+            raise ValueError('type not defined')
             
         val = type_(val)
     except Exception:
