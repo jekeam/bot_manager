@@ -207,7 +207,8 @@ def button(update, context):
         if query.data == 'botlist':
             botlist(update, context, 'Edit')
         if query.data == 'pror_edit':
-            if Account.select().where(Account.acc_id == context.user_data.get('acc_id')).get().work_stat == 'start':
+            acc_into = Account.select().where(Account.acc_id == context.user_data.get('acc_id'))
+            if acc_into.get().work_stat != 'stop' and acc_into.get().pid != 0:
                 update.callback_query.answer(show_alert=True, text="Сначала остановите аккаунт!")
             else:
                 prop_btn = [[bot_prop.BTN_CLOSE]]
