@@ -103,7 +103,7 @@ def set_prop(update, context):
                 else:
                     acc_id = context.user_data.get('acc_id')
                     if acc_id:
-                        Properties.update(val=prop_val).where(Properties.acc_id==acc_id).execute() 
+                        Properties.update(val=prop_val).where((Properties.acc_id==acc_id)&(Properties.key=prop_name).execute() 
                         update.message.reply_text(
                             text='Новое значение установлено:\n' + '*' + prop_name + '*: ' + prop_val, 
                             parse_mode=telegram.ParseMode.MARKDOWN
