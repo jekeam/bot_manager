@@ -66,18 +66,15 @@ def check_type(val:str, type_:str, min_:str, max_:str, access_list):
     err_str = ''
     
     try:
-        
         if type_ == 'int':
             type_ = int
         elif type_ == 'float':
             type_ = float
-        else: 
-            raise ValueError('type not defined')
-            
         val = type_(val)
     except Exception:
         err_str = 'Неверный тип значения, val:{}, type:{}'.format(val, type_)
        
+    print('err_str: ' + err_str)
     err_limits = check_limits(val, type_, min_, max_, access_list) 
     if err_limits:
         err_str = err_str + '\n' + err_limits
