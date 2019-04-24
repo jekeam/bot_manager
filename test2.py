@@ -1,2 +1,1 @@
-CHOOSING, TYPING_REPLY, TYPING_CHOICE = range(3)
-print(CHOOSING, TYPING_REPLY, TYPING_CHOICE )
+print(str(float('0,95'.replace(',','.'))))

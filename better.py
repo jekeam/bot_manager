@@ -82,7 +82,8 @@ def bet_olimp_cl(obj):
 
 
 def check_l(L):
-    global MIN_L
+    global MIN_PROC
+    MIN_L = 1 - (MIN_PROC/100)
 
     l_exclude_text = ''
 
@@ -524,7 +525,7 @@ if __name__ == '__main__':
         else:
             server_ip = get_prop('server_ip_test')
     
-        MIN_L = float(get_prop('min_l'))
+        MIN_PROC = float(get_prop('min_proc').replace(',','.'))
         prnt(' ')
         prnt('ID аккаунта: ' + str(ACC_ID))
         prnt('IP-адрес сервера: ' + server_ip + ':80')
@@ -559,7 +560,7 @@ if __name__ == '__main__':
         prnt('Остановка для выгрузки в (ч.): ' + str(get_prop('work_hour_end')))
         prnt('Максимальное кол-во успешных вилок: ' + str(get_prop('max_fork')))
         prnt('Максимально допустимое количество ошибок/выкупов: ' + str(int(get_prop('max_fail'))))
-        prnt('Минимальный профит вилки от (%): ' + str(round((1 - MIN_L) * 100, 3)))
+        prnt('Минимальный профит вилки от (%): ' + str(MIN_PROC))
         prnt('Жесткая ставка второго плеча: ' + str(get_prop('hard_bet_right')))
         prnt(' ')
         try:
