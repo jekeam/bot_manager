@@ -8,17 +8,17 @@ from playhouse.sqlite_ext import SqliteExtDatabase
 db = MySQLDatabase('bot_manager', user='root', password='131189_Ak13', host='127.0.0.1', port=3306)
 
 prop_abr = {
-    "SUMM": {"abr": "Общая ставка", "type": "", "max": "", "min": "", "access_list": [], "error": ""},
-    "RANDOM_SUMM_PROC": {"abr": "Отклонение от суммы (в %)", "type": "", "max": "", "min": "", "access_list": [], "error": ""},
-    "FORK_LIFE_TIME": {"abr": "Время вилки от (сек.)", "type": "", "max": "", "min": "", "access_list": [], "error": ""},
+    "SUMM": {"abr": "Общая ставка", "type": "int", "max": "10000", "min": "400", "access_list": [], "error": ""},
+    "RANDOM_SUMM_PROC": {"abr": "Отклонение от суммы (в %)", "type": "int", "max": "30", "min": "0", "access_list": [], "error": ""},
+    "FORK_LIFE_TIME": {"abr": "Время вилки от (сек.)", "type": "int", "max": "500", "min": "3", "access_list": [], "error": ""},
     # "SERVER_IP_TEST": {"abr": "IP-адрес тест. сервера", "type": "", "max": "", "min": "", "access_list": [], "error": ""},
     # "SERVER_IP": {"abr": "IP-адрес бой сервера", "type": "", "max": "", "min": "", "access_list": [], "error": ""},
     # "WORK_HOUR": {"abr": "Работаю (ч.)", "type": "", "max": "", "min": "", "access_list": [], "error": ""},
-    "WORK_HOUR_END": {"abr": "Остановка в (ч.)", "type": "", "max": "", "min": "", "access_list": [], "error": ""},
-    "ROUND_FORK": {"abr": "Округление вилки/ставки", "type": "", "max": "", "min": "", "access_list": [], "error": ""},
-    "MAX_FORK": {"abr": "Max успешных вилок", "type": "", "max": "", "min": "", "access_list": [], "error": ""},
-    "MAX_FAIL": {"abr": "Max выкупов", "type": "", "max": "", "min": "", "access_list": [], "error": ""},
-    "MIN_PROC": {"abr": "Min профит вилки", "type": "", "max": "", "min": "", "access_list": [], "error": ""},
+    "WORK_HOUR_END": {"abr": "Остановка в (ч.)", "type": "int", "max": "23", "min": "0", "access_list": [], "error": ""},
+    "ROUND_FORK": {"abr": "Округление вилки/ставки", "type": "int", "max": "100", "min": "5", "access_list": ["5","10","50", "100"], "error": ""},
+    "MAX_FORK": {"abr": "Max успешных вилок", "type": "int", "max": "50", "min": "1", "access_list": [], "error": ""},
+    "MAX_FAIL": {"abr": "Max выкупов", "type": "int", "max": "7", "min": "1", "access_list": [], "error": ""},
+    "MIN_PROC": {"abr": "Min профит вилки", "type": "float", "max": "10", "min": "0.5", "access_list": [], "error": ""},
     # "HARD_BET_RIGHT": {"abr": "Жесткая ставка второго плеча", "type": "", "max": "", "min": "", "access_list": [], "error": ""},
 }
 
