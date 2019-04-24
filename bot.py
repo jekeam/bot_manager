@@ -192,7 +192,7 @@ def button(update, context):
 
         reply_markup = InlineKeyboardMarkup(keyboard)
         query.message.edit_text(
-            text='*' + bot_prop.MSG_START_STOP + ', ID=' + str(acc_info.get().work_stat) + '*\n' + 
+            text='*' + bot_prop.MSG_START_STOP + '\nID=' + str(acc_info.get().id) + '*\n\n' + 
             get_prop_str(acc_info.get().id),
             reply_markup=reply_markup,
             parse_mode=telegram.ParseMode.MARKDOWN
