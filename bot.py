@@ -112,9 +112,18 @@ def choose_prop(update, context):
 
     markup = ReplyKeyboardRemove()
     text = update.message.text
-    update.message.reply_text(text='Редактируется *' + text + '*\n' + bot_prop.MSG_PUT_VAL,
-                              reply_markup=markup,
-                              parse_mode=telegram.ParseMode.MARKDOWN)
+    for val in prop_abr.values():
+        if val.get('abr') == text:
+            dop_indo = 'min: ' + val.get('min') + ', max: ' + val.get('max')
+            if val.get('access_list'):
+                dop_indo = dop_indo + ', допустимые значения: ' + str(val.get('access_list'))
+    
+    update.message.reply_text(
+        text='Редактируется *' + text + '*\n' + bot_prop.MSG_PUT_VAL + '\n' + 
+        'Ограничения по настройке: ' + dop_indo,
+        reply_markup=markup,
+        parse_mode=telegram.ParseMode.MARKDOWN
+    )
     context.user_data['choice'] = text
     # TODO DISP ACCESS VALUE AND MAX MIN
 
