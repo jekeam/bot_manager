@@ -110,8 +110,7 @@ def set_prop(update, context):
                         keyboard.append([InlineKeyboardButton(text=bot_prop.BTN_BACK, callback_data='botlist')])
                 
                         reply_markup = InlineKeyboardMarkup(keyboard)
-                        query = update.callback_query
-                        query.message.edit_text(
+                        update.message.edit_text(
                             text='Новое значение установлено:\n' + '*' + prop_name + '*: ' + prop_val + '\n\n' + \
                             '*' + bot_prop.MSG_START_STOP + '\nID=' + str(acc_id) + '*\n' + get_prop_str(acc_id),
                             reply_markup=reply_markup,
