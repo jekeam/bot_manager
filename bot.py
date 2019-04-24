@@ -104,8 +104,17 @@ def set_prop(update, context):
                     acc_id = context.user_data.get('acc_id')
                     if acc_id:
                         Properties.update(val=prop_val).where((Properties.acc_id==acc_id)&(Properties.key==key)).execute() 
-                        update.message.reply_text(
-                            text='Новое значение установлено:\n' + '*' + prop_name + '*: ' + prop_val, 
+                        
+                        keyboard = []
+                        keyboard.append([InlineKeyboardButton(text=emojize(':wrench:', use_aliases=True) + ' Настройки', callback_data='pror_edit')])
+                        keyboard.append([InlineKeyboardButton(text=bot_prop.BTN_BACK, callback_data='botlist')])
+                
+                        reply_markup = InlineKeyboardMarkup(keyboard)
+                        query = update.callback_query
+                        query.message.edit_text(
+                            text='Новое значение установлено:\n' + '*' + prop_name + '*: ' + prop_val,
+                            get_prop_str(acc_id),
+                            reply_markup=reply_markup,
                             parse_mode=telegram.ParseMode.MARKDOWN
                         )
         del context.user_data['choice']
