@@ -85,6 +85,7 @@ def set_prop(update, context):
     print(context.user_data, update.message.text)
     # TODO
     for val in db_model.prop_abr.values():
+        print(val.get('abr'), prop_name)
         if val.get('abr') == prop_name:
             print('ok')
             err_msg = check_type(val, val.get('type'), val.get('min'), val.get('max'), val.get('access_list'))
