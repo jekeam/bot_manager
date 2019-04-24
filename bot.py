@@ -115,11 +115,11 @@ def choose_prop(update, context):
         if val.get('abr') == text:
             dop_indo = 'min: ' + val.get('min') + ', max: ' + val.get('max')
             if val.get('access_list'):
-                dop_indo = dop_indo + ', допустимые значения: ' + str(val.get('access_list'))
+                dop_indo = dop_indo + ', допустимые значения: ' + str(val.get('access_list')).replace("'",'')
     
     update.message.reply_text(
         text='*' + text + '*\n\n'
-        '*Ограничения по настройке*: ' + dop_indo + '\n\n' + bot_prop.MSG_PUT_VAL,
+        '*Ограничения по настройке*:\n ' + dop_indo + '\n\n' + bot_prop.MSG_PUT_VAL,
         reply_markup=markup,
         parse_mode=telegram.ParseMode.MARKDOWN
     )
