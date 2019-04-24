@@ -204,11 +204,10 @@ def button(update, context):
     query = update.callback_query
 
     if query:
-        acc_info = Account.select().where(Account.key == query.data)
         if query.data == 'botlist':
             botlist(update, context, 'Edit')
         if query.data == 'pror_edit':
-            if acc_info.get().work_stat == 'start':
+            if Account.select().where(Account.acc_id == context.user_data.get('acc_id')).get().work_stat == 'start':
                 update.callback_query.answer(show_alert=True, text="Сначала остановите аккаунт!")
             else:
                 prop_btn = [[bot_prop.BTN_CLOSE]]
@@ -219,6 +218,7 @@ def button(update, context):
                 reply_keyboard = prop_btn
                 markup = ReplyKeyboardMarkup(reply_keyboard)
                 query.message.reply_text(bot_prop.MSG_PROP_LIST, reply_markup=markup)
+        acc_info = Account.select().where(Account.key == query.data)
         if acc_info:
             ACC_ACTIVE = acc_info.get().id
             context.user_data['acc_id'] = ACC_ACTIVE
