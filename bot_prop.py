@@ -35,5 +35,5 @@ MSG_ACC_STOP_WAIT_EXT = 'Аккаунт останавливается, это �
 MSG_PROP_LIST = 'Пожалуйста, выберите настройку'
 MSG_PUT_VAL = 'Введите новое значение:'
 
-BTN_CLOSE = emojize(':heavy_check_mark:', use_aliases=True) + ' Завершить'
+BTN_CLOSE = emojize(':heavy_check_mark:', use_aliases=True) + ' Закрыть'
 BTN_BACK = emojize(':back:', use_aliases=True) + ' Назад'
