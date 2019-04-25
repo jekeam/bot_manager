@@ -115,6 +115,9 @@ class BetManager:
 
         self.time_start = round(time())
 
+        self.bet_profit = self.sum_bet * self.cur_val_bet
+        self.sale_profit = 0
+
         err_msg = ''
 
         bk_work = ('olimp', 'fonbet')
@@ -167,7 +170,7 @@ class BetManager:
 
     def opposite_stat_wait(self, shared: dict):
         # if not DEBUG:
-        prnt(self.msg.format(sys._getframe().f_code.co_name,self.bk_name + ' wait status bet in from ' +self.bk_name_opposite))
+        prnt(self.msg.format(sys._getframe().f_code.co_name, self.bk_name + ' wait status bet in from ' + self.bk_name_opposite))
 
         opp_stat = None
         while opp_stat is None:
@@ -196,6 +199,12 @@ class BetManager:
                     sleep(5)
 
         def bet_done(shared):
+
+            shared[self.bk_name]['new_bet_sum'] = self.sum_bet
+            shared[self.bk_name]['new_bet_kof'] = self.cur_val_bet
+            shared[self.bk_name]['bet_profit'] = self.bet_profit
+            shared[self.bk_name]['sale_profit'] = self.sale_profit
+
             if not shared[self.bk_name].get('time_bet'):
                 shared[self.bk_name]['time_bet'] = round(time() - self.time_start)
                 prnt(self.msg.format(sys._getframe().f_code.co_name, 'Завершил работу в ' + self.bk_name))
@@ -378,15 +387,15 @@ class BetManager:
                 prnt(self.msg.format(sys._getframe().f_code.co_name, 'Ошибка: ' + e.__class__.__name__ + ' - ' + str(e)))
 
             # CALC PROFIT IF EXISTS SUMM SELL
-            sell_profit = 0
+            self.sale_profit = 0
             if self_opp_data.sum_sell:
-                sell_profit = (self_opp_data.sum_sell / self_opp_data.sum_sell_divider) - sum_opp
-                if sell_profit > 0:
-                    err_str = self.msg_err.format(sys._getframe().f_code.co_name, 'Сумма выкупа больше чем ставка на ' + str(sell_profit) + ', пробую выкупить')
+                self.sale_profit = (self_opp_data.sum_sell / self_opp_data.sum_sell_divider) - sum_opp
+                if self.sale_profit > 0:
+                    err_str = self.msg_err.format(sys._getframe().f_code.co_name, 'Сумма выкупа больше чем ставка на ' + str(self.sale_profit) + ', пробую выкупить')
                     prnt(err_str)
                     raise BetIsLost(err_str)
                 else:
-                    prnt(self.msg.format(sys._getframe().f_code.co_name, 'Потеря при выкупе: ' + str(sell_profit)))
+                    prnt(self.msg.format(sys._getframe().f_code.co_name, 'Потеря при выкупе: ' + str(self.sale_profit)))
             else:
                 prnt(self.msg.format(sys._getframe().f_code.co_name, 'Сумма выкупа неизвестна'))
 
@@ -397,7 +406,6 @@ class BetManager:
 
                 # round_rang = int(get_prop('round_fork'))
                 self.sum_bet = round(self.sum_bet_old * self.wager['value'] / self.cur_val_bet / 5) * 5
-                shared[self.bk_name]['new_bet_sum'] = self.sum_bet
 
                 bet_profit = (self.sum_bet_old - self.sum_bet) / 2
 
@@ -408,9 +416,9 @@ class BetManager:
 
                 if bet_profit >= 0:
                     prnt(self.msg.format(sys._getframe().f_code.co_name, 'Сумма ставки не изменилась или уменьшилась, делаем ставку'))
-                elif sell_profit and sell_profit > bet_profit:
+                elif self.sale_profit and self.sale_profit > bet_profit:
                     # sell bet
-                    err_str = 'Выкуп за {} выгоднее, чем возможные потери после перерасчета, на {}(сумма перерасчета разделена на 2)'.format(sell_profit, bet_profit)
+                    err_str = 'Выкуп за {} выгоднее, чем возможные потери после перерасчета, на {}(сумма перерасчета разделена на 2)'.format(self.sale_profit, bet_profit)
                     prnt(err_str)
                     raise BetIsLost(err_str)
                 else:
