@@ -150,16 +150,10 @@ class BetManager:
             sign_stat = shared.get('sign_in_' + self.bk_name_opposite, 'wait')
 
         if sign_stat not in ('ok', 'wait'):
-            err_str = self.msg_err.format(
-                sys._getframe().f_code.co_name,
-                self.bk_name + ' get error from ' +
-                self.bk_name_opposite + ': ' + sign_stat)
+            err_str = self.msg_err.format(sys._getframe().f_code.co_name, self.bk_name + ' get error from ' + self.bk_name_opposite + ': ' + sign_stat)
             raise BkOppBetError(err_str)
 
-        prnt(self.msg.format(
-            sys._getframe().f_code.co_name,
-            self.bk_name + ' get sign in from ' +
-            self.bk_name_opposite + ': ' + str(sign_stat) + '(' + str(type(sign_stat)) + ')'))
+        prnt(self.msg.format(sys._getframe().f_code.co_name, self.bk_name + ' get sign in from ' + self.bk_name_opposite + ': ' + str(sign_stat) + '(' + str(type(sign_stat)) + ')'))
 
     def opposite_stat_get(self, shared: dict):
 
@@ -267,8 +261,7 @@ class BetManager:
             shared[self.bk_name_opposite + '_err'] = str(e.__class__.__name__) + ': ' + str(e)
         except Exception as e:
             exc_type, exc_value, exc_traceback = sys.exc_info()
-            err_msg = 'Неизвестная ошибка: ' + str(e.__class__.__name__) + ' - ' + str(e) + '. ' + \
-                      str(repr(traceback.format_exception(exc_type, exc_value, exc_traceback)))
+            err_msg = 'Неизвестная ошибка: ' + str(e.__class__.__name__) + ' - ' + str(e) + '. ' + str(repr(traceback.format_exception(exc_type, exc_value, exc_traceback)))
             err_str = self.msg_err.format(sys._getframe().f_code.co_name, err_msg)
             prnt(err_str)
         finally:
@@ -380,11 +373,9 @@ class BetManager:
             prnt(self.msg.format(
                 sys._getframe().f_code.co_name,
                 'Получил данные: bet_type:{}, vector:{}, total:{}, half:{}, val_bet:{}({}),minute:{}, sc_main:{}, sc:{}'.
-                    format(self.bet_type, self.vector, self.cur_total, self.cur_half, self.cur_val_bet, self.old_val_bet, self.cur_minute,
-                           self.cur_sc_main, self.cur_sc)))
+                    format(self.bet_type, self.vector, self.cur_total, self.cur_half, self.cur_val_bet, self.old_val_bet, self.cur_minute, self.cur_sc_main, self.cur_sc)))
 
-            prnt(self.msg.format(sys._getframe().f_code.co_name,
-                                 'Запас тотала: total_stock:{}, total_bet:{}, cur_total:{}'.format(self.total_stock, self.total_bet, self.cur_total)))
+            prnt(self.msg.format(sys._getframe().f_code.co_name, 'Запас тотала: total_stock:{}, total_bet:{}, cur_total:{}'.format(self.total_stock, self.total_bet, self.cur_total)))
 
             # CHECK SUM SELL
             prnt(' ')
@@ -402,10 +393,7 @@ class BetManager:
             if self_opp_data.sum_sell:
                 sell_profit = (self_opp_data.sum_sell / self_opp_data.sum_sell_divider) - sum_opp
                 if sell_profit > 0:
-                    err_str = self.msg_err.format(
-                        sys._getframe().f_code.co_name,
-                        'Сумма выкупа больше чем ставка на ' + str(sell_profit) + ', пробую выкупить'
-                    )
+                    err_str = self.msg_err.format(sys._getframe().f_code.co_name, 'Сумма выкупа больше чем ставка на ' + str(sell_profit) + ', пробую выкупить')
                     prnt(err_str)
                     raise BetIsLost(err_str)
                 else:
@@ -418,26 +406,22 @@ class BetManager:
                 prnt(' ')
                 prnt(self.msg.format(sys._getframe().f_code.co_name, 'RECALC SUM BET'))
 
-                new_l = (k_opp * self.cur_val_bet) / (k_opp + self.cur_val_bet)
-                old_l = (k_opp * self.old_val_bet) / (k_opp + self.old_val_bet)
-
-                round_rang = int(get_prop('round_fork'))
-                self.sum_bet = round(((self.sum_bet_all / new_l) / (self.cur_val_bet / new_l)) / round_rang) * round_rang
+                # round_rang = int(get_prop('round_fork'))
+                self.sum_bet = round(self.sum_bet_old * self.wager['value'] / self.cur_val_bet / 5) * 5
                 shared[self.bk_name]['new_bet_sum'] = self.sum_bet
 
                 bet_profit = (self.sum_bet_old - self.sum_bet) / 2
 
                 prnt(self.msg.format(
                     sys._getframe().f_code.co_name,
-                    'Пересчет суммы ставки({}): {}->{}({}) (k: {}->{}, l: {}->{}, k_opp:{}, sum_opp:{}'.
-                    format(self.sum_bet_all, self.sum_bet_old, self.sum_bet, bet_profit, self.old_val_bet, self.cur_val_bet, old_l, new_l, k_opp, sum_opp)))
+                    'Пересчет суммы ставки({}): {}->{}({}) (k: {}->{}, k_opp:{}, sum_opp:{}'.
+                        format(self.sum_bet_all, self.sum_bet_old, self.sum_bet, bet_profit, self.old_val_bet, self.cur_val_bet, k_opp, sum_opp)))
 
                 if bet_profit >= 0:
                     prnt(self.msg.format(sys._getframe().f_code.co_name, 'Сумма ставки не изменилась или уменьшилась, делаем ставку'))
                 elif sell_profit and sell_profit > bet_profit:
                     # sell bet
-                    err_str = 'Выкуп за {} выгоднее, чем возможные потери после перерасчета, на {}(сумма перерасчета разделена на 2)'.format(
-                        sell_profit, bet_profit)
+                    err_str = 'Выкуп за {} выгоднее, чем возможные потери после перерасчета, на {}(сумма перерасчета разделена на 2)'.format(sell_profit, bet_profit)
                     prnt(err_str)
                     raise BetIsLost(err_str)
                 else:
@@ -447,14 +431,13 @@ class BetManager:
                 self.old_val_bet = self.cur_val_bet
                 # override abt
                 if self.override_bet:
-                    
+
                     if self.bk_name == 'olimp':
                         self.wager['factor'] = self.cur_val_bet
                     elif self.bk_name == 'fonbet':
                         self.wager['value'] = self.cur_val_bet
-                        
+
                     prnt(self.msg.format(sys._getframe().f_code.co_name, 'Коф-т для ставки в ' + self.bk_name + ': ' + str(self.cur_val_bet)))
-                    
 
         self.set_param()  # set self.side_bet, self.side_bet_half
         self.time_start = round(int(time()))

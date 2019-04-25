@@ -1,17 +1,14 @@
-sum_bet_all = 400
-cur_val_bet = 1.55
-old_val_bet = 1.7
-k_opp = 2.5
+sum_bet_all = 1000
+
+cur_val_bet = 1.84
+old_val_bet = 1.74
+k_opp = 2.1
 # 150
 
-bet1 = 280
+bet1 = 890
 
-profit = bet1*old_val_bet
-
-x = profit/bet1-cur_val_bet
+x = round(bet1*old_val_bet/cur_val_bet/5)*5
 print(x)
-
-
 
 # print('l: ' + str(proc))
 # print('l new: ' + str(proc2))

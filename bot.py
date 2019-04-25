@@ -39,32 +39,33 @@ for val in prop_abr.values():
             patterns += '(' + abr
 if patterns:
     patterns += ')'
-    
+
 
 def check_limits(val, type_, min_, max_, access_list):
     err_str = ''
     if max_:
         max_ = type_(max_)
-            
+
     if min_:
         min_ = type_(min_)
-        
+
     if access_list:
         access_list = list(map(type_, access_list))
-      
+
     if val < min_ or val > max_:
         err_str = 'Нарушены границы пределов, min: {}, max: {}'.format(min_, max_) + '\n'
-        
+
     if access_list:
         if val not in access_list:
             err_str = err_str + 'Недопустимое значение, резрешено: {}'.format(access_list)
-        
+
     return err_str
 
-def check_type(val:str, type_:str, min_:str, max_:str, access_list):
+
+def check_type(val: str, type_: str, min_: str, max_: str, access_list):
     err_str = ''
     err_limits = ''
-    
+
     try:
         if type_ == 'int':
             type_ = int
@@ -73,18 +74,16 @@ def check_type(val:str, type_:str, min_:str, max_:str, access_list):
         val = type_(val)
     except Exception:
         err_str = 'Неверный тип значения, ожидается: {}'.format(str(type_))
-       
-    
+
     try:
-        err_limits = check_limits(val, type_, min_, max_, access_list) 
+        err_limits = check_limits(val, type_, min_, max_, access_list)
     except TypeError as e:
         print(e)
-        
+
     if err_limits:
         err_str = err_str + '\n' + err_limits
-    
+
     return err_str.strip()
-    
 
 
 def set_prop(update, context):
@@ -106,28 +105,27 @@ def set_prop(update, context):
                 else:
                     acc_id = context.user_data.get('acc_id')
                     if acc_id:
-                        Properties.update(val=prop_val).where((Properties.acc_id==acc_id)&(Properties.key==key)).execute() 
+                        Properties.update(val=prop_val).where((Properties.acc_id == acc_id) & (Properties.key == key)).execute()
                         update.message.reply_text(
-                            text='Новое значение установлено:\n' + '*' + prop_name + '*: ' + prop_val + '\n\n' + \
-                            'Если хотите задать еще настройки, выберите аккаунт из /botlist и нажмите : ' + bot_prop.BTN_SETTINGS,
+                            text='Новое значение установлено:\n' + '*' + prop_name + '*: ' + prop_val + '\n\n' +
+                                 'Если хотите задать еще настройки, выберите аккаунт из /botlist и нажмите : ' + bot_prop.BTN_SETTINGS,
                             parse_mode=telegram.ParseMode.MARKDOWN
                         )
         del context.user_data['choice']
 
 
 def choose_prop(update, context):
-
     markup = ReplyKeyboardRemove()
     text = update.message.text
     for val in prop_abr.values():
         if val.get('abr') == text:
             dop_indo = 'min: ' + val.get('min') + ', max: ' + val.get('max')
             if val.get('access_list'):
-                dop_indo = dop_indo + ', допустимые значения: ' + str(val.get('access_list')).replace("'",'')
-    
+                dop_indo = dop_indo + ', допустимые значения: ' + str(val.get('access_list')).replace("'", '')
+
     update.message.reply_text(
         text='*' + text + '*\n\n'
-        '*Ограничения по настройке*:\n' + dop_indo + '\n\n' + bot_prop.MSG_PUT_VAL,
+                          '*Ограничения по настройке*:\n' + dop_indo + '\n\n' + bot_prop.MSG_PUT_VAL,
         reply_markup=markup,
         parse_mode=telegram.ParseMode.MARKDOWN
     )
@@ -180,7 +178,6 @@ def botlist(update, context, edit=False):
 
 
 def button(update, context):
-
     def prnt_acc_stat():
         keyboard = []
         if acc_info.get().work_stat == 'stop':
@@ -194,8 +191,8 @@ def button(update, context):
 
         reply_markup = InlineKeyboardMarkup(keyboard)
         query.message.edit_text(
-            text='*' + bot_prop.MSG_START_STOP + '\nID=' + str(acc_info.get().id) + '*\n' + 
-            get_prop_str(acc_info.get().id),
+            text='*' + bot_prop.MSG_START_STOP + '\nID=' + str(acc_info.get().id) + '*\n' +
+                 get_prop_str(acc_info.get().id),
             reply_markup=reply_markup,
             parse_mode=telegram.ParseMode.MARKDOWN
         )
@@ -291,9 +288,8 @@ def sender(context):
                         for admin in bot_prop.ADMINS:
                             if str(e) == 'Chat not found':
                                 try:
-                                    context.bot.send_message(admin,
-                                                             'Возникла ошибка:{}, msg:{} - сообщение исключено'
-                                                             .format(str(e), 'msg_id: ' + str(msg.id) + ', user_id:' + str(msg.to_user)))
+                                    context.bot.send_message(
+                                        admin, 'Возникла ошибка:{}, msg:{} - сообщение исключено'.format(str(e), 'msg_id: ' + str(msg.id) + ', user_id:' + str(msg.to_user)))
                                 except Exception as e:
                                     print(e)
             except Exception as e:
@@ -301,9 +297,8 @@ def sender(context):
                 for admin in bot_prop.ADMINS:
                     if str(e) == 'Chat not found':
                         try:
-                            context.bot.send_message(admin,
-                                                     'Возникла ошибка:{}, msg:{} - сообщение исключено'
-                                                     .format(str(e), 'msg_id: ' + str(msg.id) + ', user_id:' + str(msg.to_user)))
+                            context.bot.send_message(
+                                admin, 'Возникла ошибка:{}, msg:{} - сообщение исключено'.format(str(e), 'msg_id: ' + str(msg.id) + ', user_id:' + str(msg.to_user)))
                         except Exception as e:
                             print(e)
         time.sleep(1)
@@ -311,8 +306,7 @@ def sender(context):
 
 def close_prop(update, context):
     markup = ReplyKeyboardRemove()
-    update.message.reply_text(text='Настройка завершена.\n\n'
-    'Если хотите задать еще настройки, выберите аккаунт из /botlist и нажмите : ' + bot_prop.BTN_SETTINGS, reply_markup=markup)
+    update.message.reply_text(text='Настройка завершена.\n\nЕсли хотите задать еще настройки, выберите аккаунт из /botlist и нажмите : ' + bot_prop.BTN_SETTINGS, reply_markup=markup)
 
 
 if __name__ == '__main__':
