@@ -158,7 +158,7 @@ def check_fork(key, L, k1, k2, live_fork, bk1_score, bk2_score, minute, time_bre
     elif bal2 <= balance_line and k2 >= 1.3:
         fork_exclude_text = fork_exclude_text + 'Вилка ' + str(round((1 - L) * 100, 2)) + '% исключена: баланс БК фонбет меньше 30%, а коэф-т >= 1.3 (' + str(k2) + ')\n'
 
-    max_kof = get_prop('junior_team_exclude')
+    max_kof = float(get_prop('junior_team_exclude'))
     if k1 > max_kof or k2 > max_kof:
         fork_exclude_text = fork_exclude_text + 'Вилка ' + str(round((1 - L) * 100, 2)) + '% исключена т.к. коэф-большой: ({}/{}) > {})\n'.format(k1, k2, max_kof)
 
@@ -788,7 +788,7 @@ if __name__ == '__main__':
         err_str = str(ACC_ID) + ': Возникла ошибка! ' + str(e.__class__.__name__) + ' - ' + str(err_str)
         prnt(err_str)
 
-        send_message_bot(USER_ID, str(e), ADMINS)
+        send_message_bot(USER_ID, str(ACC_ID) + ': Возникла ошибка, ' + str(e), ADMINS)
 
     finally:
         shutdown = True
