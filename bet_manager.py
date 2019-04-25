@@ -64,6 +64,7 @@ class BetManager:
         # else:
         #     self.flex_bet = True
         self.hard_bet = True
+        self.override_bet = True
 
         self.msg_err = self.bk_name + '. {}, err: {}'
         self.msg = self.bk_name + '. {}, msg: {}'
@@ -426,10 +427,10 @@ class BetManager:
 
                 bet_profit = (self.sum_bet_old - self.sum_bet) / 2
 
-                prnt(self.msg.format(sys._getframe().f_code.co_name,
-                                     'Пересчет суммы ставки({}): {}->{}({}) (k: {}->{}, l: {}->{}, k_opp:{}, sum_opp:{}'.
-                                     format(self.sum_bet_all, self.sum_bet_old, self.sum_bet, bet_profit, self.old_val_bet, self.cur_val_bet, old_l, new_l,
-                                            k_opp, sum_opp)))
+                prnt(self.msg.format(
+                    sys._getframe().f_code.co_name,
+                    'Пересчет суммы ставки({}): {}->{}({}) (k: {}->{}, l: {}->{}, k_opp:{}, sum_opp:{}'.
+                    format(self.sum_bet_all, self.sum_bet_old, self.sum_bet, bet_profit, self.old_val_bet, self.cur_val_bet, old_l, new_l, k_opp, sum_opp)))
 
                 if bet_profit >= 0:
                     prnt(self.msg.format(sys._getframe().f_code.co_name, 'Сумма ставки не изменилась или уменьшилась, делаем ставку'))
@@ -442,8 +443,18 @@ class BetManager:
                 else:
                     prnt(self.msg.format(sys._getframe().f_code.co_name, 'Ставка выгоднее выкупа, работаю дальше'))
 
-            if self.cur_val_bet:
+                prnt(self.msg.format(sys._getframe().f_code.co_name, 'Коф-т ставки должен быть изменен: {}->{}'.format(self.old_val_bet, self.cur_val_bet)))
                 self.old_val_bet = self.cur_val_bet
+                # override abt
+                if self.override_bet:
+                    
+                    if self.bk_name == 'olimp':
+                        self.wager['factor'] = self.cur_val_bet
+                    elif self.bk_name == 'fonbet':
+                        self.wager['value'] = self.cur_val_bet
+                        
+                    prnt(self.msg.format(sys._getframe().f_code.co_name, 'Коф-т для ставки в ' + self.bk_name + ': ' + str(self.cur_val_bet)))
+                    
 
         self.set_param()  # set self.side_bet, self.side_bet_half
         self.time_start = round(int(time()))
@@ -451,9 +462,8 @@ class BetManager:
 
         prnt(self.msg.format(sys._getframe().f_code.co_name, 'Завершающий принял работу'))
 
-        if not get_prop('hard_bet_right'):
-            self.hard_bet = False
         prnt(self.msg.format(sys._getframe().f_code.co_name, 'Жесткая ставка второго плеча: ' + str(self.hard_bet)))
+        prnt(self.msg.format(sys._getframe().f_code.co_name, 'Переопределять изначальный коэф-т при его изменении: ' + str(self.override_bet)))
 
         is_go = True
         cnt_attempt_sale = 5
