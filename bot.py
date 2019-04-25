@@ -42,47 +42,38 @@ if patterns:
     patterns += ')'
 
 
-def print_stat(update, context) -> str:
+def print_stat(acc_id: str) -> str:
     cnt_fail = 0
     black_list_matches = 0
     cnt_fork_success = 0
 
-    def set_statistics(key, err_bk1, err_bk2):
-        global cnt_fail, black_list_matches, cnt_fork_success
-        bet_skip = False
-        if err_bk1 and err_bk2:
-            if 'BkOppBetError' in err_bk1 and 'BkOppBetError' in err_bk2:
-                bet_skip = True
-
-        if err_bk1 != 'ok' or err_bk2 != 'ok':
-            if not bet_skip:
-                cnt_fail = cnt_fail + 1
-                black_list_matches.append(key.split('@')[0])
-                black_list_matches.append(key.split('@')[1])
-        elif not bet_skip:
-            cnt_fork_success.append(key)
-
-    def get_statistics():
-        global cnt_fail, black_list_matches, cnt_fork_success
-        return 'Успешных ставок: ' + str(len(cnt_fork_success)) + '\n' + \
-               'Кол-во ставок с ошибками/выкупом: ' + str(cnt_fail) + '\n' + \
-               'Черный список матчей: ' + str(black_list_matches)
-
     try:
-        with open(str(context.user_data.get('acc_id')) + '_id_forks.txt') as f:
+        with open(acc_id + '_id_forks.txt') as f:
             for line in f:
                 js = json.loads(line)
-                last_time_temp = 0
                 for key, val in js.items():
-                    bet_key = str(val.get('olimp', {}).get('id')) + '@' + str(val.get('fonbet', {}).get('id')) + '@' + \
-                              val.get('olimp', {}).get('bet_type') + '@' + val.get('fonbet', {}).get('bet_type')
-                    set_statistics(bet_key, val.get('olimp').get('err'), val.get('fonbet').get('err'))
+                    err_bk1, err_bk2 = val.get('olimp').get('err'), val.get('fonbet').get('err')
+                    bet_skip = False
 
-                    if int(key) > last_time_temp:
-                        last_time_temp = int(key)
-            get_statistics()
+                    if err_bk1 and err_bk2:
+                        if 'BkOppBetError' in err_bk1 and 'BkOppBetError' in err_bk2:
+                            bet_skip = True
+
+                    if err_bk1 != 'ok' or err_bk2 != 'ok':
+                        if not bet_skip:
+                            cnt_fail += 1
+                            black_list_matches += 1
+
+                    elif not bet_skip:
+                        cnt_fork_success += 1
+
+            return 'Успешных ставок: ' + str(cnt_fork_success) + '\n' + \
+                   'Кол-во ставок с ошибками/выкупом: ' + str(cnt_fail) + '\n'
+
+    except FileNotFoundError:
+        return 'Нет данных'
     except Exception as e:
-        print(e)
+        return 'Возникла ошибка: ' + str(e)
 
 
 def check_limits(val, type_, min_, max_, access_list):
@@ -276,7 +267,8 @@ def button(update, context):
                 query.message.reply_text(bot_prop.MSG_PROP_LIST, reply_markup=markup)
         if query.data == 'get_stat':
             markup = ReplyKeyboardRemove()
-            query.message.reply_text(str(context.user_data.get('acc_id')) + ': ', reply_markup=markup)
+            acc_id_str = str(context.user_data.get('acc_id'))
+            query.message.reply_text(acc_id_str + ': ' + print_stat(acc_id_str), reply_markup=markup)
 
         acc_info = Account.select().where(Account.key == query.data)
         if acc_info:
