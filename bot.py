@@ -46,13 +46,18 @@ def print_stat(acc_id: str) -> str:
     cnt_fail = 0
     black_list_matches = 0
     cnt_fork_success = 0
+    min_profit = 0
+    max_profit = 0
+    sale_profit = 0
 
     try:
         with open(acc_id + '_id_forks.txt', 'r') as f:
             for line in f:
                 js = json.loads(line)
                 for key, val in js.items():
-                    err_bk1, err_bk2 = val.get('olimp').get('err'), val.get('fonbet').get('err')
+                    bk1 = val.get('olimp')
+                    bk2 = val.get('fonbet')
+                    err_bk1, err_bk2 = bk1.get('err'), bk2.get('err')
                     bet_skip = False
 
                     if err_bk1 and err_bk2:
@@ -63,12 +68,31 @@ def print_stat(acc_id: str) -> str:
                         if not bet_skip:
                             cnt_fail += 1
                             black_list_matches += 1
+                            sale_profit = sale_profit + bk1.get('sale_profit')
+
 
                     elif not bet_skip:
                         cnt_fork_success += 1
 
-            return 'Успешных ставок: ' + str(cnt_fork_success) + '\n' + \
-                   'Кол-во ставок с ошибками/выкупом: ' + str(cnt_fail) + '\n'
+                        sum_bet1, sum_bet2 = bk1.get('new_bet_sum'), bk2.get('new_bet_sum')
+                        k1, k2 = bk1.get('new_bet_kof'), bk2.get('new_bet_kof')
+                        if sum_bet1 and sum_bet2 and k1 and k2:
+                            total_sum = sum_bet1 + sum_bet2
+                            min_profit = min_profit + round(min((total_sum - sum_bet1 * k1), (total_sum - sum_bet2 * k2)))
+                            max_profit = max_profit + round(max((total_sum - sum_bet1 * k1), (total_sum - sum_bet2 * k2)))
+
+            res_str = ''
+            res_str = res_str + 'Успешных ставок: *' + str(cnt_fork_success) + '*\n'
+            if cnt_fail:
+                res_str = res_str + 'Кол-во ставок с ошибками/выкупом: *' + str(cnt_fail) + '*\n'
+            if min_profit:
+                res_str = res_str + 'Минимальный профит: *' + str(min_profit) + '*\n'
+            if max_profit:
+                res_str = res_str + 'Максимальный профит: *' + str(max_profit) + '*\n'
+            if sale_profit:
+                res_str = res_str + 'Профит от продаж: *' + str(sale_profit) + '*\n'
+
+            return res_str.strip()
 
     except FileNotFoundError:
         return 'Нет данных'
@@ -108,6 +132,7 @@ def check_type(val: str, type_: str, min_: str, max_: str, access_list):
             type_ = int
         elif type_ == 'float':
             type_ = float
+            val = val
         else:
             type_ = str
         val = type_(val)
@@ -268,7 +293,7 @@ def button(update, context):
         if query.data == 'get_stat':
             markup = ReplyKeyboardRemove()
             acc_id_str = str(context.user_data.get('acc_id'))
-            query.message.reply_text(acc_id_str + ': ' + print_stat(acc_id_str), reply_markup=markup)
+            query.message.reply_text(acc_id_str + ': ' + print_stat(acc_id_str), reply_markup=markup, parse_mode=telegram.ParseMode.MARKDOWN)
 
         acc_info = Account.select().where(Account.key == query.data)
         if acc_info:
