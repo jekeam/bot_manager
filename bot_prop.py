@@ -2,9 +2,6 @@
 from emoji import emojize
 
 # BOI
-# PY_PATH = 'python3.6'
-# TOKEN = '843081630:AAFmVT4hi5R71mgJpojVxOmTGEaZJA-LWYI'
-# ADMINS = [381868674, 33847743]
 
 # TEST
 PY_PATH = 'D:\\YandexDisk\\Парсинг\\bot_manager\\venv\\Scripts\\python.exe'
