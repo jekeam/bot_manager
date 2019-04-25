@@ -7,12 +7,14 @@ from playhouse.sqlite_ext import SqliteExtDatabase
 
 db = MySQLDatabase('bot_manager', user='root', password='131189_Ak13', host='127.0.0.1', port=3306)
 
+first_bet_in = ["fonbet", "olimp", "auto"]
+
 prop_abr = {
     "SUMM": {"abr": "Общая ставка", "type": "int", "max": "10000", "min": "400", "access_list": [], "error": ""},
-    "MIN_PROC": {"abr": "Min % вилки", "type": "float", "max": "10", "min": "0", "access_list": [], "error": ""},
+    "MIN_PROC": {"abr": "Min % вилки", "type": "float", "max": "10", "min": "0.5", "access_list": [], "error": ""},
     "RANDOM_SUMM_PROC": {"abr": "Отклонение от суммы (в %)", "type": "int", "max": "30", "min": "0", "access_list": [], "error": ""},
     "FORK_LIFE_TIME": {"abr": "Время вилки от (сек.)", "type": "int", "max": "500", "min": "3", "access_list": [], "error": ""},
-    "FIRST_BET_IN": {"abr": "Первая ставка в", "type": "str", "max": "", "min": "", "access_list": ["fonbet", "olimp", "auto"], "error": ""},
+    "FIRST_BET_IN": {"abr": "Первая ставка в", "type": "str", "max": "", "min": "", "access_list": first_bet_in, "error": ""},
     "WORK_HOUR_END": {"abr": "Остановка в (ч.)", "type": "int", "max": "23", "min": "0", "access_list": [], "error": ""},
     "ROUND_FORK": {"abr": "Округление вилки/ставки", "type": "int", "max": "100", "min": "5", "access_list": ["5", "10", "50", "100"], "error": ""},
     "MAX_FORK": {"abr": "Max ставок", "type": "int", "max": "50", "min": "1", "access_list": [], "error": ""},
@@ -93,7 +95,7 @@ def get_user_str(id: int) -> str:
 
 
 def get_val_prop_id(id: int, key: str) -> str:
-    res = '—'
+    res = 'auto'
     try:
         res = str(Properties.select().where((Properties.acc_id == id) & (Properties.key == key)).get().val)
     except Exception as e:

@@ -14,7 +14,7 @@ from telegram.ext import Updater, CommandHandler, CallbackQueryHandler, MessageH
 from telegram.error import BadRequest
 from telegram.ext.callbackcontext import CallbackContext
 
-from db_model import Account, Message, User, Properties, get_user_str, send_message_bot, get_prop_str, prop_abr
+from db_model import Account, Message, User, Properties, get_user_str, send_message_bot, get_prop_str, prop_abr, first_bet_in
 import bot_prop
 from emoji import emojize
 
