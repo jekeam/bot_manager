@@ -217,9 +217,9 @@ def get_account_info(bk=None, param=None):
         return ACCOUNTS
 
 
-def get_prop(param):
+def get_prop(param, set_default: None):
     global PROPERTIES
-    return PROPERTIES.get(param.upper())
+    return PROPERTIES.get(param.upper(), set_default)
 
 
 def serv_log(filename: str, vstr: str):

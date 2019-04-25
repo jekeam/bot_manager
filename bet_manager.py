@@ -1,11 +1,8 @@
 import urllib3
 
-from math import floor
 from time import time, sleep
 from os import path
-from json import load, dumps
-import requests
-import inspect
+from json import dumps
 import sys
 import traceback
 from threading import Thread
@@ -20,10 +17,10 @@ from meta_ol import ol_url_api, ol_payload, ol_headers, get_xtoken_bet
 from meta_fb import fb_payload, fb_payload_bet, get_random_str, get_dumped_payload, get_urls, get_common_url
 from meta_fb import fb_headers, get_new_bets_fonbet, payload_req, payload_coupon_sum, payload_coupon_sell
 from meta_fb import payload_sell_check_result
-from utils import prnt, package_dir, write_file, read_file, get_account_info, get_proxies, get_prop
+from utils import prnt, write_file, read_file, get_account_info, get_proxies, get_prop
 from fork_recheck import get_olimp_info, get_fonbet_info
 
-from exceptions import BetIsLost, SessionNotDefined, BkOppBetError, NoMoney, BetError, SessionExpired, SaleError
+from exceptions import SessionNotDefined, BkOppBetError, NoMoney, BetError, SessionExpired, SaleError
 from exceptions import CouponBlocked, BetIsLost
 
 if get_prop('debug'):
@@ -160,10 +157,7 @@ class BetManager:
         opposite_stat = str(shared.get(self.bk_name_opposite + '_err', 'ok'))
 
         if opposite_stat != 'ok':
-            err_str = self.msg_err.format(
-                sys._getframe().f_code.co_name,
-                self.bk_name + ' get error from ' +
-                self.bk_name_opposite + ': ' + opposite_stat)
+            err_str = self.msg_err.format(sys._getframe().f_code.co_name, self.bk_name + ' get error from ' + self.bk_name_opposite + ': ' + opposite_stat)
             raise BkOppBetError(err_str)
 
         prnt(self.msg.format(
@@ -192,9 +186,7 @@ class BetManager:
         def sale_opp(e, shared):
             self.opposite_stat_wait(shared)
             self.opposite_stat_get(shared)
-            prnt(self.msg.format(sys._getframe().f_code.co_name,
-                                 'Ошибка при проставлении ставки в ' + self.bk_name +
-                                 ', делаю выкуп ставки в ' + self.bk_name_opposite))
+            prnt(self.msg.format(sys._getframe().f_code.co_name, 'Ошибка при проставлении ставки в ' + self.bk_name + ', делаю выкуп ставки в ' + self.bk_name_opposite))
 
             self_opp = shared[self.bk_name_opposite].get('self', {})
 
@@ -203,10 +195,7 @@ class BetManager:
                     self_opp.sale_bet(shared)
                     break
                 except (SaleError, CouponBlocked) as e:
-                    prnt(self.msg.format(
-                        sys._getframe().f_code.co_name,
-                        'Ошибка: ' + e.__class__.__name__ + ' - ' + str(e) +
-                        '. Пробую проставить и пробую выкупить еще!'))
+                    prnt(self.msg.format(sys._getframe().f_code.co_name, 'Ошибка: ' + e.__class__.__name__ + ' - ' + str(e) + '. Пробую проставить и пробую выкупить еще!'))
                     sleep(5)
 
         def bet_done(shared):
@@ -220,7 +209,10 @@ class BetManager:
                 self.sign_in(shared)
                 self.wait_sign_in_opp(shared)
 
-                if self.vector == 'UP':
+                if self.bk_name == get_prop('first_bet_in', 'auto'):
+                    self.opposite_stat_wait(shared)
+                    self.opposite_stat_get(shared)
+                elif self.vector == 'UP':
                     self.opposite_stat_wait(shared)
                     self.opposite_stat_get(shared)
 
