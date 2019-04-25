@@ -506,6 +506,7 @@ cnt_fork_success = []
 printed = False
 last_fork_time = 0
 wait_before_start = 15
+long_pool_wait = randint(30, 60)
 
 # wag_fb:{'event': '12797479', 'factor': '921', 'param': '', 'score': '0:0', 'value': '2.35'}
 # wag_fb:{'apid': '1144260386:45874030:1:3:-9999:3:NULL:NULL:1', 'factor': '1.66', 'sport_id': 1, 'event': '45874030'}
@@ -536,6 +537,7 @@ if __name__ == '__main__':
 
         MIN_PROC = float(get_prop('min_proc').replace(',', '.'))
         prnt(' ')
+        prnt('Long pool sec: ' + str(long_pool_wait))
         prnt('ID аккаунта: ' + str(ACC_ID))
         prnt('IP-адрес сервера: ' + server_ip + ':80')
         prnt('Баланс в БК Олимп: ' + str(bal1))
