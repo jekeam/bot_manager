@@ -158,9 +158,10 @@ def check_fork(key, L, k1, k2, live_fork, bk1_score, bk2_score, minute, time_bre
     elif bal2 <= balance_line and k2 >= 1.3:
         fork_exclude_text = fork_exclude_text + 'Вилка ' + str(round((1 - L) * 100, 2)) + '% исключена: баланс БК фонбет меньше 30%, а коэф-т >= 1.3 (' + str(k2) + ')\n'
 
-    max_kof = float(get_prop('junior_team_exclude'))
-    if k1 > max_kof or k2 > max_kof:
-        fork_exclude_text = fork_exclude_text + 'Вилка ' + str(round((1 - L) * 100, 2)) + '% исключена т.к. коэф-большой: ({}/{}) > {})\n'.format(k1, k2, max_kof)
+    if get_prop('max_kof'):
+        max_kof = float(get_prop('max_kof'))
+        if k1 > max_kof or k2 > max_kof:
+            fork_exclude_text = fork_exclude_text + 'Вилка ' + str(round((1 - L) * 100, 2)) + '% исключена т.к. коэф-большой: ({}/{}) > {})\n'.format(k1, k2, max_kof)
 
     if bk1_score != bk2_score:
         fork_exclude_text = fork_exclude_text + 'Вилка ' + str(round((1 - L) * 100, 2)) + '% исключена т.к. счет не совпадает: olimp(' + bk1_score + ') fonbet(' + bk2_score + ')\n'
@@ -562,6 +563,7 @@ if __name__ == '__main__':
         prnt('Минимальный профит вилки от (%): ' + str(MIN_PROC))
         prnt('Жесткая ставка второго плеча: ' + str(get_prop('hard_bet_right')))
         prnt('Первая ставка в БК: ' + str(get_prop('first_bet_in', 'auto')))
+        prnt('Макстмальный коэф-т: ' + str(get_prop('max_kof')))
         prnt(' ')
         try:
             with open(str(ACC_ID) + '_id_forks.txt') as f:
