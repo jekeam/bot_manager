@@ -1,11 +1,7 @@
-sum_bet_all = 1000
+cur_val_bet = 3.75
+old_val_bet = 6.7
 
-cur_val_bet = 1.84
-old_val_bet = 1.74
-k_opp = 2.1
-# 150
-
-bet1 = 890
+bet1 = 250
 
 x = round(bet1*old_val_bet/cur_val_bet/5)*5
 print(x)
