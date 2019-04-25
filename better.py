@@ -415,6 +415,12 @@ def go_bets(wag_ol, wag_fb, total_bet, key, deff_max, vect1, vect2, sc1, sc2):
         fork_info[fork_id]['olimp']['new_bet_kof'] = shared['olimp'].get('new_bet_kof')
         fork_info[fork_id]['fonbet']['new_bet_kof'] = shared['fonbet'].get('new_bet_kof')
 
+        fork_info[fork_id]['olimp']['bet_profit'] = shared['olimp'].get('new_bet_sum') * shared['olimp'].get('new_bet_kof')
+        fork_info[fork_id]['fonbet']['bet_profit'] = shared['fonbet'].get('new_bet_sum') * shared['fonbet'].get('new_bet_kof')
+
+        fork_info[fork_id]['olimp']['sale_profit'] = shared['olimp'].get('sale_profit')
+        fork_info[fork_id]['fonbet']['sale_profit'] = shared['fonbet'].get('sale_profit')
+
         fork_info[fork_id]['olimp']['reg_id'] = shared['olimp'].get('reg_id')
         fork_info[fork_id]['fonbet']['reg_id'] = shared['fonbet'].get('reg_id')
 

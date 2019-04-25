@@ -202,7 +202,6 @@ class BetManager:
 
             shared[self.bk_name]['new_bet_sum'] = self.sum_bet
             shared[self.bk_name]['new_bet_kof'] = self.cur_val_bet
-            shared[self.bk_name]['bet_profit'] = self.sum_bet * self.cur_val_bet
             shared[self.bk_name]['sale_profit'] = self.sale_profit
 
             if not shared[self.bk_name].get('time_bet'):
