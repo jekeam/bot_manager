@@ -93,6 +93,7 @@ class BetManager:
         self.reqIdSale = None
         self.payload = None
         self.sum_bet = bk_container.get('amount')
+        self.sum_bet_all = bk_container.get('amount_total')
         self.sum_bet_old = self.sum_bet
         self.sum_sell = None
 
@@ -420,15 +421,14 @@ class BetManager:
                 old_l = (k_opp * self.old_val_bet) / (k_opp + self.old_val_bet)
 
                 round_rang = int(get_prop('round_fork'))
-                total_bet = int(get_prop('summ'))
-                self.sum_bet = round(((total_bet / new_l) / (self.cur_val_bet / new_l)) / round_rang) * round_rang
+                self.sum_bet = round(((self.sum_bet_all / new_l) / (self.cur_val_bet / new_l)) / round_rang) * round_rang
                 shared[self.bk_name]['new_bet_sum'] = self.sum_bet
 
                 bet_profit = (self.sum_bet_old - self.sum_bet) / 2
 
                 prnt(self.msg.format(sys._getframe().f_code.co_name,
                                      'Пересчет суммы ставки({}): {}->{}({}) (k: {}->{}, l: {}->{}, k_opp:{}, sum_opp:{}'.
-                                     format(total_bet, self.sum_bet_old, self.sum_bet, bet_profit, self.old_val_bet, self.cur_val_bet, old_l, new_l,
+                                     format(self.sum_bet_all, self.sum_bet_old, self.sum_bet, bet_profit, self.old_val_bet, self.cur_val_bet, old_l, new_l,
                                             k_opp, sum_opp)))
 
                 if bet_profit >= 0:
