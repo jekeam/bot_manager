@@ -810,7 +810,7 @@ class BetManager:
 
             self.check_max_bet(shared)
 
-            self.attempt_get_req_id = 3
+            self.attempt_get_req_id = 5
             while True:
                 if self.attempt_get_req_id <= 0:
                     err_str = 'get_request_id: no data found'
@@ -821,7 +821,7 @@ class BetManager:
                     break
                 except Exception as e:
                     prnt(self.msg_err.format(sys._getframe().f_code.co_name, 'get_request_id err: ' + str(e) + ', replay'))
-                    sleep(1)
+                    sleep(3)
 
             self.payload['requestId'] = self.reqId
 
