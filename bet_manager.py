@@ -167,10 +167,7 @@ class BetManager:
 
     def opposite_stat_wait(self, shared: dict):
         # if not DEBUG:
-        prnt(self.msg.format(
-            sys._getframe().f_code.co_name,
-            self.bk_name + ' wait status bet in from ' +
-            self.bk_name_opposite))
+        prnt(self.msg.format(sys._getframe().f_code.co_name,self.bk_name + ' wait status bet in from ' +self.bk_name_opposite))
 
         opp_stat = None
         while opp_stat is None:
