@@ -235,8 +235,8 @@ def button(update, context):
 
         keyboard.append([InlineKeyboardButton(text=start_stop, callback_data=query.data)])
         keyboard.append([InlineKeyboardButton(text=bot_prop.BTN_SETTINGS, callback_data='pror_edit')])
-        if acc_info.get().user_id in bot_prop.ADMINS:
-            keyboard.append([InlineKeyboardButton(text=bot_prop.BTN_GET_STAT, callback_data='get_stat')])
+        # if acc_info.get().user_id in bot_prop.ADMINS:
+        keyboard.append([InlineKeyboardButton(text=bot_prop.BTN_GET_STAT, callback_data='get_stat')])
         keyboard.append([InlineKeyboardButton(text=bot_prop.BTN_BACK, callback_data='botlist')])
 
         reply_markup = InlineKeyboardMarkup(keyboard)
