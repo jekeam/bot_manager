@@ -215,10 +215,7 @@ class BetManager:
                 self.sign_in(shared)
                 self.wait_sign_in_opp(shared)
 
-                if self.bk_name == get_prop('first_bet_in', 'auto'):
-                    self.opposite_stat_wait(shared)
-                    self.opposite_stat_get(shared)
-                elif self.vector == 'UP':
+                if (get_prop('first_bet_in', 'auto') == 'auto' and self.vector == 'UP') or self.bk_name_opposite == get_prop('first_bet_in', 'auto'):
                     self.opposite_stat_wait(shared)
                     self.opposite_stat_get(shared)
 

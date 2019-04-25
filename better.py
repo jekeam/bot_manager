@@ -195,7 +195,7 @@ def upd_last_fork_time(v_time: int = None):
         last_fork_time = int(time.time())
 
 
-def set_statistics(key, err_bk1, err_bk2, fork_info=None, init=False):
+def set_statistics(key, err_bk1, err_bk2, fork_info=None):
     global cnt_fail, black_list_matches, cnt_fork_success
     bet_skip = False
     if err_bk1 and err_bk2:

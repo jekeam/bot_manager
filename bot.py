@@ -14,7 +14,7 @@ from telegram.ext import Updater, CommandHandler, CallbackQueryHandler, MessageH
 from telegram.error import BadRequest
 from telegram.ext.callbackcontext import CallbackContext
 
-from db_model import Account, Message, User, Properties, get_user_str, send_message_bot, get_prop_str, prop_abr, first_bet_in
+from db_model import Account, Message, User, Properties, get_user_str, send_message_bot, get_prop_str, prop_abr
 import bot_prop
 from emoji import emojize
 
@@ -24,6 +24,7 @@ import os
 import datetime
 import time
 import re
+import json
 
 logging.basicConfig(filename='bot.log', format='%(asctime)s - %(name)s - %(levelname)s - %(message)s', level=logging.DEBUG)
 # logging.basicConfig(format='%(asctime)s - %(name)s - %(levelname)s - %(message)s', level=logging.INFO)
@@ -39,6 +40,49 @@ for val in prop_abr.values():
             patterns += '(' + abr
 if patterns:
     patterns += ')'
+
+
+def print_stat(update, context) -> str:
+    cnt_fail = 0
+    black_list_matches = 0
+    cnt_fork_success = 0
+
+    def set_statistics(key, err_bk1, err_bk2):
+        global cnt_fail, black_list_matches, cnt_fork_success
+        bet_skip = False
+        if err_bk1 and err_bk2:
+            if 'BkOppBetError' in err_bk1 and 'BkOppBetError' in err_bk2:
+                bet_skip = True
+
+        if err_bk1 != 'ok' or err_bk2 != 'ok':
+            if not bet_skip:
+                cnt_fail = cnt_fail + 1
+                black_list_matches.append(key.split('@')[0])
+                black_list_matches.append(key.split('@')[1])
+        elif not bet_skip:
+            cnt_fork_success.append(key)
+
+    def get_statistics():
+        global cnt_fail, black_list_matches, cnt_fork_success
+        return 'Успешных ставок: ' + str(len(cnt_fork_success)) + '\n' + \
+               'Кол-во ставок с ошибками/выкупом: ' + str(cnt_fail) + '\n' + \
+               'Черный список матчей: ' + str(black_list_matches)
+
+    try:
+        with open(str(context.user_data.get('acc_id')) + '_id_forks.txt') as f:
+            for line in f:
+                js = json.loads(line)
+                last_time_temp = 0
+                for key, val in js.items():
+                    bet_key = str(val.get('olimp', {}).get('id')) + '@' + str(val.get('fonbet', {}).get('id')) + '@' + \
+                              val.get('olimp', {}).get('bet_type') + '@' + val.get('fonbet', {}).get('bet_type')
+                    set_statistics(bet_key, val.get('olimp').get('err'), val.get('fonbet').get('err'))
+
+                    if int(key) > last_time_temp:
+                        last_time_temp = int(key)
+            get_statistics()
+    except Exception as e:
+        print(e)
 
 
 def check_limits(val, type_, min_, max_, access_list):
@@ -93,8 +137,6 @@ def check_type(val: str, type_: str, min_: str, max_: str, access_list):
 def set_prop(update, context):
     prop_val = update.message.text
     prop_name = context.user_data.get('choice')
-    prop_name = context.user_data.get('choice')
-    markup = ReplyKeyboardRemove()
     # TODO
     if prop_name:
         for key, val in prop_abr.items():
@@ -114,7 +156,6 @@ def set_prop(update, context):
                         else:
                             data = [(acc_id, key, prop_val), ]
                             Properties.insert_many(data, fields=[Properties.acc_id, Properties.key, Properties.val]).execute()
-                            # Properties.insert(Properties.acc_id == acc_id, key=key, val=prop_val).execute()
                         update.message.reply_text(
                             text='Новое значение *' + prop_name +
                                  '* установлено:\n' + Properties.select().where((Properties.acc_id == acc_id) & (Properties.key == key)).get().val + '\n\n' +
@@ -141,8 +182,7 @@ def choose_prop(update, context):
                 dop_indo = 'допустимые значения: ' + str(val.get('access_list')).replace("'", '')
 
     update.message.reply_text(
-        text='*' + text + '*\n\n'
-                          '*Ограничения по настройке*:\n' + dop_indo + '\n\n' + bot_prop.MSG_PUT_VAL,
+        text='*' + text + '*\n\n''*Ограничения по настройке*:\n' + dop_indo + '\n\n' + bot_prop.MSG_PUT_VAL,
         reply_markup=markup,
         parse_mode=telegram.ParseMode.MARKDOWN
     )
@@ -204,6 +244,8 @@ def button(update, context):
 
         keyboard.append([InlineKeyboardButton(text=start_stop, callback_data=query.data)])
         keyboard.append([InlineKeyboardButton(text=bot_prop.BTN_SETTINGS, callback_data='pror_edit')])
+        if acc_info.get().user_id in bot_prop.ADMINS:
+            keyboard.append([InlineKeyboardButton(text=bot_prop.BTN_GET_STAT, callback_data='get_stat')])
         keyboard.append([InlineKeyboardButton(text=bot_prop.BTN_BACK, callback_data='botlist')])
 
         reply_markup = InlineKeyboardMarkup(keyboard)
@@ -232,11 +274,15 @@ def button(update, context):
                 reply_keyboard = prop_btn
                 markup = ReplyKeyboardMarkup(reply_keyboard)
                 query.message.reply_text(bot_prop.MSG_PROP_LIST, reply_markup=markup)
+        if query.data == 'get_stat':
+            markup = ReplyKeyboardRemove()
+            query.message.reply_text(str(context.user_data.get('acc_id')) + ': ', reply_markup=markup)
+
         acc_info = Account.select().where(Account.key == query.data)
         if acc_info:
-            ACC_ACTIVE = acc_info.get().id
-            context.user_data['acc_id'] = ACC_ACTIVE
+            context.user_data['acc_id'] = acc_info.get().id
             if bot_prop.MSG_START_STOP in query.message.text:
+
                 if acc_info.get().work_stat == 'start':
                     Account.update(work_stat='stop').where(Account.key == query.data).execute()
                     update.callback_query.answer(text=bot_prop.MSG_ACC_STOP_WAIT)

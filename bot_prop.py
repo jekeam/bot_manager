@@ -2,14 +2,14 @@
 from emoji import emojize
 
 # BOI
-PY_PATH = 'python3.6'
-TOKEN = '843081630:AAFmVT4hi5R71mgJpojVxOmTGEaZJA-LWYI'
-ADMINS = [381868674, 33847743]
+# PY_PATH = 'python3.6'
+# TOKEN = '843081630:AAFmVT4hi5R71mgJpojVxOmTGEaZJA-LWYI'
+# ADMINS = [381868674, 33847743]
 
 # TEST
-# PY_PATH = 'D:\\YandexDisk\\Парсинг\\bot_manager\\venv\\Scripts\\python.exe'
-# TOKEN = '598446286:AAEhbB2RDQ7oEe7pX2vif-IENIdIVIZ9xVk'
-# ADMINS = [381868674]
+PY_PATH = 'D:\\YandexDisk\\Парсинг\\bot_manager\\venv\\Scripts\\python.exe'
+TOKEN = '598446286:AAEhbB2RDQ7oEe7pX2vif-IENIdIVIZ9xVk'
+ADMINS = [381868674]
 
 PROXY = {
     'http': 'socks5://shaggy:hzsyk4@191.101.104.71:14487',
