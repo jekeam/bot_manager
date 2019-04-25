@@ -409,7 +409,7 @@ class BetManager:
                 prnt(self.msg.format(
                     sys._getframe().f_code.co_name,
                     'Пересчет суммы ставки({}): {}->{}({}) [k: {}->{}, k_opp:{}, sum_opp:{}]'.
-                        format(self.sum_bet_all, self.sum_bet_old, self.sum_bet, bet_profit, self.old_val_bet, self.cur_val_bet, k_opp, sum_opp)))
+                        format(self.sum_bet_all, self.sum_bet_old, self.sum_bet, bet_profit, self.wager['value'], self.cur_val_bet, k_opp, sum_opp)))
 
                 if bet_profit >= 0:
                     prnt(self.msg.format(sys._getframe().f_code.co_name, 'Сумма ставки не изменилась или уменьшилась, делаем ставку'))
