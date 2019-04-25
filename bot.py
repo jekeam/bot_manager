@@ -52,8 +52,10 @@ def check_limits(val, type_, min_, max_, access_list):
     if access_list:
         access_list = list(map(type_, access_list))
 
-    if val < min_ or val > max_:
-        err_str = 'Нарушены границы пределов, min: {}, max: {}'.format(min_, max_) + '\n'
+    if min_ and val < min_:
+        err_str = 'Нарушены границы пределов, min: {}'.format(min_) + '\n'
+    if max_ and val > max_:
+        err_str = 'Нарушены границы пределов, max: {}'.format(max_) + '\n'
 
     if access_list:
         if val not in access_list:
@@ -107,9 +109,15 @@ def set_prop(update, context):
                 else:
                     acc_id = context.user_data.get('acc_id')
                     if acc_id:
-                        Properties.update(val=prop_val).where((Properties.acc_id == acc_id) & (Properties.key == key)).execute()
+                        if Properties.select().where((Properties.acc_id == acc_id) & (Properties.key == key)).count() > 0:
+                            Properties.update(val=prop_val).where((Properties.acc_id == acc_id) & (Properties.key == key)).execute()
+                        else:
+                            data = [(acc_id, key, prop_val), ]
+                            Properties.insert_many(data, fields=[Properties.acc_id, Properties.key, Properties.val]).execute()
+                            # Properties.insert(Properties.acc_id == acc_id, key=key, val=prop_val).execute()
                         update.message.reply_text(
-                            text='Новое значение установлено:\n' + '*' + prop_name + '*: ' + prop_val + '\n\n' +
+                            text='Новое значение *' + prop_name +
+                                 '* установлено:\n' + Properties.select().where((Properties.acc_id == acc_id) & (Properties.key == key)).get().val + '\n\n' +
                                  'Если хотите задать еще настройки, выберите аккаунт из /botlist и нажмите : ' + bot_prop.BTN_SETTINGS,
                             parse_mode=telegram.ParseMode.MARKDOWN
                         )
@@ -121,9 +129,16 @@ def choose_prop(update, context):
     text = update.message.text
     for val in prop_abr.values():
         if val.get('abr') == text:
-            dop_indo = 'min: ' + val.get('min') + ', max: ' + val.get('max')
+            str_r = ''
+            if val.get('min'):
+                str_r = str_r + 'min: ' + val.get('min')
+            if val.get('min'):
+                str_r = str_r + ', max: ' + val.get('max')
+            dop_indo = str_r
             if val.get('access_list'):
-                dop_indo = dop_indo + ', допустимые значения: ' + str(val.get('access_list')).replace("'", '')
+                if dop_indo:
+                    dop_indo + ', '
+                dop_indo = 'допустимые значения: ' + str(val.get('access_list')).replace("'", '')
 
     update.message.reply_text(
         text='*' + text + '*\n\n'
