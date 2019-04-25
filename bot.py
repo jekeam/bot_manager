@@ -48,7 +48,7 @@ def print_stat(acc_id: str) -> str:
     cnt_fork_success = 0
 
     try:
-        with open(acc_id + '_id_forks.txt') as f:
+        with open(acc_id + '_id_forks.txt', 'r') as f:
             for line in f:
                 js = json.loads(line)
                 for key, val in js.items():
