@@ -14,11 +14,12 @@ prop_abr = {
     "MIN_PROC": {"abr": "Min % вилки", "type": "float", "max": "10", "min": "0.5", "access_list": [], "error": ""},
     "RANDOM_SUMM_PROC": {"abr": "Отклонение от суммы (в %)", "type": "int", "max": "30", "min": "0", "access_list": [], "error": ""},
     "FORK_LIFE_TIME": {"abr": "Время вилки от (сек.)", "type": "int", "max": "500", "min": "3", "access_list": [], "error": ""},
-    "FIRST_BET_IN": {"abr": "Первая ставка в", "type": "str", "max": "", "min": "", "access_list": first_bet_in, "error": ""},
     "WORK_HOUR_END": {"abr": "Остановка в (ч.)", "type": "int", "max": "23", "min": "0", "access_list": [], "error": ""},
     "ROUND_FORK": {"abr": "Округление вилки/ставки", "type": "int", "max": "100", "min": "5", "access_list": ["5", "10", "50", "100"], "error": ""},
     "MAX_FORK": {"abr": "Max ставок", "type": "int", "max": "50", "min": "1", "access_list": [], "error": ""},
     "MAX_FAIL": {"abr": "Max выкупов", "type": "int", "max": "7", "min": "1", "access_list": [], "error": ""},
+    "FIRST_BET_IN": {"abr": "Первая ставка в", "type": "str", "max": "", "min": "", "access_list": first_bet_in, "error": ""},
+    "MAX_KOF": {"abr": "Максимальный коэф-т", "type": "float", "max": "1000", "min": "1.01", "access_list": [], "error": ""},
 
     # "SERVER_IP_TEST": {"abr": "IP-адрес тест. сервера", "type": "", "max": "", "min": "", "access_list": [], "error": ""},
     # "SERVER_IP": {"abr": "IP-адрес бой сервера", "type": "", "max": "", "min": "", "access_list": [], "error": ""},

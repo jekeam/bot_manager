@@ -154,26 +154,23 @@ def check_fork(key, L, k1, k2, live_fork, bk1_score, bk2_score, minute, time_bre
 
     # Если баланс меньше 30% то берем плече только с коэф-м меньше 1,5
     if bal1 <= balance_line and k1 >= 1.3:
-        fork_exclude_text = fork_exclude_text + 'Вилка ' + str(round((1 - L) * 100, 2)) \
-                            + '% исключена: баланс БК Олимп меньше 30%, а коэф-т >= 1.3 (' + str(k1) + ')\n'
+        fork_exclude_text = fork_exclude_text + 'Вилка ' + str(round((1 - L) * 100, 2)) + '% исключена: баланс БК Олимп меньше 30%, а коэф-т >= 1.3 (' + str(k1) + ')\n'
     elif bal2 <= balance_line and k2 >= 1.3:
-        fork_exclude_text = fork_exclude_text + 'Вилка ' + str(round((1 - L) * 100, 2)) \
-                            + '% исключена: баланс БК фонбет меньше 30%, а коэф-т >= 1.3 (' + str(k2) + ')\n'
+        fork_exclude_text = fork_exclude_text + 'Вилка ' + str(round((1 - L) * 100, 2)) + '% исключена: баланс БК фонбет меньше 30%, а коэф-т >= 1.3 (' + str(k2) + ')\n'
+
+    max_kof = get_prop('junior_team_exclude')
+    if k1 > max_kof or k2 > max_kof:
+        fork_exclude_text = fork_exclude_text + 'Вилка ' + str(round((1 - L) * 100, 2)) + '% исключена т.к. коэф-большой: ({}/{}) > {})\n'.format(k1, k2, max_kof)
 
     if bk1_score != bk2_score:
-        fork_exclude_text = fork_exclude_text + 'Вилка ' \
-                            + str(round((1 - L) * 100, 2)) \
-                            + '% исключена т.к. счет не совпадает: olimp(' + bk1_score + ') fonbet(' + bk2_score + ')\n'
+        fork_exclude_text = fork_exclude_text + 'Вилка ' + str(round((1 - L) * 100, 2)) + '% исключена т.к. счет не совпадает: olimp(' + bk1_score + ') fonbet(' + bk2_score + ')\n'
 
     # Больше 43 минуты и не идет перерыв и это 1 период
     if 43.0 < float(minute) and not time_break_fonbet and period == 1:
-        fork_exclude_text = \
-            fork_exclude_text + 'Вилка ' + str(round((1 - L) * 100, 2)) + '% исключена т.к. идет ' + str(minute) + \
-            ' минута матча и это не перерыв и это не 2-й период \n'
+        fork_exclude_text = fork_exclude_text + 'Вилка ' + str(round((1 - L) * 100, 2)) + '% исключена т.к. идет ' + str(minute) + ' минута матча и это не перерыв / не 2-й период \n'
 
     if float(minute) > 88.0:
-        fork_exclude_text = \
-            fork_exclude_text + 'Вилка ' + str(round((1 - L) * 100, 2)) + '% исключена т.к. идет ' + str(minute) + ' минута матча \n'
+        fork_exclude_text = fork_exclude_text + 'Вилка ' + str(round((1 - L) * 100, 2)) + '% исключена т.к. идет ' + str(minute) + ' минута матча \n'
 
     # Вилка живет достаточно
     long_livers = int(get_prop('fork_life_time'))
