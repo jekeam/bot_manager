@@ -95,7 +95,7 @@ def print_stat(acc_id: str) -> str:
                 res_str = res_str + 'Профит от продаж: *' + '{:,}'.format(round(sale_profit)).replace(',', ' ') + '*\n'
                 
             
-            res_str = res_str + 'Примерный доход: *' + '{:,}'.format(round((max_profit+min_profit)/2)-round(sale_profit)).replace(',', ' ') + '*\n'
+            res_str = res_str + 'Примерный доход: *' + '{:,}'.format(round((max_profit+min_profit)/2)+round(sale_profit)).replace(',', ' ') + '*\n'
 
             return res_str.strip()
 
