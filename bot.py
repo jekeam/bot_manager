@@ -89,6 +89,8 @@ def print_stat(acc_id: str) -> str:
                 res_str = res_str + 'Минимальный профит: *' + str(min_profit) + '*\n'
             if max_profit:
                 res_str = res_str + 'Максимальный профит: *' + str(max_profit) + '*\n'
+            if max_profit and min_profit:
+                res_str = res_str + 'Средний профит: *' + str(round((max_profit+min_profit)/2)) + '*\n'
             if sale_profit:
                 res_str = res_str + 'Профит от продаж: *' + str(round(sale_profit)) + '*\n'
 
