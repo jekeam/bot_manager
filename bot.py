@@ -90,7 +90,7 @@ def print_stat(acc_id: str) -> str:
             if max_profit:
                 res_str = res_str + 'Максимальный профит: *' + str(max_profit) + '*\n'
             if sale_profit:
-                res_str = res_str + 'Профит от продаж: *' + str(sale_profit) + '*\n'
+                res_str = res_str + 'Профит от продаж: *' + str(round(sale_profit) + '*\n'
 
             return res_str.strip()
 
