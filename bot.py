@@ -78,8 +78,8 @@ def print_stat(acc_id: str) -> str:
                         k1, k2 = bk1.get('new_bet_kof'), bk2.get('new_bet_kof')
                         if sum_bet1 and sum_bet2 and k1 and k2:
                             total_sum = sum_bet1 + sum_bet2
-                            min_profit = min_profit + round(min((total_sum - sum_bet1 * k1), (total_sum - sum_bet2 * k2)))
-                            max_profit = max_profit + round(max((total_sum - sum_bet1 * k1), (total_sum - sum_bet2 * k2)))
+                            min_profit = min_profit + round(min((sum_bet1 * k1 - total_sum), (sum_bet2 * k2-total_sum)))
+                            max_profit = max_profit + round(max((sum_bet1 * k1 - total_sum), (sum_bet2 * k2-total_sum)))
 
             res_str = ''
             res_str = res_str + 'Успешных ставок: *' + str(cnt_fork_success) + '*\n'
