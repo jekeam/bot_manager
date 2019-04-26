@@ -523,6 +523,7 @@ class BetManager:
                             raise BetIsLost('Totals not found!')
 
                 if self.cur_val_bet:
+                    prnt(self.msg.format(sys._getframe().f_code.co_name, 'Пробую сделать ставку'))
                     self.bet_place(shared)
                     is_go = False
 
@@ -1162,12 +1163,10 @@ class BetManager:
                     if str(new_wager.get('param', '')) == str(self.wager.get('param', '')) and \
                             int(self.wager.get('factor', 0)) != int(new_wager.get('factor', 0)):
 
-                        prnt(self.msg.format(
-                            sys._getframe().f_code.co_name,
-                            'Изменилась ИД ставки: old: ' + str(self.wager) +
-                            ', new: ' + str(new_wager)))
+                        err_str = self.msg.format(sys._getframe().f_code.co_name, 'Изменилась ИД ставки: old: ' + str(self.wager) + ', new: ' + str(new_wager))
+                        prnt(err_str)
                         self.wager.update(new_wager)
-                        return self.bet_place(shared)
+                        return BetError(err_str)
 
                     elif str(new_wager.get('param', '')) != str(self.wager.get('param', '')) and \
                             int(self.wager.get('factor', 0)) == int(new_wager.get('factor', 0)):
@@ -1184,12 +1183,13 @@ class BetManager:
                             new_wager = get_new_bets_fonbet(match_id, self.proxies, self.timeout)
                             new_wager = new_wager.get(str(match_id), {}).get('kofs', {}).get(self.bk_container.get('bet_type'))
                             if new_wager:
-                                prnt(self.msg.format(sys._getframe().f_code.co_name, 'Тотал найден: ' + str(new_wager)))
+                                err_str = self.msg.format(sys._getframe().f_code.co_name, 'Тотал найден: ' + str(new_wager))
                                 self.wager.update(new_wager)
-                                return self.bet_place(shared)
+                                prnt(err_str)
+                                return BetError(err_str)
                             else:
                                 err_str = self.msg_err.format(sys._getframe().f_code.co_name, 'Тотал не найден: ' + str(new_wager))
-                                prnt(self.msg.format(sys._getframe().f_code.co_name, err_str))
+                                prnt(err_str)
                                 raise BetIsLost(err_str)
                         else:
                             err_str = self.msg_err.format(
