@@ -84,7 +84,7 @@ def print_stat(acc_id: str) -> str:
             res_str = ''
             res_str = res_str + 'Успешных ставок: *' + str(cnt_fork_success) + '*\n'
             if cnt_fail:
-                res_str = res_str + 'Кол-во ошибками/выкупом: *' + str(cnt_fail) + '*\n'
+                res_str = res_str + 'Кол-во выкупов: *' + str(cnt_fail) + '*\n'
             if min_profit:
                 res_str = res_str + 'Минимальный профит: *' + str(min_profit) + '*\n'
             if max_profit:
