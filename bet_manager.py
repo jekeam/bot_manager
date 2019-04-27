@@ -222,8 +222,6 @@ class BetManager:
                         prnt(self.msg.format(sys._getframe().f_code.co_name, 'CHECK MAX-BET, BEFORE BET'))
                         try:
                             self.check_max_bet(shared)
-                            self.max_bet = self.sum_bet - 50
-                            raise BetIsLost('test')
                         except BetIsLost as e:
                             if recalc_sum_if_maxbet == 'вкл':
                                 prnt(' ')
