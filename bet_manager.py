@@ -407,7 +407,7 @@ class BetManager:
 
                 bk1_profit = (sum_opp * k_opp) - total_new_sum
                 bk2_profit = (self.sum_bet * self.val_bet) - total_new_sum
-                bet_profit = (bk1_profit + bk2_profit / 2)
+                bet_profit = (bk1_profit + bk2_profit) / 2
 
                 prnt(self.msg.format(
                     sys._getframe().f_code.co_name,
