@@ -98,7 +98,7 @@ def bet_type_is_work(key):
 
 
 def check_fork(key, L, k1, k2, live_fork, bk1_score, bk2_score, minute, time_break_fonbet, period, name, name_rus, deff_max, info=''):
-    global bal1, bal2, balance_line, cnt_fork_success, black_list_matches
+    global bal1, bal2, bet1, bet2, balance_line, cnt_fork_success, black_list_matches
 
     fork_exclude_text = ''
     v = True
