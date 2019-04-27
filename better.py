@@ -134,12 +134,6 @@ def check_fork(key, L, k1, k2, live_fork, bk1_score, bk2_score, minute, time_bre
                             + str(bal1) + ', bet1=' + str(bet1) \
                             + ', bal2=' + str(bal2) + ', bet2=' + str(bet2) + '\n'
 
-    # Если баланс меньше 30% то берем плече только с коэф-м меньше 1,5
-    # if bal1 <= balance_line and k1 >= 1.3:
-    #     fork_exclude_text = fork_exclude_text + 'Вилка ' + str(round((1 - L) * 100, 2)) + '% исключена: баланс БК Олимп меньше 30%, а коэф-т >= 1.3 (' + str(k1) + ')\n'
-    # elif bal2 <= balance_line and k2 >= 1.3:
-    #     fork_exclude_text = fork_exclude_text + 'Вилка ' + str(round((1 - L) * 100, 2)) + '% исключена: баланс БК фонбет меньше 30%, а коэф-т >= 1.3 (' + str(k2) + ')\n'
-
     if get_prop('max_kof'):
         max_kof = float(get_prop('max_kof'))
         if k1 > max_kof or k2 > max_kof:
@@ -715,9 +709,9 @@ if __name__ == '__main__':
                             bet1, bet2 = get_sum_bets(k1, k2, total_bet, True)
                             if bet1 > bal1 or bet2 > bal2:
                                 if bal1 < bal2:
-                                    bet1, bet2 = get_new_sum_bets(k1, k2, bal1, None, 'hide')
+                                    bet1, bet2 = get_new_sum_bets(k1, k2, bal1, None, True)
                                 else:
-                                    bet1, bet2 = get_new_sum_bets(k1, k2, bal2, None, 'hide')
+                                    bet1, bet2 = get_new_sum_bets(k1, k2, bal2, None, True)
 
                             # Проверим вилку на исключения
                             if check_fork(key, l_temp, k1, k2, live_fork, bk1_score, bk2_score,
