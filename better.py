@@ -741,9 +741,9 @@ if __name__ == '__main__':
                         fork_success = go_bets(val.get('go_bet_json').get('kof_olimp'), val.get('go_bet_json').get('kof_fonbet'),
                                                val.get('total_bet'), key, val.get('deff_max'), val.get('vect1'),
                                                val.get('vect2'), val.get('sc1'), val.get('sc2'))
+                        bal1 = OlimpBot(OLIMP_USER).get_balance()  # Баланс в БК1
+                        bal2 = FonbetBot(FONBET_USER).get_balance()  # Баланс в БК2
                         break
-                    bal1 = OlimpBot(OLIMP_USER).get_balance()  # Баланс в БК1
-                    bal2 = FonbetBot(FONBET_USER).get_balance()  # Баланс в БК2
                     total_bet = int(get_prop('summ'))
                     go_bet_key.clear()
                     server_forks.clear()
