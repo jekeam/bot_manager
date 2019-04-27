@@ -31,9 +31,9 @@ else:
     DEBUG = False
 
 
-def get_sum_bets(k1, k2, total_bet, hide=False):
-    round_fork = int(get_prop('round_fork'))
-
+def get_sum_bets(k1, k2, total_bet, round_fork=5, hide=False,):
+    if get_prop('round_fork'):
+        round_fork = int(get_prop('round_fork'))
     k1 = float(k1)
     k2 = float(k2)
     prnt('k1:{}, k2:{}'.format(k1, k2), hide)
@@ -597,7 +597,8 @@ if __name__ == '__main__':
         start_see_fork = threading.Thread(target=run_client)  # , args=(server_forks,))
         start_see_fork.start()
 
-        time.sleep(wait_before_start)
+        if not DEBUG:
+            time.sleep(wait_before_start)
 
         if Account.select().where(Account.key == KEY).get().work_stat == 'start':
             send_message_bot(USER_ID, str(ACC_ID) + ': Начал работу', ADMINS)
@@ -725,7 +726,7 @@ if __name__ == '__main__':
                             round_bet = int(get_prop('round_fork'))
                             total_bet = round(randint(total_bet_min, total_bet_max) / round_bet) * round_bet
 
-                            bet1, bet2 = get_sum_bets(k1, k2, total_bet, 'hide')
+                            bet1, bet2 = get_sum_bets(k1, k2, total_bet, None, 'hide')
                             # Проверим вилку на исключения
                             if check_fork(key, l_temp, k1, k2, live_fork, bk1_score, bk2_score,
                                           minute, time_break_fonbet, period, name, name_rus, deff_max, info) or DEBUG:

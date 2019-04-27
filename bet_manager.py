@@ -15,7 +15,7 @@ from retry_requests import requests_retry_session, requests_retry_session_post
 
 from meta_ol import ol_url_api, ol_payload, ol_headers, get_xtoken_bet
 from meta_fb import fb_payload, fb_payload_bet, get_random_str, get_dumped_payload, get_urls, get_common_url
-from meta_fb import fb_headers, get_new_bets_fonbet, payload_req, payload_coupon_sum, payload_coupon_sell
+from meta_fb import fb_headers, get_new_bets_fonbet, payload_req, payload_coupon_sum, payload_coupon_sell, fb_payload_max_bet
 from meta_fb import payload_sell_check_result
 from utils import prnt, write_file, read_file, get_account_info, get_proxies, get_prop
 from fork_recheck import get_olimp_info, get_fonbet_info
@@ -216,16 +216,18 @@ class BetManager:
                 self.sign_in(shared)
                 self.wait_sign_in_opp(shared)
 
-                recalc_sum_if_maxbet = get_prop('sum_by_max', 'выкл')
-                if get_prop('check_max_bet', 'выкл') == 'вкл' or recalc_sum_if_maxbet == 'вкл':
-                    try:
-                        self.check_max_bet(shared)
-                    except BetIsLost as e:
-                        if recalc_sum_if_maxbet == 'вкл':
-                            # recalc sum bets
+                if self.bk_name == 'fonbet':
+                    recalc_sum_if_maxbet = get_prop('sum_by_max', 'выкл')
+                    if get_prop('check_max_bet', 'выкл') == 'вкл' or recalc_sum_if_maxbet == 'вкл':
+                        try:
                             pass
-                        else:
-                            raise BetIsLost(e)
+                            self.check_max_bet(shared)
+                        except BetIsLost as e:
+                            if recalc_sum_if_maxbet == 'вкл':
+                                # recalc sum bets
+                                pass
+                            else:
+                                raise BetIsLost(e)
 
                 first_bet_in = get_prop('first_bet_in', 'auto')
                 if (first_bet_in == 'auto' and self.vector == 'UP') or self.bk_name_opposite == first_bet_in:
@@ -1061,17 +1063,15 @@ class BetManager:
     def check_max_bet(self, shared: dict):
         self.opposite_stat_get(shared)
 
-        if not self.server_fb:
-            self.server_fb = get_urls(self.mirror, self.proxies)
-        url, timeout = get_common_url(self.server_fb)
-
-        payload = copy.deepcopy(fb_payload_bet)
+        payload = copy.deepcopy(fb_payload_max_bet)
         headers = copy.deepcopy(fb_headers)
 
         if self.wager.get('param'):
             payload['coupon']['bets'][0]['param'] = int(self.wager['param'])
-
+        print('1: ' + str(payload['coupon']['bets'][0]['score']))
+        print('2: ' + str(self.wager['score']))
         payload['coupon']['bets'][0]['score'] = self.wager['score']
+        print('3: ' + str(payload['coupon']['bets'][0]['score']))
         payload['coupon']['bets'][0]['value'] = float(self.wager['value'])
         payload['coupon']['bets'][0]['event'] = int(self.wager['event'])
         payload['coupon']['bets'][0]['factor'] = int(self.wager['factor'])
