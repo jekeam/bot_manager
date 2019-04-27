@@ -117,6 +117,8 @@ class BetManager:
 
         self.sale_profit = 0
 
+        self.max_bet = 0
+
         err_msg = ''
 
         bk_work = ('olimp', 'fonbet')
@@ -214,8 +216,15 @@ class BetManager:
                 self.sign_in(shared)
                 self.wait_sign_in_opp(shared)
 
-                if get_prop('CHECK_MAX_BET', 'выкл') == 'вкл':
-                    self.check_max_bet(shared)
+                if get_prop('check_max_bet', 'выкл') == 'вкл':
+                    try:
+                        self.check_max_bet(shared)
+                    except BetIsLost as e:
+                        if get_prop('sum_by_max', 'выкл') == 'вкл':
+                            # recalc sum bets
+                            pass
+                        else:
+                            raise BetIsLost(e)
 
                 first_bet_in = get_prop('first_bet_in', 'auto')
                 if (first_bet_in == 'auto' and self.vector == 'UP') or self.bk_name_opposite == first_bet_in:
@@ -1051,7 +1060,10 @@ class BetManager:
     def check_max_bet(self, shared: dict):
         self.opposite_stat_get(shared)
 
+        if not self.server_fb:
+            self.server_fb = get_urls(self.mirror, self.proxies)
         url, timeout = get_common_url(self.server_fb)
+
         payload = copy.deepcopy(fb_payload_bet)
         headers = copy.deepcopy(fb_headers)
 
@@ -1075,7 +1087,7 @@ class BetManager:
 
         prnt(self.msg.format(sys._getframe().f_code.co_name, 'rq: ' + str(payload) + ' ' + str(headers)), 'hide')
         resp = requests_retry_session_post(
-            'https://23.111.80.252/session/coupon/getMinMax',
+            url.format('coupon/getMinMax'),
             headers=headers,
             data=data,
             verify=False,
@@ -1098,8 +1110,12 @@ class BetManager:
 
         prnt(self.msg.format(sys._getframe().f_code.co_name, 'sum bet=' + str(self.sum_bet)))
         prnt(self.msg.format(sys._getframe().f_code.co_name, 'min_amount=' + str(min_amount) + ', max_amount=' + str(max_amount)))
-        if (self.sum_bet < min_amount) or (max_amount < self.sum_bet):
-            err_str = self.msg_err.format(sys._getframe().f_code.co_name, 'max or min bet')
+        if (min_amount > self.sum_bet):
+            err_str = self.msg_err.format(sys._getframe().f_code.co_name, 'min bet')
+            raise BetIsLost(err_str)
+        if (self.sum_bet > max_amount):
+            err_str = self.msg_err.format(sys._getframe().f_code.co_name, 'max bet')
+            self.max_bet = max_amount
             raise BetIsLost(err_str)
         if self.session.get('balance') and self.session['balance'] < self.sum_bet:
             err_str = self.msg_err.format(sys._getframe().f_code.co_name, 'mo money')
