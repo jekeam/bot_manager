@@ -214,9 +214,12 @@ class BetManager:
                 self.sign_in(shared)
                 self.wait_sign_in_opp(shared)
 
-                if (get_prop('first_bet_in', 'auto') == 'auto' and self.vector == 'UP') or self.bk_name_opposite == get_prop('first_bet_in', 'auto'):
+                first_bet_in = get_prop('first_bet_in', 'auto')
+                if (first_bet_in == 'auto' and self.vector == 'UP') or self.bk_name_opposite == first_bet_in:
                     self.opposite_stat_wait(shared)
                     self.opposite_stat_get(shared)
+                if first_bet_in == 'parallel':
+                    pass
 
                 self.bet_place(shared)
                 bet_done(shared)
