@@ -59,7 +59,7 @@ def olimp_get_hist(OLIMP_USER):
 
     if olimp.get_balance() >= 0:
         balance_int += olimp.get_balance()
-        balance_str = balance_str + '\nБаланс в Олимп: *' + int_to_str(olimp.get_balance()) + '*'
+        balance_str = balance_str + 'Баланс в Олимп: ' + int_to_str(olimp.get_balance()) + '\n'
 
     data = olimp.get_history_bet(filter="0011", offset=0)
     count = data.get('count')
@@ -86,7 +86,7 @@ def fonbet_get_hist(FONBET_USER):
 
     if fonbet.get_balance() >= 0:
         balance_int += fonbet.get_balance()
-        balance_str = balance_str + '\nБаланс в Фонбет: *' + int_to_str(fonbet.get_balance()) + '*'
+        balance_str = balance_str + 'Баланс в Фонбет: ' + int_to_str(fonbet.get_balance()) + '\n'
 
     fonbet.sign_in()
     data = fonbet.get_operations(500)
@@ -141,7 +141,7 @@ def export_hist(OLIMP_USER, FONBET_USER):
         out = ""
         o_list = olimp_get_hist(OLIMP_USER)
         f_list = fonbet_get_hist(FONBET_USER)
-        all_banalce_str = '\nОбщий баланс: *' + int_to_str(balance_int) + '*'
+        all_banalce_str = '*Общий баланс: ' + int_to_str(balance_int) + '*'
         balance_msg = balance_str + all_banalce_str.strip()
         db_model.send_message_bot(USER_ID, str(ACC_ID) + ': ' + balance_msg, ADMINS)
 

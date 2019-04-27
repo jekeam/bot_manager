@@ -78,8 +78,8 @@ def print_stat(acc_id: str) -> str:
                         k1, k2 = bk1.get('new_bet_kof'), bk2.get('new_bet_kof')
                         if sum_bet1 and sum_bet2 and k1 and k2:
                             total_sum = sum_bet1 + sum_bet2
-                            min_profit = min_profit + round(min((sum_bet1 * k1 - total_sum), (sum_bet2 * k2-total_sum)))
-                            max_profit = max_profit + round(max((sum_bet1 * k1 - total_sum), (sum_bet2 * k2-total_sum)))
+                            min_profit = min_profit + round(min((sum_bet1 * k1 - total_sum), (sum_bet2 * k2 - total_sum)))
+                            max_profit = max_profit + round(max((sum_bet1 * k1 - total_sum), (sum_bet2 * k2 - total_sum)))
 
             res_str = ''
             res_str = res_str + 'Успешных ставок: *' + str(cnt_fork_success) + '*\n'
@@ -90,11 +90,11 @@ def print_stat(acc_id: str) -> str:
             if max_profit:
                 res_str = res_str + 'Максимальный профит: *' + '{:,}'.format(round(max_profit)).replace(',', ' ') + '*\n'
             if max_profit and min_profit:
-                res_str = res_str + 'Средний профит: *' + '{:,}'.format(round((max_profit+min_profit)/2)).replace(',', ' ') + '*\n'
+                res_str = res_str + 'Средний профит: *' + '{:,}'.format(round((max_profit + min_profit) / 2)).replace(',', ' ') + '*\n'
             if sale_profit:
                 res_str = res_str + 'Профит от продаж: *' + '{:,}'.format(round(sale_profit)).replace(',', ' ') + '*\n'
-                
-            res_str = res_str + '\n*Примерный доход: ' + '{:,}'.format(round((max_profit+min_profit)/2)+round(sale_profit)).replace(',', ' ') + '*\n'
+
+            res_str = res_str + '\n*Примерный доход: ' + '{:,}'.format(round((max_profit + min_profit) / 2) + round(sale_profit)).replace(',', ' ') + '*\n'
 
             return res_str.strip()
 
@@ -365,7 +365,7 @@ def sender(context):
                         Message.update(date_send=round(time.time())).where(Message.id == msg.id).execute()
                 elif msg.file_type == 'message':
                     try:
-                        context.bot.send_message(msg.to_user, msg.text[0:4000])
+                        context.bot.send_message(msg.to_user, msg.text[0:4000], parse_mode=telegram.ParseMode.MARKDOWN)
                         Message.update(date_send=round(time.time())).where(Message.id == msg.id).execute()
                     except Exception as e:
                         Message.update(date_send=-1).where(Message.id == msg.id).execute()
