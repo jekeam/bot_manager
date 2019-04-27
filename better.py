@@ -706,7 +706,7 @@ if __name__ == '__main__':
                             round_bet = int(get_prop('round_fork'))
                             total_bet = round(randint(total_bet_min, total_bet_max) / round_bet) * round_bet
 
-                            bet1, bet2 = get_sum_bets(k1, k2, total_bet, True)
+                            bet1, bet2 = get_sum_bets(k1, k2, total_bet, 5, True)
                             if bet1 > bal1 or bet2 > bal2:
                                 if bal1 < bal2:
                                     bet1, bet2 = get_new_sum_bets(k1, k2, bal1, None, True)
