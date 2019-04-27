@@ -1101,6 +1101,7 @@ class BetManager:
             raise BetIsLost(err_str)
         if self.sum_bet > max_amount:
             err_str = self.msg_err.format(sys._getframe().f_code.co_name, 'max bet')
+
             if get_prop('sum_by_max', 'выкл') == 'вкл':
                 prnt(' ')
                 prnt(self.msg.format(sys._getframe().f_code.co_name, 'RECALС BY MAX-BET: ' + str(max_amount)))
@@ -1114,9 +1115,9 @@ class BetManager:
                     self.sum_bet, self_opp_data.sum_bet = sum1, sum2
                     self.sum_bet_stat = sum1
                     self_opp_data.sum_bet_stat = sum2
-
             else:
-                raise BetIsLost(e)
+                raise BetIsLost(err_str)
+
             raise BetIsLost(err_str)
         if self.session.get('balance') and self.session['balance'] < self.sum_bet:
             err_str = self.msg_err.format(sys._getframe().f_code.co_name, 'mo money')
