@@ -220,23 +220,6 @@ def check_statistics():
         raise MaxFork(msg_str)
 
 
-def get_bets(k1, k2, total_bet, hide=None):
-    global bal1, bal2
-
-    bet1, bet2 = get_sum_bets(float(k1), float(k2), total_bet, hide)
-
-    if bet1 > bal1:
-        bet1, bet2 = get_new_sum_bets(k1, k2, bal1, None, hide)
-        if bet2 > bal2:
-            bet1, bet2 = get_new_sum_bets(k1, k2, bal2, None, hide)
-    elif bet2 > bal2:
-        bet1, bet2 = get_new_sum_bets(k1, k2, bal2, None, hide)
-        if bet1 > bal1:
-            bet1, bet2 = get_new_sum_bets(k1, k2, bal1, None, hide)
-
-    return bet1, bet2
-
-
 def go_bets(wag_ol, wag_fb, total_bet, key, deff_max, vect1, vect2, sc1, sc2):
     global bal1, bal2, cnt_fail, cnt_fork_success
 
@@ -284,7 +267,13 @@ def go_bets(wag_ol, wag_fb, total_bet, key, deff_max, vect1, vect2, sc1, sc2):
             if float(obj['olimp']) > 1 < float(obj['fonbet']):
 
                 # пересчетаем суммы ставок
-                bet1, bet2 = get_bets(float(obj['olimp']), float(obj['fonbet']), total_bet)
+                bet1, bet2 = get_sum_bets(float(obj['olimp']), float(obj['fonbet']), total_bet)
+
+                if bet1 > bal1 or bet2 > bal2:
+                    if bal1 < bal2:
+                        bet1, bet2 = get_new_sum_bets(k1, k2, bal1)
+                    else:
+                        bet1, bet2 = get_new_sum_bets(k1, k2, bal2)
 
                 # Выведем текую доходность вилки
                 prnt('cur proc: ' + str(cur_proc) + '%')
@@ -723,7 +712,12 @@ if __name__ == '__main__':
                             round_bet = int(get_prop('round_fork'))
                             total_bet = round(randint(total_bet_min, total_bet_max) / round_bet) * round_bet
 
-                            bet1, bet2 = get_bets(k1, k2, total_bet, True)
+                            bet1, bet2 = get_sum_bets(k1, k2, total_bet, True)
+                            if bet1 > bal1 or bet2 > bal2:
+                                if bal1 < bal2:
+                                    bet1, bet2 = get_new_sum_bets(k1, k2, bal1, None, 'hide')
+                                else:
+                                    bet1, bet2 = get_new_sum_bets(k1, k2, bal2, None, 'hide')
 
                             # Проверим вилку на исключения
                             if check_fork(key, l_temp, k1, k2, live_fork, bk1_score, bk2_score,
