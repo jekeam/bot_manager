@@ -193,8 +193,8 @@ def export_hist(OLIMP_USER, FONBET_USER):
                           str(fb_info.get('kof', '')).replace('.', ',') + ';' + \
                           str(o_info.get('kof', '')).replace('.', ',') + ';' + \
  \
-                          str(round(float(fb_info.get('sum_bet', 0.0)))) + ';' + \
-                          str(o_info.get('sum_bet', '')) + ';' + \
+                          str(fb_info.get('sum_bet', '0')) + ';' + \
+                          str(o_info.get('sum_bet', '0')) + ';' + \
  \
                           str(round(float(fb_info_profit))) + ';' + \
                           str(o_info.get('profit', '')) + ';' + \
