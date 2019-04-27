@@ -76,6 +76,7 @@ class BetManager:
         self.cur_total = None
         self.cur_total_new = None
         self.cur_half = None
+        self.val_bet = bk_container.get('wager', {}).get('value')
         self.cur_val_bet = bk_container.get('wager', {}).get('value')
         self.old_val_bet = bk_container.get('wager', {}).get('value')
         self.cur_minute = None
@@ -115,7 +116,6 @@ class BetManager:
 
         self.time_start = round(time())
 
-        self.bet_profit = self.sum_bet * self.cur_val_bet
         self.sale_profit = 0
 
         err_msg = ''
@@ -401,14 +401,14 @@ class BetManager:
                 prnt(self.msg.format(sys._getframe().f_code.co_name, 'RECALC SUM BET'))
 
                 # round_rang = int(get_prop('round_fork'))
-                self.sum_bet = round(self.sum_bet_old * self.wager['value'] / self.cur_val_bet / 5) * 5
+                self.sum_bet = round(self.sum_bet_old * self.val_bet / self.cur_val_bet / 5) * 5
 
                 bet_profit = (self.sum_bet_old - self.sum_bet) / 2
 
                 prnt(self.msg.format(
                     sys._getframe().f_code.co_name,
                     'Пересчет суммы ставки({}): {}->{}({}) [k: {}->{}, k_opp:{}, sum_opp:{}]'.
-                        format(self.sum_bet_all, self.sum_bet_old, self.sum_bet, bet_profit, self.wager['value'], self.cur_val_bet, k_opp, sum_opp)))
+                        format(self.sum_bet_all, self.sum_bet_old, self.sum_bet, bet_profit, self.val_bet, self.cur_val_bet, k_opp, sum_opp)))
 
                 if bet_profit >= 0:
                     prnt(self.msg.format(sys._getframe().f_code.co_name, 'Сумма ставки не изменилась или уменьшилась, делаем ставку'))

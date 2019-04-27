@@ -176,8 +176,7 @@ def check_fork(key, L, k1, k2, live_fork, bk1_score, bk2_score, minute, time_bre
     # Вилка живет достаточно
     long_livers = int(get_prop('fork_life_time'))
     if live_fork < long_livers:
-        fork_exclude_text = fork_exclude_text + 'Вилка ' + str(round((1 - L) * 100, 2)) + \
-                            '% исключена т.к. живет меньше ' + str(long_livers) + ' сек. \n'
+        fork_exclude_text = fork_exclude_text + 'Вилка ' + str(round((1 - L) * 100, 2)) + '% исключена т.к. живет меньше ' + str(long_livers) + ' сек. \n'
 
     fork_exclude_text = fork_exclude_text + check_l(L)
 
