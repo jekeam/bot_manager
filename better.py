@@ -773,10 +773,10 @@ if __name__ == '__main__':
             send_message_bot(USER_ID, str(ACC_ID) + ': ' + str(e))
 
             last_fork_time_diff = int(time.time()) - last_fork_time
-            wait_before_exp = round(max(60 * 60 * 2 - last_fork_time_diff, 0))
+            wait_before_exp = max(60 * 60 * 2 - last_fork_time_diff, 0)
             prnt(str(last_fork_time_diff) + ' секунд прошло с момента последней ставки')
             if wait_before_exp:
-                msg_str = str(ACC_ID) + ': Ожидание ' + str(wait_before_exp / 60) + ' минут, до выгрузки'
+                msg_str = str(ACC_ID) + ': Ожидание ' + str(round(wait_before_exp / 60)) + ' минут, до выгрузки'
                 prnt(msg_str)
                 send_message_bot(USER_ID, msg_str)
             while Account.select().where(Account.key == KEY).get().pid > 0 and Account.select().where(Account.key == KEY).get().work_stat == 'start' and wait_before_exp > 0:
