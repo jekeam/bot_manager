@@ -116,8 +116,6 @@ class BetManager:
 
         self.sale_profit = 0
 
-        self.max_bet = 0
-
         err_msg = ''
 
         bk_work = ('olimp', 'fonbet')
@@ -216,32 +214,10 @@ class BetManager:
                 self.wait_sign_in_opp(shared)
 
                 if self.bk_name == 'fonbet':
-                    recalc_sum_if_maxbet = get_prop('sum_by_max', 'выкл')
-                    if get_prop('check_max_bet', 'выкл') == 'вкл' or recalc_sum_if_maxbet == 'вкл':
+                    if get_prop('check_max_bet', 'выкл') == 'вкл':
                         prnt(' ')
                         prnt(self.msg.format(sys._getframe().f_code.co_name, 'CHECK MAX-BET, BEFORE BET'))
-                        try:
-                            pass
-                            self.check_max_bet(shared)
-                            self.max_bet = self.sum_bet - 50
-                            raise BetIsLost('test')
-                        except BetIsLost as e:
-                            if recalc_sum_if_maxbet == 'вкл':
-                                prnt(' ')
-                                prnt(self.msg.format(sys._getframe().f_code.co_name, 'RECALС BY MAX-BET: ' + str(self.max_bet)))
-                                # recalc sum bets
-                                self_opp_data = shared[self.bk_name_opposite].get('self', {})
-                                sum1, sum2 = get_new_sum_bets(self.cur_val_bet, self_opp_data.cur_val_bet, self.max_bet, int(get_prop('round_fork')))
-                                prnt(self.msg.format(sys._getframe().f_code.co_name, 'new sum, ' + self.bk_name + ': ' + str(sum1) + ', ' + self.bk_name_opposite + ': ' + str(sum2)))
-                                if sum1 < 30 or sum2 < 3:
-                                    raise BetIsLost('Сумма одной из ставок после пересчета меньше 30р')
-                                else:
-                                    self.sum_bet, self_opp_data.sum_bet = sum1, sum2
-                                    self.sum_bet_stat = sum1
-                                    self_opp_data.sum_bet_stat = sum2
-
-                            else:
-                                raise BetIsLost(e)
+                        self.check_max_bet(shared)
 
                 first_bet_in = get_prop('first_bet_in', 'auto')
                 if (first_bet_in == 'auto' and self.vector == 'UP') or self.bk_name_opposite == first_bet_in:
@@ -1125,7 +1101,22 @@ class BetManager:
             raise BetIsLost(err_str)
         if self.sum_bet > max_amount:
             err_str = self.msg_err.format(sys._getframe().f_code.co_name, 'max bet')
-            self.max_bet = max_amount
+            if get_prop('sum_by_max', 'выкл') == 'вкл':
+                prnt(' ')
+                prnt(self.msg.format(sys._getframe().f_code.co_name, 'RECALС BY MAX-BET: ' + str(max_amount)))
+                # recalc sum bets
+                self_opp_data = shared[self.bk_name_opposite].get('self', {})
+                sum1, sum2 = get_new_sum_bets(self.cur_val_bet, self_opp_data.cur_val_bet, max_amount, int(get_prop('round_fork')))
+                prnt(self.msg.format(sys._getframe().f_code.co_name, 'new sum, ' + self.bk_name + ': ' + str(sum1) + ', ' + self.bk_name_opposite + ': ' + str(sum2)))
+                if sum1 < 30 or sum2 < 3:
+                    raise BetIsLost('Сумма одной из ставок после пересчета меньше 30р')
+                else:
+                    self.sum_bet, self_opp_data.sum_bet = sum1, sum2
+                    self.sum_bet_stat = sum1
+                    self_opp_data.sum_bet_stat = sum2
+
+            else:
+                raise BetIsLost(e)
             raise BetIsLost(err_str)
         if self.session.get('balance') and self.session['balance'] < self.sum_bet:
             err_str = self.msg_err.format(sys._getframe().f_code.co_name, 'mo money')
