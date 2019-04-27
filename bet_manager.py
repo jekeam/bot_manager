@@ -382,7 +382,7 @@ class BetManager:
             prnt(self.msg.format(sys._getframe().f_code.co_name, 'GET SUM SELL'))
             self_opp_data = shared[self.bk_name_opposite].get('self', {})
             k_opp = self_opp_data.cur_val_bet
-            sum_opp = self_opp_data.sum_bet_stat
+            sum_opp = self_opp_data.bk_container.sum_bet_stat
             try:
                 self_opp_data.get_sum_sell()
             except CouponBlocked as e:
@@ -771,9 +771,8 @@ class BetManager:
             #     except Exception as e:
             #         raise BetError(e)
             if self.debug == 1:
-                sleep(60)
-                raise BetError('test')
-                self.debug += 1
+                raise 
+
 
             if not self.server_fb:
                 self.server_fb = get_urls(self.mirror, self.proxies)
@@ -1104,12 +1103,8 @@ class BetManager:
         if min_amount > self.sum_bet:
             err_str = self.msg_err.format(sys._getframe().f_code.co_name, 'min bet')
             raise BetIsLost(err_str)
-
-        if self.sum_bet > max_amount or self.debug == 1:
+        if self.sum_bet > max_amount:
             err_str = self.msg_err.format(sys._getframe().f_code.co_name, 'max bet')
-
-            if self.debug == 1:
-                max_amount = self.sum_bet - 50
 
             if get_prop('sum_by_max', 'выкл') == 'вкл':
                 prnt(' ')
@@ -1127,6 +1122,7 @@ class BetManager:
             else:
                 raise BetIsLost(err_str)
 
+            raise BetIsLost(err_str)
         if self.session.get('balance') and self.session['balance'] < self.sum_bet:
             err_str = self.msg_err.format(sys._getframe().f_code.co_name, 'mo money')
             raise NoMoney(err_str)
