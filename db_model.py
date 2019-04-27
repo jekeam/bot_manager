@@ -13,7 +13,7 @@ prop_abr = {
     "SUMM": {"abr": "Общая ставка", "type": "int", "max": "10000", "min": "400", "access_list": [], "error": ""},
     "MIN_PROC": {"abr": "Min % вилки", "type": "float", "max": "10", "min": "0", "access_list": [], "error": ""},
     "RANDOM_SUMM_PROC": {"abr": "Отклонение от суммы (в %)", "type": "int", "max": "30", "min": "0", "access_list": [], "error": ""},
-    "FORK_LIFE_TIME": {"abr": "Время вилки от (сек.)", "type": "int", "max": "500", "min": "3", "access_list": [], "error": ""},
+    "FORK_LIFE_TIME": {"abr": "Время вилки от (сек.)", "type": "int", "max": "500", "min": "0", "access_list": [], "error": ""},
     "WORK_HOUR_END": {"abr": "Остановка в (ч.)", "type": "int", "max": "23", "min": "0", "access_list": [], "error": ""},
     "ROUND_FORK": {"abr": "Округление вилки/ставки", "type": "int", "max": "100", "min": "5", "access_list": ["5", "10", "50", "100"], "error": ""},
     "MAX_FORK": {"abr": "Max ставок", "type": "int", "max": "50", "min": "1", "access_list": [], "error": ""},
