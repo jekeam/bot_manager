@@ -92,7 +92,6 @@ class BetManager:
         self.reqIdSale = None
         self.payload = None
         self.sum_bet = bk_container.get('amount')
-        self.sum_bet_all = bk_container.get('amount_total')
         self.sum_bet_old = self.sum_bet
         self.sum_sell = None
 
@@ -404,14 +403,18 @@ class BetManager:
                 # round_rang = int(get_prop('round_fork'))
                 self.sum_bet = round(self.sum_bet_old * self.val_bet / self.cur_val_bet / 5) * 5
 
-                bet_profit = (self.sum_bet_old - self.sum_bet) / 2
+                total_new_sum = self.sum_bet + sum_opp
+
+                bk1_profit = (sum_opp * k_opp) - total_new_sum
+                bk2_profit = (self.sum_bet * self.val_bet) - total_new_sum
+                bet_profit = (bk1_profit + bk2_profit / 2)
 
                 prnt(self.msg.format(
                     sys._getframe().f_code.co_name,
-                    'Пересчет суммы ставки({}): {}->{}({}) [k: {}->{}, k_opp:{}, sum_opp:{}]'.
-                        format(self.sum_bet_all, self.sum_bet_old, self.sum_bet, bet_profit, self.val_bet, self.cur_val_bet, k_opp, sum_opp)))
+                    'Пересчет суммы ставки: {}->{}({}) [k: {}->{}, k_opp:{}, sum_opp:{}]'.
+                        format(self.sum_bet_old, self.sum_bet, bet_profit, self.val_bet, self.cur_val_bet, k_opp, sum_opp)))
 
-                if bet_profit >= 0:
+                if self.sum_bet_old >= self.sum_bet:
                     prnt(self.msg.format(sys._getframe().f_code.co_name, 'Сумма ставки не изменилась или уменьшилась, делаем ставку'))
                 elif self.sale_profit and self.sale_profit > bet_profit:
                     # sell bet

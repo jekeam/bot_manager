@@ -354,7 +354,6 @@ def go_bets(wag_ol, wag_fb, total_bet, key, deff_max, vect1, vect2, sc1, sc2):
         shared['olimp'] = {
             'opposite': 'fonbet',
             'amount': amount_olimp,
-            'amount_total': amount_olimp + amount_fonbet,
             'wager': wag_ol,
             'bet_type': olimp_bet_type,
             'vect': vect1,
@@ -366,7 +365,6 @@ def go_bets(wag_ol, wag_fb, total_bet, key, deff_max, vect1, vect2, sc1, sc2):
         shared['fonbet'] = {
             'opposite': 'olimp',
             'amount': amount_fonbet,
-            'amount_total': amount_olimp + amount_fonbet,
             'wager': wag_fb,
             'bet_type': fonbet_bet_type,
             'vect': vect2,
