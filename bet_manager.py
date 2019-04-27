@@ -214,6 +214,9 @@ class BetManager:
                 self.sign_in(shared)
                 self.wait_sign_in_opp(shared)
 
+                if get_prop('CHECK_MAX_BET', 'выкл') == 'вкл':
+                    self.check_max_bet(shared)
+
                 first_bet_in = get_prop('first_bet_in', 'auto')
                 if (first_bet_in == 'auto' and self.vector == 'UP') or self.bk_name_opposite == first_bet_in:
                     self.opposite_stat_wait(shared)
