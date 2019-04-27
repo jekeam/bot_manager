@@ -2,14 +2,14 @@
 from emoji import emojize
 
 # BOI
-# PY_PATH = 'python3.6'
-# TOKEN = '843081630:AAFmVT4hi5R71mgJpojVxOmTGEaZJA-LWYI'
-# ADMINS = [381868674, 33847743]
+PY_PATH = 'python3.6'
+TOKEN = '843081630:AAFmVT4hi5R71mgJpojVxOmTGEaZJA-LWYI'
+ADMINS = [381868674, 33847743]
 
 # TEST
-PY_PATH = 'D:\\YandexDisk\\Парсинг\\bot_manager\\venv\\Scripts\\python.exe'
-TOKEN = '598446286:AAEhbB2RDQ7oEe7pX2vif-IENIdIVIZ9xVk'
-ADMINS = [381868674]
+# PY_PATH = 'D:\\YandexDisk\\Парсинг\\bot_manager\\venv\\Scripts\\python.exe'
+# TOKEN = '598446286:AAEhbB2RDQ7oEe7pX2vif-IENIdIVIZ9xVk'
+# ADMINS = [381868674]
 
 PROXY = {
     'http': 'socks5://shaggy:hzsyk4@191.101.104.71:14487',
@@ -35,7 +35,7 @@ MSG_ACC_STOP_WAIT_EXT = 'Аккаунт останавливается, это �
 MSG_PROP_LIST = 'Пожалуйста, выберите настройку'
 MSG_PUT_VAL = 'Введите новое значение:'
 
-BTN_CLOSE = emojize(':heavy_check_mark:', use_aliases=True) + ' Закрыть'
+BTN_CLOSE = emojize(':heavy_multiplication_x:', use_aliases=True) + ' Закрыть'
 BTN_BACK = emojize(':back:', use_aliases=True) + ' Назад'
 BTN_SETTINGS = emojize(':wrench:', use_aliases=True) + ' Настройка'
 BTN_GET_STAT = emojize(':chart_with_upwards_trend:', use_aliases=True) + ' Статистика'
