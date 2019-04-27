@@ -3,7 +3,7 @@ from bet_fonbet import *
 from bet_olimp import *
 import datetime
 from fork_recheck import get_kof_olimp, get_kof_fonbet
-from utils import prnt, get_account_info, get_prop, get_sum_bets
+from utils import prnt, get_account_info, get_prop, get_sum_bets, get_new_sum_bets
 import threading
 from multiprocessing import Manager, Process
 import time
@@ -135,10 +135,10 @@ def check_fork(key, L, k1, k2, live_fork, bk1_score, bk2_score, minute, time_bre
                             + ', bal2=' + str(bal2) + ', bet2=' + str(bet2) + '\n'
 
     # Если баланс меньше 30% то берем плече только с коэф-м меньше 1,5
-    if bal1 <= balance_line and k1 >= 1.3:
-        fork_exclude_text = fork_exclude_text + 'Вилка ' + str(round((1 - L) * 100, 2)) + '% исключена: баланс БК Олимп меньше 30%, а коэф-т >= 1.3 (' + str(k1) + ')\n'
-    elif bal2 <= balance_line and k2 >= 1.3:
-        fork_exclude_text = fork_exclude_text + 'Вилка ' + str(round((1 - L) * 100, 2)) + '% исключена: баланс БК фонбет меньше 30%, а коэф-т >= 1.3 (' + str(k2) + ')\n'
+    # if bal1 <= balance_line and k1 >= 1.3:
+    #     fork_exclude_text = fork_exclude_text + 'Вилка ' + str(round((1 - L) * 100, 2)) + '% исключена: баланс БК Олимп меньше 30%, а коэф-т >= 1.3 (' + str(k1) + ')\n'
+    # elif bal2 <= balance_line and k2 >= 1.3:
+    #     fork_exclude_text = fork_exclude_text + 'Вилка ' + str(round((1 - L) * 100, 2)) + '% исключена: баланс БК фонбет меньше 30%, а коэф-т >= 1.3 (' + str(k2) + ')\n'
 
     if get_prop('max_kof'):
         max_kof = float(get_prop('max_kof'))
@@ -229,8 +229,6 @@ def go_bets(wag_ol, wag_fb, total_bet, key, deff_max, vect1, vect2, sc1, sc2):
 
     L = ((1 / float(wag_ol['factor'])) + (1 / float(wag_fb['value'])))
     cur_proc = round((1 - L) * 100, 2)
-
-    amount_olimp, amount_fonbet = get_sum_bets(wag_ol['factor'], wag_fb['value'], total_bet)
 
     if __name__ == '__main__':
         wait_sec = 0
@@ -709,6 +707,16 @@ if __name__ == '__main__':
                             total_bet = round(randint(total_bet_min, total_bet_max) / round_bet) * round_bet
 
                             bet1, bet2 = get_sum_bets(k1, k2, total_bet, None, 'hide')
+
+                            if bet1 > bal1:
+                                bet1, bet2 = get_sum_bets(k1, k2, bal1, None, 'hide')
+                                if bet2 > bal2:
+                                    bet1, bet2 = get_sum_bets(k1, k2, bal2, None, 'hide')
+                            elif bet2 > bal2:
+                                bet1, bet2 = get_sum_bets(k1, k2, bal2, None, 'hide')
+                                if bet1 > bal1:
+                                    bet1, bet2 = get_sum_bets(k1, k2, bal1, None, 'hide')
+
                             # Проверим вилку на исключения
                             if check_fork(key, l_temp, k1, k2, live_fork, bk1_score, bk2_score,
                                           minute, time_break_fonbet, period, name, name_rus, deff_max, info) or DEBUG:
@@ -738,6 +746,8 @@ if __name__ == '__main__':
                                                val.get('total_bet'), key, val.get('deff_max'), val.get('vect1'),
                                                val.get('vect2'), val.get('sc1'), val.get('sc2'))
                         break
+                    bal1 = OlimpBot(OLIMP_USER).get_balance()  # Баланс в БК1
+                    bal2 = FonbetBot(FONBET_USER).get_balance()  # Баланс в БК2
                     total_bet = int(get_prop('summ'))
                     go_bet_key.clear()
                     server_forks.clear()
