@@ -226,13 +226,13 @@ def get_bets(k1, k2, total_bet, hide=None):
     bet1, bet2 = get_sum_bets(float(k1), float(k2), total_bet, hide)
 
     if bet1 > bal1:
-        bet1, bet2 = get_new_sum_bets(k1, k2, bal1, None, 'hide')
+        bet1, bet2 = get_new_sum_bets(k1, k2, bal1, None, hide)
         if bet2 > bal2:
-            bet1, bet2 = get_new_sum_bets(k1, k2, bal2, None, 'hide')
+            bet1, bet2 = get_new_sum_bets(k1, k2, bal2, None, hide)
     elif bet2 > bal2:
-        bet1, bet2 = get_new_sum_bets(k1, k2, bal2, None, 'hide')
+        bet1, bet2 = get_new_sum_bets(k1, k2, bal2, None, hide)
         if bet1 > bal1:
-            bet1, bet2 = get_new_sum_bets(k1, k2, bal1, None, 'hide')
+            bet1, bet2 = get_new_sum_bets(k1, k2, bal1, None, hide)
 
     return bet1, bet2
 
@@ -723,7 +723,7 @@ if __name__ == '__main__':
                             round_bet = int(get_prop('round_fork'))
                             total_bet = round(randint(total_bet_min, total_bet_max) / round_bet) * round_bet
 
-                            bet1, bet2 = get_bets(k1, k2, total_bet, 'hide')
+                            bet1, bet2 = get_bets(k1, k2, total_bet, True)
 
                             # Проверим вилку на исключения
                             if check_fork(key, l_temp, k1, k2, live_fork, bk1_score, bk2_score,
