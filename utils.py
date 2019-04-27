@@ -119,6 +119,31 @@ def int_to_str(n: int) -> str:
     return '{:,}'.format(round(n)).replace(',', ' ')
 
 
+def get_sum_bets(k1, k2, total_bet, round_fork=5, hide=False):
+    if get_prop('round_fork'):
+        round_fork = int(get_prop('round_fork'))
+    k1 = float(k1)
+    k2 = float(k2)
+    prnt('k1:{}, k2:{}'.format(k1, k2), hide)
+    l = (1 / k1) + (1 / k2)
+
+    # Округление проставления в БК1 происходит по правилам математики
+    bet_1 = round(total_bet / (k1 * l) / round_fork) * round_fork
+    bet_2 = total_bet - bet_1
+
+    prnt('L: ' + str(round((1 - l) * 100, 2)) + '% (' + str(l) + ') ', hide)
+    prnt('bet1: ' + str(bet_1) + ', bet2: ' + str(bet_2) + '|' + ' bet_sum: ' + str(bet_1 + bet_2), hide)
+
+    return bet_1, bet_2
+
+
+def get_new_sum_bets(bk1, bk2, max_bet, round_fork=5):
+    l = 1 / bk1 + 1 / bk2
+    total_bet = round((max_bet * bk1 * l / round_fork) * round_fork)
+    sum_bk1, sum_bk2 = get_sum_bets(bk1, bk2, total_bet, 5)
+    return sum_bk1, sum_bk2
+
+
 def get_vector(bet_type, sc1=None, sc2=None):
     def raise_err(VECT, sc1, sc2):
         if sc1 is None or sc2 is None and VECT != '':

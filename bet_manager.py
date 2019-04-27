@@ -17,7 +17,7 @@ from meta_ol import ol_url_api, ol_payload, ol_headers, get_xtoken_bet
 from meta_fb import fb_payload, fb_payload_bet, get_random_str, get_dumped_payload, get_urls, get_common_url
 from meta_fb import fb_headers, get_new_bets_fonbet, payload_req, payload_coupon_sum, payload_coupon_sell, fb_payload_max_bet
 from meta_fb import payload_sell_check_result
-from utils import prnt, write_file, read_file, get_account_info, get_proxies, get_prop
+from utils import prnt, write_file, read_file, get_account_info, get_proxies, get_prop, get_new_sum_bets
 from fork_recheck import get_olimp_info, get_fonbet_info
 
 from exceptions import SessionNotDefined, BkOppBetError, NoMoney, BetError, SessionExpired, SaleError
@@ -76,9 +76,8 @@ class BetManager:
         self.cur_total = None
         self.cur_total_new = None
         self.cur_half = None
-        self.val_bet = bk_container.get('wager', {}).get('value')
         self.cur_val_bet = bk_container.get('wager', {}).get('value')
-        self.old_val_bet = bk_container.get('wager', {}).get('value')
+        self.val_bet_stat = self.cur_val_bet
         self.cur_minute = None
         self.total_stock = None
 
@@ -92,7 +91,7 @@ class BetManager:
         self.reqIdSale = None
         self.payload = None
         self.sum_bet = bk_container.get('amount')
-        self.sum_bet_old = self.sum_bet
+        self.sum_bet_stat = self.sum_bet
         self.sum_sell = None
 
         self.sum_sell_divider = 1
@@ -219,13 +218,28 @@ class BetManager:
                 if self.bk_name == 'fonbet':
                     recalc_sum_if_maxbet = get_prop('sum_by_max', 'выкл')
                     if get_prop('check_max_bet', 'выкл') == 'вкл' or recalc_sum_if_maxbet == 'вкл':
+                        prnt(' ')
+                        prnt(self.msg.format(sys._getframe().f_code.co_name, 'CHECK MAX-BET, BEFORE BET'))
                         try:
                             pass
                             self.check_max_bet(shared)
+                            self.max_bet = self.sum_bet - 50
+                            raise BetIsLost('test')
                         except BetIsLost as e:
                             if recalc_sum_if_maxbet == 'вкл':
+                                prnt(' ')
+                                prnt(self.msg.format(sys._getframe().f_code.co_name, 'RECALС BY MAX-BET: ' + str(self.max_bet)))
                                 # recalc sum bets
-                                pass
+                                self_opp_data = shared[self.bk_name_opposite].get('self', {})
+                                sum1, sum2 = get_new_sum_bets(self.cur_val_bet, self_opp_data.cur_val_bet, self.max_bet, int(get_prop('round_fork')))
+                                prnt(self.msg.format(sys._getframe().f_code.co_name, 'new sum, ' + self.bk_name + ': ' + str(sum1) + ', ' + self.bk_name_opposite + ': ' + str(sum2)))
+                                if sum1 < 30 or sum2 < 3:
+                                    raise BetIsLost('Сумма одной из ставок после пересчета меньше 30р')
+                                else:
+                                    self.sum_bet, self_opp_data.sum_bet = sum1, sum2
+                                    self.sum_bet_stat = sum1
+                                    self_opp_data.sum_bet_stat = sum2
+
                             else:
                                 raise BetIsLost(e)
 
@@ -245,17 +259,14 @@ class BetManager:
                 self.opposite_stat_wait(shared)
                 self.opposite_stat_get(shared)
 
-                prnt(self.msg.format(
-                    sys._getframe().f_code.co_name,
-                    'Ошибка при проставлении ставки в ' + self.bk_name + ', передаю его завершающему'))
+                prnt(self.msg.format(sys._getframe().f_code.co_name, 'Ошибка при проставлении ставки в ' + self.bk_name + ', передаю его завершающему'))
                 self.bet_safe(shared)
 
             except BkOppBetError as e:
                 raise BkOppBetError(e)
             except (BetIsLost, NoMoney, SessionExpired, Exception) as e:
                 exc_type, exc_value, exc_traceback = sys.exc_info()
-                err_msg = 'Ошибка: ' + str(e.__class__.__name__) + ' - ' + str(e) + '. ' + \
-                          str(repr(traceback.format_exception(exc_type, exc_value, exc_traceback)))
+                err_msg = 'Ошибка: ' + str(e.__class__.__name__) + ' - ' + str(e) + '. ' + str(repr(traceback.format_exception(exc_type, exc_value, exc_traceback)))
                 shared[self.bk_name + '_err'] = err_msg
                 prnt(err_msg)
 
@@ -385,7 +396,7 @@ class BetManager:
             prnt(self.msg.format(
                 sys._getframe().f_code.co_name,
                 'Получил данные: bet_type:{}, vector:{}, total:{}, half:{}, val_bet:{}({}),minute:{}, sc_main:{}, sc:{}'.
-                    format(self.bet_type, self.vector, self.cur_total, self.cur_half, self.cur_val_bet, self.old_val_bet, self.cur_minute, self.cur_sc_main, self.cur_sc)))
+                    format(self.bet_type, self.vector, self.cur_total, self.cur_half, self.cur_val_bet, self.val_bet_stat, self.cur_minute, self.cur_sc_main, self.cur_sc)))
 
             prnt(self.msg.format(sys._getframe().f_code.co_name, 'Запас тотала: total_stock:{}, total_bet:{}, cur_total:{}'.format(self.total_stock, self.total_bet, self.cur_total)))
 
@@ -393,8 +404,8 @@ class BetManager:
             prnt(' ')
             prnt(self.msg.format(sys._getframe().f_code.co_name, 'GET SUM SELL'))
             self_opp_data = shared[self.bk_name_opposite].get('self', {})
-            k_opp = self_opp_data.bk_container.get('wager', {}).get('value')
-            sum_opp = self_opp_data.bk_container.get('amount')
+            k_opp = self_opp_data.cur_val_bet
+            sum_opp = self_opp_data.bk_container.sum_bet_stat
             try:
                 self_opp_data.get_sum_sell()
             except CouponBlocked as e:
@@ -414,25 +425,25 @@ class BetManager:
                 prnt(self.msg.format(sys._getframe().f_code.co_name, 'Сумма выкупа неизвестна'))
 
             # RECALC SUM BET
-            if self.cur_val_bet and self.old_val_bet != self.cur_val_bet:
+            if self.cur_val_bet and self.val_bet_stat != self.cur_val_bet:
                 prnt(' ')
                 prnt(self.msg.format(sys._getframe().f_code.co_name, 'RECALC SUM BET'))
 
                 # round_rang = int(get_prop('round_fork'))
-                self.sum_bet = round(self.sum_bet_old * self.val_bet / self.cur_val_bet / 5) * 5
+                self.sum_bet = round(self.sum_bet_stat * self.val_bet_stat / self.cur_val_bet / 5) * 5
 
                 total_new_sum = self.sum_bet + sum_opp
 
                 bk1_profit = (sum_opp * k_opp) - total_new_sum
-                bk2_profit = (self.sum_bet * self.val_bet) - total_new_sum
+                bk2_profit = (self.sum_bet * self.val_bet_stat) - total_new_sum
                 bet_profit = (bk1_profit + bk2_profit) / 2
 
                 prnt(self.msg.format(
                     sys._getframe().f_code.co_name,
                     'Пересчет суммы ставки: {}->{}({}) [k: {}->{}, k_opp:{}, sum_opp:{}]'.
-                        format(self.sum_bet_old, self.sum_bet, bet_profit, self.val_bet, self.cur_val_bet, k_opp, sum_opp)))
+                        format(self.sum_bet_stat, self.sum_bet, bet_profit, self.val_bet_stat, self.cur_val_bet, k_opp, sum_opp)))
 
-                if self.sum_bet_old >= self.sum_bet:
+                if self.sum_bet_stat >= self.sum_bet:
                     prnt(self.msg.format(sys._getframe().f_code.co_name, 'Сумма ставки не изменилась или уменьшилась, делаем ставку'))
                 elif self.sale_profit and self.sale_profit > bet_profit:
                     # sell bet
@@ -442,8 +453,8 @@ class BetManager:
                 else:
                     prnt(self.msg.format(sys._getframe().f_code.co_name, 'Ставка: {} выгоднее выкупа: {}, работаю дальше'.format(bet_profit, self.sale_profit)))
 
-                prnt(self.msg.format(sys._getframe().f_code.co_name, 'Коф-т ставки должен быть изменен: {}->{}'.format(self.old_val_bet, self.cur_val_bet)))
-                self.old_val_bet = self.cur_val_bet
+                prnt(self.msg.format(sys._getframe().f_code.co_name, 'Коф-т ставки должен быть изменен: {}->{}'.format(self.val_bet_stat, self.cur_val_bet)))
+                self.val_bet_stat = self.cur_val_bet
                 # override abt
                 if self.override_bet:
 
@@ -486,9 +497,7 @@ class BetManager:
                 cur_time = round(int(time()))
                 self.time_left = (self.time_start + self.timeout_left) - cur_time
 
-                prnt(self.msg.format(
-                    sys._getframe().f_code.co_name,
-                    'Vector: {}, время на работу(сек): {} из {}'.format(self.vector, self.time_left, self.timeout_left)))
+                prnt(self.msg.format(sys._getframe().f_code.co_name, 'Vector: {}, время на работу(сек): {} из {}'.format(self.vector, self.time_left, self.timeout_left)))
 
                 # Пока убрал фичю, тут можно делать запас тотола
                 if self.time_left < 0:
@@ -512,11 +521,11 @@ class BetManager:
                 # CHECK: SCORE CHANGED?
                 if self.cur_total != self.cur_total_new:
                     self.cur_total_new = self.cur_total
-                    prnt(self.msg.format(sys._getframe().f_code.co_name, 'Score changed!'))
+                    prnt(self.msg.format(sys._getframe().f_code.co_name, 'SCORE CHANGED!'))
                     # strategy definition
                     if self.strat_name in ('П'):
                         if self.cur_minute >= 80:
-                            err_str = err_str = 'Strategy ' + self.strat_name + ': bet is lost, cur_minute many 80({})'.format(self.cur_minute)
+                            err_str = 'Strategy ' + self.strat_name + ': bet is lost, cur_minute many 80({})'.format(self.cur_minute)
                             prnt(err_str)
                             raise BetIsLost(err_str)
                     # strategy definition
@@ -1070,10 +1079,7 @@ class BetManager:
 
         if self.wager.get('param'):
             payload['coupon']['bets'][0]['param'] = int(self.wager['param'])
-        print('1: ' + str(payload['coupon']['bets'][0]['score']))
-        print('2: ' + str(self.wager['score']))
         payload['coupon']['bets'][0]['score'] = self.wager['score']
-        print('3: ' + str(payload['coupon']['bets'][0]['score']))
         payload['coupon']['bets'][0]['value'] = float(self.wager['value'])
         payload['coupon']['bets'][0]['event'] = int(self.wager['event'])
         payload['coupon']['bets'][0]['factor'] = int(self.wager['factor'])
@@ -1114,10 +1120,10 @@ class BetManager:
 
         prnt(self.msg.format(sys._getframe().f_code.co_name, 'sum bet=' + str(self.sum_bet)))
         prnt(self.msg.format(sys._getframe().f_code.co_name, 'min_amount=' + str(min_amount) + ', max_amount=' + str(max_amount)))
-        if (min_amount > self.sum_bet):
+        if min_amount > self.sum_bet:
             err_str = self.msg_err.format(sys._getframe().f_code.co_name, 'min bet')
             raise BetIsLost(err_str)
-        if (self.sum_bet > max_amount):
+        if self.sum_bet > max_amount:
             err_str = self.msg_err.format(sys._getframe().f_code.co_name, 'max bet')
             self.max_bet = max_amount
             raise BetIsLost(err_str)

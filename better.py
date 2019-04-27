@@ -3,7 +3,7 @@ from bet_fonbet import *
 from bet_olimp import *
 import datetime
 from fork_recheck import get_kof_olimp, get_kof_fonbet
-from utils import prnt, get_account_info, get_prop
+from utils import prnt, get_account_info, get_prop, get_sum_bets
 import threading
 from multiprocessing import Manager, Process
 import time
@@ -29,24 +29,6 @@ if get_prop('debug'):
     DEBUG = True
 else:
     DEBUG = False
-
-
-def get_sum_bets(k1, k2, total_bet, round_fork=5, hide=False,):
-    if get_prop('round_fork'):
-        round_fork = int(get_prop('round_fork'))
-    k1 = float(k1)
-    k2 = float(k2)
-    prnt('k1:{}, k2:{}'.format(k1, k2), hide)
-    l = (1 / k1) + (1 / k2)
-
-    # Округление проставления в БК1 происходит по правилам математики
-    bet_1 = round(total_bet / (k1 * l) / round_fork) * round_fork
-    bet_2 = total_bet - bet_1
-
-    prnt('L: ' + str(round((1 - l) * 100, 2)) + '% (' + str(l) + ') ', hide)
-    prnt('bet1: ' + str(bet_1) + ', bet2: ' + str(bet_2) + '|' + ' bet_sum: ' + str(bet_1 + bet_2), hide)
-
-    return bet_1, bet_2
 
 
 def bet_fonbet_cl(obj):
@@ -553,7 +535,7 @@ if __name__ == '__main__':
             err_msg = 'Отклонение от общей суммы ставки не должно привышать 30%'
             raise ValueError(err_msg)
         else:
-            if total_bet < 400:
+            if not DEBUG and total_bet < 400:
                 err_msg = 'Обшая сумма ставки, должна превышать 400 руб.'
                 raise ValueError(err_msg)
             else:
