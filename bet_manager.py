@@ -929,6 +929,7 @@ class BetManager:
             # except Exception as e:
             #     raise CouponBlocked(e)
             self.get_sum_sell()
+            self.sale_profit = round(self.sum_sell - self.sum_bet)
 
             if self.cashout_allowed and self.sum_sell > 0:
                 payload = {}
@@ -984,6 +985,7 @@ class BetManager:
                 url = url.replace('session/', '')
 
                 self.get_sum_sell(url)
+                self.sale_profit = round(self.sum_sell - self.sum_bet)
                 # step2 get rqid for sell coupn
                 payload = copy.deepcopy(payload_coupon_sum)
                 headers = copy.deepcopy(fb_headers)
