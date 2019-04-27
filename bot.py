@@ -83,15 +83,15 @@ def print_stat(acc_id: str) -> str:
 
             res_str = ''
             res_str = res_str + 'Успешных ставок: *' + str(cnt_fork_success) + '*\n'
-            if cnt_fail:
+            if cnt_fail >= 0:
                 res_str = res_str + 'Кол-во выкупов: *' + str(cnt_fail) + '*\n'
-            if min_profit:
+            if min_profit >= 0:
                 res_str = res_str + 'Минимальный профит: *' + '{:,}'.format(round(min_profit)).replace(',', ' ') + '*\n'
-            if max_profit:
+            if max_profit >= 0:
                 res_str = res_str + 'Максимальный профит: *' + '{:,}'.format(round(max_profit)).replace(',', ' ') + '*\n'
-            if max_profit and min_profit:
+            if max_profit >= 0 and min_profit >= 0:
                 res_str = res_str + 'Средний профит: *' + '{:,}'.format(round((max_profit + min_profit) / 2)).replace(',', ' ') + '*\n'
-            if sale_profit:
+            if sale_profit >= 0:
                 res_str = res_str + 'Профит от продаж: *' + '{:,}'.format(round(sale_profit)).replace(',', ' ') + '*\n'
 
             res_str = res_str + '\n*Примерный доход: ' + '{:,}'.format(round((max_profit + min_profit) / 2) + round(sale_profit)).replace(',', ' ') + '*\n'
