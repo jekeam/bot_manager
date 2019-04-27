@@ -216,11 +216,12 @@ class BetManager:
                 self.sign_in(shared)
                 self.wait_sign_in_opp(shared)
 
-                if get_prop('check_max_bet', 'выкл') == 'вкл':
+                recalc_sum_if_maxbet = get_prop('sum_by_max', 'выкл')
+                if get_prop('check_max_bet', 'выкл') == 'вкл' or recalc_sum_if_maxbet == 'вкл':
                     try:
                         self.check_max_bet(shared)
                     except BetIsLost as e:
-                        if get_prop('sum_by_max', 'выкл') == 'вкл':
+                        if recalc_sum_if_maxbet == 'вкл':
                             # recalc sum bets
                             pass
                         else:
@@ -437,7 +438,7 @@ class BetManager:
                     prnt(err_str)
                     raise BetIsLost(err_str)
                 else:
-                    prnt(self.msg.format(sys._getframe().f_code.co_name, 'Ставка выгоднее выкупа, работаю дальше'))
+                    prnt(self.msg.format(sys._getframe().f_code.co_name, 'Ставка: {} выгоднее выкупа: {}, работаю дальше'.format(bet_profit, self.sale_profit)))
 
                 prnt(self.msg.format(sys._getframe().f_code.co_name, 'Коф-т ставки должен быть изменен: {}->{}'.format(self.old_val_bet, self.cur_val_bet)))
                 self.old_val_bet = self.cur_val_bet

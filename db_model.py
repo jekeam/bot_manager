@@ -21,7 +21,7 @@ prop_abr = {
     "FIRST_BET_IN": {"abr": "Первая ставка в", "type": "str", "max": "", "min": "", "access_list": first_bet_in, "error": ""},
     "MAX_KOF": {"abr": "MAX коэф-т", "type": "float", "max": "1000", "min": "1.02", "access_list": [], "error": ""},
     "CHECK_MAX_BET": {"abr": "Проверка на max-bet", "type": "str", "max": "", "min": "", "access_list": ["вкл", "выкл"], "error": ""},
-    "SUM_BY_MAX": {"abr": "Пересчет суммы при max-bet", "type": "str", "max": "", "min": "", "access_list": ["вкл", "выкл"], "error": ""},
+    "SUM_BY_MAX": {"abr": "Пересчет суммы по max-bet", "type": "str", "max": "", "min": "", "access_list": ["вкл", "выкл"], "error": ""},
 
     # "SERVER_IP_TEST": {"abr": "IP-адрес тест. сервера", "type": "", "max": "", "min": "", "access_list": [], "error": ""},
     # "SERVER_IP": {"abr": "IP-адрес бой сервера", "type": "", "max": "", "min": "", "access_list": [], "error": ""},
