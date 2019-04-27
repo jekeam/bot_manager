@@ -175,6 +175,7 @@ class BetManager:
         opp_stat = None
         while opp_stat is None:
             opp_stat = shared.get(self.bk_name_opposite + '_err')
+            sleep(1)
 
         prnt(self.msg.format(
             sys._getframe().f_code.co_name,
@@ -1166,7 +1167,7 @@ class BetManager:
                         err_str = self.msg.format(sys._getframe().f_code.co_name, 'Изменилась ИД ставки: old: ' + str(self.wager) + ', new: ' + str(new_wager))
                         prnt(err_str)
                         self.wager.update(new_wager)
-                        return BetError(err_str)
+                        return self.bet_place(shared)
 
                     elif str(new_wager.get('param', '')) != str(self.wager.get('param', '')) and \
                             int(self.wager.get('factor', 0)) == int(new_wager.get('factor', 0)):
@@ -1186,7 +1187,7 @@ class BetManager:
                                 err_str = self.msg.format(sys._getframe().f_code.co_name, 'Тотал найден: ' + str(new_wager))
                                 self.wager.update(new_wager)
                                 prnt(err_str)
-                                return BetError(err_str)
+                                return self.bet_place(shared)
                             else:
                                 err_str = self.msg_err.format(sys._getframe().f_code.co_name, 'Тотал не найден: ' + str(new_wager))
                                 prnt(err_str)
