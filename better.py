@@ -98,7 +98,7 @@ def bet_type_is_work(key):
 
 
 def check_fork(key, L, k1, k2, live_fork, bk1_score, bk2_score, minute, time_break_fonbet, period, name, name_rus, deff_max, info=''):
-    global bal1, bal2, bet1, bet2, balance_line, cnt_fork_success, black_list_matches
+    global bal1, bal2, bet1, bet2, cnt_fork_success, black_list_matches
 
     fork_exclude_text = ''
     v = True
@@ -474,7 +474,6 @@ bal1 = 0
 bal2 = 0
 N = 0  # счетчик (количество, проставленных вилок)
 F = 0  # счетчик (количество, найденых вилок)
-balance_line = 0  # (bal1 + bal2) / 2 / 100 * 60
 time_get_balance = datetime.datetime.now()
 time_live = datetime.datetime.now()
 
@@ -507,7 +506,6 @@ if __name__ == '__main__':
             bal2 = FonbetBot(FONBET_USER).get_balance()  # Баланс в БК2
             total_bet = int(get_prop('summ'))
 
-        balance_line = (bal1 + bal2) / 2 / 100 * 30
         if not DEBUG:
             server_ip = get_prop('server_ip')
         else:
@@ -543,7 +541,6 @@ if __name__ == '__main__':
                 total_bet_max = int(total_bet + (total_bet * int(random_summ_proc) / 100))
                 prnt('Полученный диапазон общей суммы ставки (в валюте): ' + str(total_bet_min) + '-' + str(total_bet_max))
 
-        prnt('Пропускаем ставки > 1.2, если баланс БК меньше: ' + str(balance_line))
         prnt('Время жизни вилки от (сек.): ' + str(get_prop('fork_life_time')))
         prnt('Исключаем низшие команды: ' + str(get_prop('junior_team_exclude')))
         prnt('Остановка для выгрузки в (ч.): ' + str(get_prop('work_hour_end')))
@@ -585,7 +582,6 @@ if __name__ == '__main__':
 
         while Account.select().where(Account.key == KEY).get().work_stat == 'start':
             # print(str(Account.select().where(Account.key == KEY).get().id) + ': ' + Account.select().where(Account.key == KEY).get().work_stat)
-            balance_line = (bal1 + bal2) / 2 / 100 * 30
 
             if get_prop('work_hour_end') and int(get_prop('work_hour_end')) == int(datetime.datetime.now().strftime('%H')):
                 msg_str = 'Время выгрузки: {} ч., я завершил работу'.format(get_prop('work_hour_end'))
