@@ -1088,7 +1088,8 @@ class BetManager:
 
         prnt(self.msg.format(sys._getframe().f_code.co_name, 'rq: ' + str(payload) + ' ' + str(headers)), 'hide')
         resp = requests_retry_session_post(
-            url.format('coupon/getMinMax'),
+            # url.format('coupon/getMinMax'), Not working, why?
+            'https://23.111.80.252/session/coupon/getMinMax',
             headers=headers,
             data=data,
             verify=False,
