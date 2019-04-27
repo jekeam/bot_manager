@@ -120,6 +120,9 @@ def int_to_str(n: int) -> str:
 
 
 def get_sum_bets(k1, k2, total_bet, round_fork=5, hide=False):
+    if not round_fork:
+        round_fork = 5
+
     if get_prop('round_fork'):
         round_fork = int(get_prop('round_fork'))
     k1 = float(k1)
@@ -138,6 +141,9 @@ def get_sum_bets(k1, k2, total_bet, round_fork=5, hide=False):
 
 
 def get_new_sum_bets(bk1, bk2, max_bet, round_fork=5, hide=False):
+    if not round_fork:
+        round_fork = 5
+
     l = 1 / bk1 + 1 / bk2
     total_bet = round((max_bet * bk1 * l / round_fork) * round_fork)
     sum_bk1, sum_bk2 = get_sum_bets(bk1, bk2, total_bet, round_fork, hide)
