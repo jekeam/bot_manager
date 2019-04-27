@@ -102,7 +102,6 @@ class BetManager:
         self.attempt_login = 1
         self.attempt_bet = 1
         self.attempt_sale = 1
-        self.debug = 1
         self.sleep_bet = 3.51
         self.sleep_add = 0
         self.proxies = self.get_proxy()
