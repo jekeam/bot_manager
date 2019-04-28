@@ -178,11 +178,11 @@ def export_hist(OLIMP_USER, FONBET_USER):
                     out = out + \
                           str(id) + ';' + \
                           str(time) + ';' + \
-                          str(info['fonbet'].get('kof', 0.0)).replace('.', ',') + ';' + \
-                          str(info['olimp'].get('kof', 0.0)).replace('.', ',') + ';' + \
+                          str(float(info['fonbet'].get('kof', 0.0))).replace('.', ',') + ';' + \
+                          str(float(info['olimp'].get('kof', 0.0))).replace('.', ',') + ';' + \
  \
-                          str(round(float(info['fonbet'].get('amount', 0.0)))) + ';' + \
-                          str(round(float(info['olimp'].get('amount', 0.0)))) + ';' + \
+                          str(int(info['fonbet'].get('amount', 0))) + ';' + \
+                          str(int(info['olimp'].get('amount', 0))) + ';' + \
  \
                           str(info['fonbet'].get('reg_id', '')).replace('None', '') + ';' + \
                           str(info['olimp'].get('reg_id', '')).replace('None', '') + ';' + \
@@ -193,10 +193,10 @@ def export_hist(OLIMP_USER, FONBET_USER):
                           str(fb_info.get('kof', '')).replace('.', ',') + ';' + \
                           str(o_info.get('kof', '')).replace('.', ',') + ';' + \
  \
-                          str(round(fb_info.get('sum_bet', 0))) + ';' + \
-                          str(round(o_info.get('sum_bet', 0))) + ';' + \
+                          str(int(fb_info.get('sum_bet', 0))) + ';' + \
+                          str(int(o_info.get('sum_bet', 0))) + ';' + \
  \
-                          str(round(float(fb_info_profit))) + ';' + \
+                          str(int(fb_info_profit)) + ';' + \
                           str(o_info.get('profit', '')) + ';' + \
  \
                           str(fb_info.get('result', '')) + ';' + \
