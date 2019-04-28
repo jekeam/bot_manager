@@ -99,7 +99,7 @@ def prnt(vstr=None, hide=None):
         if not hide:
             dtDeff = round((datetime.datetime.now() - dtOld).total_seconds())
             strLog = datetime.datetime.now().strftime('%d %H:%M:%S.%f ') + \
-                     '[' + str(dtDeff).rjust(2, '0') + ']    ' + str(vstr)
+                     '[' + str(dtDeff).rjust(2, '0') + ']    ' + str(ACC_ID) + ': ' + str(vstr)
             print(strLog)
             dtOld = datetime.datetime.now()
             Outfile = open(str(ACC_ID) + '_client.log', "a+", encoding='utf-8')
