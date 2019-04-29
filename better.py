@@ -97,7 +97,7 @@ def bet_type_is_work(key):
     return True
 
 
-def check_fork(key, L, k1, k2, live_fork, bk1_score, bk2_score, minute, time_break_fonbet, period, name, name_rus, deff_max, info=''):
+def check_fork(key, L, k1, k2, live_fork, live_fork_total, bk1_score, bk2_score, minute, time_break_fonbet, period, name, name_rus, deff_max, info=''):
     global bal1, bal2, bet1, bet2, cnt_fork_success, black_list_matches
 
     fork_exclude_text = ''
@@ -172,8 +172,12 @@ def check_fork(key, L, k1, k2, live_fork, bk1_score, bk2_score, minute, time_bre
 
     # Вилка живет достаточно
     long_livers = int(get_prop('fork_life_time'))
-    if live_fork < long_livers:
-        fork_exclude_text = fork_exclude_text + 'Вилка ' + str(round((1 - L) * 100, 2)) + '% исключена т.к. живет меньше ' + str(long_livers) + ' сек. \n'
+    if get_prop('fork_time_type', 'auto') in ('auto', 'текущее'):
+        if live_fork < long_livers:
+            fork_exclude_text = fork_exclude_text + 'Вилка ' + str(round((1 - L) * 100, 2)) + '% исключена т.к. живет меньше ' + str(long_livers) + ' сек. \n'
+    else:
+        if live_fork_total < long_livers:
+            fork_exclude_text = fork_exclude_text + 'Вилка ' + str(round((1 - L) * 100, 2)) + '% исключена т.к. живет в общем меньше ' + str(long_livers) + ' сек. \n'
 
     fork_exclude_text = fork_exclude_text + check_l(L)
 
@@ -438,7 +442,7 @@ def go_bets(wag_ol, wag_fb, total_bet, key, deff_max, vect1, vect2, sc1, sc2):
         # CHECK FAILS
         check_statistics()
         # WAITING AFTER BET
-        sleep_post_work = 30
+        sleep_post_work = int(get_prop('timeout_fork', 30))
         prnt('Ожидание ' + str(sleep_post_work) + ' сек.')
         time.sleep(sleep_post_work)
 
@@ -725,7 +729,7 @@ if __name__ == '__main__':
                                     bet1, bet2 = get_new_sum_bets(k1, k2, bal2, None, True)
 
                             # Проверим вилку на исключения
-                            if check_fork(key, l_temp, k1, k2, live_fork, bk1_score, bk2_score,
+                            if check_fork(key, l_temp, k1, k2, live_fork, live_fork_total, bk1_score, bk2_score,
                                           minute, time_break_fonbet, period, name, name_rus, deff_max, info) or DEBUG:
                                 go_bet_key.clear()
                                 l = l_temp

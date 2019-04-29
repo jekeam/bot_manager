@@ -11,9 +11,10 @@ first_bet_in = ["fonbet", "olimp", "parallel", "auto"]
 
 prop_abr = {
     "SUMM": {"abr": "Общая ставка", "type": "int", "max": "10000", "min": "400", "access_list": [], "error": ""},
+    "RANDOM_SUMM_PROC": {"abr": "% Разброс ставки", "type": "int", "max": "30", "min": "0", "access_list": [], "error": ""},
     "MIN_PROC": {"abr": "% Вилки от", "type": "float", "max": "10", "min": "0", "access_list": [], "error": ""},
-    "RANDOM_SUMM_PROC": {"abr": "% Откл-я от суммы", "type": "int", "max": "30", "min": "0", "access_list": [], "error": ""},
-    "FORK_LIFE_TIME": {"abr": "Время вилки от", "type": "int", "max": "500", "min": "0", "access_list": [], "error": ""},
+    "FORK_LIFE_TIME": {"abr": "Вилки от сек.", "type": "int", "max": "500", "min": "0", "access_list": [], "error": ""},
+    "FORK_TIME_TYPE": {"abr": "Тип времени вилки", "type": "str", "max": "", "min": "", "access_list": ["текущее", "общее"], "error": ""},
     "WORK_HOUR_END": {"abr": "Остановка в", "type": "int", "max": "23", "min": "0", "access_list": [], "error": ""},
     "ROUND_FORK": {"abr": "Округление", "type": "int", "max": "100", "min": "5", "access_list": ["5", "10", "50", "100"], "error": ""},
     "MAX_FORK": {"abr": "MAX ставок", "type": "int", "max": "50", "min": "1", "access_list": [], "error": ""},
@@ -22,6 +23,7 @@ prop_abr = {
     "MAX_KOF": {"abr": "MAX коэф-т", "type": "float", "max": "1000", "min": "1.02", "access_list": [], "error": ""},
     "CHECK_MAX_BET": {"abr": "Проверка maxbet", "type": "str", "max": "", "min": "", "access_list": ["вкл", "выкл"], "error": ""},
     "SUM_BY_MAX": {"abr": "Пересчет maxbet", "type": "str", "max": "", "min": "", "access_list": ["вкл", "выкл"], "error": ""},
+    "TIMEOUT_FORK": {"abr": "Ждать после ставки", "type": "int", "max": "5400", "min": "30", "access_list": [], "error": ""},
     "TEAM_RES": {"abr": "Рез-е команды", "type": "str", "max": "", "min": "", "access_list": ["вкл", "выкл"], "error": ""},
     "TEAM_STUD": {"abr": "Студ. команды", "type": "str", "max": "", "min": "", "access_list": ["вкл", "выкл"], "error": ""},
     "TEAM_FEMALE": {"abr": "Жен. команды", "type": "str", "max": "", "min": "", "access_list": ["вкл", "выкл"], "error": ""},
