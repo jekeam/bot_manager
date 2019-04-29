@@ -25,6 +25,7 @@ import datetime
 import time
 import re
 import json
+from utils import build_menu
 
 logging.basicConfig(filename='bot.log', format='%(asctime)s - %(name)s - %(levelname)s - %(message)s', level=logging.DEBUG)
 # logging.basicConfig(format='%(asctime)s - %(name)s - %(levelname)s - %(message)s', level=logging.INFO)
@@ -172,7 +173,7 @@ def set_prop(update, context):
                             Properties.insert_many(data, fields=[Properties.acc_id, Properties.key, Properties.val]).execute()
                         update.message.reply_text(
                             text='Новое значение *' + prop_name +
-                                 '* установлено:\n' + Properties.select().where((Properties.acc_id == acc_id) & (Properties.key == key)).get().val + '\n\n' +
+                                 '*\nустановлено:' + Properties.select().where((Properties.acc_id == acc_id) & (Properties.key == key)).get().val + '\n\n' +
                                  'Если хотите задать еще настройки, выберите аккаунт из /botlist и нажмите : ' + bot_prop.BTN_SETTINGS,
                             parse_mode=telegram.ParseMode.MARKDOWN
                         )
@@ -287,14 +288,14 @@ def button(update, context):
             if acc_into.get().work_stat != 'stop' and acc_into.get().pid != 0:
                 update.callback_query.answer(show_alert=True, text="Для настройки остановите аккаунт!")
             else:
-                prop_btn = [[bot_prop.BTN_CLOSE]]
+                prop_btn = []
                 for val in prop_abr.values():
                     abr = val.get('abr')
                     if abr:
-                        prop_btn.append([abr])
-                reply_keyboard = prop_btn
+                        prop_btn.append(abr)
+                reply_keyboard = build_menu(prop_btn, n_cols=2, header_buttons=[bot_prop.BTN_CLOSE])
                 markup = ReplyKeyboardMarkup(reply_keyboard)
-                query.message.reply_text(bot_prop.MSG_PROP_LIST, reply_markup=markup)
+                query.message.reply_text(bot_prop.MSG_PROP_LIST, reply_markup=markup, )
         if query.data == 'get_stat':
             markup = ReplyKeyboardRemove()
             acc_id_str = str(context.user_data.get('acc_id'))

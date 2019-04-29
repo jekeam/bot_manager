@@ -119,6 +119,18 @@ def int_to_str(n: int) -> str:
     return '{:,}'.format(round(n)).replace(',', ' ')
 
 
+def build_menu(buttons,
+               n_cols,
+               header_buttons=None,
+               footer_buttons=None):
+    menu = [buttons[i:i + n_cols] for i in range(0, len(buttons), n_cols)]
+    if header_buttons:
+        menu.insert(0, header_buttons)
+    if footer_buttons:
+        menu.append(footer_buttons)
+    return menu
+
+
 def get_sum_bets(k1, k2, total_bet, round_fork=5, hide=False):
     if get_prop('round_fork'):
         round_fork = int(get_prop('round_fork'))
