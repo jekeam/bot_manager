@@ -225,10 +225,14 @@ class BetManager:
                         except BetIsLost as e:
                             if recalc_sum_if_maxbet == 'вкл':
                                 prnt(' ')
-                                prnt(self.msg.format(sys._getframe().f_code.co_name, 'RECALС BY MAX-BET: ' + str(self.max_bet - 100)))
+                                cur_bet_sum = self.max_bet * int(get_prop('proc_by_max', 10)) / 100
+                                prnt(self.msg.format(
+                                    sys._getframe().f_code.co_name,
+                                    'RECALС BY MAX-BET: {}->{}({})' + str(self.max_bet, cur_bet_sum, get_prop('proc_by_max', '0'))
+                                ))
                                 # recalc sum bets
                                 self_opp_data = shared[self.bk_name_opposite].get('self', {})
-                                sum1, sum2 = get_new_sum_bets(self.cur_val_bet, self_opp_data.cur_val_bet, self.max_bet - 100, int(get_prop('round_fork')))
+                                sum1, sum2 = get_new_sum_bets(self.cur_val_bet, self_opp_data.cur_val_bet, cur_bet_sum, int(get_prop('round_fork')))
                                 prnt(self.msg.format(sys._getframe().f_code.co_name, 'new sum, ' + self.bk_name + ': ' + str(sum1) + ', ' + self.bk_name_opposite + ': ' + str(sum2)))
                                 if sum1 < 30 or sum2 < 3:
                                     raise BetIsLost('Сумма одной из ставок после пересчета меньше 30р')
