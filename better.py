@@ -16,7 +16,7 @@ import re
 import sys
 import traceback
 import os
-from db_model import send_message_bot
+from db_model import send_message_bot, prop_abr
 from bot_prop import ADMINS
 
 if __name__ == '__main__':
@@ -103,11 +103,32 @@ def check_fork(key, L, k1, k2, live_fork, bk1_score, bk2_score, minute, time_bre
     fork_exclude_text = ''
     v = True
 
-    if get_prop('junior_team_exclude'):
-        if re.search('(u\d{2}|\(жен\)|\(ж\)|\(р\)|\(рез\)|\(.*\d{2}\)|-студ.)', name_rus.lower()):
+    if get_prop('team_junior', 'вкл') == 'вкл':
+        if re.search('(u\d{2}|\(.*\d{2}\))', name_rus.lower()):
             fork_exclude_text = fork_exclude_text + 'Вилка исключена по названию команд: ' + name_rus + '\n'
 
-        if re.search('(u\d{2}|\(w\)|\(r\)|\(res\)|\(Reserves\)|-stud\.)', name.lower()):
+        if re.search('u\d{2}', name.lower()):
+            fork_exclude_text = fork_exclude_text + 'Вилка исключена по названию команд: ' + name + '\n'
+
+    if get_prop('team_female', 'вкл') == 'вкл':
+        if re.search('(\(жен\)|\(ж\))', name_rus.lower()):
+            fork_exclude_text = fork_exclude_text + 'Вилка исключена по названию команд: ' + name_rus + '\n'
+
+        if re.search('\(w\)', name.lower()):
+            fork_exclude_text = fork_exclude_text + 'Вилка исключена по названию команд: ' + name + '\n'
+
+    if get_prop('team_stud', 'вкл') == 'вкл':
+        if re.search('(\s|-|\(\.)студ', name_rus.lower()):
+            fork_exclude_text = fork_exclude_text + 'Вилка исключена по названию команд: ' + name_rus + '\n'
+
+        if re.search('(\s|-|\(\.)stud', name.lower()):
+            fork_exclude_text = fork_exclude_text + 'Вилка исключена по названию команд: ' + name + '\n'
+
+    if get_prop('team_res', 'вкл') == 'вкл':
+        if re.search('(\(р\)|\(рез\))', name_rus.lower()):
+            fork_exclude_text = fork_exclude_text + 'Вилка исключена по названию команд: ' + name_rus + '\n'
+
+        if re.search('(\(r\)|\(res\)|\(reserves\))', name.lower()):
             fork_exclude_text = fork_exclude_text + 'Вилка исключена по названию команд: ' + name + '\n'
 
     if not bet_type_is_work(key):
@@ -535,21 +556,15 @@ if __name__ == '__main__':
                 err_msg = 'Обшая сумма ставки, должна превышать 400 руб.'
                 raise ValueError(err_msg)
             else:
-                prnt('Общая сумма ставки: ' + str(total_bet))
-                prnt('Отклонение от общей суммы ставки (в %): ' + str(random_summ_proc))
                 total_bet_min = int(total_bet - (total_bet * int(random_summ_proc) / 100))
                 total_bet_max = int(total_bet + (total_bet * int(random_summ_proc) / 100))
-                prnt('Полученный диапазон общей суммы ставки (в валюте): ' + str(total_bet_min) + '-' + str(total_bet_max))
 
-        prnt('Время жизни вилки от (сек.): ' + str(get_prop('fork_life_time')))
-        prnt('Исключаем низшие команды: ' + str(get_prop('junior_team_exclude')))
-        prnt('Остановка для выгрузки в (ч.): ' + str(get_prop('work_hour_end')))
-        prnt('Максимальное кол-во успешных вилок: ' + str(get_prop('max_fork')))
-        prnt('Максимально допустимое количество ошибок/выкупов: ' + str(int(get_prop('max_fail'))))
-        prnt('Минимальный профит вилки от (%): ' + str(MIN_PROC))
-        prnt('Жесткая ставка второго плеча: ' + str(get_prop('hard_bet_right')))
-        prnt('Первая ставка в БК: ' + str(get_prop('first_bet_in', 'auto')))
-        prnt('Макстмальный коэф-т: ' + str(get_prop('max_kof')))
+        acc_info = Account.select().where(Account.key == KEY)
+        print(acc_info)
+        for prop in acc_info.get().properties:
+            k = prop_abr.get(prop.key)
+            if k:
+                prnt(k.get('abr', '') + ': ' + prop.val)
         prnt(' ')
         try:
             with open(str(ACC_ID) + '_id_forks.txt') as f:

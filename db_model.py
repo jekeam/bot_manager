@@ -22,6 +22,10 @@ prop_abr = {
     "MAX_KOF": {"abr": "MAX коэф-т", "type": "float", "max": "1000", "min": "1.02", "access_list": [], "error": ""},
     "CHECK_MAX_BET": {"abr": "Проверка на max-bet", "type": "str", "max": "", "min": "", "access_list": ["вкл", "выкл"], "error": ""},
     "SUM_BY_MAX": {"abr": "Пересчет суммы по max-bet", "type": "str", "max": "", "min": "", "access_list": ["вкл", "выкл"], "error": ""},
+    "TEAM_RES": {"abr": "Исключать рез-е команды", "type": "str", "max": "", "min": "", "access_list": ["вкл", "выкл"], "error": ""},
+    "TEAM_STUD": {"abr": "Исключать студ. команды", "type": "str", "max": "", "min": "", "access_list": ["вкл", "выкл"], "error": ""},
+    "TEAM_FEMALE": {"abr": "Исключать жен. команды", "type": "str", "max": "", "min": "", "access_list": ["вкл", "выкл"], "error": ""},
+    "TEAM_JUNIOR": {"abr": "Исключать юнош. команды", "type": "str", "max": "", "min": "", "access_list": ["вкл", "выкл"], "error": ""},
 
     # "SERVER_IP_TEST": {"abr": "IP-адрес тест. сервера", "type": "", "max": "", "min": "", "access_list": [], "error": ""},
     # "SERVER_IP": {"abr": "IP-адрес бой сервера", "type": "", "max": "", "min": "", "access_list": [], "error": ""},
