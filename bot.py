@@ -197,8 +197,13 @@ def choose_prop(update, context):
                     dop_indo + ', '
                 dop_indo = 'допустимые значения: ' + str(val.get('access_list')).replace("'", '')
     acc_id = context.user_data.get('acc_id')
+    cur_val = 'auto'
+    try:
+        cur_val = Properties.select().where((Properties.acc_id == acc_id) & (Properties.key == v_key)).get().val
+    except:
+        pass
     update.message.reply_text(
-        text='*' + text + '*: ' + Properties.select().where((Properties.acc_id == acc_id) & (Properties.key == v_key)).get().val +
+        text='*' + text + '*: ' + cur_val +
              '\n\n''*Ограничения по настройке*:\n' + dop_indo + '\n\n' + bot_prop.MSG_PUT_VAL,
         reply_markup=markup,
         parse_mode=telegram.ParseMode.MARKDOWN
