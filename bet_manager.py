@@ -677,7 +677,7 @@ class BetManager:
             prnt(self.msg.format(sys._getframe().f_code.co_name, 'balance: ' +
                                  str(self.session.get('balance')) + ' ' +
                                  str(self.session.get('currency'))))
-            write_file(self.session_file, self.session['session'].strip())
+            # write_file(self.session_file, self.session['session'].strip())
 
             shared['sign_in_' + self.bk_name] = 'ok'
 
@@ -695,7 +695,6 @@ class BetManager:
             raise ValueError(err_str)
 
     def bet_place(self, shared: dict):
-        self.set_session_state()
 
         # # for test
         # if self.bk_name == 'fonbet':
@@ -923,7 +922,6 @@ class BetManager:
     def sale_bet(self, shared: dict):
         # добвить возможность перед выкупом еще раз попробовать проставить второе плечо, если оно было упущено по времени а не потерено
 
-        self.set_session_state()
         # кажется это не нужно
         # self.opposite_stat_get(shared)
 
