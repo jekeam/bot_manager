@@ -1,7 +1,7 @@
 # coding: utf-8
 from peewee import *
 import time
-from json import dumps
+from json import dumps, loads
 from uuid import uuid1
 from playhouse.sqlite_ext import SqliteExtDatabase
 
@@ -108,9 +108,14 @@ def get_val_prop_id(id: int, key: str) -> str:
 
 def get_prop_str(id: int) -> str:
     res = ''
+
+    info_accs = ''
+    for key, val in loads(Account.get_by_id(id).accounts.replace('`', '"')).items():
+        info_accs = info_accs + key.capitalize() + ': * ' + str(val.get('login')) + ' / ' + str(val.get('password')) + '*\n'
+
     for key, val in prop_abr.items():
         res += '' + str(val.get('abr', '')) + ': *' + get_val_prop_id(id, key) + '*\n'
-    return res
+    return info_accs + res
 
 
 def send_message_bot(user_id: int, msg: str, admin_list: dict = None):
