@@ -217,7 +217,7 @@ class BetManager:
 
                 if self.bk_name == 'fonbet':
                     recalc_sum_if_maxbet = get_prop('sum_by_max', 'выкл')
-                    if get_prop('check_max_bet', 'выкл') == 'вкл' or recalc_sum_if_maxbet == 'вкл':
+                    if (get_prop('check_max_bet', 'выкл') == 'вкл' and get_prop('first_bet_in', 'auto') != 'fonbet') or recalc_sum_if_maxbet == 'вкл':
                         prnt(' ')
                         prnt(self.msg.format(sys._getframe().f_code.co_name, 'CHECK MAX-BET, BEFORE BET'))
                         try:
