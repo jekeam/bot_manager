@@ -441,8 +441,8 @@ class BetManager:
 
                 prnt(self.msg.format(
                     sys._getframe().f_code.co_name,
-                    'Пересчет суммы ставки: {}->{}({}) [k: {}->{}, k_opp:{}, sum_opp:{}]'.
-                        format(self.sum_bet_stat, self.sum_bet, bet_profit, self.val_bet_stat, self.cur_val_bet, k_opp, sum_opp)))
+                    'Пересчет суммы ставки: {}->{}({}:{}/{}) [k: {}->{}, k_opp:{}, sum_opp:{}]'.
+                        format(self.sum_bet_stat, self.sum_bet, bet_profit, bk1_profit, bk2_profit, self.val_bet_stat, self.cur_val_bet, k_opp, sum_opp)))
 
                 if self.sum_bet_stat >= self.sum_bet:
                     prnt(self.msg.format(sys._getframe().f_code.co_name, 'Сумма ставки не изменилась или уменьшилась, делаем ставку'))
