@@ -558,6 +558,8 @@ class BetManager:
                     prnt(self.msg.format(sys._getframe().f_code.co_name, 'Пробую сделать ставку'))
                     self.bet_place(shared)
                     is_go = False
+                else:
+                    prnt(self.msg.format(sys._getframe().f_code.co_name, 'Ставка не возможна'))
 
             except BetIsLost as e:
                 if shared.get(self.bk_name + '_err', 'err') != 'ok':
