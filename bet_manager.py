@@ -355,6 +355,9 @@ class BetManager:
                     prnt(self.msg.format(sys._getframe().f_code.co_name, 'get data from fonbet: ' + dumps(self.dop_stat, ensure_ascii=False)))
                 except BetIsLost as e:
                     raise BetIsLost(e)
+                except AttributeError as e:
+                    err_msg = 'recheck err (' + str(e.__class__.__name__) + '): ' + str(e)
+                    raise BetIsLost(err_msg )
                 except Exception as e:
                     err_msg = 'recheck err (' + str(e.__class__.__name__) + '): ' + str(e)
                     prnt(self.msg_err.format(sys._getframe().f_code.co_name, err_msg))
