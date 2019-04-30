@@ -228,7 +228,7 @@ class BetManager:
                                 cur_bet_sum = self.max_bet * int(get_prop('proc_by_max', 90)) / 100
                                 prnt(self.msg.format(
                                     sys._getframe().f_code.co_name,
-                                    'RECALС BY MAX-BET: {}->{}({})' + str(self.max_bet, cur_bet_sum, get_prop('proc_by_max', '0'))
+                                    'RECALС BY MAX-BET: {}->{}({})'.format(self.max_bet, cur_bet_sum, get_prop('proc_by_max', '0'))
                                 ))
                                 # recalc sum bets
                                 self_opp_data = shared[self.bk_name_opposite].get('self', {})
