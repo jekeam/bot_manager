@@ -1391,7 +1391,7 @@ class BetManager:
                     coupon_data = bet_list
             if not coupon_found:
                 err_str = 'coupon reg_id: ' + str(self.reg_id) + ', not found'
-                raise BetError(err_str)
+                raise BetIsLost(err_str)
 
         # Мы не знаем reg_id и берем последний по матчу
         elif self.match_id:
