@@ -23,3 +23,4 @@ test.py
 *.csv
 bot_manager.db
 *.csv#
+rq_fb_calc_balance
