@@ -148,12 +148,30 @@ class BetManager:
                     self.bk_name_opposite + ': ' + str(sign_stat) + '(' + str(type(sign_stat)) + ')'))
                 push_ok = True
             sign_stat = shared.get('sign_in_' + self.bk_name_opposite, 'wait')
+            sleep(1)
 
         if sign_stat not in ('ok', 'wait'):
             err_str = self.msg_err.format(sys._getframe().f_code.co_name, self.bk_name + ' get error from ' + self.bk_name_opposite + ': ' + sign_stat)
             raise BkOppBetError(err_str)
 
         prnt(self.msg.format(sys._getframe().f_code.co_name, self.bk_name + ' get sign in from ' + self.bk_name_opposite + ': ' + str(sign_stat) + '(' + str(type(sign_stat)) + ')'))
+
+    def wait_maxbet_check(self, shared: dict):
+        maxbet_stat = shared.get('maxbet_in_' + self.bk_name_opposite, 'wait')
+
+        push_ok = False
+        while maxbet_stat == 'wait':
+            if not push_ok:
+                prnt(self.msg.format(
+                    sys._getframe().f_code.co_name,
+                    self.bk_name + ' wait maxbet from ' +
+                    self.bk_name_opposite + ': ' + str(maxbet_stat)))
+                push_ok = True
+            maxbet_stat = shared.get('maxbet_in_' + self.bk_name_opposite, 'wait')
+            sleep(1)
+            self.opposite_stat_get(shared)
+
+        prnt(self.msg.format(sys._getframe().f_code.co_name, self.bk_name + ' get maxbet from ' + self.bk_name_opposite + ': ' + str(maxbet_stat)))
 
     def opposite_stat_get(self, shared: dict):
 
@@ -215,9 +233,12 @@ class BetManager:
                 self.sign_in(shared)
                 self.wait_sign_in_opp(shared)
 
-                if self.bk_name == 'fonbet':
-                    recalc_sum_if_maxbet = get_prop('sum_by_max', 'выкл')
-                    if (get_prop('check_max_bet', 'выкл') == 'вкл' and get_prop('first_bet_in', 'auto') != 'fonbet') or recalc_sum_if_maxbet == 'вкл':
+                first_bet_in = get_prop('first_bet_in', 'auto')
+
+                # if self.bk_name == 'fonbet':
+                recalc_sum_if_maxbet = get_prop('sum_by_max', 'выкл')
+                if (get_prop('check_max_bet', 'выкл') == 'вкл' and first_bet_in != 'fonbet') or recalc_sum_if_maxbet == 'вкл':
+                    if self.bk_name == 'fonbet':
                         prnt(' ')
                         prnt(self.msg.format(sys._getframe().f_code.co_name, 'CHECK MAX-BET, BEFORE BET'))
                         try:
@@ -234,17 +255,20 @@ class BetManager:
                                 self_opp_data = shared[self.bk_name_opposite].get('self', {})
                                 sum1, sum2 = get_new_sum_bets(self.cur_val_bet, self_opp_data.cur_val_bet, cur_bet_sum)
                                 prnt(self.msg.format(sys._getframe().f_code.co_name, 'new sum, ' + self.bk_name + ': ' + str(sum1) + ', ' + self.bk_name_opposite + ': ' + str(sum2)))
-                                if sum1 < 30 or sum2 < 3:
+                                if sum1 < 30 or sum2 < 30:
                                     raise BetIsLost('Сумма одной из ставок после пересчета меньше 30р')
                                 else:
                                     self.sum_bet, self_opp_data.sum_bet = sum1, sum2
                                     self.sum_bet_stat = sum1
                                     self_opp_data.sum_bet_stat = sum2
-
                             else:
                                 raise BetIsLost(e)
+                        print('sleep')
+                        shared['maxbet_in_' + self.bk_name] = 'ok'
+                    else:
+                        self.wait_maxbet_check(shared)
+                        self.opposite_stat_get(shared)
 
-                first_bet_in = get_prop('first_bet_in', 'auto')
                 if (first_bet_in == 'auto' and self.vector == 'UP') or self.bk_name_opposite == first_bet_in:
                     self.opposite_stat_wait(shared)
                     self.opposite_stat_get(shared)

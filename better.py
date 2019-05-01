@@ -349,10 +349,10 @@ def go_bets(wag_ol, wag_fb, total_bet, key, deff_max, vect1, vect2, sc1, sc2):
                 prnt('One of the coefficients is not available')
                 return False
 
-        if DEBUG:
-            bet1 = 30
-            bet2 = 30
-            # return False
+        # if DEBUG:
+        # bet1 = 100
+        # bet2 = 100
+        # return False
 
         shared = dict()
 
@@ -521,15 +521,15 @@ if __name__ == '__main__':
         time_get_balance = datetime.datetime.now()
         time_live = datetime.datetime.now()
 
-        if DEBUG:
-            bal1 = 20000
-            bal2 = 20000
-            # Общая масксимальная сумма ставки
-            total_bet = round(0.10 * (bal1 + bal2))
-        else:
-            bal1 = OlimpBot(OLIMP_USER).get_balance()  # Баланс в БК1
-            bal2 = FonbetBot(FONBET_USER).get_balance()  # Баланс в БК2
-            total_bet = int(get_prop('summ'))
+        # if DEBUG:
+        #     bal1 = 20000
+        #     bal2 = 20000
+        #     # Общая масксимальная сумма ставки
+        #     total_bet = round(0.10 * (bal1 + bal2))
+        # else:
+        bal1 = OlimpBot(OLIMP_USER).get_balance()  # Баланс в БК1
+        bal2 = FonbetBot(FONBET_USER).get_balance()  # Баланс в БК2
+        total_bet = int(get_prop('summ'))
 
         if not DEBUG:
             server_ip = get_prop('server_ip')
