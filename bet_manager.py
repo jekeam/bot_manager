@@ -263,7 +263,6 @@ class BetManager:
                                     self_opp_data.sum_bet_stat = sum2
                             else:
                                 raise BetIsLost(e)
-                        print('sleep')
                         shared['maxbet_in_' + self.bk_name] = 'ok'
                     else:
                         self.wait_maxbet_check(shared)
