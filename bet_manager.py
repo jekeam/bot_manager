@@ -260,8 +260,7 @@ class BetManager:
                                     raise BetIsLost('Сумма одной из ставок после пересчета меньше 30р')
                                 else:
                                     self.sum_bet, self_opp_data.sum_bet = sum1, sum2
-                                    self.sum_bet_stat = sum1
-                                    self_opp_data.sum_bet_stat = sum2
+                                    self.sum_bet_stat, self_opp_data.sum_bet_stat = sum1, sum2
                             else:
                                 raise BetIsLost(e)
                         shared['maxbet_in_' + self.bk_name] = 'ok'
