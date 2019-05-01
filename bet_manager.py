@@ -78,6 +78,7 @@ class BetManager:
         self.cur_half = None
         self.cur_val_bet = bk_container.get('wager', {}).get('value')
         self.val_bet_stat = self.cur_val_bet
+        self.val_bet_old = self.cur_val_bet
         self.cur_minute = None
         self.total_stock = None
 
@@ -452,7 +453,7 @@ class BetManager:
                 prnt(self.msg.format(sys._getframe().f_code.co_name, 'Сумма выкупа неизвестна'))
 
             # RECALC SUM BET
-            if self.cur_val_bet and self.val_bet_stat != self.cur_val_bet:
+            if self.cur_val_bet and self.val_bet_old != self.cur_val_bet:
                 prnt(' ')
                 prnt(self.msg.format(sys._getframe().f_code.co_name, 'RECALC SUM BET'))
 
@@ -481,7 +482,7 @@ class BetManager:
                     prnt(self.msg.format(sys._getframe().f_code.co_name, 'Ставка: {} выгоднее выкупа: {}, работаю дальше'.format(bet_profit, self.sale_profit)))
 
                 prnt(self.msg.format(sys._getframe().f_code.co_name, 'Коф-т ставки должен быть изменен: {}->{}'.format(self.val_bet_stat, self.cur_val_bet)))
-                self.val_bet_stat = self.cur_val_bet
+                self.val_bet_old = self.cur_val_bet
                 # override abt
                 if self.override_bet:
 
