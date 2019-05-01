@@ -456,9 +456,9 @@ def run_client():
 
     try:
         if 'Windows' == platform.system() or DEBUG:
-            conn = http.client.HTTPConnection(server_ip, 80, timeout=70)
+            conn = http.client.HTTPConnection(server_ip, 80, timeout=3.51)
         else:
-            conn = http.client.HTTPConnection(server_ip, 80, timeout=70)
+            conn = http.client.HTTPConnection(server_ip, 80, timeout=6)
 
         while True:
             if shutdown:
