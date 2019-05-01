@@ -349,9 +349,9 @@ def go_bets(wag_ol, wag_fb, total_bet, key, deff_max, vect1, vect2, sc1, sc2):
                 prnt('One of the coefficients is not available')
                 return False
 
-        # if DEBUG:
-        # bet1 = 100
-        # bet2 = 100
+        if DEBUG:
+            bet1 = 30
+            bet2 = 30
         # return False
 
         shared = dict()
@@ -465,7 +465,7 @@ def run_client():
                 err_str = 'Основной поток завершен и run_client тоже.'
                 conn.close()
                 raise Shutdown(err_str)
-            conn.request('GET', '')
+            conn.request('GET', '/get_forks')
             rs = conn.getresponse()
             data = rs.read().decode('utf-8')
             data_json = json.loads(data)
