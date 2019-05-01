@@ -724,9 +724,9 @@ if __name__ == '__main__':
                             bet1, bet2 = get_sum_bets(k1, k2, total_bet, 5, True)
                             if bet1 > bal1 or bet2 > bal2:
                                 if bal1 < bal2:
-                                    bet1, bet2 = get_new_sum_bets(k1, k2, bal1, None, True)
+                                    bet1, bet2 = get_new_sum_bets(k1, k2, bal1, True)
                                 else:
-                                    bet1, bet2 = get_new_sum_bets(k1, k2, bal2, None, True)
+                                    bet1, bet2 = get_new_sum_bets(k1, k2, bal2, True)
 
                             # Проверим вилку на исключения
                             if check_fork(key, l_temp, k1, k2, live_fork, live_fork_total, bk1_score, bk2_score,

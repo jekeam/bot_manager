@@ -232,7 +232,7 @@ class BetManager:
                                 ))
                                 # recalc sum bets
                                 self_opp_data = shared[self.bk_name_opposite].get('self', {})
-                                sum1, sum2 = get_new_sum_bets(self.cur_val_bet, self_opp_data.cur_val_bet, cur_bet_sum, int(get_prop('round_fork')))
+                                sum1, sum2 = get_new_sum_bets(self.cur_val_bet, self_opp_data.cur_val_bet, cur_bet_sum)
                                 prnt(self.msg.format(sys._getframe().f_code.co_name, 'new sum, ' + self.bk_name + ': ' + str(sum1) + ', ' + self.bk_name_opposite + ': ' + str(sum2)))
                                 if sum1 < 30 or sum2 < 3:
                                     raise BetIsLost('Сумма одной из ставок после пересчета меньше 30р')
@@ -357,7 +357,7 @@ class BetManager:
                     raise BetIsLost(e)
                 except AttributeError as e:
                     err_msg = 'recheck err (' + str(e.__class__.__name__) + '): ' + str(e)
-                    raise BetIsLost(err_msg )
+                    raise BetIsLost(err_msg)
                 except Exception as e:
                     err_msg = 'recheck err (' + str(e.__class__.__name__) + '): ' + str(e)
                     prnt(self.msg_err.format(sys._getframe().f_code.co_name, err_msg))
