@@ -239,7 +239,7 @@ def check_statistics():
         raise MaxFork(msg_str)
 
 
-def go_bets(wag_ol, wag_fb, total_bet, key, deff_max, vect1, vect2, sc1, sc2):
+def go_bets(wag_ol, wag_fb, total_bet, key, deff_max, vect1, vect2, sc1, sc2, created):
     global bal1, bal2, cnt_fail, cnt_fork_success
 
     olimp_bet_type = str(key.split('@')[-2])
@@ -358,6 +358,7 @@ def go_bets(wag_ol, wag_fb, total_bet, key, deff_max, vect1, vect2, sc1, sc2):
 
         shared['olimp'] = {
             'opposite': 'fonbet',
+            'created': created,
             'amount': bet1,
             'wager': wag_ol,
             'bet_type': olimp_bet_type,
@@ -369,6 +370,7 @@ def go_bets(wag_ol, wag_fb, total_bet, key, deff_max, vect1, vect2, sc1, sc2):
         }
         shared['fonbet'] = {
             'opposite': 'olimp',
+            'created': created,
             'amount': bet2,
             'wager': wag_fb,
             'bet_type': fonbet_bet_type,
@@ -668,6 +670,7 @@ if __name__ == '__main__':
                     time_last_upd = val_json.get('time_last_upd', 1)
                     live_fork_total = val_json.get('live_fork_total', 0)
                     live_fork = val_json.get('live_fork', 0)
+                    created_fork = val_json.get('created_fork', '')
 
                     deff_olimp = round(float(time.time() - float(val_json.get('time_req_olimp', 0))))
                     deff_fonbet = round(float(time.time() - float(val_json.get('time_req_fonbet', 0))))
@@ -687,6 +690,7 @@ if __name__ == '__main__':
 
                     try:
                         info = key + ': ' + name + ' ' + \
+                               'created: ' + created_fork + ', ' + \
                                k1_type + '=' + str(k1) + '/' + \
                                k2_type + '=' + str(k2) + ', ' + \
                                v_time + ' (' + str(minute) + ') ' + \
@@ -743,7 +747,8 @@ if __name__ == '__main__':
                                     'vect2': vect2,
                                     'sc1': sc1,
                                     'sc2': sc2,
-                                    'info': info
+                                    'info': info,
+                                    'created_fork': created_fork
                                 }
                         elif deff_max >= 10:
                             pass
@@ -755,7 +760,7 @@ if __name__ == '__main__':
                         prnt('Go bets: ' + key + ' ' + val.get('info'))
                         fork_success = go_bets(val.get('go_bet_json').get('kof_olimp'), val.get('go_bet_json').get('kof_fonbet'),
                                                val.get('total_bet'), key, val.get('deff_max'), val.get('vect1'),
-                                               val.get('vect2'), val.get('sc1'), val.get('sc2'))
+                                               val.get('vect2'), val.get('sc1'), val.get('sc2'), val.get('created_fork'))
                         bal1 = OlimpBot(OLIMP_USER).get_balance()  # Баланс в БК1
                         bal2 = FonbetBot(FONBET_USER).get_balance()  # Баланс в БК2
                         break

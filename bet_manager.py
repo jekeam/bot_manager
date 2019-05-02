@@ -53,6 +53,7 @@ class BetManager:
         self.bk_name = bk_name
         self.bk_container = bk_container
         self.wager = bk_container['wager']
+        self.created_fork = bk_container.get('created', '')
         self.bk_name_opposite = bk_container['opposite']
         self.vector = bk_container.get('wager', {})['vector']
 
@@ -236,9 +237,30 @@ class BetManager:
 
                 first_bet_in = get_prop('first_bet_in', 'auto')
 
+                if self.created_fork == '' and 'created' in first_bet_in:
+                    raise BetIsLost('Создалтель вилки не определен: ' + str(self.created_fork))
+
+                if first_bet_in == 'created':
+                    if self.created_fork == self.bk_name:
+                        first_bet_in = self.bk_name
+                    else:
+                        first_bet_in = self.bk_name_opposite
+
+                if first_bet_in == 'notcreator':
+                    if self.created_fork == self.bk_name:
+                        first_bet_in = self.bk_name_opposite
+                    else:
+                        first_bet_in = self.bk_name
+
+                prnt(self.msg.format(
+                    sys._getframe().f_code.co_name,
+                    'FIRST BET IN: {}, prop:{}, bk_name:{}, bk_opp_name:{}'.format(first_bet_in, get_prop('first_bet_in', 'auto'), self.bk_name, self.bk_name_opposite)
+                ))
+
                 # if self.bk_name == 'fonbet':
                 recalc_sum_if_maxbet = get_prop('sum_by_max', 'выкл')
-                if (get_prop('check_max_bet', 'выкл') == 'вкл' and first_bet_in != 'fonbet') or recalc_sum_if_maxbet == 'вкл':
+
+                if get_prop('check_max_bet', 'выкл') == 'вкл' or recalc_sum_if_maxbet == 'вкл':
                     if self.bk_name == 'fonbet':
                         prnt(' ')
                         prnt(self.msg.format(sys._getframe().f_code.co_name, 'CHECK MAX-BET, BEFORE BET'))

@@ -7,7 +7,7 @@ from playhouse.sqlite_ext import SqliteExtDatabase
 
 db = MySQLDatabase('bot_manager', user='root', password='131189_Ak13', host='127.0.0.1', port=3306)
 
-first_bet_in = ["fonbet", "olimp", "parallel", "auto"]
+first_bet_in = ["created", "notcreator", "fonbet", "olimp", "parallel", "auto"]
 
 prop_abr = {
     "SUMM": {"abr": "Общая ставка", "type": "int", "max": "10000", "min": "400", "access_list": [], "error": ""},
