@@ -623,8 +623,8 @@ if __name__ == '__main__':
             if cur_min % ref_min == 0 and not printed:
                 prnt(' ')
                 msg_str = str(ACC_ID) + ': ' + \
-                          'Кол-во успешно проставленных вилок: ' + str(len(cnt_fork_success)) + '\n' + \
-                          'Кол-во вилок с выкупами: ' + str(cnt_fail) + '\n'
+                          'Проставлено вилок: ' + str(len(cnt_fork_success)) + '\n' + \
+                          'Сделано выкупов: ' + str(cnt_fail) + '\n'
                 prnt(msg_str)
                 printed = True
 
