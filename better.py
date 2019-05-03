@@ -472,7 +472,7 @@ def run_client():
             data = rs.read().decode('utf-8')
             data_json = json.loads(data)
             server_forks = data_json
-            time.sleep(0.5)
+            time.sleep(1)
     except Shutdown as e:
         prnt(str(e.__class__.__name__) + ' - ' + str(e))
         raise Shutdown(e)
@@ -771,7 +771,7 @@ if __name__ == '__main__':
                     pass
             else:
                 pass
-            time.sleep(0.5)
+            time.sleep(1)
 
     except (Shutdown, MaxFail, MaxFork) as e:
         try:
