@@ -689,7 +689,7 @@ if __name__ == '__main__':
                     vect2 = bk2_bet_json.get('vector')
 
                     try:
-                        info = key + ': ' + name + ' ' + \
+                        info = key + ': ' + name + ', ' + \
                                'created: ' + created_fork + ', ' + \
                                k1_type + '=' + str(k1) + '/' + \
                                k2_type + '=' + str(k2) + ', ' + \
