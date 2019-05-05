@@ -350,8 +350,9 @@ def go_bets(wag_ol, wag_fb, total_bet, key, deff_max, vect1, vect2, sc1, sc2, cr
                 return False
 
         if DEBUG:
-            bet1 = 30
-            bet2 = 30
+            pass
+            # bet1 = 30
+            # bet2 = 30
         # return False
 
         shared = dict()
@@ -681,6 +682,12 @@ if __name__ == '__main__':
 
                     bk1_hist = bk1_bet_json.get('hist', {})
                     bk2_hist = bk2_bet_json.get('hist', {})
+
+                    bk1_avg_change = bk1_hist.get('avg_change')
+                    bk2_avg_change = bk2_hist.get('avg_change')
+
+                    bk1_kof_order = bk1_hist.get('order')
+                    bk2_kof_order = bk2_hist.get('order')
 
                     k1 = bk1_bet_json.get('factor', 0)
                     k2 = bk2_bet_json.get('value', 0)
