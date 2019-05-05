@@ -495,7 +495,7 @@ class BetManager:
 
                 if self.sum_bet_stat >= self.sum_bet:
                     prnt(self.msg.format(sys._getframe().f_code.co_name, 'Сумма ставки не изменилась или уменьшилась, делаем ставку'))
-                elif self.sale_profit and self.sale_profit > bet_profit:
+                elif self_opp_data.sum_sell and self.sale_profit > bet_profit:
                     # sell bet
                     err_str = 'Выкуп за: {} выгоднее, чем возможные потери после перерасчета: {}'.format(self.sale_profit, bet_profit)
                     prnt(err_str)
