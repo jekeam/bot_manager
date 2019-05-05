@@ -119,6 +119,7 @@ class BetManager:
         self.sale_profit = 0
 
         self.max_bet = 0
+        self.min_bet = 0
 
         err_msg = ''
 
@@ -278,8 +279,8 @@ class BetManager:
                                 self_opp_data = shared[self.bk_name_opposite].get('self', {})
                                 sum1, sum2 = get_new_sum_bets(self.cur_val_bet, self_opp_data.cur_val_bet, cur_bet_sum)
                                 prnt(self.msg.format(sys._getframe().f_code.co_name, 'new sum, ' + self.bk_name + ': ' + str(sum1) + ', ' + self.bk_name_opposite + ': ' + str(sum2)))
-                                if sum1 < 30 or sum2 < 30:
-                                    raise BetIsLost('Сумма одной из ставок после пересчета меньше 30р')
+                                if sum1 < self.min_bet or sum2 < self.min_bet:
+                                    raise BetIsLost('Сумма одной из ставок после пересчета меньше min_bet: ' + str(self.min_bet))
                                 else:
                                     self.sum_bet, self_opp_data.sum_bet = sum1, sum2
                                     self.sum_bet_stat, self_opp_data.sum_bet_stat = sum1, sum2
@@ -1171,6 +1172,7 @@ class BetManager:
         prnt(self.msg.format(sys._getframe().f_code.co_name, 'min_amount=' + str(min_amount) + ', max_amount=' + str(max_amount)))
         if min_amount > self.sum_bet:
             err_str = self.msg_err.format(sys._getframe().f_code.co_name, 'min bet')
+            self.min_bet = min_amount
             raise BetIsLost(err_str)
         if self.sum_bet > max_amount:
             err_str = self.msg_err.format(sys._getframe().f_code.co_name, 'max bet')
