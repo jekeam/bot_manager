@@ -1,6 +1,10 @@
 # coding:utf-8
 from emoji import emojize
 
+old_proxy = 'socks5://shaggy:hzsyk4@191.101.104.71:14487'
+new_proxy = 'socks5://suineg:8veh34@185.161.211.100:12974'
+new_proxy_http = 'https://suineg:8veh34@185.161.211.100:2974'
+
 # BOI
 PY_PATH = 'python3.6'
 TOKEN = '843081630:AAFmVT4hi5R71mgJpojVxOmTGEaZJA-LWYI'
@@ -14,15 +18,12 @@ IP_SERVER = '62.109.10.57:80'
 # IP_SERVER = '149.154.70.53:80'
 
 PROXY = {
-    'http': 'socks5://shaggy:hzsyk4@191.101.104.71:14487',
-    'https': 'socks5://shaggy:hzsyk4@191.101.104.71:14487'
+    'http': new_proxy,
+    'https': new_proxy
 }
-PROXY2 = {
-    "http": "http://shaggy:hzsyk4@191.101.104.71:4487",
-    "https": "https://shaggy:hzsyk4@191.101.104.71:4487"
-}
+
 REQUEST_KWARGS = {
-    'proxy_url': 'https://shaggy:hzsyk4@191.101.104.71:4487',
+    'proxy_url': new_proxy_http,
     'read_timeout': 60,
     'connect_timeout': 30
 }
