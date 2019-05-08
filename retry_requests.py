@@ -15,7 +15,7 @@ def requests_retry_session(
         backoff_factor=1,
         status=3,
         method_whitelist=frozenset(['POST']),
-        status_forcelist=(500, 501, 502, 503, 504),
+        status_forcelist=(500, 501, 502, 503, 504, 404),
         session=None,
 ):
     session = session or requests.Session()
