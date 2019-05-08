@@ -16,7 +16,7 @@ prop_abr = {
     "FORK_LIFE_TIME": {"abr": "Вилки от сек.", "type": "int", "max": "500", "min": "0", "access_list": [], "error": ""},
     "FORK_TIME_TYPE": {"abr": "Тип времени вилки", "type": "str", "max": "", "min": "", "access_list": ["текущее", "общее"], "error": ""},
     "WORK_HOUR_END": {"abr": "Остановка в", "type": "int", "max": "23", "min": "0", "access_list": [], "error": ""},
-    "ROUND_FORK": {"abr": "Округление", "type": "int", "max": "100", "min": "5", "access_list": ["5", "10", "50", "100"], "error": ""},
+    "ROUND_FORK": {"abr": "Округление", "type": "int", "max": "100", "min": "5", "access_list": ["5", "10", "25", "50", "100"], "error": ""},
     "MAX_FORK": {"abr": "MAX ставок", "type": "int", "max": "50", "min": "1", "access_list": [], "error": ""},
     "MAX_FAIL": {"abr": "MAX выкупов", "type": "int", "max": "7", "min": "1", "access_list": [], "error": ""},
     "FIRST_BET_IN": {"abr": "Первая ставка в", "type": "str", "max": "", "min": "", "access_list": first_bet_in, "error": ""},
