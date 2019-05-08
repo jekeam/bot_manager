@@ -555,7 +555,7 @@ if __name__ == '__main__':
         prnt('Баланс в БК Фонбет: ' + str(bal2))
 
         get_round_fork = int(get_prop('round_fork'))
-        if get_round_fork not in (5, 10, 25, 50, 100, 1000):
+        if get_round_fork not in (5, 10, 50, 100, 1000):
             err_msg = 'Недопустимое округление ставки={}'.format(get_round_fork)
             raise ValueError(err_msg)
         else:
