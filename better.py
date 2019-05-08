@@ -428,6 +428,13 @@ def go_bets(wag_ol, wag_fb, total_bet, key, deff_max, vect1, vect2, sc1, sc2, cr
         fork_info[fork_id]['fonbet']['err'] = str(shared.get('fonbet_err', 'ok'))
 
         fork_info[fork_id]['fonbet']['max_bet'] = shared['fonbet'].get('max_bet')
+
+        fork_info[fork_id]['fonbet']['avg_change'] = str(wag_fb.get('hist', {}).get('avg_change'))
+        fork_info[fork_id]['fonbet']['order_kof'] = str(wag_fb.get('hist', {}).get('order'))
+
+        fork_info[fork_id]['olimp']['avg_change'] = str(wag_ol.get('hist', {}).get('avg_change'))
+        fork_info[fork_id]['olimp']['order_kof'] = str(wag_ol.get('hist', {}).get('order'))
+
         # CHECK FATAL ERROR
         if shared.get('fonbet_err_fatal') or shared.get('olimp_err_fatal'):
             msg_str = 'Обнаружена фатальная ошибка:' + \
