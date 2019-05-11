@@ -107,7 +107,7 @@ class BetManager:
         self.sleep_bet = 3.51
         self.sleep_add = 0
         self.proxies = self.get_proxy()
-        self.server_olimp = 8
+        self.server_olimp = '08'
         self.server_fb = {}
         self.mirror = self.account.get('mirror')
 
@@ -669,7 +669,7 @@ class BetManager:
 
                 prnt(self.msg.format(sys._getframe().f_code.co_name, 'rq: ' + str(payload) + ' ' + str(headers)), 'hide')
                 resp = requests_retry_session_post(
-                    ol_url_api.format(str(self.server_olimp), 'autorize'),
+                    ol_url_api.format(self.server_olimp, 'autorize'),
                     headers=headers,
                     data=payload,
                     verify=False,
@@ -808,7 +808,7 @@ class BetManager:
             prnt(self.msg.format(sys._getframe().f_code.co_name, 'rq: ' + str(payload) + ' ' + str(headers)), 'hide')
             self.opposite_stat_get(shared)
             resp = requests_retry_session().post(
-                ol_url_api.format(str(self.server_olimp), 'basket/fast'),
+                ol_url_api.format(self.server_olimp, 'basket/fast'),
                 headers=headers,
                 data=payload,
                 verify=False,
@@ -1018,7 +1018,7 @@ class BetManager:
 
                 prnt(self.msg.format(sys._getframe().f_code.co_name, 'rq: ' + str(payload) + ' ' + str(headers)), 'hide')
                 resp = requests_retry_session_post(
-                    ol_url_api.format(str(self.server_olimp), 'user/cashout'),
+                    ol_url_api.format(self.server_olimp, 'user/cashout'),
                     headers=headers,
                     data=payload,
                     verify=False,
@@ -1413,7 +1413,7 @@ class BetManager:
 
     def get_cur_max_bet_id(self, filter='0100', offset='0'):
 
-        req_url = ol_url_api.format(str(self.server_olimp), 'user/history')
+        req_url = ol_url_api.format(self.server_olimp, 'user/history')
 
         payload = copy.deepcopy(ol_payload)
         payload['filter'] = filter  # только не расчитанные
