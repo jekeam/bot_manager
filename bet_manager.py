@@ -107,7 +107,7 @@ class BetManager:
         self.sleep_bet = 3.51
         self.sleep_add = 0
         self.proxies = self.get_proxy()
-        self.server_olimp = 10
+        self.server_olimp = 8
         self.server_fb = {}
         self.mirror = self.account.get('mirror')
 
