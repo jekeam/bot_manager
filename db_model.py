@@ -29,6 +29,7 @@ prop_abr = {
     "TEAM_STUD": {"abr": "Студ. команды", "type": "str", "max": "", "min": "", "access_list": ["вкл", "выкл"], "error": ""},
     "TEAM_FEMALE": {"abr": "Жен. команды", "type": "str", "max": "", "min": "", "access_list": ["вкл", "выкл"], "error": ""},
     "TEAM_JUNIOR": {"abr": "Юнош. команды", "type": "str", "max": "", "min": "", "access_list": ["вкл", "выкл"], "error": ""},
+    "TOP": {"abr": "TOP Матчи", "type": "str", "max": "", "min": "", "access_list": ["вкл", "выкл"], "error": ""},
 
     # "SERVER_IP_TEST": {"abr": "IP-адрес тест. сервера", "type": "", "max": "", "min": "", "access_list": [], "error": ""},
     # "SERVER_IP": {"abr": "IP-адрес бой сервера", "type": "", "max": "", "min": "", "access_list": [], "error": ""},
@@ -152,5 +153,18 @@ def send_message_bot(user_id: int, msg: str, admin_list: dict = None):
 
 
 if __name__ == '__main__':
-    print(uuid1())
-    print(get_prop_str(1))
+    uid = uuid1()
+    print(uid)
+    user = 'i'
+    pswd = 'p'
+    ip = 'ip'
+    port = 'port'
+    proxy = user + ':' + pswd + '@' + ip + ':' + port
+    print('proxy: ' + proxy)
+    proxies = '{`fonbet`:{`http`:`http://' + proxy + '`,`https`:`https://' + proxy + '`},`olimp`:{`http`:`http://' + proxy + '`,`https`:`https://' + proxy + '`}}'
+    olu = '3318188'
+    olp = '6ya8y4eK'
+    fbu = '5989155'
+    fbp = '6ya8y4eK'
+    accounts = '{`olimp`:{`login`:`' + olu + '`,`password`:`' + olp + '`,`mirror`:`olimp.com`},`fonbet`:{`login`:' + fbu + ',`password`:`' + fbp + '`,`mirror`:`fonbet.com`}}'
+    Account

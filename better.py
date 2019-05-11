@@ -98,7 +98,7 @@ def bet_type_is_work(key):
     return True
 
 
-def check_fork(key, L, k1, k2, live_fork, live_fork_total, bk1_score, bk2_score, minute, time_break_fonbet, period, name, name_rus, deff_max, info=''):
+def check_fork(key, L, k1, k2, live_fork, live_fork_total, bk1_score, bk2_score, minute, time_break_fonbet, period, name, name_rus, deff_max, is_top, info=''):
     global bal1, bal2, bet1, bet2, cnt_fork_success, black_list_matches
 
     fork_exclude_text = ''
@@ -179,6 +179,9 @@ def check_fork(key, L, k1, k2, live_fork, live_fork_total, bk1_score, bk2_score,
     else:
         if live_fork_total - deff_max < long_livers:
             fork_exclude_text = fork_exclude_text + 'Вилка ' + str(round((1 - L) * 100, 2)) + '% исключена т.к. живет в общем меньше ' + str(long_livers) + ' сек. \n'
+
+    if get_prop('top', 'выкл') == 'вкл' and not is_top:
+        fork_exclude_text = fork_exclude_text + 'Вилка исключена т.к. это не топовый матч: ' + name_rus + '\n'
 
     fork_exclude_text = fork_exclude_text + check_l(L)
 
@@ -692,6 +695,7 @@ if __name__ == '__main__':
                     v_time = val_json.get('time', 'v_time')
                     minute = val_json.get('minute', 0)
                     time_break_fonbet = val_json.get('time_break_fonbet')
+                    is_top = val_json.get('is_top')
                     period = val_json.get('period')
                     time_last_upd = val_json.get('time_last_upd', 1)
                     live_fork_total = val_json.get('live_fork_total', 0)
@@ -766,7 +770,7 @@ if __name__ == '__main__':
 
                             # Проверим вилку на исключения
                             if check_fork(key, l_temp, k1, k2, live_fork, live_fork_total, bk1_score, bk2_score,
-                                          minute, time_break_fonbet, period, name, name_rus, deff_max, info) or DEBUG:
+                                          minute, time_break_fonbet, period, name, name_rus, deff_max, is_top, info) or DEBUG:
                                 go_bet_key.clear()
                                 l = l_temp
                                 go_bet_json = val_json

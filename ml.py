@@ -244,3 +244,7 @@ def str_to_list_float(s: str) -> list:
 
 def str_to_list_int(s: str) -> list:
     return list(map(int, s.replace('[', '').replace(']', '').replace(' ', '').split(',')))
+
+
+if __name__ == '__main__':
+    vect1, vect2, noize1, noize2 = get_vect([257, 89, 89, 6], [4.7, 4.8, 4.9, 5.0], [2], [1.3], filename='img/chart.png')
