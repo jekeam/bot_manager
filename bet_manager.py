@@ -648,7 +648,7 @@ class BetManager:
             finally:
                 sleep(5)
 
-    def sign_in(self, shared: dict, retry=None):
+    def sign_in(self, shared: dict):
 
         try:
             if self.bk_name == 'olimp':
@@ -677,16 +677,17 @@ class BetManager:
                     proxies=self.proxies)
                 prnt(self.msg.format(sys._getframe().f_code.co_name, 'rs: ' + str(resp.status_code) + ' ' + str(resp.text.strip())), 'hide')
                 data_js = resp.json()
+                
                 err_code = data_js.get('error', {}).get('err_code', 0)
                 if err_code == 404 and self.attempt_login <= 6:
                     self.attempt_login += 1
-                    self.sign_in(shared, retry=self.attempt_login)
-                else:
-                    data = data_js.get('data', {})
+                    return self.sign_in(shared)
 
-                    self.session['session'] = data.get('session')
-                    self.session['balance'] = float(dict(data).get('s'))
-                    self.session['currency'] = dict(data).get('cur')
+                data = data_js.get('data', {})
+
+                self.session['session'] = data.get('session')
+                self.session['balance'] = float(dict(data).get('s'))
+                self.session['currency'] = dict(data).get('cur')
 
             elif self.bk_name == 'fonbet':
 
@@ -817,6 +818,11 @@ class BetManager:
 
             err_code = res.get('error', {}).get('err_code')
             err_msg = res.get('error', {}).get('err_desc')
+
+            if err_code == 404 and self.attempt_bet <= 6:
+                self.attempt_bet += 1
+                return self.bet_place(shared)
+
             self.check_responce(err_msg)
 
             if err_code == 0:
