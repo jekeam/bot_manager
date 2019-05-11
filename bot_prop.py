@@ -6,16 +6,16 @@ new_proxy = 'socks5://suineg:8veh34@185.161.211.100:12974'
 new_proxy_http = 'http://suineg:8veh34@185.161.211.100:2974'
 
 # BOI
-PY_PATH = 'python3.6'
-TOKEN = '843081630:AAFmVT4hi5R71mgJpojVxOmTGEaZJA-LWYI'
-ADMINS = [381868674, 33847743, 337186802]
-IP_SERVER = '62.109.10.57:80'
+# PY_PATH = 'python3.6'
+# TOKEN = '843081630:AAFmVT4hi5R71mgJpojVxOmTGEaZJA-LWYI'
+# ADMINS = [381868674, 33847743, 337186802]
+# IP_SERVER = '62.109.10.57:80'
 
 # TEST
-# PY_PATH = 'D:\\YandexDisk\\Парсинг\\bot_manager\\venv\\Scripts\\python.exe'
-# TOKEN = '598446286:AAEhbB2RDQ7oEe7pX2vif-IENIdIVIZ9xVk'
-# ADMINS = [381868674]
-# IP_SERVER = '149.154.70.53:80'
+PY_PATH = 'D:\\YandexDisk\\Парсинг\\bot_manager\\venv\\Scripts\\python.exe'
+TOKEN = '598446286:AAEhbB2RDQ7oEe7pX2vif-IENIdIVIZ9xVk'
+ADMINS = [381868674]
+IP_SERVER = '149.154.70.53:80'
 
 PROXY = {
     'http': new_proxy,
