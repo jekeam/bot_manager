@@ -395,20 +395,22 @@ def go_bets(wag_ol, wag_fb, total_bet, key, deff_max, vect1, vect2, sc1, sc2, cr
 
         x2 = wag_ol.get('hist', {}).get('avg_change')
         y2 = wag_ol.get('hist', {}).get('order')
-        filename_graph = str(ACC_ID) + '_' + str(fork_id) + '.png'
-        real_vect2, real_vect1, noize1, noize2 = get_vect(x, y, x2, y2, filename=filename_graph)
-        if check_vect(real_vect1, real_vect2) and check_noize(noize1, noize2):
-            prnt('ID Fork: ' + str(fork_id) + ', успешно прошел проверку 1 (векторы строго сонаправлены и нет шума): ' + filename_graph)
-            if vect1 != real_vect1:
-                prnt('Вектор в Олимп измнен: {}->{}'.format(vect1, real_vect1))
-                shared['olimp']['vect'] = vect2
-            if vect2 != real_vect2:
-                prnt('Вектор в Фонбет измнен: {}->{}'.format(vect2, real_vect2))
-                shared['fonbet']['vect'] = vect1
+        
+        if ACC_ID in (1, 3, 11):
+            filename_graph = str(ACC_ID) + '_' + str(fork_id) + '.png'
+            real_vect2, real_vect1, noize1, noize2 = get_vect(x, y, x2, y2, filename=filename_graph)
+            if check_vect(real_vect1, real_vect2) and check_noize(noize1, noize2):
+                prnt('ID Fork: ' + str(fork_id) + ', успешно прошел проверку 1 (векторы строго сонаправлены и нет шума): ' + filename_graph)
+                if vect1 != real_vect1:
+                    prnt('Вектор в Олимп измнен: {}->{}'.format(vect1, real_vect1))
+                    shared['olimp']['vect'] = vect2
+                if vect2 != real_vect2:
+                    prnt('Вектор в Фонбет измнен: {}->{}'.format(vect2, real_vect2))
+                    shared['fonbet']['vect'] = vect1
+            else:
+                prnt('ID Fork: ' + str(fork_id) + ', не прошел проверку 1 (векторы строго сонаправлены и нет шума): ' + filename_graph)
+                return False
 
-        else:
-            prnt('ID Fork: ' + str(fork_id) + ', не прошел проверку 1 (векторы строго сонаправлены и нет шума): ' + filename_graph)
-            return False
         from bet_manager import run_bets
         run_bets(shared)
 
