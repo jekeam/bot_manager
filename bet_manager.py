@@ -677,9 +677,10 @@ class BetManager:
                     proxies=self.proxies)
                 prnt(self.msg.format(sys._getframe().f_code.co_name, 'rs: ' + str(resp.status_code) + ' ' + str(resp.text.strip())), 'hide')
                 data_js = resp.json()
-                
+
                 err_code = data_js.get('error', {}).get('err_code', 0)
                 if err_code == 404 and self.attempt_login <= 6:
+                    sleep(2)
                     self.attempt_login += 1
                     return self.sign_in(shared)
 
@@ -820,6 +821,7 @@ class BetManager:
             err_msg = res.get('error', {}).get('err_desc')
 
             if err_code == 404 and self.attempt_bet <= 6:
+                sleep(2)
                 self.attempt_bet += 1
                 return self.bet_place(shared)
 
