@@ -231,7 +231,7 @@ def check_statistics():
 
     max_fail = int(get_prop('max_fail'))
     if cnt_fail >= max_fail:
-        msg_str = 'Кол-во ошибок больше допустимого (' + str(max_fail) + '), работа завершена.'
+        msg_str = 'Кол-во выкупов больше допустимого (' + str(max_fail) + '), работа завершена.'
         raise MaxFail(msg_str)
 
     max_fork = int(get_prop('max_fork'))
