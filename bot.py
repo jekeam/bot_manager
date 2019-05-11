@@ -407,6 +407,17 @@ def matches(update, context):
     update.message.reply_text(text='Кол-во матчей: ' + cnt)
 
 
+def top_matches(update, context):
+    cnt = '0'
+    try:
+        resp = requests.get('http://' + bot_prop.IP_SERVER + '/get_cnt_top_matches')
+        cnt = str(resp.text)
+    except Exception as e:
+        update.message.reply_text(text='Ошибка при запросе кол-ва TOP матчей: ' + str(e))
+
+    update.message.reply_text(text='Кол-во TOP матчей: ' + cnt)
+
+
 if __name__ == '__main__':
     updater = Updater(bot_prop.TOKEN, use_context=True, request_kwargs=bot_prop.REQUEST_KWARGS)
     dispatcher = updater.dispatcher
@@ -419,6 +430,7 @@ if __name__ == '__main__':
     updater.dispatcher.add_handler(CommandHandler('hello', send_text))
     updater.dispatcher.add_handler(CommandHandler('botlist', botlist))
     updater.dispatcher.add_handler(CommandHandler('matches', matches))
+    updater.dispatcher.add_handler(CommandHandler('top_matches', top_matches))
     updater.dispatcher.add_handler(CallbackQueryHandler(button))
     updater.dispatcher.add_handler(RegexHandler(patterns, choose_prop))
     updater.dispatcher.add_handler(RegexHandler('^(' + bot_prop.BTN_CLOSE + ')$', close_prop))
