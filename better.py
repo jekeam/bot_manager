@@ -173,10 +173,10 @@ def check_fork(key, L, k1, k2, live_fork, live_fork_total, bk1_score, bk2_score,
     # Вилка живет достаточно
     long_livers = int(get_prop('fork_life_time'))
     if get_prop('fork_time_type', 'auto') in ('auto', 'текущее'):
-        if live_fork < long_livers:
+        if live_fork - deff_max < long_livers:
             fork_exclude_text = fork_exclude_text + 'Вилка ' + str(round((1 - L) * 100, 2)) + '% исключена т.к. живет меньше ' + str(long_livers) + ' сек. \n'
     else:
-        if live_fork_total < long_livers:
+        if live_fork_total - deff_max < long_livers:
             fork_exclude_text = fork_exclude_text + 'Вилка ' + str(round((1 - L) * 100, 2)) + '% исключена т.к. живет в общем меньше ' + str(long_livers) + ' сек. \n'
 
     fork_exclude_text = fork_exclude_text + check_l(L)
@@ -252,12 +252,8 @@ def go_bets(wag_ol, wag_fb, total_bet, key, deff_max, vect1, vect2, sc1, sc2, cr
     if __name__ == '__main__':
         wait_sec = 0
         prnt('Wait sec: ' + str(wait_sec))
-
         real_wait = wait_sec + deff_max
         prnt('Real wait sec: ' + str(real_wait))
-        if real_wait > 9:
-            prnt('Fork is lost: real wait > 9')
-            return False
 
         time.sleep(wait_sec)
         with Manager() as manager:
@@ -735,7 +731,7 @@ if __name__ == '__main__':
                         info = ''
 
                     if vect1 and vect2:
-                        if (0.0 <= l < l_temp or DEBUG) and deff_max < 10 and k1 > 0 < k2:
+                        if (0.0 <= l < l_temp or DEBUG) and deff_max < 3 and k1 > 0 < k2:
                             round_bet = int(get_prop('round_fork'))
                             total_bet = round(randint(total_bet_min, total_bet_max) / round_bet) * round_bet
 
@@ -764,7 +760,7 @@ if __name__ == '__main__':
                                     'info': info,
                                     'created_fork': created_fork
                                 }
-                        elif deff_max >= 10:
+                        elif deff_max >= 3:
                             pass
                     else:
                         prnt('Вектор направления коф-та не определен: VECT1=' + str(vect1) + ', VECT2=' + str(vect2))
