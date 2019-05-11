@@ -681,11 +681,12 @@ class BetManager:
                 if err_code == 404 and self.attempt_login <= 6:
                     self.attempt_login += 1
                     self.sign_in(shared, retry=self.attempt_login)
-                data = data_js.get('data', {})
+                else:
+                    data = data_js.get('data', {})
 
-                self.session['session'] = data.get('session')
-                self.session['balance'] = float(dict(data).get('s'))
-                self.session['currency'] = dict(data).get('cur')
+                    self.session['session'] = data.get('session')
+                    self.session['balance'] = float(dict(data).get('s'))
+                    self.session['currency'] = dict(data).get('cur')
 
             elif self.bk_name == 'fonbet':
 
