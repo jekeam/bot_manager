@@ -25,3 +25,4 @@ bot_manager.db
 *.csv#
 rq_fb_calc_balance
 *.png
+*.db

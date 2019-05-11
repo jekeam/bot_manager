@@ -208,6 +208,7 @@ def get_vect(x, y, x2, y2, filename=None):
     prnt('Olimp: {}, {}->{}. {}. Noize: {}'.format(vect_ol, kof_predict12, kof_predict22, kof_cur2, noize2))
     if filename:
         plt.savefig(filename)
+        plt.close()
     else:
         plt.show()
     return vect_fb, vect_ol, noize1, noize2
