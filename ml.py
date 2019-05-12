@@ -210,7 +210,8 @@ def get_vect(x, y, x2, y2, filename=None):
         plt.savefig(filename)
         plt.close()
     else:
-        plt.show()
+        plt.close()
+        # plt.show()
     return vect_fb, vect_ol, noize1, noize2
 
 

@@ -30,6 +30,7 @@ prop_abr = {
     "TEAM_FEMALE": {"abr": "Жен. команды", "type": "str", "max": "", "min": "", "access_list": ["вкл", "выкл"], "error": ""},
     "TEAM_JUNIOR": {"abr": "Юнош. команды", "type": "str", "max": "", "min": "", "access_list": ["вкл", "выкл"], "error": ""},
     "TOP": {"abr": "TOP Матчи", "type": "str", "max": "", "min": "", "access_list": ["вкл", "выкл"], "error": ""},
+    "ML_NOIZE": {"abr": "ML: исключить шум", "type": "str", "max": "", "min": "", "access_list": ["вкл", "выкл"], "error": ""},
 
     # "SERVER_IP_TEST": {"abr": "IP-адрес тест. сервера", "type": "", "max": "", "min": "", "access_list": [], "error": ""},
     # "SERVER_IP": {"abr": "IP-адрес бой сервера", "type": "", "max": "", "min": "", "access_list": [], "error": ""},
