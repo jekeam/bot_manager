@@ -121,6 +121,9 @@ def get_prop_str(id: int) -> str:
     for key, val in loads(Account.get_by_id(id).accounts.replace('`', '"')).items():
         info_accs = info_accs + key.capitalize() + ': * ' + str(val.get('login')) + ' / ' + str(val.get('password')) + '*\n'
 
+    for key, val in loads(Account.get_by_id(id).proxies.replace('`', '"')).items():
+        info_accs = info_accs + key.capitalize() + ': * ' + str(val.get('http').replace('http://', '')) + '*\n'
+
     for key, val in prop_abr.items():
         res += '' + str(val.get('abr', '')) + ': *' + get_val_prop_id(id, key) + '*\n'
     return info_accs + res
@@ -153,18 +156,4 @@ def send_message_bot(user_id: int, msg: str, admin_list: dict = None):
 
 
 if __name__ == '__main__':
-    uid = uuid1()
-    print(uid)
-    user = 'i'
-    pswd = 'p'
-    ip = 'ip'
-    port = 'port'
-    proxy = user + ':' + pswd + '@' + ip + ':' + port
-    print('proxy: ' + proxy)
-    proxies = '{`fonbet`:{`http`:`http://' + proxy + '`,`https`:`https://' + proxy + '`},`olimp`:{`http`:`http://' + proxy + '`,`https`:`https://' + proxy + '`}}'
-    olu = '3318188'
-    olp = '6ya8y4eK'
-    fbu = '5989155'
-    fbp = '6ya8y4eK'
-    accounts = '{`olimp`:{`login`:`' + olu + '`,`password`:`' + olp + '`,`mirror`:`olimp.com`},`fonbet`:{`login`:' + fbu + ',`password`:`' + fbp + '`,`mirror`:`fonbet.com`}}'
-    Account
+    pass
