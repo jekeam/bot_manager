@@ -7,21 +7,21 @@ if __name__ == '__main__':
     print(uid)
     user = 'shaggy'
     pswd = 'hzsyk4'
-    ip = '193.228.53.76'
-    port = '6817'
+    ip = '181.215.12.168'
+    port = '3966'
     proxy = user + ':' + pswd + '@' + ip + ':' + port
 
     proxies = '{`fonbet`:{`http`:`http://' + proxy + '`,`https`:`https://' + proxy + '`},`olimp`:{`http`:`http://' + proxy + '`,`https`:`https://' + proxy + '`}}'
     print('proxies: ' + proxies)
-    olu = '7167474'
-    olp = 'Y0r13tH2'
-    fbu = '6726320'
-    fbp = 'Y0r13tH2'
+    olu = '5780597'
+    olp = '0n4EBNqT'
+    fbu = '6724925'
+    fbp = '0n4EBNqT'
     accounts = '{`olimp`:{`login`:`' + olu + '`,`password`:`' + olp + '`,`mirror`:`olimp.com`},`fonbet`:{`login`:' + fbu + ',`password`:`' + fbp + '`,`mirror`:`fonbet.com`}}'
     print('accounts: ' + accounts)
     try:
         acc = Account.create(
-            user=381868674,
+            user=33847743,
             key=uid,
             # date_end=get_trunc_sysdate(30),
             status='active',
