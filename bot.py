@@ -417,9 +417,6 @@ def matches(update, context):
     update.message.reply_text(text=msg)
 
 
-def top_matches(update, context):
-
-
 if __name__ == '__main__':
     updater = Updater(bot_prop.TOKEN, use_context=True, request_kwargs=bot_prop.REQUEST_KWARGS)
     dispatcher = updater.dispatcher
