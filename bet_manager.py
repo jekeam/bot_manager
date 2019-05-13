@@ -1146,7 +1146,7 @@ class BetManager:
                 raise SessionExpired(err_msg + ' ' + err_str)
             elif 'Продажа ставки недоступна'.lower() in err_msg.lower() or 'Изменилась сумма продажи ставки'.lower() in err_msg.lower():
                 raise CouponBlocked(self.msg.format(sys._getframe().f_code.co_name, err_msg))
-            elif 'Превышена cуммарная ставка'.lower() in err_msg.lower():
+            elif 'Слишком частые ставки на событие'.lower() in err_msg.lower():
                 raise BetIsLost(err_msg)
             elif 'Нет прав на выполнение операции'.lower() in err_msg.lower() or \
                     'No rights for operation'.lower() in err_msg.lower():
@@ -1247,6 +1247,7 @@ class BetManager:
         err_msg = res.get('coupon', {}).get('errorMessageRus')
         err_msg_eng = res.get('coupon', {}).get('errorMessageEng')
 
+        self.opposite_stat_get(shared)
         self.check_responce(err_msg)
 
         if result == 'couponResult':
@@ -1264,10 +1265,7 @@ class BetManager:
                 raise BetIsLost(err_str)
             elif err_code == 100:
                 self.opposite_stat_get(shared)
-                if 'Слишком частые ставки на событие' in err_msg:
-                    err_str = self.msg_err.format(sys._getframe().f_code.co_name, err_msg)
-                    raise BetIsLost(err_str)
-                elif 'Превышена cуммарная ставка для события' in err_msg:
+                if 'Превышена cуммарная ставка для события' in err_msg:
                     try:
                         self.max_bet = int(re.search('=(\d{1,})\D', err_msg.replace(' ', '').replace('.', '').replace(',', '')).group(1))
                         if self.max_bet and ((self.first_bet_in == 'auto' and self.vector == 'DOWN') or self.bk_name == self.first_bet_in):
