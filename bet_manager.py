@@ -1269,14 +1269,17 @@ class BetManager:
                     raise BetIsLost(err_str)
                 elif 'Превышена cуммарная ставка для события' in err_msg:
                     try:
-                        self.max_bet = int(re.search('Max=(\d+)руб', err_msg.replace(' ', '').replace('.', '').replace(',', '')).group(1))
+                        self.max_bet = int(re.search('=(\d{1,})\D', err_msg.replace(' ', '').replace('.', '').replace(',', '')).group(1))
                         if self.max_bet and ((self.first_bet_in == 'auto' and self.vector == 'DOWN') or self.bk_name == self.first_bet_in):
                             prnt(self.msg.format(sys._getframe().f_code.co_name, 'Получен неявный максбет: ' + str(self.max_bet)))
                             self.recalc_sum_by_maxbet(self, shared)
                             return self.bet_place(shared)
+                        else:
+                            raise AttributeError(err_msg)
                     except AttributeError as e:
                         prnt(self.msg.format(sys._getframe().f_code.co_name, e + ': ' + err_msg))
                         self.max_bet = 0
+                        
                     if self.max_bet == 0:
                         raise BetIsLost(err_msg)
                 else:
