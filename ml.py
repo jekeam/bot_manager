@@ -4,6 +4,7 @@ from sklearn import linear_model
 import matplotlib.pyplot as plt
 import json
 from utils import prnt
+import os
 
 noize = 2
 access_vect = {'UP': 'DOWN', 'DOWN': 'UP'}
@@ -53,7 +54,7 @@ def del_zerro(val_arr: list, line_arr: list):
     return val_arr, line_arr
 
 
-def get_vect(x, y, x2, y2, filename=None):
+def get_vect(x, y, x2, y2):
     y = y[-len(x):]
     y2 = y2[-len(x2):]
 
@@ -98,27 +99,26 @@ def get_vect(x, y, x2, y2, filename=None):
     x_predict1 = x[-1] + x_max
     x_predict2 = x2[-1] + x2_max
 
-    if filename:
-        for k in reversed(p):
-            k1, k2 = k[0], k[1]
-            if k1 and k2:
-                l = 1 / k1 + 1 / k2
-                if l < 1:
-                    proc = (1 - l) * 100
-                    if proc > 0:
-                        if proc >= 3:
-                            color = 'pink'
-                        elif proc >= 2:
-                            color = 'red'
-                        elif proc >= 1:
-                            color = 'yellow'
-                        elif proc >= 0.5:
-                            color = 'orange'
-                        elif proc < 0.5:
-                            color = 'black'
-                        plt.plot([n3, n3], [min(k1, k2) + 0.05, max(k1, k2) - 0.05], color=color, markersize=1)
-                        # live += 1
-            n3 += 1
+    for k in reversed(p):
+        k1, k2 = k[0], k[1]
+        if k1 and k2:
+            l = 1 / k1 + 1 / k2
+            if l < 1:
+                proc = (1 - l) * 100
+                if proc > 0:
+                    if proc >= 3:
+                        color = 'pink'
+                    elif proc >= 2:
+                        color = 'red'
+                    elif proc >= 1:
+                        color = 'yellow'
+                    elif proc >= 0.5:
+                        color = 'orange'
+                    elif proc < 0.5:
+                        color = 'black'
+                    plt.plot([n3, n3], [min(k1, k2) + 0.05, max(k1, k2) - 0.05], color=color, markersize=1)
+                    # live += 1
+        n3 += 1
     plt.scatter(x, y, color='blue', marker=',')
     plt.scatter(x2, y2, color='red', marker=',')
     x_save, y_save = np.asarray(x).reshape(len(x), 1), np.asarray(y).reshape(len(y), 1)
@@ -206,13 +206,7 @@ def get_vect(x, y, x2, y2, filename=None):
     else:
         vect_ol = 'DOWN'
     prnt('Olimp: {}, {}->{}. {}. Noize: {}'.format(vect_ol, kof_predict12, kof_predict22, kof_cur2, noize2))
-    if filename:
-        plt.savefig(filename)
-        plt.close()
-    else:
-        plt.close()
-        # plt.show()
-    return vect_fb, vect_ol, noize1, noize2
+    return vect_fb, vect_ol, noize1, noize2, plt
 
 
 # 01 - vects up-down/down/up, noizes=0
@@ -231,8 +225,8 @@ def check_noize(noize1, noize2):
         return False
 
 
-def checks(x, y, x2, y2, filename):
-    vect1, vect2, noize1, noize2 = get_vect(x, y, x2, y2, filename=filename)
+def checks(x, y, x2, y2):
+    vect1, vect2, noize1, noize2 = get_vect(x, y, x2, y2)
     if check_vect(vect1, vect2) and check_noize(noize1, noize2):
         return True
     else:
@@ -248,4 +242,4 @@ def str_to_list_int(s: str) -> list:
 
 
 if __name__ == '__main__':
-    vect1, vect2, noize1, noize2 = get_vect([257, 89, 89, 6], [4.7, 4.8, 4.9, 5.0], [2], [1.3], filename='img/chart.png')
+    pass

@@ -182,14 +182,13 @@ def check_fork(key, L, k1, k2, live_fork, live_fork_total, bk1_score, bk2_score,
 
     if get_prop('top', 'выкл') == 'вкл' and not is_top:
         fork_exclude_text = fork_exclude_text + 'Вилка исключена т.к. это не топовый матч: ' + name_rus + '\n'
-    
+
     pour_into = get_prop('pour_into', 'auto')
     if pour_into != 'auto':
         if pour_into == 'olimp' and k1 > k2:
             fork_exclude_text = fork_exclude_text + 'Вилка исключена т.к. задан перелив в {}, а коф-т менее вероятен: k_ol:{} > k_fb:{}\n'.format(pour_into, k1, k2)
         elif pour_into == 'fonbet' and k2 > k1:
             fork_exclude_text = fork_exclude_text + 'Вилка исключена т.к. задан перелив в {}, а коф-т менее вероятен: k_ol:{} < k_fb:{}\n'.format(pour_into, k1, k2)
-        
 
     fork_exclude_text = fork_exclude_text + check_l(L)
 
@@ -408,10 +407,18 @@ def go_bets(wag_ol, wag_fb, total_bet, key, deff_max, vect1, vect2, sc1, sc2, cr
         y2 = wag_ol.get('hist', {}).get('order')
 
         if get_prop('ml_noize', 'выкл') == 'вкл':
-            filename_graph = str(ACC_ID) + '_' + str(fork_id) + '.png'
-            real_vect2, real_vect1, noize1, noize2 = get_vect(x, y, x2, y2)  # , filename=filename_graph)
+
+            real_vect2, real_vect1, noize1, noize2, plt = get_vect(x, y, x2, y2)
+
             if check_vect(real_vect1, real_vect2) and check_noize(noize1, noize2) and sum(x) >= 2 <= sum(x2):
-                prnt('ID Fork: ' + str(fork_id) + ', успешно прошел проверку 1 (векторы строго сонаправлены и нет шума): ' + filename_graph)
+                prnt('Fork key: ' + str(key) + ', успешно прошел проверку 1 (векторы строго сонаправлены и нет шума)')
+
+                dir_ok = str(ACC_ID) + '_ok'
+                if not os.path.exists(dir_ok):
+                    os.makedirs(dir_ok)
+                plt.savefig(os.path.join(dir_ok, key))
+                plt.close()
+
                 if vect1 != real_vect1:
                     prnt('Вектор в Олимп измнен: {}->{}'.format(vect1, real_vect1))
                     shared['olimp']['vect'] = vect2
@@ -419,7 +426,14 @@ def go_bets(wag_ol, wag_fb, total_bet, key, deff_max, vect1, vect2, sc1, sc2, cr
                     prnt('Вектор в Фонбет измнен: {}->{}'.format(vect2, real_vect2))
                     shared['fonbet']['vect'] = vect1
             else:
-                prnt('ID Fork: ' + str(fork_id) + ', не прошел проверку 1 (векторы строго сонаправлены и нет шума): ' + filename_graph)
+                prnt('Fork key: ' + str(key) + ', не прошел проверку 1 (векторы строго сонаправлены и нет шума)')
+
+                dir_err = str(ACC_ID) + '_err'
+                if not os.path.exists(dir_err):
+                    os.makedirs(dir_err)
+                plt.savefig(os.path.join(dir_err, key))
+                plt.close()
+
                 return False
 
         from bet_manager import run_bets
