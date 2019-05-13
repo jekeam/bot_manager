@@ -400,14 +400,14 @@ def matches(update, context):
     msg = ''
     cnt = '0'
     try:
-        resp = requests.get('http://' + bot_prop.IP_SERVER + '/get_cnt_matches')
+        resp = requests.get('http://' + bot_prop.IP_SERVER + '/get_cnt_matches', timeout=5)
         cnt = str(resp.text)
     except Exception as e:
         update.message.reply_text(text='Ошибка при запросе кол-ва матчей: ' + str(e))
 
     top = '0'
     try:
-        resp = requests.get('http://' + bot_prop.IP_SERVER + '/get_cnt_top_matches')
+        resp = requests.get('http://' + bot_prop.IP_SERVER + '/get_cnt_top_matches', timeout=5)
         top = str(resp.text)
     except Exception as e:
         update.message.reply_text(text='Ошибка при запросе кол-ва TOP матчей: ' + str(e))

@@ -8,7 +8,7 @@ new_proxy_http = 'http://suineg:8veh34@185.161.211.100:2974'
 # BOI
 PY_PATH = 'python3.6'
 TOKEN = '843081630:AAFmVT4hi5R71mgJpojVxOmTGEaZJA-LWYI'
-ADMINS = [381868674, 33847743, 337186802]
+ADMINS = [381868674, 33847743] # 337186802
 IP_SERVER = '62.109.10.57:80'
 
 # TEST
@@ -24,7 +24,7 @@ PROXY = {
 
 REQUEST_KWARGS = {
     'proxy_url': new_proxy_http,
-    'read_timeout': 60,
+    'read_timeout': 30,
     'connect_timeout': 30
 }
 
