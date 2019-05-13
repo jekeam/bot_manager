@@ -9,6 +9,8 @@ db = MySQLDatabase('bot_manager', user='root', password='131189_Ak13', host='127
 
 first_bet_in = ["created", "notcreator", "fonbet", "olimp", "parallel", "auto"]
 
+bks = [ "fonbet", "olimp", "auto"]
+
 prop_abr = {
     "SUMM": {"abr": "Общая ставка", "type": "int", "max": "10000", "min": "400", "access_list": [], "error": ""},
     "RANDOM_SUMM_PROC": {"abr": "% Разброс ставки", "type": "int", "max": "30", "min": "0", "access_list": [], "error": ""},
@@ -31,6 +33,7 @@ prop_abr = {
     "TEAM_JUNIOR": {"abr": "Юнош. команды", "type": "str", "max": "", "min": "", "access_list": ["вкл", "выкл"], "error": ""},
     "TOP": {"abr": "TOP Матчи", "type": "str", "max": "", "min": "", "access_list": ["вкл", "выкл"], "error": ""},
     "ML_NOIZE": {"abr": "ML: исключить шум", "type": "str", "max": "", "min": "", "access_list": ["вкл", "выкл"], "error": ""},
+    "POUR_INTO": {"abr": "Перелить в", "type": "str", "max": "", "min": "", "access_list": bks, "error": ""},
 
     # "SERVER_IP_TEST": {"abr": "IP-адрес тест. сервера", "type": "", "max": "", "min": "", "access_list": [], "error": ""},
     # "SERVER_IP": {"abr": "IP-адрес бой сервера", "type": "", "max": "", "min": "", "access_list": [], "error": ""},

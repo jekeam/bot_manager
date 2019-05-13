@@ -182,6 +182,14 @@ def check_fork(key, L, k1, k2, live_fork, live_fork_total, bk1_score, bk2_score,
 
     if get_prop('top', 'выкл') == 'вкл' and not is_top:
         fork_exclude_text = fork_exclude_text + 'Вилка исключена т.к. это не топовый матч: ' + name_rus + '\n'
+    
+    pour_into = get_prop('pour_into', 'auto')
+    if pour_into != 'auto':
+        if pour_into == 'olimp' and k1 > k2:
+            fork_exclude_text = fork_exclude_text + 'Вилка исключена т.к. задан перелив в {}, а коф-т менее вероятен: k_ol:{} > k_fb:{}\n'.format(pour_into, k1, k2)
+        elif pour_into == 'fonbet' and k2 > k1:
+            fork_exclude_text = fork_exclude_text + 'Вилка исключена т.к. задан перелив в {}, а коф-т менее вероятен: k_ol:{} < k_fb:{}\n'.format(pour_into, k1, k2)
+        
 
     fork_exclude_text = fork_exclude_text + check_l(L)
 
