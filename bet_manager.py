@@ -415,12 +415,21 @@ class BetManager:
                     err_msg = 'recheck err (' + str(e.__class__.__name__) + '): ' + str(e)
                     prnt(self.msg_err.format(sys._getframe().f_code.co_name, err_msg))
 
-            if self.side_bet == '1':
-                self.cur_total = int(self.cur_sc_main.split(':')[0])
-            elif self.side_bet == '2':
-                self.cur_total = int(self.cur_sc_main.split(':')[1])
-            else:
-                self.cur_total = sum(map(int, self.cur_sc_main.split(':')))
+            try:
+                if self.side_bet == '1':
+                    self.cur_total = int(self.cur_sc_main.split(':')[0])
+                elif self.side_bet == '2':
+                    self.cur_total = int(self.cur_sc_main.split(':')[1])
+                else:
+                    self.cur_total = sum(map(int, self.cur_sc_main.split(':')))
+            except AttributeError as e:
+                exc_type, exc_value, exc_traceback = sys.exc_info()
+                prnt(
+                    self.msg.format(
+                        sys._getframe().f_code.co_name,
+                        'Ошибка парсинга счета: (' + e.__class__.__name__ + ') ' + str(e) + ' ' + str(repr(traceback.format_exception(exc_type, exc_value, exc_traceback)))
+                    )
+                )
 
             if not self.cur_total_new:
                 self.cur_total_new = self.cur_total
@@ -580,11 +589,21 @@ class BetManager:
                             raise BetIsLost(err_str)
                     # strategy definition
                     elif self.strat_name == 'КЗ':
-                        if self.side_bet == '1' and int(self.cur_sc_main.split(':')[0]) > 0 or \
-                                self.side_bet == '2' and int(self.cur_sc_main.split(':')[1]) > 0:
-                            err_str = 'Strategy ' + self.strat_name + ': bet is lost, side_bet:{}, score:{}'.format(self.side_bet, self.cur_sc_main)
-                            prnt(err_str)
-                            raise BetIsLost(err_str)
+                        try:
+                            if self.side_bet == '1' and int(self.cur_sc_main.split(':')[0]) > 0 or \
+                                    self.side_bet == '2' and int(self.cur_sc_main.split(':')[1]) > 0:
+                                err_str = 'Strategy ' + self.strat_name + ': bet is lost, side_bet:{}, score:{}'.format(self.side_bet, self.cur_sc_main)
+                                prnt(err_str)
+                                raise BetIsLost(err_str)
+                        except AttributeError as e:
+                            exc_type, exc_value, exc_traceback = sys.exc_info()
+                            prnt(
+                                self.msg.format(
+                                    sys._getframe().f_code.co_name,
+                                    'Ошибка парсинга счета: (' + e.__class__.__name__ + ') ' + str(e) + ' ' +
+                                    str(repr(traceback.format_exception(exc_type, exc_value, exc_traceback)))
+                                )
+                            )
                     elif self.strat_name == 'ОЗ':
                         if self.cur_total > 0:
                             err_str = 'Strategy ' + self.strat_name + ': bet is lost, score:{}, cur_total:{}'.format(self.cur_sc_main, self.cur_total)
