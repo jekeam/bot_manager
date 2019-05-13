@@ -1,6 +1,3 @@
-# def x(y=5):
-#     if not y:
-#         y = 5
-#     print(y)
-#
-# x(y=None)
+import re
+if re.match('\([\d|\d\d]:[\d|\d\d]\)', '45:00 (1:0)'):
+    print('x')

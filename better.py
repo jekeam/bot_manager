@@ -104,28 +104,28 @@ def check_fork(key, L, k1, k2, live_fork, live_fork_total, bk1_score, bk2_score,
     fork_exclude_text = ''
     v = True
 
-    if get_prop('team_junior', 'вкл') == 'вкл':
+    if get_prop('team_junior', 'выкл') == 'выкл':
         if re.search('(u\d{2}|\(.*\d{2}\))', name_rus.lower()):
             fork_exclude_text = fork_exclude_text + 'Вилка исключена по названию команд: ' + name_rus + '\n'
 
         if re.search('u\d{2}', name.lower()):
             fork_exclude_text = fork_exclude_text + 'Вилка исключена по названию команд: ' + name + '\n'
 
-    if get_prop('team_female', 'вкл') == 'вкл':
+    if get_prop('team_female', 'выкл') == 'выкл':
         if re.search('(\(жен\)|\(ж\))', name_rus.lower()):
             fork_exclude_text = fork_exclude_text + 'Вилка исключена по названию команд: ' + name_rus + '\n'
 
         if re.search('\(w\)', name.lower()):
             fork_exclude_text = fork_exclude_text + 'Вилка исключена по названию команд: ' + name + '\n'
 
-    if get_prop('team_stud', 'вкл') == 'вкл':
+    if get_prop('team_stud', 'выкл') == 'выкл':
         if re.search('(\s|-|\(\.)студ', name_rus.lower()):
             fork_exclude_text = fork_exclude_text + 'Вилка исключена по названию команд: ' + name_rus + '\n'
 
         if re.search('(\s|-|\(\.)stud', name.lower()):
             fork_exclude_text = fork_exclude_text + 'Вилка исключена по названию команд: ' + name + '\n'
 
-    if get_prop('team_res', 'вкл') == 'вкл':
+    if get_prop('team_res', 'выкл') == 'выкл':
         if re.search('(\(р\)|\(рез\))', name_rus.lower()):
             fork_exclude_text = fork_exclude_text + 'Вилка исключена по названию команд: ' + name_rus + '\n'
 
