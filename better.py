@@ -410,13 +410,15 @@ def go_bets(wag_ol, wag_fb, total_bet, key, deff_max, vect1, vect2, sc1, sc2, cr
 
             real_vect2, real_vect1, noize1, noize2, plt = get_vect(x, y, x2, y2)
 
+            filename = key.replace('.', '')
+
             if check_vect(real_vect1, real_vect2) and check_noize(noize1, noize2) and sum(x) >= 2 <= sum(x2):
-                prnt('Fork key: ' + str(key) + ', успешно прошел проверку 1 (векторы строго сонаправлены и нет шума)')
+                prnt('Fork key: ' + str(filename) + ', успешно прошел проверку 1 (векторы строго сонаправлены и нет шума)')
 
                 dir_ok = str(ACC_ID) + '_ok'
                 if not os.path.exists(dir_ok):
                     os.makedirs(dir_ok)
-                plt.savefig(os.path.join(dir_ok, key))
+                plt.savefig(os.path.join(dir_ok, filename))
                 plt.close()
 
                 if vect1 != real_vect1:
@@ -426,12 +428,12 @@ def go_bets(wag_ol, wag_fb, total_bet, key, deff_max, vect1, vect2, sc1, sc2, cr
                     prnt('Вектор в Фонбет измнен: {}->{}'.format(vect2, real_vect2))
                     shared['fonbet']['vect'] = vect1
             else:
-                prnt('Fork key: ' + str(key) + ', не прошел проверку 1 (векторы строго сонаправлены и нет шума)')
+                prnt('Fork key: ' + str(filename) + ', не прошел проверку 1 (векторы строго сонаправлены и нет шума)')
 
                 dir_err = str(ACC_ID) + '_err'
                 if not os.path.exists(dir_err):
                     os.makedirs(dir_err)
-                plt.savefig(os.path.join(dir_err, key))
+                plt.savefig(os.path.join(dir_err, filename))
                 plt.close()
 
                 return False

@@ -1279,7 +1279,7 @@ class BetManager:
                     except AttributeError as e:
                         prnt(self.msg.format(sys._getframe().f_code.co_name, e + ': ' + err_msg))
                         self.max_bet = 0
-                        
+
                     if self.max_bet == 0:
                         raise BetIsLost(err_msg)
                 else:
