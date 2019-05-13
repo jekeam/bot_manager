@@ -130,13 +130,12 @@ def get_fonbet_info(match_id, factor_id, param, bet_tepe=None):
             sc = event.get('score', '0:0').replace('-', ':')
             period = 1
             time_break_fonbet = False
-
-            if re.match('\([\d|\d\d]:[\d|\d\d]\)', event.get('scoreComment', '').replace('-', ':')) and \
+            if re.match('\(\d+:\d+\)', event.get('scoreComment', '').replace('-', ':').replace(' ', '')) and \
                     str(event.get('timer', '')) == '45:00' and \
                     event.get('timerSeconds', 0) == 45.0:
                 time_break_fonbet = True
                 period = 2
-            elif re.match('\([\d|\d\d]:[\d|\d\d]\)', event.get('scoreComment', '').replace('-', ':')) and \
+            elif re.match('\(\d+:\d+\)', event.get('scoreComment', '').replace('-', ':').replace(' ', '')) and \
                     event.get('timerSeconds', 0) / 60 > 45.0:
                 period = 2
             try:
