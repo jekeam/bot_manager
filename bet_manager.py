@@ -1219,10 +1219,10 @@ class BetManager:
 
     def check_result(self, shared: dict):
 
-        def replay_bet():
+        def replay_bet(n: str):
             if self.max_bet and ((self.first_bet_in == 'auto' and self.vector == 'DOWN') or self.bk_name == self.first_bet_in):
                 wait_bet = self.sleep_bet * 2
-                prnt(self.msg.format(sys._getframe().f_code.co_name, 'Получен неявный максбет: ' + str(self.max_bet) + ', wait: ' + str(wait_bet)))
+                prnt(self.msg.format(sys._getframe().f_code.co_name, 'Получен неявный максбет #' + n + ': ' + str(self.max_bet) + ', wait: ' + str(wait_bet)))
                 self.recalc_sum_by_maxbet(shared)
                 sleep(wait_bet)
                 return self.bet_place(shared)
@@ -1277,7 +1277,7 @@ class BetManager:
                         substr = err_msg.replace(' ', '').replace('.', '').replace(',', '')
                         self.min_bet = int(re.search('(\d{1,})(-)(\d{1,})', substr).group(1))
                         self.max_bet = int(re.search('(\d{1,})(-)(\d{1,})', substr).group(3))
-                        replay_bet()
+                        replay_bet(str(err_code))
                     except AttributeError as e:
                         prnt(self.msg.format(sys._getframe().f_code.co_name, e + ': ' + err_msg))
                         self.max_bet = 0
@@ -1293,7 +1293,7 @@ class BetManager:
                 if 'Превышена cуммарная ставка для события' in err_msg:
                     try:
                         self.max_bet = int(re.search('=(\d{1,})\D', err_msg.replace(' ', '').replace('.', '').replace(',', '')).group(1))
-                        replay_bet()
+                        replay_bet(str(err_code))
                     except AttributeError as e:
                         prnt(self.msg.format(sys._getframe().f_code.co_name, e + ': ' + err_msg))
                         self.max_bet = 0
