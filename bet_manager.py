@@ -1219,6 +1219,16 @@ class BetManager:
 
     def check_result(self, shared: dict):
 
+        def replay_bet():
+            if self.max_bet and ((self.first_bet_in == 'auto' and self.vector == 'DOWN') or self.bk_name == self.first_bet_in):
+                wait_bet = self.sleep_bet * 2
+                prnt(self.msg.format(sys._getframe().f_code.co_name, 'Получен неявный максбет: ' + str(self.max_bet) + ', wait: ' + str(wait_bet)))
+                self.recalc_sum_by_maxbet(shared)
+                sleep(wait_bet)
+                return self.bet_place(shared)
+            else:
+                raise AttributeError(err_msg)
+
         payload = copy.deepcopy(self.payload)
 
         url, timeout = get_common_url(self.server_fb)
@@ -1260,22 +1270,30 @@ class BetManager:
                 shared[self.bk_name + '_err'] = 'ok'
 
             if err_code == 1:
+
                 self.opposite_stat_get(shared)
-                err_str = self.msg.format(sys._getframe().f_code.co_name, err_msg)
-                raise BetIsLost(err_str)
+                if 'Допустимая сумма ставки' in err_msg:
+                    try:
+                        substr = err_msg.replace(' ', '').replace('.', '').replace(',', '')
+                        self.min_bet = int(re.search('(\d{1,})(-)(\d{1,})', substr).group(1))
+                        self.max_bet = int(re.search('(\d{1,})(-)(\d{1,})', substr).group(3))
+                        replay_bet()
+                    except AttributeError as e:
+                        prnt(self.msg.format(sys._getframe().f_code.co_name, e + ': ' + err_msg))
+                        self.max_bet = 0
+
+                    if self.max_bet == 0:
+                        raise BetIsLost(err_msg)
+                else:
+                    err_str = self.msg.format(sys._getframe().f_code.co_name, err_msg)
+                    raise BetIsLost(err_str)
+
             elif err_code == 100:
                 self.opposite_stat_get(shared)
                 if 'Превышена cуммарная ставка для события' in err_msg:
                     try:
                         self.max_bet = int(re.search('=(\d{1,})\D', err_msg.replace(' ', '').replace('.', '').replace(',', '')).group(1))
-                        if self.max_bet and ((self.first_bet_in == 'auto' and self.vector == 'DOWN') or self.bk_name == self.first_bet_in):
-                            wait_bet = self.sleep_bet * 2
-                            prnt(self.msg.format(sys._getframe().f_code.co_name, 'Получен неявный максбет: ' + str(self.max_bet) + ', wait: ' + str(wait_bet)))
-                            self.recalc_sum_by_maxbet(shared)
-                            sleep(wait_bet)
-                            return self.bet_place(shared)
-                        else:
-                            raise AttributeError(err_msg)
+                        replay_bet()
                     except AttributeError as e:
                         prnt(self.msg.format(sys._getframe().f_code.co_name, e + ': ' + err_msg))
                         self.max_bet = 0
