@@ -939,10 +939,10 @@ class BetManager:
             self.check_responce(msg_str)
 
             if result == 'betDelay':
-                bet_delay_sec = (float(res.get('betDelay')) / 1000)
-                shared[self.bk_name]['bet_delay'] = bet_delay_sec
-                prnt(self.msg.format(sys._getframe().f_code.co_name, 'bet_delay: ' + str(bet_delay_sec) + ' sec.'))
-                sleep(bet_delay_sec)
+                self.sleep_bet = (float(res.get('betDelay')) / 1000)
+                shared[self.bk_name]['bet_delay'] = self.sleep_bet
+                prnt(self.msg.format(sys._getframe().f_code.co_name, 'bet_delay: ' + str(self.sleep_bet) + ' sec.'))
+                sleep(self.sleep_bet)
             else:
                 shared[self.bk_name]['bet_delay'] = 0
 
@@ -1269,9 +1269,10 @@ class BetManager:
                     try:
                         self.max_bet = int(re.search('=(\d{1,})\D', err_msg.replace(' ', '').replace('.', '').replace(',', '')).group(1))
                         if self.max_bet and ((self.first_bet_in == 'auto' and self.vector == 'DOWN') or self.bk_name == self.first_bet_in):
-                            prnt(self.msg.format(sys._getframe().f_code.co_name, 'Получен неявный максбет: ' + str(self.max_bet)))
+                            wait_bet = self.sleep_bet * 2
+                            prnt(self.msg.format(sys._getframe().f_code.co_name, 'Получен неявный максбет: ' + str(self.max_bet) + ', wait: ' + str(wait_bet)))
                             self.recalc_sum_by_maxbet(shared)
-                            sleep(self.sleep_bet)
+                            sleep(wait_bet)
                             return self.bet_place(shared)
                         else:
                             raise AttributeError(err_msg)
