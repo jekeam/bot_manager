@@ -205,7 +205,7 @@ class BetManager:
             self.bk_name + ' after wait, get status bet in from ' +
             self.bk_name_opposite + ': ' + str(opp_stat) + '(' + str(type(opp_stat)) + ')'))
 
-    def recalc_sum_by_maxbet(self, shared):
+    def recalc_sum_by_maxbet(self, shared: dict):
         cur_bet_sum = self.max_bet * int(get_prop('proc_by_max', 90)) / 100
 
         prnt(' ')
@@ -1270,7 +1270,7 @@ class BetManager:
                         self.max_bet = int(re.search('=(\d{1,})\D', err_msg.replace(' ', '').replace('.', '').replace(',', '')).group(1))
                         if self.max_bet and ((self.first_bet_in == 'auto' and self.vector == 'DOWN') or self.bk_name == self.first_bet_in):
                             prnt(self.msg.format(sys._getframe().f_code.co_name, 'Получен неявный максбет: ' + str(self.max_bet)))
-                            self.recalc_sum_by_maxbet(self, shared)
+                            self.recalc_sum_by_maxbet(shared)
                             return self.bet_place(shared)
                         else:
                             raise AttributeError(err_msg)

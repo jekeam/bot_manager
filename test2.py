@@ -1,3 +1,4 @@
-# import re
-# if re.match('\([\d|\d\d]:[\d|\d\d]\)', '45:00 (1:0)'):
-#     print('x')
+import re
+
+if re.match('\(\d+:\d+\)', '(01:11) https://www.youtube.com/watch?v=4vQZTkYnOqI'.replace(' ', '')):
+    print('x')
