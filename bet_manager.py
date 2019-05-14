@@ -1271,6 +1271,7 @@ class BetManager:
                         if self.max_bet and ((self.first_bet_in == 'auto' and self.vector == 'DOWN') or self.bk_name == self.first_bet_in):
                             prnt(self.msg.format(sys._getframe().f_code.co_name, 'Получен неявный максбет: ' + str(self.max_bet)))
                             self.recalc_sum_by_maxbet(shared)
+                            sleep(self.sleep_bet)
                             return self.bet_place(shared)
                         else:
                             raise AttributeError(err_msg)
