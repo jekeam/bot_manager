@@ -139,8 +139,9 @@ def check_fork(key, L, k1, k2, live_fork, live_fork_total, bk1_score, bk2_score,
     if deff_max > deff_limit:
         fork_exclude_text = fork_exclude_text + 'Вилка исключена, т.к. deff_max (' + str(deff_max) + ' > ' + str(deff_limit) + ')\n'
 
-    if cnt_fork_success.count(key) > 0:
-        fork_exclude_text = fork_exclude_text + 'Вилка не проставлена, т.к. уже проставляли на эту вилку: ' + key + '\n'
+    if get_prop('double_bet', 'выкл') == 'выкл':
+        if cnt_fork_success.count(key) > 0:
+            fork_exclude_text = fork_exclude_text + 'Вилка не проставлена, т.к. уже проставляли на эту вилку: ' + key + '\n'
 
     if black_list_matches.count(key.split('@')[0]) > 0 or black_list_matches.count(key.split('@')[1]) > 0:
         fork_exclude_text = fork_exclude_text + 'Вилка исключена, т.к. матч занесен в blacklist: ' + key + ', ' + str(black_list_matches) + '\n'
