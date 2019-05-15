@@ -164,6 +164,7 @@ def get_vect(x, y, x2, y2):
                 break
     # chech last kof is noise
     k1_is_noise = 0
+    prnt('Fonbet: min: {}, cur: {}, max: {}'.format(list(check_noise_down)[-1][1][0], kof_cur1, list(check_noise_up)[-1][1][0]))
     if list(check_noise_down)[-1][1][0] > kof_cur1 > list(check_noise_up)[-1][1][0]:
         k1_is_noise = kof_cur1
 
@@ -186,6 +187,7 @@ def get_vect(x, y, x2, y2):
                 break
     # chech last kof is noise
     k2_is_noise = 0
+    prnt('Olimp: min: {}, cur: {}, max: {}'.format(list(check_noise_down2)[-1][1][0], kof_cur2, list(check_noise_up2)[-1][1][0]))
     if list(check_noise_down2)[-1][1][0] > kof_cur2 > list(check_noise_up2)[-1][1][0]:
         k2_is_noise = kof_cur2
         
