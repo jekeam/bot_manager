@@ -150,8 +150,8 @@ def get_vect(x, y, x2, y2):
     x2 = np.asarray(x2).reshape(len(x2), 1)
     regr2.fit(x2, y2)
 
-    check_noise_up = zip(y_for_check_noise, regr.predict(x_for_check_noise) + get_std(y))
-    check_noise_down = zip(y_for_check_noise, regr.predict(x_for_check_noise) - get_std(y))
+    check_noise_up = list(zip(y_for_check_noise, regr.predict(x_for_check_noise) + get_std(y)))
+    check_noise_down = list(zip(y_for_check_noise, regr.predict(x_for_check_noise) - get_std(y)))
     noise1 = 0
     for n1 in check_noise_up:
         if n1[0].tolist()[0] > n1[1].tolist()[0]:
@@ -164,16 +164,16 @@ def get_vect(x, y, x2, y2):
                 break
     # chech last kof is noise
     k1_is_noise = 0
-    prnt('Fonbet: min: {}, cur: {}, max: {}'.format(list(check_noise_down)[-1][1][0], kof_cur1, list(check_noise_up)[-1][1][0]))
-    if list(check_noise_down)[-1][1][0] > kof_cur1 > list(check_noise_up)[-1][1][0]:
+    prnt('Fonbet: min: {}, cur: {}, max: {}'.format(check_noise_down[-1][1][0], kof_cur1, check_noise_up[-1][1][0]))
+    if check_noise_down[-1][1][0] > kof_cur1 > check_noise_up[-1][1][0]:
         k1_is_noise = kof_cur1
 
     plt.plot(x_save, regr.predict(x_save) + get_std(y), color='blue', linestyle='dotted', markersize=1)
     plt.plot(x_save, regr.predict(x_save), color='black', linestyle='dashed', markersize=1)
     plt.plot(x_save, regr.predict(x_save) - get_std(y), color='blue', linestyle='dotted', markersize=1)
 
-    check_noise_up2 = zip(y2_for_check_noise, regr2.predict(x2_for_check_noise) + get_std(y2))
-    check_noise_down2 = zip(y2_for_check_noise, regr2.predict(x2_for_check_noise) - get_std(y2))
+    check_noise_up2 = list(zip(y2_for_check_noise, regr2.predict(x2_for_check_noise) + get_std(y2)))
+    check_noise_down2 = list(zip(y2_for_check_noise, regr2.predict(x2_for_check_noise) - get_std(y2)))
 
     noise2 = 0
     for n2 in check_noise_up2:
@@ -187,8 +187,8 @@ def get_vect(x, y, x2, y2):
                 break
     # chech last kof is noise
     k2_is_noise = 0
-    prnt('Olimp: min: {}, cur: {}, max: {}'.format(list(check_noise_down2)[-1][1][0], kof_cur2, list(check_noise_up2)[-1][1][0]))
-    if list(check_noise_down2)[-1][1][0] > kof_cur2 > list(check_noise_up2)[-1][1][0]:
+    prnt('Olimp: min: {}, cur: {}, max: {}'.format(check_noise_down2[-1][1][0], kof_cur2, check_noise_up2[-1][1][0]))
+    if check_noise_down2[-1][1][0] > kof_cur2 > check_noise_up2[-1][1][0]:
         k2_is_noise = kof_cur2
         
     plt.plot(x2_save, regr2.predict(x2_save) + get_std(y2), color='red', linestyle='dotted', markersize=1)
@@ -260,4 +260,19 @@ def str_to_list_int(s: str) -> list:
 
 
 if __name__ == '__main__':
-    pass
+    x =  [5, 106, 29, 27, 121, 114, 37, 17, 67, 30, 29, 122, 29, 89, 31, 28, 122, 120, 121, 20, 39, 90, 29, 29, 91, 29, 90, 29, 89, 119, 93, 121,
+    58, 91, 795, 379, 59, 88, 29, 15, 43, 58, 59, 59, 59, 29, 58, 29, 29, 29, 29, 59, 29, 59, 29, 29, 28, 29, 29, 59, 29, 28, 59, 29, 59, 28, 59, 45]
+    y = [2.3, 2.15, 2.17, 2.18, 2.2, 2.25, 0, 2.25, 2.05, 2.07, 2.08, 2.1, 2.12, 2.15, 2.17, 2.18, 2.2, 2.25, 2.3, 2.35, 2.03, 2.05, 2.07, 2.08, 2.1, 2.12, 2.15, 2.17, 2.2, 2.25, 2.3, 2.35, 2.4, 2.45, 2.5, 2.7, 2.75, 2.8, 2.85, 2.9, 3.15, 3.2, 3.25, 3.3, 3.35, 3.4, 3.45, 3.5, 3.55, 3.6, 3.65, 3.7, 3.75, 3.8, 3.85, 3.9, 3.95, 4.0, 4.05, 4.1, 4.15, 4.2, 4.3, 4.4, 4.5, 4.6, 4.7, 4.8]
+    
+    x2 =[16, 15, 23, 7, 15, 87, 30, 15, 134, 20, 15, 7, 7, 103, 43, 35, 43, 19, 54, 14, 31, 51, 47, 19, 15, 19, 43, 36, 17, 53, 16, 7, 35, 19
+    , 31, 39, 40, 2, 19, 11, 19, 77, 7, 12, 17, 39, 111, 11, 87, 35, 15, 27, 18, 65, 59, 11, 95, 27, 78, 61, 71, 63, 35, 108, 56, 4
+    , 63, 163, 31, 102, 15, 151, 91, 434, 59, 35, 19, 15, 84, 51, 47, 19, 59, 107, 57, 9, 70, 23, 15, 31, 15, 15, 27, 77, 120, 107,
+    11, 15, 23, 15, 51, 27, 15, 51, 52]
+    
+    y2 = [1.65, 1.7, 1.6, 0, 1.6, 1.65, 1.7, 1.75, 1.7, 1.65, 1.6, 1.55, 1.6, 0, 1.6, 1.65, 
+    1.6, 1.7, 1.6, 1.7, 1.65, 1.75, 1.7, 1.75, 1.8, 1.75, 1.8, 1.7, 1.65, 1.6, 1.65, 1.6, 1.65, 1.7, 1.65, 1.6, 1.55, 1.6, 1.55, 1.5, 1.6,
+    1.55, 1.6, 1.55, 1.45, 1.47, 0, 1.5, 1.55, 1.6, 1.55, 0, 1.55, 1.6, 1.55, 1.6, 1.55, 1.5, 1.55, 1.5, 1.47, 1.5, 1.47, 1.5, 1.47, 1.45, 1.42, 
+    1.4, 1.42, 1.4, 1.45, 1.47, 1.42, 1.4, 1.35, 1.42, 1.4, 1.42, 1.4, 1.35, 1.3, 1.35, 1.33, 1.3, 1.27, 1.3,
+    1.27, 1.25, 1.22, 1.25, 1.27, 1.25, 1.27, 1.25, 1.22, 1.2, 1.17, 1.15, 1.17, 1.2, 1.22, 1.2, 1.22, 1.27, 1.3]
+    
+    get_vect(x, y, x2, y2)
