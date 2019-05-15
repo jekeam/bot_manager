@@ -415,7 +415,7 @@ def go_bets(wag_ol, wag_fb, total_bet, key, deff_max, vect1, vect2, sc1, sc2, cr
 
         if get_prop('ml_noise', 'выкл') == 'вкл':
             ml_ok = False
-            real_vect2, real_vect1, noise2, noise1, k1_is_noise, k2_is_noise, plt = get_vect(x, y, x2, y2)
+            real_vect2, real_vect1, noise2, noise1, k2_is_noise, k1_is_noise, plt = get_vect(x, y, x2, y2)
 
             filename = key.replace('.', '')
             # ML #1 - CHECK VECTS

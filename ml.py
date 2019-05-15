@@ -205,7 +205,7 @@ def get_vect(x, y, x2, y2):
         vect_fb = 'STAT'
     else:
         vect_fb = 'DOWN'
-    prnt('Fonbet: {}, {}->{}. {}. Noise: {}'.format(vect_fb, kof_predict11, kof_predict21, kof_cur1, noise1))
+    prnt('Fonbet: {}, {}->{}. {}. Noise: {}. Last_noise: {}'.format(vect_fb, kof_predict11, kof_predict21, kof_cur1, noise1, k1_is_noise))
 
     if kof_predict22 > kof_predict12:
         vect_ol = 'UP'
@@ -213,7 +213,7 @@ def get_vect(x, y, x2, y2):
         vect_ol = 'STAT'
     else:
         vect_ol = 'DOWN'
-    prnt('Olimp: {}, {}->{}. {}. Noise: {}'.format(vect_ol, kof_predict12, kof_predict22, kof_cur2, noise2))
+    prnt('Olimp: {}, {}->{}. {}. Noise: {}. Last_noise: {}'.format(vect_ol, kof_predict12, kof_predict22, kof_cur2, noise2, k2_is_noise))
     return vect_fb, vect_ol, noise1, noise2, k1_is_noise, k2_is_noise, plt
 
 
