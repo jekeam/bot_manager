@@ -457,10 +457,10 @@ def go_bets(wag_ol, wag_fb, total_bet, key, deff_max, vect1, vect2, sc1, sc2, cr
                             prnt('Вектор в Фонбет измнен: {}->{}'.format(vect2, fake_vect2))
                             shared['fonbet']['vect'] = fake_vect2
                         save_plt(str(ACC_ID) + '_II_ok', filename, plt)
-                
+            
+            plt.close()
             if not ml_ok:        
                 return False
-            plt.close()
 
         from bet_manager import run_bets
         run_bets(shared)
