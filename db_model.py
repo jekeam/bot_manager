@@ -31,7 +31,7 @@ prop_abr = {
     "TEAM_STUD": {"abr": "Студ. команды", "type": "str", "max": "", "min": "", "access_list": ["вкл", "выкл"], "error": ""},
     "TEAM_FEMALE": {"abr": "Жен. команды", "type": "str", "max": "", "min": "", "access_list": ["вкл", "выкл"], "error": ""},
     "TEAM_JUNIOR": {"abr": "Юнош. команды", "type": "str", "max": "", "min": "", "access_list": ["вкл", "выкл"], "error": ""},
-    "TOP": {"abr": "TOP Матчи", "type": "str", "max": "", "min": "", "access_list": ["вкл", "выкл"], "error": ""},
+    "TOP": {"abr": "Только TOP", "type": "str", "max": "", "min": "", "access_list": ["вкл", "выкл"], "error": ""},
     "ML_NOISE": {"abr": "ML: исключить шум", "type": "str", "max": "", "min": "", "access_list": ["вкл", "выкл"], "error": ""},
     "POUR_INTO": {"abr": "Перелить в", "type": "str", "max": "", "min": "", "access_list": bks, "error": ""},
     "DOUBLE_BET": {"abr": "Дубли ставок", "type": "str", "max": "", "min": "", "access_list": ["вкл", "выкл"], "error": ""},
