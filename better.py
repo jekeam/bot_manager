@@ -18,7 +18,7 @@ import traceback
 import os
 from db_model import send_message_bot, prop_abr
 from bot_prop import ADMINS
-from ml import get_vect, check_vect, check_noize
+from ml import get_vect, check_vect, check_noise, get_creater
 
 if __name__ == '__main__':
     from history import export_hist
@@ -407,16 +407,16 @@ def go_bets(wag_ol, wag_fb, total_bet, key, deff_max, vect1, vect2, sc1, sc2, cr
         x2 = wag_ol.get('hist', {}).get('avg_change')
         y2 = wag_ol.get('hist', {}).get('order')
 
-        if get_prop('ml_noize', 'выкл') == 'вкл':
-
-            real_vect2, real_vect1, noize1, noize2, plt = get_vect(x, y, x2, y2)
+        if get_prop('ml_noise', 'выкл') == 'вкл':
+            ml_ok = True
+            real_vect2, real_vect1, noise2, noise1, k1_is_noise, k2_is_noise, plt = get_vect(x, y, x2, y2)
 
             filename = key.replace('.', '')
 
-            if check_vect(real_vect1, real_vect2) and check_noize(noize1, noize2) and sum(x) >= 2 <= sum(x2):
+            if check_vect(real_vect1, real_vect2) and check_noise(noise1, noise2) and sum(x) >= 2 <= sum(x2):
                 prnt('Fork key: ' + str(filename) + ', успешно прошел проверку 1 (векторы строго сонаправлены и нет шума)')
 
-                dir_ok = str(ACC_ID) + '_ok'
+                dir_ok = str(ACC_ID) + '_v_ok'
                 if not os.path.exists(dir_ok):
                     os.makedirs(dir_ok)
                 plt.savefig(os.path.join(dir_ok, filename))
@@ -424,11 +424,12 @@ def go_bets(wag_ol, wag_fb, total_bet, key, deff_max, vect1, vect2, sc1, sc2, cr
 
                 if vect1 != real_vect1:
                     prnt('Вектор в Олимп измнен: {}->{}'.format(vect1, real_vect1))
-                    shared['olimp']['vect'] = vect2
+                    shared['olimp']['vect'] = real_vect1
                 if vect2 != real_vect2:
                     prnt('Вектор в Фонбет измнен: {}->{}'.format(vect2, real_vect2))
-                    shared['fonbet']['vect'] = vect1
+                    shared['fonbet']['vect'] = real_vect2
             else:
+                ml_ok = False
                 prnt('Fork key: ' + str(filename) + ', не прошел проверку 1 (векторы строго сонаправлены и нет шума)')
 
                 dir_err = str(ACC_ID) + '_err'
@@ -436,7 +437,23 @@ def go_bets(wag_ol, wag_fb, total_bet, key, deff_max, vect1, vect2, sc1, sc2, cr
                     os.makedirs(dir_err)
                 plt.savefig(os.path.join(dir_err, filename))
                 plt.close()
-
+                
+            if not ml_ok:
+                side_created = get_creater(k1_is_noise, k2_is_noise)
+                if side_created == 1:
+                    fake_vect1 = 'DOWN'
+                    fake_vect2 = 'UP'
+                elif side_created == 2:
+                    fake_vect2 = 'DOWN'
+                    fake_vect1 = 'UP'
+                
+                if side_created:
+                    if vect1 != fake_vect1:
+                        prnt('Вектор в Олимп измнен: {}->{}'.format(vect1, fake_vect1))
+                        shared['olimp']['vect'] = fake_vect1
+                    if vect2 != fake_vect2:
+                        prnt('Вектор в Фонбет измнен: {}->{}'.format(vect2, fake_vect2))
+                        shared['fonbet']['vect'] = fake_vect2
                 return False
 
         from bet_manager import run_bets

@@ -1,4 +1,9 @@
-# import re
+import numpy as np
 
-# if re.match('\(\d+:\d+\)', '(01:11) https://www.youtube.com/watch?v=4vQZTkYnOqI'.replace(' ', '')):
-#     print('x')
+x = [1, 2, 3, 4]
+
+xx = np.asarray(x).reshape(len(x), 1)
+yy = np.asarray(x).reshape(len(x), 1)
+n = zip(xx, yy)
+
+print(n[-1][1][0])
