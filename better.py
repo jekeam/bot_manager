@@ -254,7 +254,6 @@ def save_plt(folder, filename, plt):
     if not os.path.exists(folder):
         os.makedirs(folder)
     plt.savefig(os.path.join(folder, filename))
-    plt.close()        
 
 
 def go_bets(wag_ol, wag_fb, total_bet, key, deff_max, vect1, vect2, sc1, sc2, created):
@@ -460,6 +459,7 @@ def go_bets(wag_ol, wag_fb, total_bet, key, deff_max, vect1, vect2, sc1, sc2, cr
                 
             if not ml_ok:        
                 return False
+            plt.close()
 
         from bet_manager import run_bets
         run_bets(shared)
