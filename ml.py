@@ -319,6 +319,7 @@ if __name__ == '__main__':
             if vect1 != fake_vect1:
                 prnt('Вектор в Олимп измнен: {}->{}'.format(vect1, fake_vect1))
                 shared['olimp']['vect'] = fake_vect1
+            print(vect2, fake_vect2)
             if vect2 != fake_vect2:
                 prnt('Вектор в Фонбет измнен: {}->{}'.format(vect2, fake_vect2))
                 shared['fonbet']['vect'] = fake_vect2
