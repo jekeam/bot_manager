@@ -165,7 +165,7 @@ def get_vect(x, y, x2, y2):
     # chech last kof is noise
     k1_is_noise = 0
     prnt('Fonbet: min: {}, cur: {}, max: {}'.format(check_noise_down[-1][1][0], kof_cur1, check_noise_up[-1][1][0]))
-    if check_noise_down[-1][1][0] > kof_cur1 > check_noise_up[-1][1][0]:
+    if check_noise_down[-1][1][0] > kof_cur1 or kof_cur1 > check_noise_up[-1][1][0]:
         k1_is_noise = kof_cur1
 
     plt.plot(x_save, regr.predict(x_save) + get_std(y), color='blue', linestyle='dotted', markersize=1)
@@ -188,7 +188,7 @@ def get_vect(x, y, x2, y2):
     # chech last kof is noise
     k2_is_noise = 0
     prnt('Olimp: min: {}, cur: {}, max: {}'.format(check_noise_down2[-1][1][0], kof_cur2, check_noise_up2[-1][1][0]))
-    if check_noise_down2[-1][1][0] > kof_cur2 > check_noise_up2[-1][1][0]:
+    if check_noise_down2[-1][1][0] > kof_cur2 or kof_cur2 > check_noise_up2[-1][1][0]:
         k2_is_noise = kof_cur2
         
     plt.plot(x2_save, regr2.predict(x2_save) + get_std(y2), color='red', linestyle='dotted', markersize=1)
