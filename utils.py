@@ -134,8 +134,6 @@ def build_menu(buttons,
 def get_sum_bets(k1, k2, total_bet, round_fork=5, hide=False):
     if get_prop('round_fork'):
         round_fork = int(get_prop('round_fork'))
-    elif not round_fork:
-        round_fork = 5
 
     k1 = float(k1)
     k2 = float(k2)

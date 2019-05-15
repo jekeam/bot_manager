@@ -432,31 +432,32 @@ def go_bets(wag_ol, wag_fb, total_bet, key, deff_max, vect1, vect2, sc1, sc2, cr
             else:
                 prnt('Fork key: ' + str(filename) + ', не прошел проверку 1 (векторы строго сонаправлены и нет шума)')
                 save_plt(str(ACC_ID) + '_I_err', filename, plt)
-                
-            # ML #2 CHECK CREATER-NOISE
-            if not ml_ok:
-                side_created = get_creater(k1_is_noise, k2_is_noise)
-                if side_created == 1:
-                    fake_vect1 = 'DOWN'
-                    fake_vect2 = 'UP'
-                elif side_created == 2:
-                    fake_vect2 = 'DOWN'
-                    fake_vect1 = 'UP'
-                else:
-                    prnt('Fork key: ' + str(filename) + ', не прошел проверку 2 (Шумный создатель вилки)')
-                    save_plt(str(ACC_ID) + '_II_err', filename, plt)
-                
-                if side_created:
-                    ml_ok = True
-                    prnt('Fork key: ' + str(filename) + ', успешно прошел проверку 2 (Шумный создатель вилки)')
-                    if vect1 != fake_vect1:
-                        prnt('Вектор в Олимп измнен: {}->{}'.format(vect1, fake_vect1))
-                        shared['olimp']['vect'] = fake_vect1
-                    if vect2 != fake_vect2:
-                        prnt('Вектор в Фонбет измнен: {}->{}'.format(vect2, fake_vect2))
-                        shared['fonbet']['vect'] = fake_vect2
-                    save_plt(str(ACC_ID) + '_II_ok', filename, plt)
             
+            if ACC_ID in (1, 3):
+                # ML #2 CHECK CREATER-NOISE
+                if not ml_ok:
+                    side_created = get_creater(k1_is_noise, k2_is_noise)
+                    if side_created == 1:
+                        fake_vect1 = 'DOWN'
+                        fake_vect2 = 'UP'
+                    elif side_created == 2:
+                        fake_vect2 = 'DOWN'
+                        fake_vect1 = 'UP'
+                    else:
+                        prnt('Fork key: ' + str(filename) + ', не прошел проверку 2 (Шумный создатель вилки)')
+                        save_plt(str(ACC_ID) + '_II_err', filename, plt)
+                    
+                    if side_created:
+                        ml_ok = True
+                        prnt('Fork key: ' + str(filename) + ', успешно прошел проверку 2 (Шумный создатель вилки)')
+                        if vect1 != fake_vect1:
+                            prnt('Вектор в Олимп измнен: {}->{}'.format(vect1, fake_vect1))
+                            shared['olimp']['vect'] = fake_vect1
+                        if vect2 != fake_vect2:
+                            prnt('Вектор в Фонбет измнен: {}->{}'.format(vect2, fake_vect2))
+                            shared['fonbet']['vect'] = fake_vect2
+                        save_plt(str(ACC_ID) + '_II_ok', filename, plt)
+                
             if not ml_ok:        
                 return False
 
@@ -812,7 +813,7 @@ if __name__ == '__main__':
                                 if bal1 < bal2:
                                     bet1, bet2 = get_new_sum_bets(k1, k2, bal1, True)
                                 else:
-                                    bet1, bet2 = get_new_sum_bets(k1, k2, bal2, True)
+                                    bet2, bet1 = get_new_sum_bets(k2, k1, bal2, True)
 
                             # Проверим вилку на исключения
                             if check_fork(key, l_temp, k1, k2, live_fork, live_fork_total, bk1_score, bk2_score,
