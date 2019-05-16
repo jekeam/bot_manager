@@ -433,7 +433,7 @@ def go_bets(wag_ol, wag_fb, total_bet, key, deff_max, vect1, vect2, sc1, sc2, cr
                     prnt('Fork key: ' + str(filename) + ', не прошел проверку 1 (векторы строго сонаправлены и нет шума)')
                     save_plt(str(ACC_ID) + '_I_err', filename, plt)
                 
-            if ACC_ID in (1, 3):
+            if ACC_ID in (1, 3, 13):
                 # ML #2 CHECK CREATER-NOISE
                 if not ml_ok:
                     side_created = get_creater(k1_is_noise, k2_is_noise)
