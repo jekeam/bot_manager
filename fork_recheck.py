@@ -34,9 +34,9 @@ def get_olimp_info(id_matche, olimp_k):
     )
     prnt('FORK_RECHECK.PY: get_olimp_info rs: ' + str(res.text), 'hide')
 
-    stake = res.json()
-    if not stake.get('error', {}).get('err_code', 0):
-        stake = stake.get('data', {})
+    resp = res.json()
+    if not resp.get('error', {}).get('err_code', 0):
+        stake = resp.get('data', {})
         
         bet_into['ID'] = id_matche
 
