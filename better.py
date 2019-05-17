@@ -713,7 +713,7 @@ if __name__ == '__main__':
                 go_bet_key = {}
                 go_bet_json = {}
                 for key, val_json in server_forks.items():
-
+                    l = val_json.get('l', 0.0)
                     k1_type = key.split('@')[-1]
                     k2_type = key.split('@')[-2]
 
