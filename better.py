@@ -711,11 +711,8 @@ if __name__ == '__main__':
 
             if server_forks:
                 go_bet_key = {}
-                l = 0.0
                 go_bet_json = {}
                 for key, val_json in server_forks.items():
-                    # print(json.dumps(val_json, ensure_ascii=False))
-                    l_temp = val_json.get('l', 0.0)
 
                     k1_type = key.split('@')[-1]
                     k2_type = key.split('@')[-2]
@@ -805,7 +802,7 @@ if __name__ == '__main__':
                         info = ''
 
                     if vect1 and vect2:
-                        if (0.0 <= l < l_temp or DEBUG) and deff_max < 3 and k1 > 0 < k2:
+                        if deff_max < 3 and k1 > 0 < k2:
                             round_bet = int(get_prop('round_fork'))
                             total_bet = round(randint(total_bet_min, total_bet_max) / round_bet) * round_bet
 
@@ -817,42 +814,18 @@ if __name__ == '__main__':
                                     bet2, bet1 = get_new_sum_bets(k2, k1, bal2, True)
 
                             # Проверим вилку на исключения
-                            if check_fork(key, l_temp, k1, k2, live_fork, live_fork_total, bk1_score, bk2_score,
+                            if check_fork(key, l, k1, k2, live_fork, live_fork_total, bk1_score, bk2_score,
                                           minute, time_break_fonbet, period, name, name_rus, deff_max, is_top, info) or DEBUG:
-                                go_bet_key.clear()
-                                l = l_temp
-                                go_bet_json = val_json
-                                go_bet_key[key] = {
-                                    'go_bet_json': go_bet_json,
-                                    'total_bet': total_bet,
-                                    'go_bet_key': go_bet_key,
-                                    'deff_max': deff_max,
-                                    'vect1': vect1,
-                                    'vect2': vect2,
-                                    'sc1': sc1,
-                                    'sc2': sc2,
-                                    'info': info,
-                                    'created_fork': created_fork
-                                }
+                                prnt(' ')
+                                prnt('Go bets: ' + key + ' ' + info)
+                                fork_success = go_bets(go_bet_json.get('kof_olimp'), go_bet_json.get('kof_fonbet'),
+                                                       total_bet, key, deff_max, vect1, vect2, sc1, sc2, created_fork)
+                                bal1 = OlimpBot(OLIMP_USER).get_balance()  # Баланс в БК1
+                                bal2 = FonbetBot(FONBET_USER).get_balance()  # Баланс в БК2
                         elif deff_max >= 3:
                             pass
                     else:
                         prnt('Вектор направления коф-та не определен: VECT1=' + str(vect1) + ', VECT2=' + str(vect2))
-                if go_bet_key:
-                    for key, val in go_bet_key.items():
-                        prnt(' ')
-                        prnt('Go bets: ' + key + ' ' + val.get('info'))
-                        fork_success = go_bets(val.get('go_bet_json').get('kof_olimp'), val.get('go_bet_json').get('kof_fonbet'),
-                                               val.get('total_bet'), key, val.get('deff_max'), val.get('vect1'),
-                                               val.get('vect2'), val.get('sc1'), val.get('sc2'), val.get('created_fork'))
-                        bal1 = OlimpBot(OLIMP_USER).get_balance()  # Баланс в БК1
-                        bal2 = FonbetBot(FONBET_USER).get_balance()  # Баланс в БК2
-                        break
-                    total_bet = int(get_prop('summ'))
-                    go_bet_key.clear()
-                    server_forks.clear()
-                else:
-                    pass
             else:
                 pass
             time.sleep(1)
