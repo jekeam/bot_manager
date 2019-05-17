@@ -57,7 +57,7 @@ def get_olimp_info(id_matche, olimp_k):
         # timeDif = currentTime-startTime
 
         # minuts
-        bet_into['SCORE'] = stake.get('sc', '0:0')  # .get('sc', '0:0').split(' ')[0]
+        bet_into['SCORE'] = stake.get('data', {}).get('sc', '0:0')  # .get('sc', '0:0').split(' ')[0]
         for c in stake.get('data', {}).get('it', []):
             # if c.get('n','') in ['Main Bets', 'Goals', 'Corners', 'Individual total', 'Additional total']:
             if c.get('n', '') in ['Основные', 'Голы', 'Угловые', 'Инд.тотал', 'Доп.тотал', 'Исходы по таймам']:
