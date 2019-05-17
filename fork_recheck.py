@@ -36,6 +36,8 @@ def get_olimp_info(id_matche, olimp_k):
 
     stake = res.json()
     if not stake.get('error', {}).get('err_code', 0):
+        stake = stake.get('data', {})
+        
         bet_into['ID'] = id_matche
 
         is_block = ''
@@ -57,8 +59,8 @@ def get_olimp_info(id_matche, olimp_k):
         # timeDif = currentTime-startTime
 
         # minuts
-        bet_into['SCORE'] = stake.get('data', {}).get('sc', '0:0')  # .get('sc', '0:0').split(' ')[0]
-        for c in stake.get('data', {}).get('it', []):
+        bet_into['SCORE'] = stake.get('sc', '0:0')  # .get('sc', '0:0').split(' ')[0]
+        for c in stake.get('it', []):
             # if c.get('n','') in ['Main Bets', 'Goals', 'Corners', 'Individual total', 'Additional total']:
             if c.get('n', '') in ['Основные', 'Голы', 'Угловые', 'Инд.тотал', 'Доп.тотал', 'Исходы по таймам']:
                 for d in c.get('i', []):
@@ -81,8 +83,7 @@ def get_olimp_info(id_matche, olimp_k):
                             or 'Ничья' \
                             in d.get('n', ''):
                         # prnt(key_r)
-                        key_r = d.get('n', '').replace(stake.get('data').get('c1', ''), 'Т1') \
-                            .replace(stake.get('data').get('c2', ''), 'Т2')
+                        key_r = d.get('n', '').replace(stake.get('c1', ''), 'Т1').replace(stake.get('c2', ''), 'Т2')
                         olimp_factor_short = str([
                                                      abbreviations[c.replace(' ', '')]
                                                      if c.replace(' ', '') in abbreviations.keys()
