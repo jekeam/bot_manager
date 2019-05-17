@@ -710,8 +710,6 @@ if __name__ == '__main__':
                 printed = False
 
             if server_forks:
-                go_bet_key = {}
-                go_bet_json = {}
                 for key, val_json in server_forks.items():
                     l = val_json.get('l', 0.0)
                     k1_type = key.split('@')[-1]
@@ -818,7 +816,7 @@ if __name__ == '__main__':
                                           minute, time_break_fonbet, period, name, name_rus, deff_max, is_top, info) or DEBUG:
                                 prnt(' ')
                                 prnt('Go bets: ' + key + ' ' + info)
-                                fork_success = go_bets(go_bet_json.get('kof_olimp'), go_bet_json.get('kof_fonbet'),
+                                fork_success = go_bets(val_json.get('kof_olimp'), val_json.get('kof_fonbet'),
                                                        total_bet, key, deff_max, vect1, vect2, sc1, sc2, created_fork)
                                 bal1 = OlimpBot(OLIMP_USER).get_balance()  # Баланс в БК1
                                 bal2 = FonbetBot(FONBET_USER).get_balance()  # Баланс в БК2
