@@ -37,14 +37,14 @@ def get_olimp_info(id_matche, olimp_k):
     resp = res.json()
     if not resp.get('error', {}).get('err_code', 0):
         stake = resp.get('data', {})
-        
+
         bet_into['ID'] = id_matche
 
         is_block = ''
         if str(stake.get('ms', '')) == '1':
             is_block = 'BLOCKED'  # 1 - block, 2 - available
             prnt('Олимп: ставки приостановлены: http://olimp.com/app/event/live/1/' + str(stake.get('id', '')))
-            prnt('kof is blocked: ' + str(stake))
+            prnt('kof is blocked: ' + str(stake), 'hide')
         bet_into['BLOCKED'] = is_block
 
         minutes = "-1"
@@ -92,13 +92,13 @@ def get_olimp_info(id_matche, olimp_k):
                                                      else to_abb(c.replace(' ', ''))
                                                      for c in [key_r]
                                                  ][0])
-                                                 
+
                         val_kof = d.get('v', '')
                         if is_block == 'BLOCKED':
                             val_kof = 0
-                            
+
                         bet_into[olimp_factor_short] = val_kof
-                        
+
     else:
         raise ValueError(stake)
     k = bet_into.get(olimp_k, 0)
@@ -172,10 +172,8 @@ def get_fonbet_info(match_id, factor_id, param, bet_tepe=None):
                 for kof in cat.get('quotes'):
                     if kof.get('factorId') == factor_id:
 
-                        if kof.get('blocked'):
-                            prnt('kof is blocked ' + str(kof))
-
                         if param:
+                            err_str = None
                             if kof.get('pValue') != param:
                                 prnt('Изменилась тотал ставки, param не совпадает: ' + 'new: ' + str(kof.get('pValue')) + ', old: ' + str(param))
 
@@ -192,10 +190,12 @@ def get_fonbet_info(match_id, factor_id, param, bet_tepe=None):
                                         err_str = 'Тотал не найден: ' + str(new_wager)
                                 else:
                                     err_str = 'Тип ставки, например 1ТМ(2.5) - не задан: bet_type:' + bet_tepe
-                            if kof.get('blocked'):
-                                prnt('kof is blocked ' + str(kof))
-
+                            if err_str:
+                                prnt(err_str)
                         k = kof.get('value', 0)
+                        if kof.get('blocked'):
+                            prnt('kof is blocked ' + str(kof), 'hide')
+                            k = 0
                         prnt('fonbet score: ' + sc)
                         dop_stat.update({'val': k})
                         prnt('FORK_RECHECK.PY: get_olimp_info end work', 'hide')
