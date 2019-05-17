@@ -92,7 +92,13 @@ def get_olimp_info(id_matche, olimp_k):
                                                      else to_abb(c.replace(' ', ''))
                                                      for c in [key_r]
                                                  ][0])
-                        bet_into[olimp_factor_short] = d.get('v', '')
+                                                 
+                        val_kof = d.get('v', '')
+                        if is_block == 'BLOCKED':
+                            val_kof = 0
+                            
+                        bet_into[olimp_factor_short] = val_kof
+                        
     else:
         raise ValueError(stake)
     k = bet_into.get(olimp_k, 0)
