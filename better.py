@@ -258,7 +258,7 @@ def save_plt(folder, filename, plt):
 
 
 def go_bets(wag_ol, wag_fb, key, deff_max, vect1, vect2, sc1, sc2, created):
-    global bal1, bal2, cnt_fail, cnt_fork_success, k1, k2, total_bet, bet1, bet2
+    global bal1, bal2, cnt_fail, cnt_fork_success, k1, k2, total_bet, bet1, bet2, OLIMP_USER, FONBET_USER
 
     olimp_bet_type = str(key.split('@')[-2])
     fonbet_bet_type = str(key.split('@')[-1])
@@ -519,6 +519,8 @@ def go_bets(wag_ol, wag_fb, key, deff_max, vect1, vect2, sc1, sc2, created):
         if not 'BkOppBetError'.lower() in msg_errs.lower():
             # SAVE INFO
             save_fork(fork_info)
+            bal1 = OlimpBot(OLIMP_USER).get_balance()  # Баланс в БК1
+            bal2 = FonbetBot(FONBET_USER).get_balance()  # Баланс в БК2
         # CHECK FAILS
         check_statistics()
         # WAITING AFTER BET
@@ -563,8 +565,10 @@ def run_client():
 
 
 def recalc_bets(hide=True):
-    global k1, k2, total_bet, bal1, bal1, bet1, bet2
+    global k1, k2, total_bet, bal1, bal1, bet1, bet2, total_bet_min, total_bet_max, round_bet
     prnt('Get sum bets', hide)
+    print('total_bet: {}, total_bet_min: {}, total_bet_max: {}, round_bet: {}, bal1:{}, bal2:{}, bet1:{},  bet2:{}'.
+          format(total_bet, total_bet_min, total_bet_max, round_bet, bal1, bal2, bet1, bet1), hide)
     bet1, bet2 = get_sum_bets(k1, k2, total_bet, 5, hide)
     if bet1 > bal1 or bet2 > bal2:
         if bal1 < bal2:
@@ -825,7 +829,6 @@ if __name__ == '__main__':
                         if deff_max < 3 and k1 > 0 < k2:
                             round_bet = int(get_prop('round_fork'))
                             total_bet = round(randint(total_bet_min, total_bet_max) / round_bet) * round_bet
-                            print('total_bet: {}, total_bet_min: {}, total_bet_max: {}, round_bet: {}'.format(total_bet, total_bet_min, total_bet_max, round_bet), 'hide')
 
                             recalc_bets()
                             # Проверим вилку на исключения
@@ -834,8 +837,6 @@ if __name__ == '__main__':
                                 prnt(' ')
                                 prnt('Go bets: ' + key + ' ' + info)
                                 fork_success = go_bets(val_json.get('kof_olimp'), val_json.get('kof_fonbet'), key, deff_max, vect1, vect2, sc1, sc2, created_fork)
-                                bal1 = OlimpBot(OLIMP_USER).get_balance()  # Баланс в БК1
-                                bal2 = FonbetBot(FONBET_USER).get_balance()  # Баланс в БК2
                         elif deff_max >= 3:
                             pass
                     else:
