@@ -100,7 +100,7 @@ def get_olimp_info(id_matche, olimp_k):
                         bet_into[olimp_factor_short] = val_kof
 
     else:
-        raise ValueError(stake)
+        raise ValueError(str(resp.get('error', {})))
     k = bet_into.get(olimp_k, 0)
     sc = bet_into.get('SCORE', '0:0').split(' ')[0]
     prnt('olimp score: ' + sc)
