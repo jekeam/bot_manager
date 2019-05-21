@@ -26,3 +26,4 @@ bot_manager.db
 rq_fb_calc_balance
 *.png
 *.db
+test2.py
