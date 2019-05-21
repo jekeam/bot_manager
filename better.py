@@ -257,8 +257,8 @@ def save_plt(folder, filename, plt):
     plt.savefig(os.path.join(folder, filename))
 
 
-def go_bets(wag_ol, wag_fb, total_bet, key, deff_max, vect1, vect2, sc1, sc2, created):
-    global bal1, bal2, cnt_fail, cnt_fork_success
+def go_bets(wag_ol, wag_fb, key, deff_max, vect1, vect2, sc1, sc2, created):
+    global bal1, bal2, cnt_fail, cnt_fork_success, k1, k2, total_bet, bet1, bet2
 
     olimp_bet_type = str(key.split('@')[-2])
     fonbet_bet_type = str(key.split('@')[-1])
@@ -296,21 +296,18 @@ def go_bets(wag_ol, wag_fb, total_bet, key, deff_max, vect1, vect2, sc1, sc2, cr
             wag_ol['value'] = obj['olimp']
             wag_ol['factor'] = obj['olimp']
 
+            k1 = float(obj['olimp'])
+            k2 = float(obj['fonbet'])
+
             # Проверяем что полученный коэфициент больше 1
-            if float(obj['olimp']) > 1 < float(obj['fonbet']):
+            if k1 > 1 < k2:
 
                 # пересчетаем суммы ставок
-                bet1, bet2 = get_sum_bets(float(obj['olimp']), float(obj['fonbet']), total_bet)
-
-                if bet1 > bal1 or bet2 > bal2:
-                    if bal1 < bal2:
-                        bet1, bet2 = get_new_sum_bets(k1, k2, bal1)
-                    else:
-                        bet1, bet2 = get_new_sum_bets(k1, k2, bal2)
+                recalc_bets()
 
                 # Выведем текую доходность вилки
                 prnt('cur proc: ' + str(cur_proc) + '%')
-                L = (1 / float(obj['olimp'])) + (1 / float(obj['fonbet']))
+                L = (1 / k1) + (1 / k2)
                 new_proc = round((1 - L) * 100, 2)
                 change_proc = round(new_proc - cur_proc, 2)
                 prnt('new proc: ' + str(new_proc) + '%, change: ' + str(change_proc))
@@ -565,6 +562,27 @@ def run_client():
         return run_client()
 
 
+def recalc_bets():
+    global k1, k2, total_bet, bal1, bal1, bet1, bet2
+    prnt('Get sum bets', 'hide')
+    bet1, bet2 = get_sum_bets(k1, k2, total_bet, 5, True)
+    if bet1 > bal1 or bet2 > bal2:
+        if bal1 < bal2:
+            prnt('recalc bet (bal1 < bal2)', 'hide')
+            bet1, bet2 = get_new_sum_bets(k1, k2, bal1, True)
+            total_bet = bal1 + bal2
+        else:
+            prnt('recalc bet (bal1 > bal2)', 'hide')
+            bet2, bet1 = get_new_sum_bets(k2, k1, bal2, True)
+            total_bet = bal1 + bal2
+
+    max_bet_fonbet = int(get_prop('max_bet_fonbet', '0'))
+    if max_bet_fonbet > 0 and bet2 > max_bet_fonbet:
+        prnt('recalc bet (max_bet_fonbet)', 'hide')
+        bet2, bet1 = get_new_sum_bets(k2, k1, max_bet_fonbet, True)
+        total_bet = bal1 + bal2
+
+
 FONBET_USER = {'login': get_account_info('fonbet', 'login'), 'password': get_account_info('fonbet', 'password')}
 OLIMP_USER = {'login': get_account_info('olimp', 'login'), 'password': get_account_info('olimp', 'password')}
 
@@ -808,27 +826,13 @@ if __name__ == '__main__':
                             round_bet = int(get_prop('round_fork'))
                             total_bet = round(randint(total_bet_min, total_bet_max) / round_bet) * round_bet
 
-                            prnt('Get sum bets', 'hide')
-                            bet1, bet2 = get_sum_bets(k1, k2, total_bet, 5, True)
-                            if bet1 > bal1 or bet2 > bal2:
-                                if bal1 < bal2:
-                                    prnt('recalc bet (bal1 < bal2)', 'hide')
-                                    bet1, bet2 = get_new_sum_bets(k1, k2, bal1, True)
-                                else:
-                                    prnt('recalc bet (bal1 > bal2)', 'hide')
-                                    bet2, bet1 = get_new_sum_bets(k2, k1, bal2, True)
-
-                            max_bet_fonbet = int(get_prop('max_bet_fonbet', '0'))
-                            if max_bet_fonbet > 0 and bet2 > max_bet_fonbet:
-                                prnt('recalc bet (max_bet_fonbet)', 'hide')
-                                bet2, bet1 = get_new_sum_bets(k2, k1, max_bet_fonbet, True)
-
+                            recalc_bets()
                             # Проверим вилку на исключения
                             if check_fork(key, l, k1, k2, live_fork, live_fork_total, bk1_score, bk2_score,
                                           minute, time_break_fonbet, period, name, name_rus, deff_max, is_top, info) or DEBUG:
                                 prnt(' ')
                                 prnt('Go bets: ' + key + ' ' + info)
-                                fork_success = go_bets(val_json.get('kof_olimp'), val_json.get('kof_fonbet'), total_bet, key, deff_max, vect1, vect2, sc1, sc2, created_fork)
+                                fork_success = go_bets(val_json.get('kof_olimp'), val_json.get('kof_fonbet'), key, deff_max, vect1, vect2, sc1, sc2, created_fork)
                                 bal1 = OlimpBot(OLIMP_USER).get_balance()  # Баланс в БК1
                                 bal2 = FonbetBot(FONBET_USER).get_balance()  # Баланс в БК2
                         elif deff_max >= 3:
