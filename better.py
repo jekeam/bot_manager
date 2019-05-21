@@ -825,6 +825,7 @@ if __name__ == '__main__':
                         if deff_max < 3 and k1 > 0 < k2:
                             round_bet = int(get_prop('round_fork'))
                             total_bet = round(randint(total_bet_min, total_bet_max) / round_bet) * round_bet
+                            print('total_bet: {}, total_bet_min: {}, total_bet_max: {}, round_bet: {}'.format(total_bet, total_bet_min, total_bet_max, round_bet), 'hide')
 
                             recalc_bets()
                             # Проверим вилку на исключения
