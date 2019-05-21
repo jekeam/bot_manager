@@ -303,7 +303,7 @@ def go_bets(wag_ol, wag_fb, key, deff_max, vect1, vect2, sc1, sc2, created):
             if k1 > 1 < k2:
 
                 # пересчетаем суммы ставок
-                recalc_bets()
+                recalc_bets(hide=False)
 
                 # Выведем текую доходность вилки
                 prnt('cur proc: ' + str(cur_proc) + '%')
@@ -562,24 +562,24 @@ def run_client():
         return run_client()
 
 
-def recalc_bets():
+def recalc_bets(hide=True):
     global k1, k2, total_bet, bal1, bal1, bet1, bet2
-    prnt('Get sum bets', 'hide')
-    bet1, bet2 = get_sum_bets(k1, k2, total_bet, 5, True)
+    prnt('Get sum bets', hide)
+    bet1, bet2 = get_sum_bets(k1, k2, total_bet, 5, hide)
     if bet1 > bal1 or bet2 > bal2:
         if bal1 < bal2:
-            prnt('recalc bet (bal1 < bal2)', 'hide')
-            bet1, bet2 = get_new_sum_bets(k1, k2, bal1, True)
+            prnt('recalc bet (bal1 < bal2)', hide)
+            bet1, bet2 = get_new_sum_bets(k1, k2, bal1, hide)
             total_bet = bal1 + bal2
         else:
-            prnt('recalc bet (bal1 > bal2)', 'hide')
-            bet2, bet1 = get_new_sum_bets(k2, k1, bal2, True)
+            prnt('recalc bet (bal1 > bal2)', hide)
+            bet2, bet1 = get_new_sum_bets(k2, k1, bal2, hide)
             total_bet = bal1 + bal2
 
     max_bet_fonbet = int(get_prop('max_bet_fonbet', '0'))
     if max_bet_fonbet > 0 and bet2 > max_bet_fonbet:
-        prnt('recalc bet (max_bet_fonbet)', 'hide')
-        bet2, bet1 = get_new_sum_bets(k2, k1, max_bet_fonbet, True)
+        prnt('recalc bet (max_bet_fonbet)', hide)
+        bet2, bet1 = get_new_sum_bets(k2, k1, max_bet_fonbet, hide)
         total_bet = bal1 + bal2
 
 
