@@ -808,15 +808,19 @@ if __name__ == '__main__':
                             round_bet = int(get_prop('round_fork'))
                             total_bet = round(randint(total_bet_min, total_bet_max) / round_bet) * round_bet
 
+                            prnt('Get sum bets')
                             bet1, bet2 = get_sum_bets(k1, k2, total_bet, 5, True)
                             if bet1 > bal1 or bet2 > bal2:
                                 if bal1 < bal2:
+                                    prnt('recalc bet (bal1 < bal2)')
                                     bet1, bet2 = get_new_sum_bets(k1, k2, bal1, True)
                                 else:
+                                    prnt('recalc bet (bal1 > bal2)')
                                     bet2, bet1 = get_new_sum_bets(k2, k1, bal2, True)
 
                             max_bet_fonbet = int(get_prop('max_bet_fonbet', '0'))
                             if max_bet_fonbet > 0 and bet2 > max_bet_fonbet:
+                                prnt('recalc bet (max_bet_fonbet)')
                                 bet2, bet1 = get_new_sum_bets(k2, k1, max_bet_fonbet, True)
 
                             # Проверим вилку на исключения
