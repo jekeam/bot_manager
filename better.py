@@ -435,30 +435,29 @@ def go_bets(wag_ol, wag_fb, total_bet, key, deff_max, vect1, vect2, sc1, sc2, cr
                         prnt('Fork key: ' + str(filename) + ', не прошел проверку 1 (векторы строго сонаправлены и нет шума)')
                         save_plt(str(ACC_ID) + '_I_err', filename, plt)
 
-                if ACC_ID in (1, 3, 13):
-                    # ML #2 CHECK CREATER-NOISE
-                    if not ml_ok:
-                        side_created = get_creater(k1_is_noise, k2_is_noise)
-                        if side_created == 1:
-                            fake_vect1 = 'DOWN'
-                            fake_vect2 = 'UP'
-                        elif side_created == 2:
-                            fake_vect2 = 'DOWN'
-                            fake_vect1 = 'UP'
-                        else:
-                            prnt('Fork key: ' + str(filename) + ', не прошел проверку 2 (Шумный создатель вилки)')
-                            save_plt(str(ACC_ID) + '_II_err', filename, plt)
+                # ML #2 CHECK CREATER-NOISE
+                if not ml_ok:
+                    side_created = get_creater(k1_is_noise, k2_is_noise)
+                    if side_created == 1:
+                        fake_vect1 = 'DOWN'
+                        fake_vect2 = 'UP'
+                    elif side_created == 2:
+                        fake_vect2 = 'DOWN'
+                        fake_vect1 = 'UP'
+                    else:
+                        prnt('Fork key: ' + str(filename) + ', не прошел проверку 2 (Шумный создатель вилки)')
+                        save_plt(str(ACC_ID) + '_II_err', filename, plt)
 
-                        if side_created:
-                            ml_ok = True
-                            prnt('Fork key: ' + str(filename) + ', успешно прошел проверку 2 (Шумный создатель вилки)')
-                            if vect1 != fake_vect1:
-                                prnt('Вектор в Олимп измнен: {}->{}'.format(vect1, fake_vect1))
-                                shared['olimp']['vect'] = fake_vect1
-                            if vect2 != fake_vect2:
-                                prnt('Вектор в Фонбет измнен: {}->{}'.format(vect2, fake_vect2))
-                                shared['fonbet']['vect'] = fake_vect2
-                            save_plt(str(ACC_ID) + '_II_ok', filename, plt)
+                    if side_created:
+                        ml_ok = True
+                        prnt('Fork key: ' + str(filename) + ', успешно прошел проверку 2 (Шумный создатель вилки)')
+                        if vect1 != fake_vect1:
+                            prnt('Вектор в Олимп измнен: {}->{}'.format(vect1, fake_vect1))
+                            shared['olimp']['vect'] = fake_vect1
+                        if vect2 != fake_vect2:
+                            prnt('Вектор в Фонбет измнен: {}->{}'.format(vect2, fake_vect2))
+                            shared['fonbet']['vect'] = fake_vect2
+                        save_plt(str(ACC_ID) + '_II_ok', filename, plt)
 
                 plt.close()
                 if not ml_ok:
@@ -816,13 +815,16 @@ if __name__ == '__main__':
                                 else:
                                     bet2, bet1 = get_new_sum_bets(k2, k1, bal2, True)
 
+                            max_bet_fonbet = int(get_prop('max_bet_fonbet', '0'))
+                            if max_bet_fonbet > 0 and bet2 > max_bet_fonbet:
+                                bet2, bet1 = get_new_sum_bets(k2, k1, max_bet_fonbet, True)
+
                             # Проверим вилку на исключения
                             if check_fork(key, l, k1, k2, live_fork, live_fork_total, bk1_score, bk2_score,
                                           minute, time_break_fonbet, period, name, name_rus, deff_max, is_top, info) or DEBUG:
                                 prnt(' ')
                                 prnt('Go bets: ' + key + ' ' + info)
-                                fork_success = go_bets(val_json.get('kof_olimp'), val_json.get('kof_fonbet'),
-                                                       total_bet, key, deff_max, vect1, vect2, sc1, sc2, created_fork)
+                                fork_success = go_bets(val_json.get('kof_olimp'), val_json.get('kof_fonbet'), total_bet, key, deff_max, vect1, vect2, sc1, sc2, created_fork)
                                 bal1 = OlimpBot(OLIMP_USER).get_balance()  # Баланс в БК1
                                 bal2 = FonbetBot(FONBET_USER).get_balance()  # Баланс в БК2
                         elif deff_max >= 3:

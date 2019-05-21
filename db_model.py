@@ -9,7 +9,7 @@ db = MySQLDatabase('bot_manager', user='root', password='131189_Ak13', host='127
 
 first_bet_in = ["created", "notcreator", "fonbet", "olimp", "parallel", "auto"]
 
-bks = [ "fonbet", "olimp", "auto"]
+bks = ["fonbet", "olimp", "auto"]
 
 prop_abr = {
     "SUMM": {"abr": "Общая ставка", "type": "int", "max": "10000", "min": "400", "access_list": [], "error": ""},
@@ -35,6 +35,7 @@ prop_abr = {
     "ML_NOISE": {"abr": "ML: исключить шум", "type": "str", "max": "", "min": "", "access_list": ["вкл", "выкл"], "error": ""},
     "POUR_INTO": {"abr": "Перелить в", "type": "str", "max": "", "min": "", "access_list": bks, "error": ""},
     "DOUBLE_BET": {"abr": "Дубли ставок", "type": "str", "max": "", "min": "", "access_list": ["вкл", "выкл"], "error": ""},
+    "MAX_BET_FONBET": {"abr": "MAX BET в Fonbet", "type": "int", "max": "500", "min": "0", "access_list": ["0", "100", "200", "300", "400", "500"], "error": ""},
 
     # "SERVER_IP_TEST": {"abr": "IP-адрес тест. сервера", "type": "", "max": "", "min": "", "access_list": [], "error": ""},
     # "SERVER_IP": {"abr": "IP-адрес бой сервера", "type": "", "max": "", "min": "", "access_list": [], "error": ""},
