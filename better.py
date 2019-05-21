@@ -567,7 +567,7 @@ def run_client():
 def recalc_bets(hide=True):
     global k1, k2, total_bet, bal1, bal1, bet1, bet2, total_bet_min, total_bet_max, round_bet
     prnt('Get sum bets', hide)
-    print('total_bet: {}, total_bet_min: {}, total_bet_max: {}, round_bet: {}, bal1:{}, bal2:{}, bet1:{},  bet2:{}'.
+    prnt('total_bet: {}, total_bet_min: {}, total_bet_max: {}, round_bet: {}, bal1:{}, bal2:{}, bet1:{},  bet2:{}'.
           format(total_bet, total_bet_min, total_bet_max, round_bet, bal1, bal2, bet1, bet1), hide)
     bet1, bet2 = get_sum_bets(k1, k2, total_bet, 5, hide)
     if bet1 > bal1 or bet2 > bal2:
