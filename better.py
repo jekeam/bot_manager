@@ -420,20 +420,20 @@ def go_bets(wag_ol, wag_fb, total_bet, key, deff_max, vect1, vect2, sc1, sc2, cr
 
                 filename = key.replace('.', '')
                 # ML #1 - CHECK VECTS
-                if not ACC_ID in (1, 3):
-                    if check_vect(real_vect1, real_vect2) and check_noise(noise1, noise2):
-                        ml_ok = True
-                        prnt('Fork key: ' + str(filename) + ', успешно прошел проверку 1 (векторы строго сонаправлены и нет шума)')
-                        if vect1 != real_vect1:
-                            prnt('Вектор в Олимп измнен: {}->{}'.format(vect1, real_vect1))
-                            shared['olimp']['vect'] = real_vect1
-                        if vect2 != real_vect2:
-                            prnt('Вектор в Фонбет измнен: {}->{}'.format(vect2, real_vect2))
-                            shared['fonbet']['vect'] = real_vect2
-                        save_plt(str(ACC_ID) + '_I_ok', filename, plt)
-                    else:
-                        prnt('Fork key: ' + str(filename) + ', не прошел проверку 1 (векторы строго сонаправлены и нет шума)')
-                        save_plt(str(ACC_ID) + '_I_err', filename, plt)
+                # if not ACC_ID in (1, 3):
+                if check_vect(real_vect1, real_vect2) and check_noise(noise1, noise2):
+                    ml_ok = True
+                    prnt('Fork key: ' + str(filename) + ', успешно прошел проверку 1 (векторы строго сонаправлены и нет шума)')
+                    if vect1 != real_vect1:
+                        prnt('Вектор в Олимп измнен: {}->{}'.format(vect1, real_vect1))
+                        shared['olimp']['vect'] = real_vect1
+                    if vect2 != real_vect2:
+                        prnt('Вектор в Фонбет измнен: {}->{}'.format(vect2, real_vect2))
+                        shared['fonbet']['vect'] = real_vect2
+                    save_plt(str(ACC_ID) + '_I_ok', filename, plt)
+                else:
+                    prnt('Fork key: ' + str(filename) + ', не прошел проверку 1 (векторы строго сонаправлены и нет шума)')
+                    save_plt(str(ACC_ID) + '_I_err', filename, plt)
 
                 # ML #2 CHECK CREATER-NOISE
                 if not ml_ok:
