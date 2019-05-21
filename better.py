@@ -568,23 +568,23 @@ def recalc_bets(hide=True):
     global k1, k2, total_bet, bal1, bal1, bet1, bet2, total_bet_min, total_bet_max, round_bet
     prnt('Get sum bets', hide)
     prnt('total_bet: {}, total_bet_min: {}, total_bet_max: {}, round_bet: {}, bal1:{}, bal2:{}, bet1:{},  bet2:{}'.
-          format(total_bet, total_bet_min, total_bet_max, round_bet, bal1, bal2, bet1, bet1), hide)
+         format(total_bet, total_bet_min, total_bet_max, round_bet, bal1, bal2, bet1, bet2), hide)
     bet1, bet2 = get_sum_bets(k1, k2, total_bet, 5, hide)
     if bet1 > bal1 or bet2 > bal2:
         if bal1 < bal2:
             prnt('recalc bet (bal1 < bal2)', hide)
             bet1, bet2 = get_new_sum_bets(k1, k2, bal1, hide)
-            total_bet = bal1 + bal2
+            total_bet = bet1 + bet2
         else:
             prnt('recalc bet (bal1 > bal2)', hide)
             bet2, bet1 = get_new_sum_bets(k2, k1, bal2, hide)
-            total_bet = bal1 + bal2
+            total_bet = bet1 + bet2
 
     max_bet_fonbet = int(get_prop('max_bet_fonbet', '0'))
     if max_bet_fonbet > 0 and bet2 > max_bet_fonbet:
         prnt('recalc bet (max_bet_fonbet)', hide)
         bet2, bet1 = get_new_sum_bets(k2, k1, max_bet_fonbet, hide)
-        total_bet = bal1 + bal2
+        total_bet = bet1 + bet2
 
 
 FONBET_USER = {'login': get_account_info('fonbet', 'login'), 'password': get_account_info('fonbet', 'password')}
@@ -667,6 +667,7 @@ if __name__ == '__main__':
             else:
                 total_bet_min = int(total_bet - (total_bet * int(random_summ_proc) / 100))
                 total_bet_max = int(total_bet + (total_bet * int(random_summ_proc) / 100))
+                prnt('total_bet:{}, total_bet_min: {}, total_bet_max: {}'.format(total_bet, total_bet_min, total_bet_max))
 
         acc_info = Account.select().where(Account.key == KEY)
         print(acc_info)
@@ -829,6 +830,7 @@ if __name__ == '__main__':
                         if deff_max < 3 and k1 > 0 < k2:
                             round_bet = int(get_prop('round_fork'))
                             total_bet = round(randint(total_bet_min, total_bet_max) / round_bet) * round_bet
+                            prnt('total_bet random: ' + str(total_bet), 'hide')
 
                             recalc_bets()
                             # Проверим вилку на исключения
