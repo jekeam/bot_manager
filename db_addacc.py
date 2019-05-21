@@ -7,16 +7,16 @@ if __name__ == '__main__':
     print(uid)
     user = 'shaggy'
     pswd = 'hzsyk4'
-    ip = '5.188.74.107'
-    port = '3519'
+    ip = '5.188.74.30'
+    port = '4547'
     proxy = user + ':' + pswd + '@' + ip + ':' + port
 
     proxies = '{`fonbet`:{`http`:`http://' + proxy + '`,`https`:`https://' + proxy + '`},`olimp`:{`http`:`http://' + proxy + '`,`https`:`https://' + proxy + '`}}'
     print('proxies: ' + proxies)
-    olu = '5910079'
-    olp = 'Q933389d'
-    fbu = '6876192'
-    fbp = '83zWs25c'
+    olu = '9581160'
+    olp = 'G303336n'
+    fbu = '6878033'
+    fbp = 'T5dpYvk7'
     accounts = '{`olimp`:{`login`:`' + olu + '`,`password`:`' + olp + '`,`mirror`:`olimp.com`},`fonbet`:{`login`:' + fbu + ',`password`:`' + fbp + '`,`mirror`:`fonbet.com`}}'
     print('accounts: ' + accounts)
     try:
