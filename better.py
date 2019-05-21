@@ -519,15 +519,15 @@ def go_bets(wag_ol, wag_fb, key, deff_max, vect1, vect2, sc1, sc2, created):
         if not 'BkOppBetError'.lower() in msg_errs.lower():
             # SAVE INFO
             save_fork(fork_info)
+            # WAITING AFTER BET
+            sleep_post_work = int(get_prop('timeout_fork', 30))
+            prnt('Ожидание ' + str(sleep_post_work) + ' сек.')
+            time.sleep(sleep_post_work)
+            # GET NEW BALANCE
             bal1 = OlimpBot(OLIMP_USER).get_balance()  # Баланс в БК1
             bal2 = FonbetBot(FONBET_USER).get_balance()  # Баланс в БК2
         # CHECK FAILS
         check_statistics()
-        # WAITING AFTER BET
-        sleep_post_work = int(get_prop('timeout_fork', 30))
-        prnt('Ожидание ' + str(sleep_post_work) + ' сек.')
-        time.sleep(sleep_post_work)
-
         return True
 
 
@@ -712,8 +712,8 @@ if __name__ == '__main__':
                 msg_str = 'Время выгрузки: {} ч., я завершил работу'.format(get_prop('work_hour_end'))
                 raise Shutdown(msg_str)
 
-            # Обновление баланса каждые 30 минут
-            ref_balace = 30
+            # Обновление баланса каждые 60 минут
+            ref_balace = 60
             if (datetime.datetime.now() - time_get_balance).total_seconds() > (60 * ref_balace):
                 prnt(' ')
                 prnt('Прошло больше ' + str(ref_balace) + ' минут, пора обновить балансы:')
@@ -726,9 +726,7 @@ if __name__ == '__main__':
             ref_min = 30
             if cur_min % ref_min == 0 and not printed:
                 prnt(' ')
-                msg_str = str(ACC_ID) + ': ' + \
-                          'Проставлено вилок: ' + str(len(cnt_fork_success)) + '\n' + \
-                          'Сделано выкупов: ' + str(cnt_fail) + '\n'
+                msg_str = str(ACC_ID) + ': ' + 'Проставлено вилок: ' + str(len(cnt_fork_success)) + '\n' + 'Сделано выкупов: ' + str(cnt_fail) + '\n'
                 prnt(msg_str)
                 printed = True
 
