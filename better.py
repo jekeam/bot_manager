@@ -581,7 +581,7 @@ def recalc_bets(hide=True):
             total_bet = bet1 + bet2
 
     max_bet_fonbet = int(get_prop('max_bet_fonbet', '0'))
-    if max_bet_fonbet > 0 and bet2 > max_bet_fonbet:
+    if bet2 > max_bet_fonbet > 0:
         prnt('recalc bet (max_bet_fonbet)', hide)
         bet2, bet1 = get_new_sum_bets(k2, k1, max_bet_fonbet, hide)
         total_bet = bet1 + bet2
