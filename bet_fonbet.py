@@ -12,6 +12,7 @@ from exceptions import OlimpBetError
 urllib3.disable_warnings(urllib3.exceptions.InsecureRequestWarning)
 
 # "deviceid":"c2c1c82f1b9e1b8299fc3ab10e1960c8"
+LENOVO_MODEL = 'S850'
 
 browser_headers = {
     "User-Agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/63.0.3239.132 Safari/537.36"
@@ -101,7 +102,7 @@ class FonbetBot:
             "appVersion": "5.1.3b",
             "carrier": "MegaFon",
             "deviceManufacturer": "LENOVO",
-            "deviceModel": "Lenovo A5000",
+            "deviceModel": "Lenovo " + LENOVO_MODEL,
             "fsid": "",
             "lang": "ru",
             "platform": "mobile_android",
@@ -116,7 +117,7 @@ class FonbetBot:
             "appVersion": "5.1.3b",
             "carrier": "MegaFon",
             "deviceManufacturer": "LENOVO",
-            "deviceModel": "Lenovo A5000",
+            "deviceModel": "Lenovo " + LENOVO_MODEL,
             "fsid": "",
             "lang": "ru",
             "platform": "mobile_android",
@@ -175,7 +176,7 @@ class FonbetBot:
             "appVersion": "5.1.3b",
             "carrier": "MegaFon",
             "deviceManufacturer": "LENOVO",
-            "deviceModel": "Lenovo A5000",
+            "deviceModel": "Lenovo " + LENOVO_MODEL,
             "fsid": "",
             "lang": "ru",
             "platform": "mobile_android",

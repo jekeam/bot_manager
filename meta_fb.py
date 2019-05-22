@@ -5,6 +5,7 @@ import requests
 from utils import check_status_with_resp, prnt
 import time
 from retry_requests import requests_retry_session
+LENOVO_MODEL = 'S850'
 
 fb_payload = {
     "appVersion": "5.1.3b",
@@ -47,7 +48,7 @@ fb_payload_bet = {
     "appVersion": "5.1.3b",
     "carrier": "MegaFon",
     "deviceManufacturer": "LENOVO",
-    "deviceModel": "Lenovo A5000",
+    "deviceModel": "Lenovo " + LENOVO_MODEL,
     "fsid": "",
     "lang": "ru",
     "platform": "mobile_android",
@@ -79,7 +80,7 @@ fb_payload_max_bet = {
     "appVersion": "5.1.3b",
     "carrier": "MegaFon",
     "deviceManufacturer": "LENOVO",
-    "deviceModel": "Lenovo A5000",
+    "deviceModel": "Lenovo " + LENOVO_MODEL,
     "fsid": "",
     "lang": "ru",
     "platform": "mobile_android",
@@ -94,7 +95,7 @@ payload_req = {
     "appVersion": "5.1.3b",
     "carrier": "MegaFon",
     "deviceManufacturer": "LENOVO",
-    "deviceModel": "Lenovo A5000",
+    "deviceModel": "Lenovo " + LENOVO_MODEL,
     "fsid": "",
     "lang": "ru",
     "platform": "mobile_android",
