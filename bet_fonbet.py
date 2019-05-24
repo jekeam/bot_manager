@@ -63,7 +63,7 @@ class FonbetBot:
         self.timeout = 50
         self.fonbet_bet_type = None
 
-        session_proxies = get_proxies().get('fonbet')
+        session_proxies = get_proxies().get('fonbet', {})
 
         if session_proxies:
             self.proxies = session_proxies
@@ -190,7 +190,7 @@ class FonbetBot:
 
     def get_urls(self):
         url = get_account_info('fonbet', 'mirror')
-        if url == '':
+        if not url:
             url = 'www.fonbet.com'
         url = "https://" + url + "/urls.json?{}".format(random())
         resp = requests_retry_session().get(
@@ -951,10 +951,10 @@ def get_new_bets_fonbet(match_id, proxies, time_out):
 
 if __name__ == '__main__':
     
+    PROXIES = dict()
+    
     FONBET_USER = {
-        "login": get_account_info(
-            'fonbet', 'login'), "password": get_account_info(
-            'fonbet', 'password')}
+        "login": 6638610, "password": "qqQQAA113", "mirror":"fonbet.com"}
     wager_fonbet = {'time_req': 1552746519, 'fonbet_bet_type':"ТБ1(2.5)", 'event': 13759645, 'value': 2.6, 'param': 250, 'factor': '1815', 'score': '0:0', 'vector': 'UP', 'hist': {'time_change': 1552746510, 'avg_change': [0, 39, 31, 1, 9, 33, 27, 92, 31, 27, 93, 1, 78, 31, 179, 15, 39], '1': 2.6, '2': 2.6, '3': 2.6, '4': 2.6, '5': 2.6}}
 
     obj = {}
@@ -966,6 +966,6 @@ if __name__ == '__main__':
     fonbet.sign_in()
     #fonbet.place_bet(obj)
     #time.sleep(3)
-    fonbet.sale_bet(15102409046)
+    #fonbet.sale_bet(15102409046)
     # fonbet_reg_id = fonbet.place_bet(amount_fonbet, wager_fonbet)
     # {'e': 12264423, 'f': 931, 'v': 1.4, 'p': 250, 'pt': '2.5', 'isLive': True}

@@ -326,5 +326,9 @@ def get_session_with_proxy(name):
 
 
 def get_proxies():
-    global PROXIES
-    return PROXIES
+    try:
+        global PROXIES
+        return PROXIES
+    except:
+        D = dict()
+        return D
