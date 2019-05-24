@@ -330,5 +330,7 @@ def get_proxies():
         global PROXIES
         return PROXIES
     except:
-        D = dict()
+        #D = dict()
+        D = {'fonbet':{'http':'http://shaggy:hzsyk4@191.101.104.71:4487','https':'https://shaggy:hzsyk4@191.101.104.71:4487'},
+    'olimp':{'http':'http://shaggy:hzsyk4@191.101.104.71:4487','https':'https://shaggy:hzsyk4@191.101.104.71:4487'}}
         return D

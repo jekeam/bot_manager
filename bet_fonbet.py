@@ -193,6 +193,7 @@ class FonbetBot:
         if not url:
             url = 'www.fonbet.com'
         url = "https://" + url + "/urls.json?{}".format(random())
+        print(url)
         resp = requests_retry_session().get(
             url,
             headers=browser_headers,
@@ -200,6 +201,7 @@ class FonbetBot:
             timeout=self.timeout,
             proxies=self.proxies
         )
+        print(resp.text)
         check_status_with_resp(resp)
         return resp.json()
 
@@ -954,9 +956,9 @@ if __name__ == '__main__':
     PROXIES = dict()
     
     FONBET_USER = {
-        "login": 6638610, "password": "qqQQAA113", "mirror":"fonbet.com"}
+        "login": 5987993, "password": "qRVcRUXz23", "mirror":"fonbet-33298.com"}
+    
     wager_fonbet = {'time_req': 1552746519, 'fonbet_bet_type':"ТБ1(2.5)", 'event': 13759645, 'value': 2.6, 'param': 250, 'factor': '1815', 'score': '0:0', 'vector': 'UP', 'hist': {'time_change': 1552746510, 'avg_change': [0, 39, 31, 1, 9, 33, 27, 92, 31, 27, 93, 1, 78, 31, 179, 15, 39], '1': 2.6, '2': 2.6, '3': 2.6, '4': 2.6, '5': 2.6}}
-
     obj = {}
     obj['wager_fonbet'] = wager_fonbet
     obj['amount_fonbet'] = 110
