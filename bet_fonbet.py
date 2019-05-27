@@ -194,11 +194,9 @@ class FonbetBot:
 
     def get_urls(self):
         url = get_account_info('fonbet', 'mirror')
-        print(url)
         if not url:
-            url = 'www.fonbet.com'
+            url = 'fonbet.com'
         url = "https://" + url + "/urls.json?{}".format(random())
-        print(url)
         resp = requests_retry_session().get(
             url,
             headers=browser_headers,
@@ -264,9 +262,21 @@ class FonbetBot:
             self.fsid = res["fsid"]
 
             self.balance = float(res.get("saldo"))
+            
             self.limit_group = res.get("limitGroup")
+            
             self.pay_blocked = res.get("attributes",{}).get("payBlocked")
+            if self.pay_blocked:
+                self.pay_blocked = 'Да'
+            else:
+                self.pay_blocked = 'Нет'
+            
             self.live_blocked = res.get("attributes",{}).get("liveBlocked")
+            if self.live_blocked:
+                self.live_blocked = 'Да'
+            else:
+                self.live_blocked = 'Нет'
+            
             # self.balance_in_play = 0.0
             self.payload = payload
             prnt('BET_FONBET.PY: balance: ' + str(self.balance))
@@ -961,8 +971,8 @@ if __name__ == '__main__':
     
     PROXIES = dict()
     
-    FONBET_USER = {"fonbet":{
-        "login": 5987993, "password": "qRVcRUXz23", "mirror":"fonbet-94a95.com"}}
+    FONBET_USER = {
+        "login": 6638610, "password": "qqQQAA113", "mirror":"fonbet-94a95.com"}
     
     wager_fonbet = {'time_req': 1552746519, 'fonbet_bet_type':"ТБ1(2.5)", 'event': 13759645, 'value': 2.6, 'param': 250, 'factor': '1815', 'score': '0:0', 'vector': 'UP', 'hist': {'time_change': 1552746510, 'avg_change': [0, 39, 31, 1, 9, 33, 27, 92, 31, 27, 93, 1, 78, 31, 179, 15, 39], '1': 2.6, '2': 2.6, '3': 2.6, '4': 2.6, '5': 2.6}}
     obj = {}
