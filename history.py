@@ -86,7 +86,7 @@ def fonbet_get_hist(FONBET_USER):
 
     if fonbet.get_balance() >= 0:
         balance_int += fonbet.get_balance()
-        balance_str = balance_str + '\nИнформация о Фонбет:\n'
+        balance_str = balance_str + 'Фонбет:\n'
         balance_str = balance_str + 'Баланс: ' + int_to_str(fonbet.get_balance()) + '\n'
         balance_str = balance_str + 'Группа лимита: ' + str(fonbet.limit_group) + '\n'
         balance_str = balance_str + 'Блокировка ставки: ' + str(fonbet.live_blocked) + '\n'
