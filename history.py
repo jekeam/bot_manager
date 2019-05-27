@@ -126,6 +126,7 @@ def export_hist(OLIMP_USER, FONBET_USER):
     global fonbet_bet_min
     global ACC_ID, USER_ID
     global balance_str, balance_int
+    prnt(file_name, os.path.isfile(file_name))
 
     if os.path.isfile(file_name):
 
