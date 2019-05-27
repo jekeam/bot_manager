@@ -88,7 +88,6 @@ def fonbet_get_hist(FONBET_USER):
         balance_int += fonbet.get_balance()
         balance_str = balance_str + '\nИнформация о Фонбет:\n'
         balance_str = balance_str + 'Баланс: ' + int_to_str(fonbet.get_balance()) + '\n'
-        prnt('fonbet.limit_group '+str(fonbet.limit_group))
         balance_str = balance_str + 'Группа лимита: ' + str(fonbet.limit_group) + '\n'
         balance_str = balance_str + 'Блокировка ставки: ' + str(fonbet.live_blocked) + '\n'
         balance_str = balance_str + 'Блокировка вывода: ' + str(fonbet.pay_blocked) + '\n'
@@ -127,14 +126,10 @@ def export_hist(OLIMP_USER, FONBET_USER):
     global fonbet_bet_min
     global ACC_ID, USER_ID
     global balance_str, balance_int
-    prnt(file_name)
-    prnt('ex:' + str(os.path.isfile(file_name)))
-    prnt('export_hist')
 
     if os.path.isfile(file_name):
 
         cur_date_str = datetime.now().strftime("%d_%m_%Y")
-        prnt(cur_date_str)
 
         with open(file_name, encoding='utf-8') as f:
             for line in f.readlines():
@@ -248,7 +243,6 @@ def export_hist(OLIMP_USER, FONBET_USER):
             with open(csv_name, 'w', encoding='utf-8') as f:
                 f.write(header + out)
 
-    prnt('2+'+cur_date_str)
     if os.path.isfile(str(ACC_ID) + '_client.log'):
         try:
             os.rename(str(ACC_ID) + '_client.log', cur_date_str + '_' + str(ACC_ID) + '_' + 'client.log')
