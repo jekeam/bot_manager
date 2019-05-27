@@ -62,6 +62,10 @@ class FonbetBot:
         self.add_sleep = 0
         self.timeout = 50
         self.fonbet_bet_type = None
+        
+        self.limit_group = None
+        self.pay_blocked = None
+        self.live_blocked = None
 
         session_proxies = get_proxies().get('fonbet', {})
 
@@ -190,6 +194,7 @@ class FonbetBot:
 
     def get_urls(self):
         url = get_account_info('fonbet', 'mirror')
+        print(url)
         if not url:
             url = 'www.fonbet.com'
         url = "https://" + url + "/urls.json?{}".format(random())
@@ -201,7 +206,6 @@ class FonbetBot:
             timeout=self.timeout,
             proxies=self.proxies
         )
-        print(resp.text)
         check_status_with_resp(resp)
         return resp.json()
 
@@ -222,7 +226,7 @@ class FonbetBot:
 
     def get_session_state(self):
         f = open('fonbet_session.txt', 'r')
-        print(f.read().strip())
+        prnt(f.read().strip())
 
     def sign_in(self):
         try:
@@ -260,6 +264,9 @@ class FonbetBot:
             self.fsid = res["fsid"]
 
             self.balance = float(res.get("saldo"))
+            self.limit_group = res.get("limitGroup")
+            self.pay_blocked = res.get("attributes",{}).get("payBlocked")
+            self.live_blocked = res.get("attributes",{}).get("liveBlocked")
             # self.balance_in_play = 0.0
             self.payload = payload
             prnt('BET_FONBET.PY: balance: ' + str(self.balance))
@@ -741,11 +748,11 @@ class FonbetBot:
                 err_str = 'BET_FONBET.PY, err sale bet, coupon tempBlock = True: ' + str(res) + ' ' + \
                           'sell_delay: ' + str(sleep_tempblock) + ' sec...'
                 time.sleep(sleep_tempblock)
-                print(err_str)
+                prnt(err_str)
                 return self.sale_bet()
             else:
                 err_str = 'BET_FONBET.PY, err sale bet, new actualSellSum: ' + str(res.get('actualSellSum') / 10)
-                print(err_str)
+                prnt(err_str)
                 return self.sale_bet()
 
         elif res.get('result') == 'couponCompletelySold':
@@ -867,7 +874,6 @@ def get_new_bets_fonbet(match_id, proxies, time_out):
                             'time_req': round(time.time())
                         })
                     except Exception as e:
-                        # print(e)
                         bets_fonbet[key_id] = {
                             'sport_id': skId,
                             'sport_name': skName,
@@ -955,8 +961,8 @@ if __name__ == '__main__':
     
     PROXIES = dict()
     
-    FONBET_USER = {
-        "login": 5987993, "password": "qRVcRUXz23", "mirror":"fonbet-33298.com"}
+    FONBET_USER = {"fonbet":{
+        "login": 5987993, "password": "qRVcRUXz23", "mirror":"fonbet-94a95.com"}}
     
     wager_fonbet = {'time_req': 1552746519, 'fonbet_bet_type':"ТБ1(2.5)", 'event': 13759645, 'value': 2.6, 'param': 250, 'factor': '1815', 'score': '0:0', 'vector': 'UP', 'hist': {'time_change': 1552746510, 'avg_change': [0, 39, 31, 1, 9, 33, 27, 92, 31, 27, 93, 1, 78, 31, 179, 15, 39], '1': 2.6, '2': 2.6, '3': 2.6, '4': 2.6, '5': 2.6}}
     obj = {}
