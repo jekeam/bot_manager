@@ -13,7 +13,8 @@ urllib3.disable_warnings(urllib3.exceptions.InsecureRequestWarning)
 DEFAULT_ACCOUNT = {"login": 5523988, "passw": "E506274m"}
 
 olimp_url = "https://176.223.130.242/api/{}"
-olimp_url2 = "https://08.olimp-proxy.ru/api/{}"
+# olimp_url2 = "https://08.olimp-proxy.ru/api/{}"
+olimp_url2 = "https://185.112.156.108:10600/api/{}"
 base_url = "https://olimp.com/api/{}"
 
 url_test = "http://httpbin.org/delay/3"
