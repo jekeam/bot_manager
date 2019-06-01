@@ -26,7 +26,8 @@ def get_olimp_info(id_matche, olimp_k):
 
     prnt('FORK_RECHECK.PY: get_olimp_info rq: ' + str(olimp_data), 'hide')
     res = requests_retry_session().post(
-        ol_url_api.format('10', 'stakes/'),
+        # ol_url_api.format('10', 'stakes/'),
+        ol_url_api.format('stakes/'),
         data=olimp_data,
         headers=olimp_stake_head,
         timeout=10,
