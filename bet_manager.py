@@ -692,7 +692,8 @@ class BetManager:
 
                 prnt(self.msg.format(sys._getframe().f_code.co_name, 'rq: ' + str(payload) + ' ' + str(headers)), 'hide')
                 resp = requests_retry_session_post(
-                    ol_url_api.format(self.server_olimp, 'autorize'),
+                    # ol_url_api.format(self.server_olimp, 'autorize'),
+                    ol_url_api.format('autorize'),
                     headers=headers,
                     data=payload,
                     verify=False,
@@ -831,7 +832,8 @@ class BetManager:
             prnt(self.msg.format(sys._getframe().f_code.co_name, 'rq: ' + str(payload) + ' ' + str(headers)), 'hide')
             self.opposite_stat_get(shared)
             resp = requests_retry_session().post(
-                ol_url_api.format(self.server_olimp, 'basket/fast'),
+                # ol_url_api.format(self.server_olimp, 'basket/fast'),
+                ol_url_api.format('basket/fast'),
                 headers=headers,
                 data=payload,
                 verify=False,
@@ -1041,7 +1043,8 @@ class BetManager:
 
                 prnt(self.msg.format(sys._getframe().f_code.co_name, 'rq: ' + str(payload) + ' ' + str(headers)), 'hide')
                 resp = requests_retry_session_post(
-                    ol_url_api.format(self.server_olimp, 'user/cashout'),
+                    # ol_url_api.format(self.server_olimp, 'user/cashout'),
+                    ol_url_api.format('user/cashout'),
                     headers=headers,
                     data=payload,
                     verify=False,
@@ -1469,7 +1472,8 @@ class BetManager:
 
     def get_cur_max_bet_id(self, filter='0100', offset='0'):
 
-        req_url = ol_url_api.format(self.server_olimp, 'user/history')
+        # req_url = ol_url_api.format(self.server_olimp, 'user/history')
+        req_url = ol_url_api.format('user/history')
 
         payload = copy.deepcopy(ol_payload)
         payload['filter'] = filter  # только не расчитанные

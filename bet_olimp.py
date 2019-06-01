@@ -12,9 +12,9 @@ urllib3.disable_warnings(urllib3.exceptions.InsecureRequestWarning)
 
 DEFAULT_ACCOUNT = {"login": 5523988, "passw": "E506274m"}
 
-olimp_url = "https://176.223.130.242/api/{}"
-olimp_url2 = "https://08.olimp-proxy.ru/api/{}"
-base_url = "https://olimp.com/api/{}"
+# olimp_url = "https://194.135.82.124/api/{}"
+olimp_url2 = "http://194.135.82.124:10600/api/{}"
+# base_url = "https://olimp.com/api/{}"
 
 url_test = "http://httpbin.org/delay/3"
 
@@ -438,5 +438,5 @@ if __name__ == '__main__':
     olimp = OlimpBot(OLIMP_USER)
     olimp.sign_in()
     #olimp.place_bet(obj)
-    olimp.sale_bet(2137)
+    #olimp.sale_bet(2137)
     #olimp.sale_bet(29)
