@@ -1,7 +1,7 @@
 # coding:utf-8
 from emoji import emojize
 
-old_proxy = 'socks5://shaggy:hzsyk4@191.101.104.71:14487' 
+old_proxy = 'socks5://shaggy:hzsyk4@191.101.104.71:14487'
 new_proxy = 'socks5://shaggy:hzsyk4@191.101.104.71:14487'
 new_proxy_http = 'http://shaggy:hzsyk4@191.101.104.71:14487'
 
