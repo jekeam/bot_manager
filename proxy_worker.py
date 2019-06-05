@@ -1,11 +1,13 @@
 # coding: utf-8
+import asyncio
+from proxybroker import Broker
 import requests
 import multiprocessing as mp
 import os
 import time
 import urllib3
 from random import choice
-from utils import prnts, get_prop
+from utils import prnts, DEBUG
 from hashlib import md5
 import threading
 import platform
@@ -14,12 +16,6 @@ from utils import DEBUG
 
 # disable warning
 urllib3.disable_warnings()
-
-
-if get_prop('debug'):
-    DEBUG = True
-else:
-    DEBUG = False
 
 TIME_OUT = 2
 
@@ -73,7 +69,7 @@ def check_proxy_olimp(proxies_for_check, valid_proxies):
         try:
             x = 0
             http_type = 'https' if 'https' in prx else 'http'
-            url = olimp_url  # olimp_url_https if 'https' in prx else olimp_url
+            url = olimp_url  # olimp_url_https if 'https' in http_type else olimp_url
             proxies = {http_type: prx}
             resp = requests.post(
                 url + '/api/slice/',
@@ -125,7 +121,7 @@ def check_proxies_olimp(proxies_list):
     mgr = mp.Manager()
     valid_proxies_list = mgr.list()
 
-    n_chunks = 10
+    n_chunks = 90
     chunks = [proxies_list[i::n_chunks] for i in range(n_chunks)]
 
     prcs = []
@@ -144,7 +140,7 @@ def check_proxies_fonbet(proxies_list):
     mgr = mp.Manager()
     valid_proxies_list = mgr.list()
 
-    n_chunks = 10
+    n_chunks = 90
     chunks = [proxies_list[i::n_chunks] for i in range(n_chunks)]
 
     prcs = []
@@ -187,9 +183,6 @@ def save_list(proxies, filename=None):
 
 def get_proxies(n):
     global proxy_list, TIME_OUT
-    import asyncio
-    from proxybroker import Broker
-    
     proxies = asyncio.Queue()
     broker = Broker(proxies, timeout=TIME_OUT)
     tasks = asyncio.gather(
@@ -281,7 +274,7 @@ def proxy_push(ol_fl, fb_fl):
 
 def cd():
     if platform.system() != 'Windows' and not DEBUG:
-        os.chdir('/home/autobro/')
+        os.chdir(os.path.dirname(os.path.abspath(__file__)))
 
 
 ol_fl = 'proxy_by_olimp.txt'
@@ -292,9 +285,10 @@ if __name__ == '__main__':
     proxy_list = []
     proxy_list_olimp = []
     proxy_list_fonbet = []
-    proxy_list = join_proxies_to_file(5000)
+    proxy_list = join_proxies_to_file(1)
 
-    proxy_list_olimp = check_proxies_olimp(proxy_list)
+    proxy_list2 = list(filter(lambda p: 'https' in p, proxy_list))
+    proxy_list_olimp = check_proxies_olimp(proxy_list2)
     save_list(proxy_list_olimp, ol_fl)
 
     proxy_list_fonbet = check_proxies_fonbet(proxy_list)
