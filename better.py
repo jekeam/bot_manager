@@ -65,14 +65,14 @@ def bet_olimp_cl(obj):
 
 
 def check_l(L):
-    global MIN_PROC
+    global MIN_PROC, ACC_ID
     MIN_L = 1 - (MIN_PROC / 100)
 
     l_exclude_text = ''
 
-    if L <= 0.90:
-        l_exclude_text = l_exclude_text + 'Вилка ' + str(L) + ' (' + str(round((1 - L) * 100, 2)) + \
-                         '%), вилка исключена т.к. доходноть высокая >= 10%\n'
+
+    if L <= 0.90 and str(ACC_ID) != '3':
+            l_exclude_text = l_exclude_text + 'Вилка ' + str(L) + ' (' + str(round((1 - L) * 100, 2)) + '%), вилка исключена т.к. доходноть высокая >= 10%\n'
     if L > MIN_L:
         l_exclude_text = l_exclude_text + 'Вилка ' + \
                          str(L) + ' (' + str(round((1 - L) * 100, 3)) + '%), беру вилки только >= ' + str(round((1 - MIN_L) * 100, 3)) + '%\n'
