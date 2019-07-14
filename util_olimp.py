@@ -23,7 +23,7 @@ def get_xtoken_bet(payload):
     return {"X-TOKEN": md5(to_encode.encode()).hexdigest()}
 
 
-olimp_url = 'http://194.135.82.124:10600'
+olimp_url = 'http://176.223.129.133:10600'
 olimp_url_https = 'https://10.olimp-proxy.ru'
 olimp_url_random = 'https://{}.olimp-proxy.ru'  # c 10 по 18й
 
