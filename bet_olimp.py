@@ -13,7 +13,7 @@ urllib3.disable_warnings(urllib3.exceptions.InsecureRequestWarning)
 DEFAULT_ACCOUNT = {"login": 5523988, "passw": "E506274m"}
 
 # olimp_url = "https://194.135.82.124/api/{}"
-olimp_url2 = "http://176.223.129.133:10600/api/{}"
+olimp_url2 = 'http://' + get_prop('server_olimp') + ':10600/api/{}'
 # base_url = "https://olimp.com/api/{}"
 
 url_test = "http://httpbin.org/delay/3"
@@ -426,17 +426,18 @@ class OlimpBot:
 
 if __name__ == '__main__':
     OLIMP_USER = {
-    "login": get_account_info(
-        'olimp', 'login'), "password": get_account_info(
-        'olimp', 'password')}
+        "login": get_account_info(
+            'olimp', 'login'), "password": get_account_info(
+            'olimp', 'password')}
 
-    wager_olimp = {'time_req': 1552752123, 'value': 1.75, 'apid': '1184611441:47027634:3:5:6.5:1:0:0:1', 'factor': 1.75, 'sport_id': 1, 'event': '47027634', 'vector': 'UP', 'hist': {'time_change': 1552752115, 'avg_change': [0], '1': 1.75, '2': 1.75, '3': 1.75, '4': 1.75, '5': 0}}
+    wager_olimp = {'time_req': 1552752123, 'value': 1.75, 'apid': '1184611441:47027634:3:5:6.5:1:0:0:1', 'factor': 1.75, 'sport_id': 1, 'event': '47027634', 'vector': 'UP',
+                   'hist': {'time_change': 1552752115, 'avg_change': [0], '1': 1.75, '2': 1.75, '3': 1.75, '4': 1.75, '5': 0}}
     obj = {}
     obj['wager_olimp'] = wager_olimp
     obj['amount_olimp'] = 160
 
     olimp = OlimpBot(OLIMP_USER)
     olimp.sign_in()
-    #olimp.place_bet(obj)
-    #olimp.sale_bet(2137)
-    #olimp.sale_bet(29)
+    # olimp.place_bet(obj)
+    # olimp.sale_bet(2137)
+    # olimp.sale_bet(29)
