@@ -91,13 +91,13 @@ class OlimpBot:
             prnt('BET_OLIMP.PY: balance: ' + str(self.balance))
         except Exception as e:
             self.attempt_login += 1
-            if self.attempt_login > 3:
-                str_err = 'Attempt login many: ' + str(self.attempt_login) + \
-                          ', err: ' + str(e) + \
-                          ', resp: ' + str(resp.text)
+            if self.attempt_login > 3 and resp:
+                str_err = 'Attempt login many: ' + str(self.attempt_login) + ', err: ' + str(e) + ', resp: ' + str(resp.text)
                 prnt(str_err)
                 time.sleep(3)
                 raise ValueError(str_err)
+            else:
+                raise ValueError('Нет ответа от сервера Олимп')
             prnt(e)
             return self.sign_in()
 
