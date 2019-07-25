@@ -23,9 +23,9 @@ def get_xtoken_bet(payload):
     return {"X-TOKEN": md5(to_encode.encode()).hexdigest()}
 
 
-olimp_url = 'http://' + get_prop('server_olimp') + ':10600'
+olimp_url = 'http://' + get_prop('server_olimp')
 olimp_url_https = 'https://10.olimp-proxy.ru'
-olimp_url_random = 'https://{}.olimp-proxy.ru'  # c 10 по 18й
+olimp_url_random = 'https://{}.olimp-proxy.ru'  # c 13 по 18й
 
 olimp_secret_key = 'b2c59ba4-7702-4b12-bef5-0908391851d9'
 
