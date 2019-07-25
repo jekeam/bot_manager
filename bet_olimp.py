@@ -97,7 +97,7 @@ class OlimpBot:
                 time.sleep(3)
                 raise ValueError(str_err)
             else:
-                raise ValueError('Нет ответа от сервера Олимп')
+                raise ValueError('Нет ответа от сервера Олимп, проверьте работоспособность приложения, возможно сменился сервер')
             prnt(e)
             return self.sign_in()
 
