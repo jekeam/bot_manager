@@ -80,8 +80,8 @@ class OlimpBot:
                 timeout=self.timeout,
                 proxies=self.proxies
             )
-            check_status_with_resp(resp)
             prnt('BET_OLIMP.PY: Olimp, sign_in responce: ' + str(resp.status_code) + ' ' + resp.text, 'hide')
+            check_status_with_resp(resp)
 
             self.session_payload["session"] = resp.json()["data"]["session"]
             login_info = dict(resp.json()['data'])
@@ -91,7 +91,7 @@ class OlimpBot:
             prnt('BET_OLIMP.PY: balance: ' + str(self.balance))
         except Exception as e:
             self.attempt_login += 1
-            if self.attempt_login > 5:
+            if self.attempt_login > 3:
                 str_err = 'Attempt login many: ' + str(self.attempt_login) + \
                           ', err: ' + str(e) + \
                           ', resp: ' + str(resp.text)
