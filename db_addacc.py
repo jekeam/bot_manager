@@ -39,7 +39,8 @@ if __name__ == '__main__':
             "ROUND_FORK": 5,
             "MAX_FORK": 10,
             "MAX_FAIL": 2,
-            "MIN_PROC": 0
+            "MIN_PROC": 0,
+            "SERVER_OLIMP": "0359ee.olimp0002.top:10606"
         }
         for k, v in p.items():
             prop = Properties.create(acc=acc.id, key=k, val=v)
