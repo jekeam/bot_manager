@@ -13,7 +13,7 @@ urllib3.disable_warnings(urllib3.exceptions.InsecureRequestWarning)
 DEFAULT_ACCOUNT = {"login": 5523988, "passw": "E506274m"}
 
 # olimp_url = "https://194.135.82.124/api/{}"
-olimp_url2 = 'http://' + get_prop('server_olimp') + '/api/{}'
+olimp_url2 = 'https://' + get_prop('server_olimp') + '/api/{}'
 # base_url = "https://olimp.com/api/{}"
 
 url_test = "http://httpbin.org/delay/3"

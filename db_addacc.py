@@ -40,7 +40,7 @@ if __name__ == '__main__':
             "MAX_FORK": 10,
             "MAX_FAIL": 2,
             "MIN_PROC": 0,
-            "SERVER_OLIMP": "0359ee.olimp0002.top:10606"
+            "SERVER_OLIMP": "olimpkzapi.ru"
         }
         for k, v in p.items():
             prop = Properties.create(acc=acc.id, key=k, val=v)
