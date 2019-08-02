@@ -117,7 +117,7 @@ def get_fonbet_info(match_id, factor_id, param, bet_tepe=None):
     prnt('get_fonbet_info: match_id:{}, factor_id:{}, param:{}, bet_tepe:{}'.format(match_id, factor_id, param, bet_tepe))
 
     header = copy.deepcopy(fb_headers)
-    url = "https://23.111.80.222/line/eventView?eventId=" + str(match_id) + "&lang=ru"
+    url = "https://213.196.34.196/line/eventView?eventId=" + str(match_id) + "&lang=ru"
     prnt('FORK_RECHECK.PY: get_fonbet_info rq: ' + url + ' ' + str(header), 'hide')
     resp = requests_retry_session().get(
         url,
