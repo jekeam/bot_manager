@@ -9,6 +9,8 @@ import copy
 from retry_requests import requests_retry_session
 from exceptions import BetIsLost, BetError
 import json
+import urllib3
+urllib3.disable_warnings()
 
 
 def get_olimp_info(id_matche, olimp_k, proxies=None):
