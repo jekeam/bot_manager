@@ -115,12 +115,12 @@ def get_olimp_info(id_matche, olimp_k, proxies=None):
     return k, sc, round(res.elapsed.total_seconds(), 2)
 
 
-def get_fonbet_info(match_id, factor_id, param, bet_tepe=None):
+def get_fonbet_info(match_id, factor_id, param, bet_type=None):
     dop_stat = dict()
     sc1 = None
     sc2 = None
 
-    prnt('get_fonbet_info: match_id:{}, factor_id:{}, param:{}, bet_tepe:{}'.format(match_id, factor_id, param, bet_tepe))
+    prnt('get_fonbet_info: match_id:{}, factor_id:{}, param:{}, bet_type:{}'.format(match_id, factor_id, param, bet_type))
 
     header = copy.deepcopy(fb_headers)
     url = "https://213.196.34.196/line/eventView?eventId=" + str(match_id) + "&lang=ru"
@@ -172,8 +172,8 @@ def get_fonbet_info(match_id, factor_id, param, bet_tepe=None):
                 'period': period,
                 'timebreak': time_break_fonbet
             }
-            if bet_tepe:
-                dop_stat.update({'vector': get_vector(bet_tepe, sc1, sc2)})
+            if bet_type:
+                dop_stat.update({'vector': get_vector(bet_type, sc1, sc2)})
 
             for cat in event.get('subcategories'):
                 for kof in cat.get('quotes'):
@@ -184,10 +184,10 @@ def get_fonbet_info(match_id, factor_id, param, bet_tepe=None):
                             if kof.get('pValue') != param:
                                 prnt('Изменилась тотал ставки, param не совпадает: ' + 'new: ' + str(kof.get('pValue')) + ', old: ' + str(param))
 
-                                if bet_tepe:
-                                    prnt('поиск нового id тотала: ' + bet_tepe)
+                                if bet_type:
+                                    prnt('поиск нового id тотала: ' + bet_type)
                                     new_wager = get_new_bets_fonbet(match_id, proxies={})
-                                    new_wager = new_wager.get(str(match_id), {}).get('kofs', {}).get(bet_tepe)
+                                    new_wager = new_wager.get(str(match_id), {}).get('kofs', {}).get(bet_type)
                                     if new_wager:
                                         prnt('Тотал найден: ' + str(new_wager))
                                         k = new_wager.get('value', 0)
@@ -196,7 +196,7 @@ def get_fonbet_info(match_id, factor_id, param, bet_tepe=None):
                                     else:
                                         err_str = 'Тотал не найден: ' + str(new_wager)
                                 else:
-                                    err_str = 'Тип ставки, например 1ТМ(2.5) - не задан: bet_type:' + bet_tepe
+                                    err_str = 'Тип ставки, например 1ТМ(2.5) - не задан: bet_type:' + bet_type
                             if err_str:
                                 prnt(err_str)
                         k = kof.get('value', 0)
