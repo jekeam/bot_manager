@@ -11,7 +11,7 @@ from exceptions import BetIsLost, BetError
 import json
 
 
-def get_olimp_info(id_matche, olimp_k):
+def get_olimp_info(id_matche, olimp_k, proxies=None):
     bet_into = {}
     olimp_data = copy.deepcopy(ol_payload)
     olimp_data.update({
@@ -25,13 +25,15 @@ def get_olimp_info(id_matche, olimp_k):
     olimp_stake_head.pop('Accept-Language', None)
 
     prnt('FORK_RECHECK.PY: get_olimp_info rq: ' + str(olimp_data), 'hide')
+
     res = requests_retry_session().post(
         # ol_url_api.format('10', 'stakes/'),
         ol_url_api.format('stakes/'),
         data=olimp_data,
         headers=olimp_stake_head,
         timeout=10,
-        verify=False
+        verify=False,
+        proxies=proxies
     )
     prnt('FORK_RECHECK.PY: get_olimp_info rs: ' + str(res.text), 'hide')
 
