@@ -231,12 +231,12 @@ def get_kof_fonbet(obj, match_id, factor_id, param):
     return obj
 
 
-def get_kof_olimp(obj, olimp_match, olimp_k):
+def get_kof_olimp(obj, olimp_match, olimp_k, proxies):
     obj['olimp'] = 0
     obj['olimp_time_req'] = 0
     sc = ''
     try:
-        r_olimp_coef1, sc, rime_req = get_olimp_info(olimp_match, olimp_k)
+        r_olimp_coef1, sc, rime_req = get_olimp_info(olimp_match, olimp_k, proxies)
         obj['olimp_time_req'] = rime_req
         obj['olimp'] = r_olimp_coef1
     except Exception as e:

@@ -3,7 +3,7 @@ from bet_fonbet import *
 from bet_olimp import *
 import datetime
 from fork_recheck import get_kof_olimp, get_kof_fonbet
-from utils import prnt, get_account_info, get_prop, get_sum_bets, get_new_sum_bets
+from utils import prnt, get_account_info, get_prop, get_sum_bets, get_new_sum_bets, get_proxies
 import threading
 from multiprocessing import Manager, Process
 import time
@@ -277,7 +277,7 @@ def go_bets(wag_ol, wag_fb, key, deff_max, vect1, vect2, sc1, sc2, created):
         with Manager() as manager:
             obj = manager.dict()
 
-            recheck_o = Process(target=get_kof_olimp, args=(obj, wag_ol['event'], olimp_bet_type))
+            recheck_o = Process(target=get_kof_olimp, args=(obj, wag_ol['event'], olimp_bet_type, get_proxies().get('olimp')))
             recheck_fb = Process(target=get_kof_fonbet, args=(obj, wag_fb['event'], int(wag_fb['factor']), wag_fb['param']))
 
             recheck_fb.start()
