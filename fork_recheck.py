@@ -15,7 +15,7 @@ urllib3.disable_warnings()
 
 
 def get_olimp_info(id_matche, olimp_k, proxies=None):
-    prnt('get_olimp_info: ' + str(id_matche) + ' ' + str(olimp_k) + ' ' + str(proxies))
+    prnt('get_olimp_info: id_matche=' + str(id_matche) + ';olimp_k=' + str(olimp_k) + ';proxies=' + str(proxies), 'hide')
     bet_into = {}
     olimp_data = copy.deepcopy(ol_payload)
     olimp_data.update({
