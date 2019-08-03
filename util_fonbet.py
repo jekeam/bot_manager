@@ -7,7 +7,7 @@ from utils import prnts, get_vector, MINUTE_COMPLITE
 import re
 
 url_fonbet_matchs = "https://line-02.ccf4ab51771cacd46d.com/live/currentLine/en/?2lzf1earo8wjksbh22s"
-url_fonbet_match = "https://213.196.34.196/line/eventView?eventId="
+url_fonbet_match = "https://213.196.34.171/line/eventView?eventId="
 UA = 'Mozilla/5.0 (Windows NT 10; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/70.3163.100 Safari/537.36'
 fonbet_header = {
     'User-Agent': 'Fonbet/5.1.3b (Android 21; Phone; com.bkfonbet)',
