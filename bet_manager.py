@@ -1165,6 +1165,10 @@ class BetManager:
         payload = copy.deepcopy(fb_payload_max_bet)
         headers = copy.deepcopy(fb_headers)
 
+        if not self.server_fb:
+            self.server_fb = get_urls(self.mirror, self.proxies)
+        url, self.timeout = get_common_url(self.server_fb)
+
         if self.wager.get('param'):
             payload['coupon']['bets'][0]['param'] = int(self.wager['param'])
         payload['coupon']['bets'][0]['score'] = self.wager['score']
@@ -1185,7 +1189,7 @@ class BetManager:
         prnt(self.msg.format(sys._getframe().f_code.co_name, 'rq: ' + str(payload) + ' ' + str(headers)), 'hide')
         resp = requests_retry_session_post(
             # url.format('coupon/getMinMax'), Not working, why?
-            'https://23.111.80.252/session/coupon/getMinMax',
+            url.format('coupon/getMinMax'),
             headers=headers,
             data=data,
             verify=False,
