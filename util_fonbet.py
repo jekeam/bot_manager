@@ -6,8 +6,9 @@ from exceptions import FonbetMatchСompleted
 from utils import prnts, get_vector, MINUTE_COMPLITE
 import re
 
-url_fonbet_matchs = "https://line-02.ccf4ab51771cacd46d.com/live/currentLine/en/?2lzf1earo8wjksbh22s"
-url_fonbet_match = "https://23.111.18.94/line/eventView?eventId="
+url_fonbet = 'https://line-02.ccf4ab51771cacd46d.com'
+url_fonbet_matchs = url_fonbet + "/live/currentLine/en/?2lzf1earo8wjksbh22s"
+url_fonbet_match = url_fonbet + "/line/eventView?eventId="
 UA = 'Mozilla/5.0 (Windows NT 10; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/70.3163.100 Safari/537.36'
 fonbet_header = {
     'User-Agent': 'Fonbet/5.1.3b (Android 21; Phone; com.bkfonbet)',
@@ -278,10 +279,10 @@ def get_bets_fonbet(bets_fonbet, match_id, proxies_fonbet, proxy, time_out, pair
                                 for vct in VICTS:
                                     coef = half + str(vct[0])  # + num_team
                                     if str(vct[1]) == factorId:
-                                        hist5 = bets_fonbet[key_id].get('kofs', {}).get(coef, {}).get('hist', {}).get('4',0)
-                                        hist4 = bets_fonbet[key_id].get('kofs', {}).get(coef, {}).get('hist', {}).get('3',0)
-                                        hist3 = bets_fonbet[key_id].get('kofs', {}).get(coef, {}).get('hist', {}).get('2',0)
-                                        hist2 = bets_fonbet[key_id].get('kofs', {}).get(coef, {}).get('hist', {}).get('1',0)
+                                        hist5 = bets_fonbet[key_id].get('kofs', {}).get(coef, {}).get('hist', {}).get('4', 0)
+                                        hist4 = bets_fonbet[key_id].get('kofs', {}).get(coef, {}).get('hist', {}).get('3', 0)
+                                        hist3 = bets_fonbet[key_id].get('kofs', {}).get(coef, {}).get('hist', {}).get('2', 0)
+                                        hist2 = bets_fonbet[key_id].get('kofs', {}).get(coef, {}).get('hist', {}).get('1', 0)
                                         hist1 = bets_fonbet[key_id].get('kofs', {}).get(coef, {}).get('value', 0)
 
                                         cof_is_change = True if hist1 != value else False
@@ -350,10 +351,10 @@ def get_bets_fonbet(bets_fonbet, match_id, proxies_fonbet, proxy, time_out, pair
                                 for stake in TT:
                                     coef = half + str(stake[0].format(p))  # + num_team
                                     if str(stake[1]) == factorId:
-                                        hist5 = bets_fonbet[key_id].get('kofs', {}).get(coef, {}).get('hist', {}).get('4',0)
-                                        hist4 = bets_fonbet[key_id].get('kofs', {}).get(coef, {}).get('hist', {}).get('3',0)
-                                        hist3 = bets_fonbet[key_id].get('kofs', {}).get(coef, {}).get('hist', {}).get('2',0)
-                                        hist2 = bets_fonbet[key_id].get('kofs', {}).get(coef, {}).get('hist', {}).get('1',0)
+                                        hist5 = bets_fonbet[key_id].get('kofs', {}).get(coef, {}).get('hist', {}).get('4', 0)
+                                        hist4 = bets_fonbet[key_id].get('kofs', {}).get(coef, {}).get('hist', {}).get('3', 0)
+                                        hist3 = bets_fonbet[key_id].get('kofs', {}).get(coef, {}).get('hist', {}).get('2', 0)
+                                        hist2 = bets_fonbet[key_id].get('kofs', {}).get(coef, {}).get('hist', {}).get('1', 0)
                                         hist1 = bets_fonbet[key_id].get('kofs', {}).get(coef, {}).get('value', 0)
 
                                         cof_is_change = True if hist1 != value else False

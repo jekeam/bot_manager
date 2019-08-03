@@ -2,7 +2,7 @@
 import requests
 from olimp import to_abb, abbreviations
 from meta_ol import get_xtoken_bet, olimp_secret_key, ol_url_api, ol_payload, ol_headers
-from meta_fb import fb_headers, get_new_bets_fonbet
+from meta_fb import fb_headers, get_new_bets_fonbet, url_fonbet
 import re
 from utils import prnt, get_vector
 import copy
@@ -123,7 +123,7 @@ def get_fonbet_info(match_id, factor_id, param, bet_type=None):
     prnt('get_fonbet_info: match_id:{}, factor_id:{}, param:{}, bet_type:{}'.format(match_id, factor_id, param, bet_type))
 
     header = copy.deepcopy(fb_headers)
-    url = "https://23.111.18.94/line/eventView?eventId=" + str(match_id) + "&lang=ru"
+    url = url_fonbet + "/line/eventView?eventId=" + str(match_id) + "&lang=ru"
     prnt('FORK_RECHECK.PY: get_fonbet_info rq: ' + url + ' ' + str(header), 'hide')
     resp = requests_retry_session().get(
         url,

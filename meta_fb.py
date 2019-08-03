@@ -7,6 +7,8 @@ import time
 from retry_requests import requests_retry_session
 LENOVO_MODEL = 'A5000'
 
+url_fonbet = 'https://line-02.ccf4ab51771cacd46d.com'
+
 fb_payload = {
     "appVersion": "5.1.3b",
     "lang": "ru",
@@ -150,7 +152,7 @@ def get_dumped_payload(payload):
     dumped = dumped.replace(": ", ":")  # remove spaces between items
     dumped = dumped.replace(", ", ",")
     return dumped
-    
+
 
 def get_urls(mirror, proxies):
     global fb_browser_head
