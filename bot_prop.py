@@ -2,8 +2,11 @@
 from emoji import emojize
 
 # old_proxy = 'socks5://shaggy:hzsyk4@191.101.104.71:14487'
-new_proxy = 'socks5://suineg:8veh34@185.161.211.100:12974'
-new_proxy_http = 'http://suineg:8veh34@185.161.211.100:2974'
+# new_proxy = 'socks5://suineg:8veh34@185.161.211.100:12974'
+# new_proxy_http = 'http://suineg:8veh34@185.161.211.100:2974'
+
+new_proxy = 'socks5://Selsuinegne:R5v7JwJ@146.71.87.184:45786'
+new_proxy_http = 'http://Selsuinegne:R5v7JwJ@146.71.87.184:45785'
 
 # BOI
 PY_PATH = 'python3.6'
