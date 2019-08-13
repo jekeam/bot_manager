@@ -201,7 +201,7 @@ class FonbetBot:
             url,
             headers=browser_headers,
             verify=False,
-            timeout=self.timeout,
+            timeout=3,
             proxies=self.proxies
         )
         check_status_with_resp(resp)
