@@ -60,7 +60,7 @@ class FonbetBot:
         self.sleep = 4
         self.cnt_test = 0
         self.add_sleep = 0
-        self.timeout = 50
+        self.timeout = 4
         self.fonbet_bet_type = None
         
         self.limit_group = None
@@ -201,7 +201,7 @@ class FonbetBot:
             url,
             headers=browser_headers,
             verify=False,
-            timeout=3,
+            timeout=self.timeout,
             proxies=self.proxies
         )
         check_status_with_resp(resp)
@@ -210,7 +210,7 @@ class FonbetBot:
     def get_common_url(self):
         urls = self.get_urls()
         client_url = urls["clients-api"][0]
-        self.timeout = urls["timeout"] / 100
+        self.timeout = 4 # urls["timeout"] / 100
         prnt('BET_FONBET.PY: set timeout: ' + str(self.timeout))
 
         return "https:{url}/session/".format(url=client_url) + "{}"

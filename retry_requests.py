@@ -70,9 +70,9 @@ def retry(exceptions, delay=0, times=2):
     return outer_wrapper
 
 
-@retry(exceptions=(Timeout, ProxyError), delay=1, times=4)
+@retry(exceptions=(Timeout, ProxyError), delay=1, times=3)
 def requests_retry_session_post(url: str, headers=None, data=None, json=None, verify=None, timeout=None, proxies=None):
     prnt('retry_requests: execute requests_retry_session_post, url={}'.format(url))
-    resp = requests_retry_session().post(url=url, headers=headers, data=data, json=json, verify=False, timeout=25, proxies=proxies)
+    resp = requests_retry_session().post(url=url, headers=headers, data=data, json=json, verify=False, timeout=timeout, proxies=proxies)
     cnt_retry = 0
     return resp

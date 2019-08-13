@@ -161,7 +161,7 @@ def get_urls(mirror, proxies):
         url,
         headers=fb_browser_head,
         verify=False,
-        timeout=50,
+        timeout=4,
         proxies=proxies
     )
     check_status_with_resp(resp)
@@ -169,7 +169,7 @@ def get_urls(mirror, proxies):
 
 def get_common_url(data_urls):
     client_url = data_urls["clients-api"][0]
-    timeout = data_urls["timeout"] / 100
+    timeout = 4 # data_urls["timeout"] / 100
     return "https:{url}/session/".format(url=client_url) + "{}", timeout
     
 
