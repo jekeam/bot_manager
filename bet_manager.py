@@ -234,11 +234,16 @@ class BetManager:
 
             while True:
                 try:
+                    if self.attempt_sale > 50:
+                        self.attempt_sale = 1
+                        raise BetIsLost('To many attempt sale!')
+                    else:
+                        self.attempt_sale = self.attempt_sale + 1
                     self_opp.sale_bet(shared)
                     break
                 except (SaleError, CouponBlocked) as e:
-                    prnt(self.msg.format(sys._getframe().f_code.co_name, 'Ошибка: ' + e.__class__.__name__ + ' - ' + str(e) + '. Пробую проставить и пробую выкупить еще!'))
-                    sleep(5)
+                    prnt(self.msg.format(sys._getframe().f_code.co_name, 'Ошибка: ' + e.__class__.__name__ + ' - ' + str(e) + '. Пробую проставить и пробую выкупить еще! ('+str(self.attempt_sale)+')'))
+                    sleep(15)
 
         def bet_done(shared):
 
@@ -477,6 +482,8 @@ class BetManager:
             # CALC PROFIT IF EXISTS SUMM SELL
             self.sale_profit = 0
             if self_opp_data.sum_sell:
+                prnt(' ')
+                prnt(self.msg.format(sys._getframe().f_code.co_name, 'CALC PROFIT IF EXISTS SUMM SELL'))
                 self.sale_profit = (self_opp_data.sum_sell / self_opp_data.sum_sell_divider) - sum_opp
                 if self.sale_profit > 0:
                     err_str = self.msg_err.format(sys._getframe().f_code.co_name, 'Сумма выкупа больше чем ставка на ' + str(self.sale_profit) + ', пробую выкупить')
@@ -487,7 +494,6 @@ class BetManager:
             else:
                 prnt(self.msg.format(sys._getframe().f_code.co_name, 'Сумма выкупа неизвестна'))
 
-            # RECALC SUM BET
             if self.cur_val_bet and self.val_bet_old != self.cur_val_bet:
                 prnt(' ')
                 prnt(self.msg.format(sys._getframe().f_code.co_name, 'RECALC SUM BET'))
