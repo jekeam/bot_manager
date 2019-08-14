@@ -985,25 +985,32 @@ class BetManager:
             res = resp.json()
             result = res.get('result')
             msg_str = res.get('errorMessage')
+            msg_code = res.get('errorCode', -1)
             self.check_responce(msg_str)
 
             timer_update = float(res.get('recommendedUpdateFrequency', 3))
 
             coupon_found = False
-            for coupon in res.get('conditions'):
-                if str(coupon.get('regId')) == str(self.reg_id):
-                    coupon_found = True
-
-                    prnt(self.msg.format(sys._getframe().f_code.co_name, 'canSell: ' + str(coupon.get('canSell', True))), 'hide')
-                    prnt(self.msg.format(sys._getframe().f_code.co_name, 'tempBlock: ' + str(coupon.get('tempBlock', False))), 'hide')
-
-                    if coupon.get('canSell', True) and not coupon.get('tempBlock', False):
-                        self.sum_sell = float(coupon.get('completeSellSum'))
-                        prnt(self.msg.format(sys._getframe().f_code.co_name, 'coupon sum sell: ' + str(self.sum_sell / self.sum_sell_divider)))
-                    else:
-                        err_str = self.msg_err.format(sys._getframe().f_code.co_name, 'coupon is lock, time sleep ' + str(timer_update) + ' sec.')
-                        sleep(timer_update)
-                        raise CouponBlocked(err_str)
+            
+            conditions = None
+            conditions = res.get('conditions', None)
+            if conditions:
+                for coupon in conditions:
+                    if str(coupon.get('regId')) == str(self.reg_id):
+                        coupon_found = True
+    
+                        prnt(self.msg.format(sys._getframe().f_code.co_name, 'canSell: ' + str(coupon.get('canSell', True))), 'hide')
+                        prnt(self.msg.format(sys._getframe().f_code.co_name, 'tempBlock: ' + str(coupon.get('tempBlock', False))), 'hide')
+    
+                        if coupon.get('canSell', True) and not coupon.get('tempBlock', False):
+                            self.sum_sell = float(coupon.get('completeSellSum'))
+                            prnt(self.msg.format(sys._getframe().f_code.co_name, 'coupon sum sell: ' + str(self.sum_sell / self.sum_sell_divider)))
+                        else:
+                            err_str = self.msg_err.format(sys._getframe().f_code.co_name, 'coupon is lock, time sleep ' + str(timer_update) + ' sec.')
+                            sleep(timer_update)
+                            raise CouponBlocked(err_str)
+            if msg_code == 2:
+                raise CouponBlocked(msg_str)
             if not coupon_found:
                 err_str = self.msg_err.format(
                     sys._getframe().f_code.co_name,
