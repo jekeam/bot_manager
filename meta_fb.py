@@ -5,6 +5,7 @@ import requests
 from utils import check_status_with_resp, prnt
 import time
 from retry_requests import requests_retry_session
+
 LENOVO_MODEL = 'A5000'
 
 url_fonbet = 'https://line-02.ccf4ab51771cacd46d.com'
@@ -115,7 +116,6 @@ payload_coupon_sum = {
     "sysId": 4
 }
 
-
 payload_sell_check_result = {
     "requestId": 0,
     "clientId": "",
@@ -147,6 +147,7 @@ def get_random_str():
         result += choice(alph)
     return result
 
+
 def get_dumped_payload(payload):
     dumped = dumps(payload)
     dumped = dumped.replace(": ", ":")  # remove spaces between items
@@ -165,13 +166,13 @@ def get_urls(mirror, proxies):
         proxies=proxies
     )
     check_status_with_resp(resp)
-    return resp.json()    
+    return resp.json()
+
 
 def get_common_url(data_urls):
-    client_url = data_urls["clients-api"][0]
-    timeout = 4 # data_urls["timeout"] / 100
+    client_url = data_urls["clients-api"][1]
+    timeout = 4  # data_urls["timeout"] / 100
     return "https:{url}/session/".format(url=client_url) + "{}", timeout
-    
 
 
 def get_new_bets_fonbet(match_id, proxies, time_out=50):
@@ -303,4 +304,4 @@ def get_new_bets_fonbet(match_id, proxies, time_out=50):
         return bets_fonbet
     except Exception as e:
         prnt(e)
-        raise ValueError(e)    
+        raise ValueError(e)
