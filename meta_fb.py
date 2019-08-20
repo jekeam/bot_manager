@@ -170,7 +170,7 @@ def get_urls(mirror, proxies):
 
 
 def get_common_url(data_urls):
-    client_url = data_urls["clients-api"][1]
+    client_url = data_urls["clients-api"][2]
     timeout = 4  # data_urls["timeout"] / 100
     return "https:{url}/session/".format(url=client_url) + "{}", timeout
 
