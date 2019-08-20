@@ -8,7 +8,7 @@ from retry_requests import requests_retry_session
 
 LENOVO_MODEL = 'A5000'
 
-url_fonbet = 'https://clientsapi-021.ccf4ab51771cacd46d.com'
+url_fonbet = 'https://line-01.ccf4ab51771cacd46d.com'
 
 fb_payload = {
     "appVersion": "5.1.3b",
