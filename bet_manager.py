@@ -264,7 +264,7 @@ class BetManager:
                 err_msg = 'recheck err (' + str(e.__class__.__name__) + '): ' + str(e)
                 prnt(self.msg_err.format(sys._getframe().f_code.co_name, err_msg))
         
-        prnt(self.msg.format(sys._getframe().f_code.co_name, 'get kof '+self.bk_name+': ' + self.val_bet_stat + ' -> ' + str(self.cur_val_bet) + ', time req.:' + str(time_req)))
+        prnt(self.msg.format(sys._getframe().f_code.co_name, 'get kof '+self.bk_name+': ' + str(self.val_bet_stat) + ' -> ' + str(self.cur_val_bet) + ', time req.:' + str(time_req)))
         shared[self.bk_name + '_recheck'] = 'done'
         
         self.opposite_wait(shared, 'recheck')
