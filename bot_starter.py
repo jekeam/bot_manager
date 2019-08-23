@@ -12,10 +12,10 @@ import os
 import time
 
 if __name__ == '__main__':
-    def start(key: str):  # abs_path:str
+    def start(acc_id: str):  # abs_path:str
         # os.chdir(abs_path)
         if os.path.isfile('better.py'):
-            call_str = bot_prop.PY_PATH + ' better.py --key ' + key
+            call_str = bot_prop.PY_PATH + ' better.py --acc_id ' + acc_id
             print('dir: ' + str(os.getcwd()) + ', command: ' + call_str)
             subprocess.call(call_str, shell=True)
         else:
@@ -29,7 +29,7 @@ if __name__ == '__main__':
                 Account.update(pid=1).where(Account.id == acc.id).execute()
                 send_message_bot(acc.user_id, str(acc.id) + ': ' + bot_prop.MSG_ACC_START_WAIT)
                 print(''.ljust(120, '*'))
-                print('start: ', acc.key)  # acc.work_dir,
-                acc_start = Thread(target=start, args=(acc.key,))  # acc.work_dir,
+                print('start: ', acc.id)  # acc.work_dir,
+                acc_start = Thread(target=start, args=(acc.id,))  # acc.work_dir,
                 acc_start.start()
             time.sleep(1)

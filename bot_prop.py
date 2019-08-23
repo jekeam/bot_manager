@@ -9,7 +9,6 @@ new_proxy = 'socks5://Selsuinegne:R5v7JwJ@181.214.107.89:45786'
 new_proxy_http = 'http://Selsuinegne:R5v7JwJ@181.214.107.89:45785'
 
 # BOI
-
 PY_PATH = 'python3.6'
 TOKEN = '843081630:AAFmVT4hi5R71mgJpojVxOmTGEaZJA-LWYI'
 ADMINS = [381868674, 33847743, 337186802]
