@@ -212,8 +212,9 @@ class BetManager:
         sec = 0
         while opp_stat is None:
             opp_stat = shared.get(self.bk_name_opposite + '_' + event)
-            sleep(0.25)
-            sec = sec + 1
+            s_cnt = 0.25
+            sleep(s_cnt)
+            sec = sec + s_cnt
             
         prnt(self.msg.format(sys._getframe().f_code.co_name, self.bk_name + ' after wait ' + str(sec) + ' sec., get ' + event + ' in from ' + self.bk_name_opposite + ': ' + str(opp_stat)))
 
@@ -263,19 +264,21 @@ class BetManager:
                 err_msg = 'recheck err (' + str(e.__class__.__name__) + '): ' + str(e)
                 prnt(self.msg_err.format(sys._getframe().f_code.co_name, err_msg))
         
-        prnt(self.msg.format(sys._getframe().f_code.co_name, 'get kof '+self.bk_name+': ' + str(self.cur_val_bet) + ', time req.:' + str(time_req)))
+        prnt(self.msg.format(sys._getframe().f_code.co_name, 'get kof '+self.bk_name+': ' + self.val_bet_stat + ' -> ' + str(self.cur_val_bet) + ', time req.:' + str(time_req)))
         shared[self.bk_name + '_recheck'] = 'done'
         
         self.opposite_wait(shared, 'recheck')
         l = (1 / self.cur_val_bet) + (1 / shared[self.bk_name_opposite].get('self', {}).cur_val_bet)
+        l_first = (1 / self.val_bet_stat) + (1 / shared[self.bk_name_opposite].get('self', {}).val_bet_stat)
         
         min_proc = float(get_prop('min_proc').replace(',', '.'))
         min_l = 1 - (min_proc / 100)
         
         prnt(' ')
         cur_proc = str(round((1 - l) * 100, 3))
+        first_proc = str(round((1 - l_first) * 100, 3))
         min_proc = str(round((1 - min_l) * 100, 3))
-        prnt(self.msg.format(sys._getframe().f_code.co_name, 'get min l: ' + str(min_l) + ', cur. l: ' + str(l) + ', cur_proc: ' + cur_proc ))
+        prnt(self.msg.format(sys._getframe().f_code.co_name, 'min l: ' + str(min_l) + ', l: ' + str(l_first) + ' -> ' + str(l) + ', proc: ' + str(first_proc) + ' -> ' + cur_proc ))
         
         if l > min_l:
             raise BetIsLost('Вилка ' + str(l) + ' (' + cur_proc + '%), беру вилки только >= ' + min_proc + '%')
