@@ -153,7 +153,7 @@ class BetManager:
                     self.bk_name_opposite + ': ' + str(sign_stat) + '(' + str(type(sign_stat)) + ')'))
                 push_ok = True
             sign_stat = shared.get('sign_in_' + self.bk_name_opposite, 'wait')
-            sleep(1)
+            sleep(0.25)
 
         if sign_stat not in ('ok', 'wait'):
             err_str = self.msg_err.format(sys._getframe().f_code.co_name, self.bk_name + ' get error from ' + self.bk_name_opposite + ': ' + sign_stat)
@@ -173,7 +173,7 @@ class BetManager:
                     self.bk_name_opposite + ': ' + str(maxbet_stat)))
                 push_ok = True
             maxbet_stat = shared.get('maxbet_in_' + self.bk_name_opposite, 'wait')
-            sleep(1)
+            sleep(0.25)
             self.opposite_stat_get(shared)
 
         prnt(self.msg.format(sys._getframe().f_code.co_name, self.bk_name + ' get maxbet from ' + self.bk_name_opposite + ': ' + str(maxbet_stat)))
@@ -198,7 +198,7 @@ class BetManager:
         opp_stat = None
         while opp_stat is None:
             opp_stat = shared.get(self.bk_name_opposite + '_err')
-            sleep(1)
+            sleep(0.25)
 
         prnt(self.msg.format(
             sys._getframe().f_code.co_name,
@@ -212,7 +212,7 @@ class BetManager:
         sec = 0
         while opp_stat is None:
             opp_stat = shared.get(self.bk_name_opposite + '_' + event)
-            sleep(1)
+            sleep(0.25)
             sec = sec + 1
             
         prnt(self.msg.format(sys._getframe().f_code.co_name, self.bk_name + ' after wait ' + str(sec) + ' sec., get ' + event + ' in from ' + self.bk_name_opposite + ': ' + str(opp_stat)))
@@ -272,8 +272,18 @@ class BetManager:
         min_proc = float(get_prop('min_proc').replace(',', '.'))
         min_l = 1 - (min_proc / 100)
         
+        prnt(' ')
+        cur_proc = str(round((1 - l) * 100, 3))
+        min_proc = str(round((1 - min_l) * 100, 3))
+        prnt(self.msg.format(sys._getframe().f_code.co_name, 'get min l: ' + str(min_l) + ', cur. l: ' + str(l) + ', cur_proc: ' + cur_proc ))
+        
         if l > min_l:
-            raise BetIsLost('Вилка ' + str(l) + ' (' + str(round((1 - l) * 100, 3)) + '%), беру вилки только >= ' + str(round((1 - min_l) * 100, 3)) + '%')
+            raise BetIsLost('Вилка ' + str(l) + ' (' + cur_proc + '%), беру вилки только >= ' + min_proc + '%')
+            
+        prnt(' ')
+        prnt(self.msg.format(sys._getframe().f_code.co_name, 'RECALC SUM'))
+        self.recalc_sum_bet(shared)
+        
 
     def bet_simple(self, shared: dict):
 
@@ -440,6 +450,53 @@ class BetManager:
                 set_strategy('ОЗ', None)
         prnt(self.msg.format(sys._getframe().f_code.co_name, bet_depends))
 
+
+    def recalc_sum_bet(self, shared):
+        self_opp_data = shared[self.bk_name_opposite].get('self', {})
+        k_opp = self_opp_data.cur_val_bet
+        sum_opp = self_opp_data.sum_bet_stat
+        
+        if self.cur_val_bet and self.val_bet_old != self.cur_val_bet:
+            prnt(' ')
+            prnt(self.msg.format(sys._getframe().f_code.co_name, 'RECALC SUM BET'))
+
+            # round_rang = int(get_prop('round_fork'))
+            self.sum_bet = round(self.sum_bet_stat * self.val_bet_stat / self.cur_val_bet / 5) * 5
+
+            total_new_sum = self.sum_bet + sum_opp
+
+            bk1_profit = sum_opp * k_opp - total_new_sum
+            bk2_profit = self.sum_bet * self.cur_val_bet - total_new_sum
+            bet_profit = round((bk1_profit + bk2_profit) / 2)
+
+            prnt(self.msg.format(
+                sys._getframe().f_code.co_name,
+                'Пересчет суммы ставки: {}->{}({}:{}/{}) [k: {}->{}, k_opp:{}, sum_opp:{}]'.
+                    format(self.sum_bet_stat, self.sum_bet, bet_profit, bk1_profit, bk2_profit, self.val_bet_stat, self.cur_val_bet, k_opp, sum_opp)))
+
+            if self.sum_bet_stat >= self.sum_bet:
+                prnt(self.msg.format(sys._getframe().f_code.co_name, 'Сумма ставки не изменилась или уменьшилась, делаем ставку'))
+            elif self_opp_data.sum_sell and self.sale_profit > bet_profit:
+                # sell bet
+                err_str = 'Выкуп за: {} выгоднее, чем возможные потери после перерасчета: {}'.format(self.sale_profit, bet_profit)
+                prnt(err_str)
+                raise BetIsLost(err_str)
+            else:
+                prnt(self.msg.format(sys._getframe().f_code.co_name, 'Ставка: {} выгоднее выкупа: {}, работаю дальше'.format(bet_profit, self.sale_profit)))
+
+            prnt(self.msg.format(sys._getframe().f_code.co_name, 'Коф-т ставки должен быть изменен: {}->{}'.format(self.val_bet_stat, self.cur_val_bet)))
+            self.val_bet_old = self.cur_val_bet
+            # override abt
+            if self.override_bet:
+
+                if self.bk_name == 'olimp':
+                    self.wager['factor'] = self.cur_val_bet
+                elif self.bk_name == 'fonbet':
+                    self.wager['value'] = self.cur_val_bet
+
+                prnt(self.msg.format(sys._getframe().f_code.co_name, 'Коф-т для ставки в ' + self.bk_name + ': ' + str(self.cur_val_bet)))
+
+
     def bet_safe(self, shared: dict):
 
         def data_update():
@@ -548,45 +605,7 @@ class BetManager:
             else:
                 prnt(self.msg.format(sys._getframe().f_code.co_name, 'Сумма выкупа неизвестна'))
 
-            if self.cur_val_bet and self.val_bet_old != self.cur_val_bet:
-                prnt(' ')
-                prnt(self.msg.format(sys._getframe().f_code.co_name, 'RECALC SUM BET'))
-
-                # round_rang = int(get_prop('round_fork'))
-                self.sum_bet = round(self.sum_bet_stat * self.val_bet_stat / self.cur_val_bet / 5) * 5
-
-                total_new_sum = self.sum_bet + sum_opp
-
-                bk1_profit = sum_opp * k_opp - total_new_sum
-                bk2_profit = self.sum_bet * self.cur_val_bet - total_new_sum
-                bet_profit = round((bk1_profit + bk2_profit) / 2)
-
-                prnt(self.msg.format(
-                    sys._getframe().f_code.co_name,
-                    'Пересчет суммы ставки: {}->{}({}:{}/{}) [k: {}->{}, k_opp:{}, sum_opp:{}]'.
-                        format(self.sum_bet_stat, self.sum_bet, bet_profit, bk1_profit, bk2_profit, self.val_bet_stat, self.cur_val_bet, k_opp, sum_opp)))
-
-                if self.sum_bet_stat >= self.sum_bet:
-                    prnt(self.msg.format(sys._getframe().f_code.co_name, 'Сумма ставки не изменилась или уменьшилась, делаем ставку'))
-                elif self_opp_data.sum_sell and self.sale_profit > bet_profit:
-                    # sell bet
-                    err_str = 'Выкуп за: {} выгоднее, чем возможные потери после перерасчета: {}'.format(self.sale_profit, bet_profit)
-                    prnt(err_str)
-                    raise BetIsLost(err_str)
-                else:
-                    prnt(self.msg.format(sys._getframe().f_code.co_name, 'Ставка: {} выгоднее выкупа: {}, работаю дальше'.format(bet_profit, self.sale_profit)))
-
-                prnt(self.msg.format(sys._getframe().f_code.co_name, 'Коф-т ставки должен быть изменен: {}->{}'.format(self.val_bet_stat, self.cur_val_bet)))
-                self.val_bet_old = self.cur_val_bet
-                # override abt
-                if self.override_bet:
-
-                    if self.bk_name == 'olimp':
-                        self.wager['factor'] = self.cur_val_bet
-                    elif self.bk_name == 'fonbet':
-                        self.wager['value'] = self.cur_val_bet
-
-                    prnt(self.msg.format(sys._getframe().f_code.co_name, 'Коф-т для ставки в ' + self.bk_name + ': ' + str(self.cur_val_bet)))
+            self.recalc_sum_bet(shared)
 
         self.set_param()  # set self.side_bet, self.side_bet_half
         self.time_start = round(int(time()))

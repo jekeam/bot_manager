@@ -274,6 +274,41 @@ def go_bets(wag_ol, wag_fb, key, deff_max, vect1, vect2, sc1, sc2, created):
         prnt('Real wait sec: ' + str(real_wait))
 
         time.sleep(wait_sec)
+        
+        fork_id = int(time.time())
+        fork_info = {
+            fork_id: {
+                'olimp': {
+                    'id': wag_ol['event'],
+                    'kof': wag_ol['factor'],
+                    'amount': bet1,
+                    'reg_id': 0,
+                    'bet_type': olimp_bet_type,
+                    'balance': bal1,
+                    'time_bet': 0,
+                    'vector': vect1,
+                    'new_bet_sum': 0,
+                    'new_bet_kof': 0,
+                    'sale_profit': 0,
+                    'err': 'ok'
+                },
+                'fonbet': {
+                    'id': wag_fb['event'],
+                    'kof': wag_fb['value'],
+                    'amount': bet2,
+                    'reg_id': 0,
+                    'bet_type': fonbet_bet_type,
+                    'balance': bal2,
+                    'time_bet': 0,
+                    'bet_delay': 0,
+                    'vector': vect2,
+                    'new_bet_sum': 0,
+                    'new_bet_kof': 0,
+                    'sale_profit': 0,
+                    'err': 'ok'
+                },
+            }
+        }
 
         if DEBUG:
             pass
@@ -482,8 +517,7 @@ def run_client():
 def recalc_bets(hide=True):
     global k1, k2, total_bet, bal1, bal1, bet1, bet2, total_bet_min, total_bet_max, round_bet
     prnt('Get sum bets', hide)
-    prnt('total_bet: {}, total_bet_min: {}, total_bet_max: {}, round_bet: {}, bal1:{}, bal2:{}, bet1:{},  bet2:{}'.
-         format(total_bet, total_bet_min, total_bet_max, round_bet, bal1, bal2, bet1, bet2), hide)
+    prnt('total_bet: {}, total_bet_min: {}, total_bet_max: {}, round_bet: {}, bal1:{}, bal2:{}, bet1:{},  bet2:{}'.format(total_bet, total_bet_min, total_bet_max, round_bet, bal1, bal2, bet1, bet2), hide)
     bet1, bet2 = get_sum_bets(k1, k2, total_bet, 5, hide)
     if bet1 > bal1 or bet2 > bal2:
         if bal1 < bal2:
