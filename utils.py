@@ -72,13 +72,13 @@ USER_ID = 0
 PROPERTIES = {}
 ACCOUNTS = {}
 try:
-    acc_id = sys.argv[2]
+    ACC_ID = sys.argv[2]
 except:
     pass
 
-if acc_id:
-    acc_info = Account.select().where(Account.id == acc_id)
-    KEY = ACC_ID = acc_info.get().key
+if ACC_ID:
+    acc_info = Account.select().where(Account.id == ACC_ID)
+    KEY = acc_info.get().key
     if acc_info:
         print('___________________INIT____________________')
         ACCOUNTS = loads(acc_info.get().accounts.replace('`', '"'))
