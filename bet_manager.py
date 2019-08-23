@@ -157,7 +157,7 @@ class BetManager:
                     self.bk_name_opposite + ': ' + str(sign_stat) + '(' + str(type(sign_stat)) + ')'))
                 push_ok = True
             sign_stat = shared.get('sign_in_' + self.bk_name_opposite, 'wait')
-            sleep(0.25)
+            sleep(0.1)
 
         if sign_stat not in ('ok', 'wait'):
             err_str = self.msg_err.format(sys._getframe().f_code.co_name, self.bk_name + ' get error from ' + self.bk_name_opposite + ': ' + sign_stat)
@@ -177,7 +177,7 @@ class BetManager:
                     self.bk_name_opposite + ': ' + str(maxbet_stat)))
                 push_ok = True
             maxbet_stat = shared.get('maxbet_in_' + self.bk_name_opposite, 'wait')
-            sleep(0.25)
+            sleep(0.1)
             self.opposite_stat_get(shared)
 
         prnt(self.msg.format(sys._getframe().f_code.co_name, self.bk_name + ' get maxbet from ' + self.bk_name_opposite + ': ' + str(maxbet_stat)))
@@ -202,7 +202,7 @@ class BetManager:
         opp_stat = None
         while opp_stat is None:
             opp_stat = shared.get(self.bk_name_opposite + '_err')
-            sleep(0.25)
+            sleep(0.1)
 
         prnt(self.msg.format(
             sys._getframe().f_code.co_name,
@@ -216,7 +216,7 @@ class BetManager:
         sec = 0
         while opp_stat is None:
             opp_stat = shared.get(self.bk_name_opposite + '_' + event)
-            s_cnt = 0.25
+            s_cnt = 0.1
             sleep(s_cnt)
             sec = sec + s_cnt
             
