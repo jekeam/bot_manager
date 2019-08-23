@@ -246,6 +246,8 @@ class BetManager:
         time_req = 0
 
         if self.bk_name == 'fonbet':
+            print('20 sec sleep')
+            sleep(20)
             try:
                 self.cur_val_bet, self.cur_sc_main, time_req, self.dop_stat = get_fonbet_info(match_id, bet_id, param, self.bet_type)
             except BetIsLost as e:
