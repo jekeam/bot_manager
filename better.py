@@ -264,7 +264,7 @@ def go_bets(wag_ol, wag_fb, key, deff_max, vect1, vect2, sc1, sc2, created):
     fonbet_bet_type = str(key.split('@')[-1])
     # Проверяем ставили ли мы на этот матч, пока в ручную
 
-    L = ((1 / float(wag_ol['factor'])) + (1 / float(wag_fb['value'])))
+    L = (1 / float(wag_ol['factor'])) + (1 / float(wag_fb['value']))
     cur_proc = round((1 - L) * 100, 2)
 
     if __name__ == '__main__':

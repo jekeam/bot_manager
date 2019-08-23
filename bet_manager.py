@@ -265,6 +265,15 @@ class BetManager:
         
         prnt(self.msg.format(sys._getframe().f_code.co_name, 'get kof '+self.bk_name+': ' + str(self.cur_val_bet) + ', time req.:' + str(time_req)))
         shared[self.bk_name + '_recheck'] = 'done'
+        
+        self.opposite_wait(shared, 'recheck')
+        l = (1 / self.cur_val_bet) + (1 / shared[self.bk_name_opposite].get('self', {}).cur_val_bet)
+        
+        min_proc = float(get_prop('min_proc').replace(',', '.'))
+        min_l = 1 - (min_proc / 100)
+        
+        if l > min_l:
+            raise BetIsLost('Вилка ' + str(l) + ' (' + str(round((1 - l) * 100, 3)) + '%), беру вилки только >= ' + str(round((1 - min_l) * 100, 3)) + '%')
 
     def bet_simple(self, shared: dict):
 
@@ -305,7 +314,6 @@ class BetManager:
                 self.wait_sign_in_opp(shared)
                 
                 self.recheck(shared)
-                self.opposite_wait(shared, 'recheck')
 
                 if self.created_fork == '' and 'created' in self.first_bet_in:
                     raise BetIsLost('Создалтель вилки не определен: ' + str(self.created_fork))
