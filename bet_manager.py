@@ -204,6 +204,19 @@ class BetManager:
             sys._getframe().f_code.co_name,
             self.bk_name + ' after wait, get status bet in from ' +
             self.bk_name_opposite + ': ' + str(opp_stat) + '(' + str(type(opp_stat)) + ')'))
+            
+    def opposite_wait(self, shared: dict, event: str):
+        prnt(self.msg.format(sys._getframe().f_code.co_name, self.bk_name + ' wait ' + event + ' in from ' + self.bk_name_opposite))
+        
+        opp_stat = None
+        sec = 0
+        while opp_stat is None:
+            opp_stat = shared.get(self.bk_name_opposite + '_' + event)
+            sleep(1)
+            sec = sec + 1
+            
+        prnt(self.msg.format(sys._getframe().f_code.co_name, self.bk_name + ' after wait ' + str(sec) + ' sec., get ' + event + ' in from ' + self.bk_name_opposite + ': ' + str(opp_stat)))
+
 
     def recalc_sum_by_maxbet(self, shared: dict):
         cur_bet_sum = self.max_bet * int(get_prop('proc_by_max', 90)) / 100
@@ -222,6 +235,36 @@ class BetManager:
         else:
             self.sum_bet, self_opp_data.sum_bet = sum1, sum2
             self.sum_bet_stat, self_opp_data.sum_bet_stat = sum1, sum2
+            
+    def recheck(self, shared):
+        prnt(' ')
+        prnt(self.msg.format(sys._getframe().f_code.co_name, 'RECHECK FORK'))
+        match_id = self.bk_container.get('wager', {})['event']
+        param = self.bk_container.get('wager', {}).get('param')
+        bet_id = int(self.bk_container.get('wager', {}).get('factor'))
+        time_req = 0
+
+        if self.bk_name == 'fonbet':
+            try:
+                self.cur_val_bet, self.cur_sc_main, time_req, self.dop_stat = get_fonbet_info(match_id, bet_id, param, self.bet_type)
+            except BetIsLost as e:
+                raise BetIsLost(e)
+            except AttributeError as e:
+                err_msg = 'recheck err (' + str(e.__class__.__name__) + '): ' + str(e)
+                raise BetIsLost(err_msg)
+            except Exception as e:
+                err_msg = 'recheck err (' + str(e.__class__.__name__) + '): ' + str(e)
+                prnt(self.msg_err.format(sys._getframe().f_code.co_name, err_msg))
+
+        if self.bk_name == 'olimp':
+            try:
+                self.cur_val_bet, self.cur_sc, time_req = get_olimp_info(match_id, self.bet_type, proxies=self.proxies)
+            except Exception as e:
+                err_msg = 'recheck err (' + str(e.__class__.__name__) + '): ' + str(e)
+                prnt(self.msg_err.format(sys._getframe().f_code.co_name, err_msg))
+        
+        prnt(self.msg.format(sys._getframe().f_code.co_name, 'get kof '+self.bk_name+': ' + str(self.cur_val_bet) + ', time req.:' + str(time_req)))
+        shared[self.bk_name + '_recheck'] = 'done'
 
     def bet_simple(self, shared: dict):
 
@@ -260,6 +303,9 @@ class BetManager:
             try:
                 self.sign_in(shared)
                 self.wait_sign_in_opp(shared)
+                
+                self.recheck(shared)
+                self.opposite_wait(shared, 'recheck')
 
                 if self.created_fork == '' and 'created' in self.first_bet_in:
                     raise BetIsLost('Создалтель вилки не определен: ' + str(self.created_fork))
