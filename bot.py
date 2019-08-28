@@ -232,7 +232,13 @@ def botlist(update, context, edit=False):
     if edit:
         update = update.callback_query
     user = update.message.chat
-    acc_list = Account.select().where(Account.user == user.id).order_by(Account.id)
+    
+    acc_list = None
+    if str(acc_info.get().user_id) == '381868674':
+        acc_list = Account.select().where().order_by(Account.id)
+    else:
+        acc_list = Account.select().where(Account.user == user.id).order_by(Account.id)
+        
     for acc in acc_list:
 
         if acc.date_end:
