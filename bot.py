@@ -233,9 +233,8 @@ def botlist(update, context, edit=False):
         update = update.callback_query
     user = update.message.chat
     
-    acc_info = Account.select().where(Account.key == query.data)
     acc_list = None
-    if str(acc_info.get().user_id) == '381868674':
+    if str(update.message.chat.id) == '381868674':
         acc_list = Account.select().where().order_by(Account.id)
     else:
         acc_list = Account.select().where(Account.user == user.id).order_by(Account.id)
