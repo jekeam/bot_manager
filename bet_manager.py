@@ -738,10 +738,12 @@ class BetManager:
                     except CouponBlocked as e:
                         prnt(self.msg.format(
                             sys._getframe().f_code.co_name,
-                            'Ошибка: ' + e.__class__.__name__ + ' - ' + str(e) +
-                            '. Пробую проставить и пробую выкупить еще!'))
+                            'Ошибка: ' + e.__class__.__name__ + ' - ' + str(e) + '. Пробую проставить и пробую выкупить еще! (' + str(self.attempt_sale) + ')'
+                            ))
                         sleep(5)
-                    if self.total_stock is not None and self.total_stock <= 0:
+                        self.attempt_sale = self.attempt_sale + 1
+                    if (self.total_stock is not None and self.total_stock <= 0) or self.attempt_sale > 500:
+                        self.attempt_sale = 1
                         raise BetIsLost(err_msg)
 
             except SessionExpired as e:
