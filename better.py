@@ -70,7 +70,6 @@ def check_l(L):
 
     l_exclude_text = ''
 
-
     # if L <= 0.90 and str(ACC_ID) != '3':
     #         l_exclude_text = l_exclude_text + 'Вилка ' + str(L) + ' (' + str(round((1 - L) * 100, 2)) + '%), вилка исключена т.к. доходноть высокая >= 10%\n'
     if L > MIN_L:
@@ -274,7 +273,7 @@ def go_bets(wag_ol, wag_fb, key, deff_max, vect1, vect2, sc1, sc2, created):
         prnt('Real wait sec: ' + str(real_wait))
 
         time.sleep(wait_sec)
-        
+
         fork_id = int(time.time())
         fork_info = {
             fork_id: {
@@ -517,7 +516,9 @@ def run_client():
 def recalc_bets(hide=True):
     global k1, k2, total_bet, bal1, bal1, bet1, bet2, total_bet_min, total_bet_max, round_bet
     prnt('Get sum bets', hide)
-    prnt('total_bet: {}, total_bet_min: {}, total_bet_max: {}, round_bet: {}, bal1:{}, bal2:{}, bet1:{},  bet2:{}'.format(total_bet, total_bet_min, total_bet_max, round_bet, bal1, bal2, bet1, bet2), hide)
+    prnt('total_bet: {}, total_bet_min: {}, total_bet_max: {}, round_bet: {}, bal1:{}, bal2:{}, bet1:{},  bet2:{}'.format(
+        total_bet, total_bet_min, total_bet_max, round_bet, bal1, bal2, bet1, bet2), hide
+    )
     bet1, bet2 = get_sum_bets(k1, k2, total_bet, 5, hide)
     if bet1 > bal1 or bet2 > bal2:
         if bal1 < bal2:

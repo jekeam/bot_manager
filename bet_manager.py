@@ -123,7 +123,7 @@ class BetManager:
         self.min_bet = 0
 
         self.first_bet_in = get_prop('first_bet_in', 'auto')
-        
+
         self.time_req = 0
         self.time_req_opp = 0
 
@@ -208,10 +208,10 @@ class BetManager:
             sys._getframe().f_code.co_name,
             self.bk_name + ' after wait, get status bet in from ' +
             self.bk_name_opposite + ': ' + str(opp_stat) + '(' + str(type(opp_stat)) + ')'))
-            
+
     def opposite_wait(self, shared: dict, event: str):
         prnt(self.msg.format(sys._getframe().f_code.co_name, self.bk_name + ' wait ' + event + ' in from ' + self.bk_name_opposite))
-        
+
         opp_stat = None
         sec = 0
         while opp_stat is None:
@@ -219,9 +219,9 @@ class BetManager:
             s_cnt = 0.1
             sleep(s_cnt)
             sec = sec + s_cnt
-            
-        prnt(self.msg.format(sys._getframe().f_code.co_name, self.bk_name + ' after wait ' + str(sec) + ' sec., get ' + event + ' in from ' + self.bk_name_opposite + ': ' + str(opp_stat)))
 
+        prnt(self.msg.format(sys._getframe().f_code.co_name,
+                             self.bk_name + ' after wait ' + str(sec) + ' sec., get ' + event + ' in from ' + self.bk_name_opposite + ': ' + str(opp_stat)))
 
     def recalc_sum_by_maxbet(self, shared: dict):
         cur_bet_sum = self.max_bet * int(get_prop('proc_by_max', 90)) / 100
@@ -240,7 +240,7 @@ class BetManager:
         else:
             self.sum_bet, self_opp_data.sum_bet = sum1, sum2
             self.sum_bet_stat, self_opp_data.sum_bet_stat = sum1, sum2
-            
+
     def recheck(self, shared):
         prnt(' ')
         prnt(self.msg.format(sys._getframe().f_code.co_name, 'RECHECK FORK'))
@@ -266,35 +266,35 @@ class BetManager:
             except Exception as e:
                 err_msg = 'recheck err (' + str(e.__class__.__name__) + '): ' + str(e)
                 prnt(self.msg_err.format(sys._getframe().f_code.co_name, err_msg))
-        
-        prnt(self.msg.format(sys._getframe().f_code.co_name, 'get kof '+self.bk_name+': ' + str(self.val_bet_stat) + ' -> ' + str(self.cur_val_bet) + ', time req.:' + str(self.time_req)))
-        
+
+        prnt(self.msg.format(sys._getframe().f_code.co_name,
+                             'get kof ' + self.bk_name + ': ' + str(self.val_bet_stat) + ' -> ' + str(self.cur_val_bet) + ', time req.:' + str(self.time_req)))
+
         shared[self.bk_name + '_recheck'] = 'done'
         self.opposite_wait(shared, 'recheck')
-        
+
         opp_cur_val_bet = shared[self.bk_name_opposite].get('self', {}).cur_val_bet
         if self.cur_val_bet > 0 < opp_cur_val_bet:
             l = (1 / self.cur_val_bet) + (1 / opp_cur_val_bet)
             l_first = (1 / self.val_bet_stat) + (1 / shared[self.bk_name_opposite].get('self', {}).val_bet_stat)
-            
+
             min_proc = float(get_prop('min_proc').replace(',', '.'))
             min_l = 1 - (min_proc / 100)
-            
+
             prnt(' ')
             cur_proc = str(round((1 - l) * 100, 3))
             first_proc = str(round((1 - l_first) * 100, 3))
             min_proc = str(round((1 - min_l) * 100, 3))
-            prnt(self.msg.format(sys._getframe().f_code.co_name, 'min l: ' + str(min_l) + ', l: ' + str(l_first) + ' -> ' + str(l) + ', proc: ' + str(first_proc) + ' -> ' + cur_proc ))
+            prnt(self.msg.format(sys._getframe().f_code.co_name, 'min l: ' + str(min_l) + ', l: ' + str(l_first) + ' -> ' + str(l) + ', proc: ' + str(first_proc) + ' -> ' + cur_proc))
         else:
             raise BetIsLost('Один из коф-в заблокирован: ' + self.bk_name + '(' + str(self.cur_val_bet) + '), ' + self.bk_name_opposite + '(' + str(opp_cur_val_bet) + ')')
-        
+
         if l > min_l:
             raise BetIsLost('Вилка ' + str(l) + ' (' + cur_proc + '%), беру вилки только >= ' + min_proc + '%')
-            
+
         prnt(' ')
         prnt(self.msg.format(sys._getframe().f_code.co_name, 'RECALC SUM'))
         self.recalc_sum_bet(shared)
-        
 
     def bet_simple(self, shared: dict):
 
@@ -315,7 +315,8 @@ class BetManager:
                     self_opp.sale_bet(shared)
                     break
                 except (SaleError, CouponBlocked) as e:
-                    prnt(self.msg.format(sys._getframe().f_code.co_name, 'Ошибка: ' + e.__class__.__name__ + ' - ' + str(e) + '. Пробую проставить и пробую выкупить еще! ('+str(self.attempt_sale)+')'))
+                    prnt(self.msg.format(sys._getframe().f_code.co_name,
+                                         'Ошибка: ' + e.__class__.__name__ + ' - ' + str(e) + '. Пробую проставить и пробую выкупить еще! (' + str(self.attempt_sale) + ')'))
                     sleep(15)
 
         def bet_done(shared):
@@ -333,7 +334,7 @@ class BetManager:
             try:
                 self.sign_in(shared)
                 self.wait_sign_in_opp(shared)
-                
+
                 self.recheck(shared)
 
                 if self.created_fork == '' and 'created' in self.first_bet_in:
@@ -461,12 +462,11 @@ class BetManager:
                 set_strategy('ОЗ', None)
         prnt(self.msg.format(sys._getframe().f_code.co_name, bet_depends))
 
-
     def recalc_sum_bet(self, shared):
         self_opp_data = shared[self.bk_name_opposite].get('self', {})
         k_opp = self_opp_data.cur_val_bet
         sum_opp = self_opp_data.sum_bet_stat
-        
+
         if self.cur_val_bet and self.val_bet_old != self.cur_val_bet:
             prnt(' ')
             prnt(self.msg.format(sys._getframe().f_code.co_name, 'RECALC SUM BET'))
@@ -484,7 +484,6 @@ class BetManager:
                 sys._getframe().f_code.co_name,
                 'Пересчет суммы ставки: {}->{}({}:{}/{}) [k: {}->{}, k_opp:{}, sum_opp:{}]'.
                     format(self.sum_bet_stat, self.sum_bet, self.bet_profit, bk1_profit, bk2_profit, self.val_bet_stat, self.cur_val_bet, k_opp, sum_opp)))
-
 
     def bet_safe(self, shared: dict):
 
@@ -596,7 +595,7 @@ class BetManager:
                 prnt(self.msg.format(sys._getframe().f_code.co_name, 'Сумма выкупа неизвестна'))
 
             self.recalc_sum_bet(shared)
-            
+
             if self.sum_bet_stat >= self.sum_bet:
                 prnt(self.msg.format(sys._getframe().f_code.co_name, 'Сумма ставки не изменилась или уменьшилась, делаем ставку'))
             elif self_opp_data.sum_sell and self.sale_profit > self.bet_profit:
@@ -739,7 +738,7 @@ class BetManager:
                         prnt(self.msg.format(
                             sys._getframe().f_code.co_name,
                             'Ошибка: ' + e.__class__.__name__ + ' - ' + str(e) + '. Пробую проставить и пробую выкупить еще! (' + str(self.attempt_sale) + ')'
-                            ))
+                        ))
                         sleep(5)
                         self.attempt_sale = self.attempt_sale + 1
                     if (self.total_stock is not None and self.total_stock <= 0) or self.attempt_sale > 500:
@@ -1084,17 +1083,17 @@ class BetManager:
             timer_update = float(res.get('recommendedUpdateFrequency', 3))
 
             coupon_found = False
-            
+
             conditions = None
             conditions = res.get('conditions', None)
             if conditions:
                 for coupon in conditions:
                     if str(coupon.get('regId')) == str(self.reg_id):
                         coupon_found = True
-    
+
                         prnt(self.msg.format(sys._getframe().f_code.co_name, 'canSell: ' + str(coupon.get('canSell', True))), 'hide')
                         prnt(self.msg.format(sys._getframe().f_code.co_name, 'tempBlock: ' + str(coupon.get('tempBlock', False))), 'hide')
-    
+
                         if coupon.get('canSell', True) and not coupon.get('tempBlock', False):
                             self.sum_sell = float(coupon.get('completeSellSum'))
                             prnt(self.msg.format(sys._getframe().f_code.co_name, 'coupon sum sell: ' + str(self.sum_sell / self.sum_sell_divider)))
@@ -1185,7 +1184,7 @@ class BetManager:
                 self.get_sum_sell(url)
                 self.sale_profit = round(self.sum_sell - self.sum_bet)
                 shared[self.bk_name]['sale_profit'] = self.sale_profit
-                
+
                 # step2 get rqid for sell coupn
                 payload = copy.deepcopy(payload_coupon_sum)
                 headers = copy.deepcopy(fb_headers)
