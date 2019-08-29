@@ -1123,6 +1123,7 @@ class BetManager:
             #     raise CouponBlocked(e)
             self.get_sum_sell()
             self.sale_profit = round(self.sum_sell - self.sum_bet)
+            shared[self.bk_name]['sale_profit'] = self.sale_profit
 
             if self.cashout_allowed and self.sum_sell > 0:
                 payload = {}
@@ -1180,6 +1181,8 @@ class BetManager:
 
                 self.get_sum_sell(url)
                 self.sale_profit = round(self.sum_sell - self.sum_bet)
+                shared[self.bk_name]['sale_profit'] = self.sale_profit
+                
                 # step2 get rqid for sell coupn
                 payload = copy.deepcopy(payload_coupon_sum)
                 headers = copy.deepcopy(fb_headers)
