@@ -191,7 +191,7 @@ def choose_prop(update, context):
             str_r = ''
             if val.get('min'):
                 str_r = str_r + 'min: ' + val.get('min')
-            if val.get('min'): 
+            if val.get('min'):
                 str_r = str_r + ', max: ' + val.get('max')
             dop_indo = str_r
             if val.get('access_list'):
@@ -232,13 +232,13 @@ def botlist(update, context, edit=False):
     if edit:
         update = update.callback_query
     user = update.message.chat
-    
+
     acc_list = None
-    if str(update.message.chat.id) == '381868674':
+    if str(update.message.chat.id) in ['381868674', '33847743']:
         acc_list = Account.select().order_by(Account.id)
     else:
         acc_list = Account.select().where(Account.user == user.id).order_by(Account.id)
-        
+
     for acc in acc_list:
 
         if acc.date_end:
