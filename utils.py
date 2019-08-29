@@ -155,7 +155,6 @@ def get_new_sum_bets(bk1, bk2, max_bet, hide=False):
     l = 1 / bk1 + 1 / bk2
     total_bet = round((max_bet * bk1 * l) / 5) * 5
     sum_bk1, sum_bk2 = get_sum_bets(bk1, bk2, total_bet, 5, hide)
-    prnt('get_new_sum_bets: sum_bk1:{}, sum_bk2:{}'.format(sum_bk1, sum_bk2))
     return sum_bk1, sum_bk2
 
 
