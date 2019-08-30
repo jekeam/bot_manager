@@ -324,7 +324,6 @@ class BetManager:
             shared[self.bk_name]['new_bet_sum'] = self.sum_bet
             shared[self.bk_name]['new_bet_kof'] = self.cur_val_bet
             shared[self.bk_name]['sale_profit'] = self.sale_profit
-            prnt(self.msg.format(sys._getframe().f_code.co_name, 'sell_profit:' + str(self.sale_profit)))
 
             if not shared[self.bk_name].get('time_bet'):
                 shared[self.bk_name]['time_bet'] = round(time() - self.time_start)
@@ -585,9 +584,6 @@ class BetManager:
                 prnt(' ')
                 prnt(self.msg.format(sys._getframe().f_code.co_name, 'CALC PROFIT IF EXISTS SUMM SELL'))
                 self.sale_profit = (self_opp_data.sum_sell / self_opp_data.sum_sell_divider) - sum_opp
-                prnt(self.msg.format(
-                    sys._getframe().f_code.co_name,
-                    'sell_profit:{}, opp_sell: {}, opp_divider: {}, sum_opp: {}'.format(self.sale_profit, self_opp_data.sum_sell, self_opp_data.sum_sell_divider, sum_opp)))
                 shared[self.bk_name]['sale_profit'] = self.sale_profit
 
                 if self.sale_profit > 0:
@@ -1189,9 +1185,6 @@ class BetManager:
                 self.get_sum_sell(url)
                 self.sale_profit = round(self.sum_sell - self.sum_bet)
                 shared[self.bk_name]['sale_profit'] = self.sale_profit
-                prnt(self.msg.format(
-                    sys._getframe().f_code.co_name,
-                    'sell_profit:{}, opp_sell: {}, opp_divider: {}, sum_opp: {}'.format(self.sale_profit, self.sum_sell, self.sum_sell_divider, self.sum_bet)))
 
                 # step2 get rqid for sell coupn
                 payload = copy.deepcopy(payload_coupon_sum)
