@@ -70,7 +70,10 @@ def print_stat(acc_id: str) -> str:
                         if not bet_skip:
                             cnt_fail += 1
                             black_list_matches += 1
-                            sale_profit = sale_profit + bk1.get('sale_profit') + bk2.get('sale_profit')
+                            if err_bk1 != 'ok':
+                                sale_profit = sale_profit + bk1.get('sale_profit')
+                            elif err_bk2 != 'ok':
+                                sale_profit = sale_profit + bk2.get('sale_profit')
 
 
                     elif not bet_skip:
