@@ -6,9 +6,26 @@ from utils import check_status_with_resp, prnt
 import time
 from retry_requests import requests_retry_session
 
+# VICTORIES
+VICTS = [['П1', 921], ['Н', 922], ['П2', 923], ['П1Н', 924], ['12', 1571], ['П2Н', 925],
+         ['ОЗД', 4241], ['ОЗН', 4242], ['КЗ1', 4235], ['КНЗ1', 4236], ['КЗ2', 4238], ['КНЗ2', 4239]]
+# Обе забьют:да/Обе забьют:нет/Команда 1 забьет/Команда 1 не забьет/Команда 2 забьет/Команда 2 не забьет
+# TOTALS
+TTO = [['ТБ({})', 930], ['ТБ({})', 1696], ['ТБ({})', 1727], ['ТБ({})', 1730], ['ТБ({})', 1733]]
+TTU = [['ТМ({})', 931], ['ТМ({})', 1697], ['ТМ({})', 1728], ['ТМ({})', 1731], ['ТМ({})', 1734]]
+# TEAM TOTALS-1
+TT1O = [['ТБ1({})', 1809], ['ТБ1({})', 1812], ['ТБ1({})', 1815]]
+TT1U = [['ТМ1({})', 1810], ['ТМ1({})', 1813], ['ТМ1({})', 1816]]
+# TEAM TOTALS-2
+TT2O = [['ТБ2({})', 1854], ['ТБ2({})', 1873], ['ТБ2({})', 1880]]
+TT2U = [['ТМ2({})', 1871], ['ТМ2({})', 1874], ['ТМ2({})', 1881]]
+
 LENOVO_MODEL = 'A5000'
 
-url_fonbet = 'https://line-01.ccf4ab51771cacd46d.com'
+url_fonbet  = 'https://line-01.ccf4ab51771cacd46d.com'
+
+url_fonbet_matchs = url_fonbet + "/live/currentLine/en/?2lzf1earo8wjksbh22s"
+url_fonbet_match = url_fonbet + "/line/eventView?eventId="
 
 fb_payload = {
     "appVersion": "5.1.3b",
@@ -27,6 +44,12 @@ fb_headers = {
     "Content-Type": "application/json; charset=UTF-8",
     "Connection": "Keep-Alive",
     "Accept-Encoding": "gzip"
+}
+
+fonbet_header2 = {
+    'User-Agent': 'Fonbet/5.1.3b (Android 21; Phone; com.bkfonbet)',
+    'Connection': 'Keep-Alive',
+    'Accept-Encoding': 'gzip'
 }
 
 fb_payload_bet = {
@@ -176,13 +199,12 @@ def get_common_url(data_urls):
 
 
 def get_new_bets_fonbet(match_id, proxies, time_out=50):
-    from util_fonbet import url_fonbet_match, fonbet_header, VICTS, TTO, TTU, TT1O, TT1U, TT2O, TT2U
     key_id = str(match_id)
     bets_fonbet = {}
     try:
         resp = requests_retry_session().get(
             url_fonbet_match + str(match_id) + "&lang=en",
-            headers=fonbet_header,
+            headers=fonbet_header2,
             timeout=time_out,
             verify=False,
             proxies=proxies,
