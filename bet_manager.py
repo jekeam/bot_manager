@@ -584,7 +584,9 @@ class BetManager:
                 prnt(' ')
                 prnt(self.msg.format(sys._getframe().f_code.co_name, 'CALC PROFIT IF EXISTS SUMM SELL'))
                 self.sale_profit = (self_opp_data.sum_sell / self_opp_data.sum_sell_divider) - sum_opp
-                shared[self.bk_name]['sale_profit'] = self.sale_profit
+
+                if self.sale_profit != 0:
+                    shared[self.bk_name]['sale_profit'] = self.sale_profit
 
                 if self.sale_profit > 0:
                     err_str = self.msg_err.format(sys._getframe().f_code.co_name, 'Сумма выкупа больше чем ставка на ' + str(self.sale_profit) + ', пробую выкупить')
@@ -1126,7 +1128,6 @@ class BetManager:
             #     raise CouponBlocked(e)
             self.get_sum_sell()
             self.sale_profit = round(self.sum_sell - self.sum_bet)
-            shared[self.bk_name]['sale_profit'] = self.sale_profit
 
             if self.cashout_allowed and self.sum_sell > 0:
                 payload = {}
@@ -1184,7 +1185,6 @@ class BetManager:
 
                 self.get_sum_sell(url)
                 self.sale_profit = round(self.sum_sell - self.sum_bet)
-                shared[self.bk_name]['sale_profit'] = self.sale_profit
 
                 # step2 get rqid for sell coupn
                 payload = copy.deepcopy(payload_coupon_sum)
