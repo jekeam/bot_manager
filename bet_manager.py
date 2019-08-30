@@ -585,9 +585,6 @@ class BetManager:
                 prnt(self.msg.format(sys._getframe().f_code.co_name, 'CALC PROFIT IF EXISTS SUMM SELL'))
                 self.sale_profit = (self_opp_data.sum_sell / self_opp_data.sum_sell_divider) - sum_opp
 
-                if self.sale_profit != 0:
-                    shared[self.bk_name]['sale_profit'] = self.sale_profit
-
                 if self.sale_profit > 0:
                     err_str = self.msg_err.format(sys._getframe().f_code.co_name, 'Сумма выкупа больше чем ставка на ' + str(self.sale_profit) + ', пробую выкупить')
                     prnt(err_str)
