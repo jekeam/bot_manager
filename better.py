@@ -216,7 +216,7 @@ def set_statistics(key, err_bk1, err_bk2, fork_info=None, sale_sum=0):
                 fork_info['olimp']['err'] = 'Вилка была пропущена: ' + err_bk1
                 fork_info['fonbet']['err'] = 'Вилка была пропущена: ' + err_bk2
 
-    if sale_sum < 0 and not bet_skip:
+    if (sale_sum < 0 or err_bk1 != 'ok' or err_bk2 != 'ok') and not bet_skip:
         cnt_fail = cnt_fail + 1
         black_list_matches.append(key.split('@')[0])
         black_list_matches.append(key.split('@')[1])
