@@ -206,7 +206,7 @@ def upd_last_fork_time(v_time: int = None):
         last_fork_time = int(time.time())
 
 
-def set_statistics(key, err_bk1, err_bk2, fork_info=None):
+def set_statistics(key, err_bk1, err_bk2, fork_info=None, sale_sum=0):
     global cnt_fail, black_list_matches, cnt_fork_success
     bet_skip = False
     if err_bk1 and err_bk2:
@@ -217,7 +217,7 @@ def set_statistics(key, err_bk1, err_bk2, fork_info=None):
                 fork_info['fonbet']['err'] = 'Вилка была пропущена: ' + err_bk2
 
     if err_bk1 != 'ok' or err_bk2 != 'ok':
-        if not bet_skip:
+        if not bet_skip and sale_sum < 0:
             cnt_fail = cnt_fail + 1
             black_list_matches.append(key.split('@')[0])
             black_list_matches.append(key.split('@')[1])
@@ -462,7 +462,9 @@ def go_bets(wag_ol, wag_fb, key, deff_max, vect1, vect2, sc1, sc2, created):
             raise MaxFail(msg_str)
 
         # CALC/SET STATISTICS
-        set_statistics(key, shared.get('olimp_err'), shared.get('fonbet_err'), fork_info=fork_info[fork_id])
+        sale_list = [shared['olimp'].get('sale_profit'), shared['fonbet'].get('sale_profit')]
+        sale_sum = list(filter(lambda f: f!=0, sale_list))[0]
+        set_statistics(key, shared.get('olimp_err'), shared.get('fonbet_err'), fork_info=fork_info[fork_id], sale_sum=sale_sum)
         get_statistics()
         msg_errs = ' ' + shared.get('olimp_err') + shared.get('fonbet_err')
         if not 'BkOppBetError'.lower() in msg_errs.lower():

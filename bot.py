@@ -61,21 +61,18 @@ def print_stat(acc_id: str) -> str:
                     bk2 = val.get('fonbet')
                     err_bk1, err_bk2 = bk1.get('err'), bk2.get('err')
                     bet_skip = False
-
+                  
                     if err_bk1 and err_bk2:
                         if 'BkOppBetError' in err_bk1 and 'BkOppBetError' in err_bk2:
                             bet_skip = True
-
-                    if not bet_skip:
-                        if bk1.get('sale_profit') != 0 or bk2.get('sale_profit') != 0:
+                            
+                    if (bk1.get('sale_profit') != 0 or bk2.get('sale_profit') != 0) and not bet_skip:
                             sale_list = [bk1.get('sale_profit'), bk2.get('sale_profit')]
                             sale_sum = list(filter(lambda f: f!=0, sale_list))[0]
                             if sale_sum < 0:
                                 cnt_fail += 1
                                 black_list_matches += 1
                             sale_profit = sale_profit + sale_sum
-
-
                     elif not bet_skip:
                         cnt_fork_success += 1
 
