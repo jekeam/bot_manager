@@ -633,9 +633,14 @@ if __name__ == '__main__':
                     js = json.loads(line)
                     last_time_temp = 0
                     for key, val in js.items():
+                        
                         bet_key = str(val.get('olimp', {}).get('id')) + '@' + str(val.get('fonbet', {}).get('id')) + '@' + \
                                   val.get('olimp', {}).get('bet_type') + '@' + val.get('fonbet', {}).get('bet_type')
-                        set_statistics(bet_key, val.get('olimp').get('err'), val.get('fonbet').get('err'))
+                                  
+                        sale_list = [val.get('fonbet').get('sale_profit'), val.get('olimp').get('sale_profit')]
+                        sale_sum = list(filter(lambda f: f!=0, sale_list))[0]
+                        
+                        set_statistics(bet_key, val.get('olimp').get('err'), val.get('fonbet').get('err'), val, sale_sum)
 
                         if int(key) > last_time_temp:
                             last_time_temp = int(key)
