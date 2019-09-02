@@ -72,8 +72,11 @@ def print_stat(acc_id: str) -> str:
                             sale_list = [bk1.get('sale_profit', 0), bk2.get('sale_profit', 0)]
                             try:
                                 sale_sum = list(filter(lambda f: f!=0, sale_list))[0]
+                                if sale_sum is None:
+                                    sale_sum = 0
                             except:
                                 sale_sum = 0
+                            
                             if sale_sum < 0:
                                 cnt_fail += 1
                                 black_list_matches += 1
@@ -101,8 +104,8 @@ def print_stat(acc_id: str) -> str:
 
     except FileNotFoundError:
         return 'Нет данных'
-    #except Exception as e:
-        #return 'Возникла ошибка: ' + str(e)
+    except Exception as e:
+        return 'Возникла ошибка: ' + str(e)
 
 
 def check_limits(val, type_, min_, max_, access_list):
