@@ -468,7 +468,7 @@ def go_bets(wag_ol, wag_fb, key, deff_max, vect1, vect2, sc1, sc2, created):
 
         # CALC/SET STATISTICS
         sale_list = [shared['olimp'].get('sale_profit', 0), shared['fonbet'].get('sale_profit', 0)]
-        set_statistics(key, shared.get('olimp_err'), shared.get('fonbet_err'), fork_info[fork_id], sale_list=sale_list)
+        set_statistics(key, shared.get('olimp_err'), shared.get('fonbet_err'), fork_info[fork_id], sale_list)
         get_statistics()
         msg_errs = ' ' + shared.get('olimp_err') + shared.get('fonbet_err')
         if not 'BkOppBetError'.lower() in msg_errs.lower():
@@ -646,7 +646,7 @@ if __name__ == '__main__':
                             bet_key, 
                             val.get('olimp').get('err'), 
                             val.get('fonbet').get('err'), 
-                            val[key], 
+                            val, 
                             [val.get('fonbet').get('sale_profit', 0), val.get('olimp').get('sale_profit', 0)]
                         )
 
