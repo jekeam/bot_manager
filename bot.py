@@ -68,8 +68,11 @@ def print_stat(acc_id: str) -> str:
                             bet_skip = True
                             
                     if (bk1.get('sale_profit') != 0 or bk2.get('sale_profit') != 0) and not bet_skip:
-                            sale_list = [bk1.get('sale_profit'), bk2.get('sale_profit')]
-                            sale_sum = list(filter(lambda f: f!=0, sale_list))[0]
+                            sale_list = [bk1.get('sale_profit', 0), bk2.get('sale_profit', 0)]
+                            try:
+                                sale_sum = list(filter(lambda f: f!=0, sale_list))[0]
+                            except:
+                                sale_sum = 0
                             if sale_sum < 0:
                                 cnt_fail += 1
                                 black_list_matches += 1
