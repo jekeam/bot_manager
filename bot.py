@@ -66,10 +66,14 @@ def print_stat(acc_id: str) -> str:
                         if 'BkOppBetError' in err_bk1 and 'BkOppBetError' in err_bk2:
                             bet_skip = True
 
-                    if bk1.get('sale_profit') != 0 or bk2.get('sale_profit') != 0:
-                        cnt_fail += 1
-                        black_list_matches += 1
-                        sale_profit = sale_profit + min(bk1.get('sale_profit'), bk2.get('sale_profit'))
+                    if not bet_skip:
+                        if bk1.get('sale_profit') != 0 or bk2.get('sale_profit') != 0:
+                            sale_list = [bk1.get('sale_profit'), bk2.get('sale_profit')]
+                            sale_sum = list(filter(lambda f: f!=0, sale_list))[0]
+                            if sale_sum < 0:
+                                cnt_fail += 1
+                                black_list_matches += 1
+                            sale_profit = sale_profit + sale_sum
 
 
                     elif not bet_skip:
@@ -84,10 +88,9 @@ def print_stat(acc_id: str) -> str:
 
             res_str = ''
             res_str = res_str + 'Проставлено вилок: *' + str(cnt_fork_success) + '*\n'
-            res_str = res_str + 'Кол-во выкупов: *' + str(cnt_fail) + '*\n'
+            res_str = res_str + 'Кол-во минусовых выкупов: *' + str(cnt_fail) + '*\n'
             res_str = res_str + 'Минимальный профит: *' + '{:,}'.format(round(min_profit)).replace(',', ' ') + '*\n'
             res_str = res_str + 'Максимальный профит: *' + '{:,}'.format(round(max_profit)).replace(',', ' ') + '*\n'
-            res_str = res_str + 'Средний профит: *' + '{:,}'.format(round((max_profit + min_profit) / 2)).replace(',', ' ') + '*\n'
             res_str = res_str + 'Профит от выкупов: *' + '{:,}'.format(round(sale_profit)).replace(',', ' ') + '*\n'
             res_str = res_str + '\n*Примерный доход: ' + '{:,}'.format(round((max_profit + min_profit) / 2) + round(sale_profit)).replace(',', ' ') + '*\n'
 
