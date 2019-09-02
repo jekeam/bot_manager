@@ -101,8 +101,8 @@ def print_stat(acc_id: str) -> str:
 
     except FileNotFoundError:
         return 'Нет данных'
-    except Exception as e:
-        return 'Возникла ошибка: ' + str(e)
+    #except Exception as e:
+        #return 'Возникла ошибка: ' + str(e)
 
 
 def check_limits(val, type_, min_, max_, access_list):
