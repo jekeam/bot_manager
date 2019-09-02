@@ -52,6 +52,7 @@ def print_stat(acc_id: str) -> str:
     min_profit = 0
     max_profit = 0
     sale_profit = 0
+    sale_sum = 0
 
     try:
         with open(acc_id + '_id_forks.txt', 'r') as f:
