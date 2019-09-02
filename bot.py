@@ -67,7 +67,7 @@ def print_stat(acc_id: str) -> str:
                         if 'BkOppBetError' in err_bk1 and 'BkOppBetError' in err_bk2:
                             bet_skip = True
                             
-                    if (bk1.get('sale_profit') != 0 or bk2.get('sale_profit') != 0) and not bet_skip:
+                    if (bk1.get('sale_profit') != 0 or bk2.get('sale_profit') != 0) and (err_bk1 != 'ok' or err_bk2 != 'ok') and not bet_skip:
                             sale_list = [bk1.get('sale_profit', 0), bk2.get('sale_profit', 0)]
                             try:
                                 sale_sum = list(filter(lambda f: f!=0, sale_list))[0]
