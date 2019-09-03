@@ -206,14 +206,8 @@ def upd_last_fork_time(v_time: int = None):
         last_fork_time = int(time.time())
 
 
-def set_statistics(key, err_bk1, err_bk2, fork_info=None, sale_list=[]):
+def set_statistics(key, err_bk1, err_bk2, fork_info=None):
     global cnt_fail, black_list_matches, cnt_fork_success
-    
-    try:
-        sale_sum = list(filter(lambda f: f!=0, sale_list))[0]
-    except:
-        sale_sum = 0
-    
     bet_skip = False
     if err_bk1 and err_bk2:
         if 'BkOppBetError' in err_bk1 and 'BkOppBetError' in err_bk2:
@@ -222,13 +216,13 @@ def set_statistics(key, err_bk1, err_bk2, fork_info=None, sale_list=[]):
                 fork_info['olimp']['err'] = 'Вилка была пропущена: ' + err_bk1
                 fork_info['fonbet']['err'] = 'Вилка была пропущена: ' + err_bk2
 
-    if (err_bk1 != 'ok' or err_bk2 != 'ok') and not bet_skip:
-        if sale_sum < 0:
+    if err_bk1 != 'ok' or err_bk2 != 'ok':
+        if not bet_skip:
             cnt_fail = cnt_fail + 1
             black_list_matches.append(key.split('@')[0])
             black_list_matches.append(key.split('@')[1])
-        # Добавим доп инфу о проставлении
-        upd_last_fork_time()
+            # Добавим доп инфу о проставлении
+            upd_last_fork_time()
     elif not bet_skip:
         cnt_fork_success.append(key)
         upd_last_fork_time()
@@ -247,7 +241,7 @@ def check_statistics():
 
     max_fail = int(get_prop('max_fail'))
     if cnt_fail >= max_fail:
-        msg_str = 'Кол-во отрицательных выкупов больше допустимого (' + str(max_fail) + '), работа завершена.'
+        msg_str = 'Кол-во выкупов больше допустимого (' + str(max_fail) + '), работа завершена.'
         raise MaxFail(msg_str)
 
     max_fork = int(get_prop('max_fork'))
@@ -468,8 +462,7 @@ def go_bets(wag_ol, wag_fb, key, deff_max, vect1, vect2, sc1, sc2, created):
             raise MaxFail(msg_str)
 
         # CALC/SET STATISTICS
-        sale_list = [shared['olimp'].get('sale_profit', 0), shared['fonbet'].get('sale_profit', 0)]
-        set_statistics(key, shared.get('olimp_err'), shared.get('fonbet_err'), fork_info[fork_id], sale_list)
+        set_statistics(key, shared.get('olimp_err'), shared.get('fonbet_err'), fork_info=fork_info[fork_id])
         get_statistics()
         msg_errs = ' ' + shared.get('olimp_err') + shared.get('fonbet_err')
         if not 'BkOppBetError'.lower() in msg_errs.lower():
@@ -639,17 +632,9 @@ if __name__ == '__main__':
                     js = json.loads(line)
                     last_time_temp = 0
                     for key, val in js.items():
-                        
                         bet_key = str(val.get('olimp', {}).get('id')) + '@' + str(val.get('fonbet', {}).get('id')) + '@' + \
                                   val.get('olimp', {}).get('bet_type') + '@' + val.get('fonbet', {}).get('bet_type')
-                                  
-                        set_statistics(
-                            bet_key, 
-                            val.get('olimp').get('err'), 
-                            val.get('fonbet').get('err'), 
-                            val, 
-                            [val.get('fonbet').get('sale_profit', 0), val.get('olimp').get('sale_profit', 0)]
-                        )
+                        set_statistics(bet_key, val.get('olimp').get('err'), val.get('fonbet').get('err'))
 
                         if int(key) > last_time_temp:
                             last_time_temp = int(key)

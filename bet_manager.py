@@ -323,7 +323,7 @@ class BetManager:
 
             shared[self.bk_name]['new_bet_sum'] = self.sum_bet
             shared[self.bk_name]['new_bet_kof'] = self.cur_val_bet
-            shared[self.bk_name]['sale_profit'] = round((self.sum_sell/self.sum_sell_divider) - self.sum_bet)
+            shared[self.bk_name]['sale_profit'] = self.sale_profit
 
             if not shared[self.bk_name].get('time_bet'):
                 shared[self.bk_name]['time_bet'] = round(time() - self.time_start)
@@ -1124,7 +1124,7 @@ class BetManager:
             # except Exception as e:
             #     raise CouponBlocked(e)
             self.get_sum_sell()
-            self.sale_profit = round(self.sum_sell - self.sum_bet)
+            self.sale_profit = round((self.sum_sell/self.sum_sell_divider) - self.sum_bet)
 
             if self.cashout_allowed and self.sum_sell > 0:
                 payload = {}
@@ -1181,6 +1181,7 @@ class BetManager:
                 url = url.replace('session/', '')
 
                 self.get_sum_sell(url)
+                self.sale_profit = round((self.sum_sell/self.sum_sell_divider) - self.sum_bet)
 
                 # step2 get rqid for sell coupn
                 payload = copy.deepcopy(payload_coupon_sum)
