@@ -366,6 +366,8 @@ class BetManager:
                         prnt(self.msg.format(sys._getframe().f_code.co_name, 'CHECK MAX-BET, BEFORE BET'))
                         try:
                             self.check_max_bet(shared)
+                            if recalc_sum_if_maxbet == 'вкл':
+                                self.recalc_sum_by_maxbet(shared)
                         except BetIsLost as e:
                             if recalc_sum_if_maxbet == 'вкл':
                                 self.recalc_sum_by_maxbet(shared)
