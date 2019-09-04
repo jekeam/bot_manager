@@ -396,21 +396,14 @@ class BetManager:
 
             except BkOppBetError as e:
                 raise BkOppBetError(e)
-            except (BetIsLost, NoMoney, SessionExpired) as e:
+            except (BetIsLost, NoMoney, SessionExpired, Exception) as e:
                 exc_type, exc_value, exc_traceback = sys.exc_info()
                 err_msg = 'Ошибка: ' + str(e.__class__.__name__) + ' - ' + str(e) + '. ' + str(repr(traceback.format_exception(exc_type, exc_value, exc_traceback)))
                 shared[self.bk_name + '_err'] = err_msg
                 prnt(err_msg)
 
                 self.opposite_stat_wait(shared)
-                self.opposite_stat_get(shared)
 
-                if shared.get(self.bk_name_opposite, {}).get('reg_id'):
-                    sale_opp(e, shared)
-                    raise ValueError(err_msg)
-                else:
-                    raise BkOppBetError(err_msg)
-            except (Exception) as e:
                 if shared.get(self.bk_name_opposite, {}).get('reg_id'):
                     sale_opp(e, shared)
                     raise ValueError(err_msg)
