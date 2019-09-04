@@ -411,7 +411,11 @@ class BetManager:
                 else:
                     raise BkOppBetError(err_msg)
             except (Exception) as e:
-                raise ValueError(e)
+                if shared.get(self.bk_name_opposite, {}).get('reg_id'):
+                    sale_opp(e, shared)
+                    raise ValueError(err_msg)
+                else:
+                    raise BkOppBetError(err_msg)
         except BkOppBetError as e:
             # В обоих БК ошибки, выкидываем вилку
             shared[self.bk_name + '_err'] = str(e.__class__.__name__) + ': ' + str(e)
