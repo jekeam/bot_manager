@@ -236,7 +236,7 @@ class BetManager:
         ))
         # recalc sum bets
         self_opp_data = shared[self.bk_name_opposite].get('self', {})
-        sum1, sum2 = get_new_sum_bets(self.cur_val_bet, self_opp_data.cur_val_bet, cur_bet_sum, True)
+        sum1, sum2 = get_new_sum_bets(self.cur_val_bet, self_opp_data.cur_val_bet, cur_bet_sum)
         prnt(self.msg.format(sys._getframe().f_code.co_name, 'new sum, ' + self.bk_name + ': ' + str(sum1) + ', ' + self.bk_name_opposite + ': ' + str(sum2)))
         if sum1 < self.min_bet or sum2 < self.min_bet:
             raise BetIsLost('Сумма одной из ставок после пересчета меньше min_bet: ' + str(self.min_bet))
