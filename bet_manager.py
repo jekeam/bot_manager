@@ -225,6 +225,9 @@ class BetManager:
 
     def recalc_sum_by_maxbet(self, shared: dict):
         cur_bet_sum = self.max_bet * int(get_prop('proc_by_max', 90)) / 100
+        if cur_bet_sum > int(get_prop('summ')):
+            cur_bet_sum = int(get_prop('summ'))
+            prnt(self.msg.format(sys._getframe().f_code.co_name, ' Сумма после пересчета по максбету больше общей ставки, уменьшаем ее: {}->{}'.format(cur_bet_sum, get_prop('summ'))))
 
         prnt(' ')
         prnt(self.msg.format(
@@ -237,6 +240,8 @@ class BetManager:
         prnt(self.msg.format(sys._getframe().f_code.co_name, 'new sum, ' + self.bk_name + ': ' + str(sum1) + ', ' + self.bk_name_opposite + ': ' + str(sum2)))
         if sum1 < self.min_bet or sum2 < self.min_bet:
             raise BetIsLost('Сумма одной из ставок после пересчета меньше min_bet: ' + str(self.min_bet))
+        elif sum1 < 30 or sum2 < 30:
+            raise BetIsLost('Сумма одной из ставок после пересчета меньше 30 рублей')
         else:
             self.sum_bet, self_opp_data.sum_bet = sum1, sum2
             self.sum_bet_stat, self_opp_data.sum_bet_stat = sum1, sum2
@@ -1312,16 +1317,16 @@ class BetManager:
         min_amount, max_amount = res['min'] // 100, res['max'] // 100
 
         shared[self.bk_name]['max_bet'] = max_amount
+        self.min_bet = min_amount
+        self.max_bet = max_amount
 
         prnt(self.msg.format(sys._getframe().f_code.co_name, 'sum bet=' + str(self.sum_bet)))
         prnt(self.msg.format(sys._getframe().f_code.co_name, 'min_amount=' + str(min_amount) + ', max_amount=' + str(max_amount)))
         if min_amount > self.sum_bet:
             err_str = self.msg_err.format(sys._getframe().f_code.co_name, 'min bet')
-            self.min_bet = min_amount
             raise BetIsLost(err_str)
         if self.sum_bet > max_amount:
             err_str = self.msg_err.format(sys._getframe().f_code.co_name, 'max bet')
-            self.max_bet = max_amount
             raise BetIsLost(err_str)
         if self.session.get('balance') and self.session['balance'] < self.sum_bet:
             err_str = self.msg_err.format(sys._getframe().f_code.co_name, 'mo money')
