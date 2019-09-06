@@ -732,7 +732,9 @@ class BetManager:
                     shared[self.bk_name + '_err'] = err_msg
                     prnt(self.msg.format(sys._getframe().f_code.co_name, 'Ошибка при проставлении ставки в ' + self.bk_name + ', делаю выкуп ставки в ' + self.bk_name_opposite))
                     try:
-                        shared[self.bk_name_opposite].get('self', {}).sale_bet(shared)
+                        bk_oop_sale = shared[self.bk_name_opposite].get('self', {})
+                        bk_oop_sale.sale_bet(shared)
+                        shared[self.bk_name]['sale_profit'] = bk_oop_sale.sale_profit
                         is_go = False
                         break
                     except CouponBlocked as e:
