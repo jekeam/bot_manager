@@ -299,6 +299,7 @@ class BetManager:
     def bet_simple(self, shared: dict):
 
         def sale_opp(e, shared):
+            prnt(self.msg.format(sys._getframe().f_code.co_name, e))
             self.opposite_stat_wait(shared)
             self.opposite_stat_get(shared)
             prnt(self.msg.format(sys._getframe().f_code.co_name, 'Ошибка при проставлении ставки в ' + self.bk_name + ', делаю выкуп ставки в ' + self.bk_name_opposite))
@@ -388,7 +389,7 @@ class BetManager:
                 bet_done(shared)
             except BetError as e:
                 shared[self.bk_name + '_err'] = str(e.__class__.__name__) + ': ' + str(e)
-                prnt(e)
+                prnt(self.msg.format(sys._getframe().f_code.co_name, e))
 
                 self.opposite_stat_wait(shared)
                 self.opposite_stat_get(shared)
@@ -727,10 +728,9 @@ class BetManager:
             except BetIsLost as e:
                 if shared.get(self.bk_name + '_err', 'err') != 'ok':
                     err_msg = str(e.__class__.__name__) + ': ' + str(e)
+                    prnt(self.msg.format(sys._getframe().f_code.co_name, err_msg))
                     shared[self.bk_name + '_err'] = err_msg
-                    prnt(self.msg.format(sys._getframe().f_code.co_name,
-                                         'Ошибка при проставлении ставки в ' + self.bk_name +
-                                         ', делаю выкуп ставки в ' + self.bk_name_opposite))
+                    prnt(self.msg.format(sys._getframe().f_code.co_name, 'Ошибка при проставлении ставки в ' + self.bk_name + ', делаю выкуп ставки в ' + self.bk_name_opposite))
                     try:
                         shared[self.bk_name_opposite].get('self', {}).sale_bet(shared)
                         is_go = False
@@ -1125,7 +1125,7 @@ class BetManager:
             # except Exception as e:
             #     raise CouponBlocked(e)
             self.get_sum_sell()
-            self.sale_profit = round((self.sum_sell/self.sum_sell_divider) - self.sum_bet)
+            self.sale_profit = round((self.sum_sell / self.sum_sell_divider) - self.sum_bet)
 
             if self.cashout_allowed and self.sum_sell > 0:
                 payload = {}
@@ -1182,7 +1182,7 @@ class BetManager:
                 url = url.replace('session/', '')
 
                 self.get_sum_sell(url)
-                self.sale_profit = round((self.sum_sell/self.sum_sell_divider) - self.sum_bet)
+                self.sale_profit = round((self.sum_sell / self.sum_sell_divider) - self.sum_bet)
 
                 # step2 get rqid for sell coupn
                 payload = copy.deepcopy(payload_coupon_sum)
