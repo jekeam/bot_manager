@@ -331,6 +331,10 @@ class BetManager:
             shared[self.bk_name]['new_bet_kof'] = self.cur_val_bet
             shared[self.bk_name]['sale_profit'] = self.sale_profit
 
+            opp_sale_profit = shared[self.bk_name_opposite].get('self', {}).sale_profit
+            if self.sale_profit == 0 and opp_sale_profit != 0:
+                shared[self.bk_name]['sale_profit'] = opp_sale_profit
+
             if not shared[self.bk_name].get('time_bet'):
                 shared[self.bk_name]['time_bet'] = round(time() - self.time_start)
                 prnt(self.msg.format(sys._getframe().f_code.co_name, 'Завершил работу в ' + self.bk_name))
