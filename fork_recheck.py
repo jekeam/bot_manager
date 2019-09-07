@@ -137,7 +137,7 @@ def get_fonbet_info(match_id, factor_id, param, bet_type=None):
     result = res.get('result')
 
     if result == "error":
-        raise BetIsLost(resp.get("errorMessage"))
+        raise BetIsLost(res.get("errorMessage"))
 
     for event in res.get("events"):
         if event.get('id') == match_id:
