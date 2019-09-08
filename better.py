@@ -719,6 +719,7 @@ if __name__ == '__main__':
                     live_fork_total = val_json.get('live_fork_total', 0)
                     live_fork = val_json.get('live_fork', 0)
                     created_fork = val_json.get('created_fork', '')
+                    event_type = val_json.get('event_type')
 
                     deff_olimp = round(float(time.time() - float(val_json.get('time_req_olimp', 0))))
                     deff_fonbet = round(float(time.time() - float(val_json.get('time_req_fonbet', 0))))
@@ -751,11 +752,14 @@ if __name__ == '__main__':
                                score + ' ' + str(pair_math) + \
                                ', live_fork: ' + str(live_fork) + \
                                ', live_fork_total: ' + str(live_fork_total) + \
-                               ', max deff: ' + str(deff_max)
+                               ', max deff: ' + str(deff_max) + \
+                               ', event_type: ' + event_type
                     except Exception as e:
                         exc_type, exc_value, exc_traceback = sys.exc_info()
                         err_str = str(e) + ' ' + str(repr(traceback.format_exception(exc_type, exc_value, exc_traceback)))
                         prnt('better: ' + err_str)
+
+                        prnt('event_type: ' + event_type)
 
                         prnt('deff max: ' + str(deff_max))
                         prnt('live fork total: ' + str(live_fork_total))
@@ -773,24 +777,26 @@ if __name__ == '__main__':
                         prnt('val_json: ' + str(val_json))
 
                         info = ''
+                    if event_type == 'football':
+                        if vect1 and vect2:
+                            if deff_max < 3 and k1 > 0 < k2:
+                                round_bet = int(get_prop('round_fork'))
+                                total_bet = round(randint(total_bet_min, total_bet_max) / round_bet) * round_bet
+                                prnt('total_bet random: ' + str(total_bet), 'hide')
 
-                    if vect1 and vect2:
-                        if deff_max < 3 and k1 > 0 < k2:
-                            round_bet = int(get_prop('round_fork'))
-                            total_bet = round(randint(total_bet_min, total_bet_max) / round_bet) * round_bet
-                            prnt('total_bet random: ' + str(total_bet), 'hide')
-
-                            recalc_bets()
-                            # Проверим вилку на исключения
-                            if check_fork(key, l, k1, k2, live_fork, live_fork_total, bk1_score, bk2_score,
-                                          minute, time_break_fonbet, period, name, name_rus, deff_max, is_top, info) or DEBUG:
-                                prnt(' ')
-                                prnt('Go bets: ' + key + ' ' + info)
-                                fork_success = go_bets(val_json.get('kof_olimp'), val_json.get('kof_fonbet'), key, deff_max, vect1, vect2, sc1, sc2, created_fork)
-                        elif deff_max >= 3:
-                            pass
+                                recalc_bets()
+                                # Проверим вилку на исключения
+                                if check_fork(key, l, k1, k2, live_fork, live_fork_total, bk1_score, bk2_score,
+                                              minute, time_break_fonbet, period, name, name_rus, deff_max, is_top, info) or DEBUG:
+                                    prnt(' ')
+                                    prnt('Go bets: ' + key + ' ' + info)
+                                    fork_success = go_bets(val_json.get('kof_olimp'), val_json.get('kof_fonbet'), key, deff_max, vect1, vect2, sc1, sc2, created_fork)
+                            elif deff_max >= 3:
+                                pass
+                        else:
+                            prnt('Вектор направления коф-та не определен: VECT1=' + str(vect1) + ', VECT2=' + str(vect2))
                     else:
-                        prnt('Вектор направления коф-та не определен: VECT1=' + str(vect1) + ', VECT2=' + str(vect2))
+                        prnt('Вилка исключена, т.к. вид спорта: ' + event_type)
             else:
                 pass
             time.sleep(1)
