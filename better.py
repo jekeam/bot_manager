@@ -97,7 +97,7 @@ def bet_type_is_work(key):
     return True
 
 
-def check_fork(key, L, k1, k2, live_fork, live_fork_total, bk1_score, bk2_score, minute, time_break_fonbet, period, name, name_rus, deff_max, is_top, info=''):
+def check_fork(key, L, k1, k2, live_fork, live_fork_total, bk1_score, bk2_score, event_type, minute, time_break_fonbet, period, name, name_rus, deff_max, is_top, info=''):
     global bal1, bal2, bet1, bet2, cnt_fork_success, black_list_matches
 
     fork_exclude_text = ''
@@ -164,12 +164,14 @@ def check_fork(key, L, k1, k2, live_fork, live_fork_total, bk1_score, bk2_score,
     if bk1_score != bk2_score:
         fork_exclude_text = fork_exclude_text + 'Вилка ' + str(round((1 - L) * 100, 2)) + '% исключена т.к. счет не совпадает: olimp(' + bk1_score + ') fonbet(' + bk2_score + ')\n'
 
-    # Больше 43 минуты и не идет перерыв и это 1 период
-    if 43.0 < float(minute) and not time_break_fonbet and period == 1:
-        fork_exclude_text = fork_exclude_text + 'Вилка ' + str(round((1 - L) * 100, 2)) + '% исключена т.к. идет ' + str(minute) + ' минута матча и это не перерыв / не 2-й период \n'
+    if event_type == 'football':
+        # Больше 43 минуты и не идет перерыв и это 1 период
+        if 43.0 < float(minute) and not time_break_fonbet and period == 1:
+            fork_exclude_text = fork_exclude_text + 'Вилка ' + str(round((1 - L) * 100, 2)) + '% исключена т.к. идет ' + \
+                                str(minute) + ' минута матча и это не перерыв / не 2-й период \n'
 
-    if float(minute) > 88.0:
-        fork_exclude_text = fork_exclude_text + 'Вилка ' + str(round((1 - L) * 100, 2)) + '% исключена т.к. идет ' + str(minute) + ' минута матча \n'
+        if float(minute) > 88.0:
+            fork_exclude_text = fork_exclude_text + 'Вилка ' + str(round((1 - L) * 100, 2)) + '% исключена т.к. идет ' + str(minute) + ' минута матча \n'
 
     # Вилка живет достаточно
     long_livers = int(get_prop('fork_life_time'))
@@ -256,7 +258,7 @@ def save_plt(folder, filename, plt):
     plt.savefig(os.path.join(folder, filename))
 
 
-def go_bets(wag_ol, wag_fb, key, deff_max, vect1, vect2, sc1, sc2, created):
+def go_bets(wag_ol, wag_fb, key, deff_max, vect1, vect2, sc1, sc2, created, event_type):
     global bal1, bal2, cnt_fail, cnt_fork_success, k1, k2, total_bet, bet1, bet2, OLIMP_USER, FONBET_USER
 
     olimp_bet_type = str(key.split('@')[-2])
@@ -289,6 +291,7 @@ def go_bets(wag_ol, wag_fb, key, deff_max, vect1, vect2, sc1, sc2, created):
                     'new_bet_sum': 0,
                     'new_bet_kof': 0,
                     'sale_profit': 0,
+                    'event_type': event_type,
                     'err': 'ok'
                 },
                 'fonbet': {
@@ -304,6 +307,7 @@ def go_bets(wag_ol, wag_fb, key, deff_max, vect1, vect2, sc1, sc2, created):
                     'new_bet_sum': 0,
                     'new_bet_kof': 0,
                     'sale_profit': 0,
+                    'event_type': event_type,
                     'err': 'ok'
                 },
             }
@@ -327,7 +331,8 @@ def go_bets(wag_ol, wag_fb, key, deff_max, vect1, vect2, sc1, sc2, created):
             'sc1': sc1,
             'sc2': sc2,
             'cur_total': sc1 + sc2,
-            'side_team': '1'
+            'side_team': '1',
+            'event_type': event_type,
         }
         shared['fonbet'] = {
             'opposite': 'olimp',
@@ -340,7 +345,8 @@ def go_bets(wag_ol, wag_fb, key, deff_max, vect1, vect2, sc1, sc2, created):
             'sc2': sc2,
             'cur_total': sc1 + sc2,
             'side_team': '2',
-            'max_bet': 0
+            'max_bet': 0,
+            'event_type': event_type,
         }
         if '(' in fonbet_bet_type:
             shared['olimp']['bet_total'] = float(re.findall(r'\((.*)\)', fonbet_bet_type)[0])
@@ -777,7 +783,7 @@ if __name__ == '__main__':
                         prnt('val_json: ' + str(val_json))
 
                         info = ''
-                    if event_type == 'football':
+                    if (event_type == 'football') or (event_type == 'hockey' and str(ACC_ID) == '3'):
                         if vect1 and vect2:
                             if deff_max < 3 and k1 > 0 < k2:
                                 round_bet = int(get_prop('round_fork'))
@@ -786,11 +792,11 @@ if __name__ == '__main__':
 
                                 recalc_bets()
                                 # Проверим вилку на исключения
-                                if check_fork(key, l, k1, k2, live_fork, live_fork_total, bk1_score, bk2_score,
+                                if check_fork(key, l, k1, k2, live_fork, live_fork_total, bk1_score, bk2_score, event_type,
                                               minute, time_break_fonbet, period, name, name_rus, deff_max, is_top, info) or DEBUG:
                                     prnt(' ')
                                     prnt('Go bets: ' + key + ' ' + info)
-                                    fork_success = go_bets(val_json.get('kof_olimp'), val_json.get('kof_fonbet'), key, deff_max, vect1, vect2, sc1, sc2, created_fork)
+                                    fork_success = go_bets(val_json.get('kof_olimp'), val_json.get('kof_fonbet'), key, deff_max, vect1, vect2, sc1, sc2, created_fork, event_type)
                             elif deff_max >= 3:
                                 pass
                         else:

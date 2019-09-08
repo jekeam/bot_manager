@@ -70,6 +70,7 @@ class BetManager:
         self.total_bet = bk_container.get('bet_total')
         self.side_team = bk_container['side_team']
         self.bet_type = bk_container['bet_type']
+        self.event_type = bk_container['event_type']
         self.dop_stat = dict()
         # dynamic params
         self.cur_sc = None
@@ -672,15 +673,16 @@ class BetManager:
 
                 # CHECK FOR LOSS
                 prnt(' ')
-                prnt(self.msg.format(sys._getframe().f_code.co_name, 'CHECK FOR LOSS'))
-                if self.side_bet_half == '1' and self.cur_minute >= 43.0:
-                    err_str = 'Bet is lost: side_bet_half={} and cur_minute many 43({})'.format(self.side_bet_half, self.cur_minute)
-                    prnt(err_str)
-                    raise BetIsLost(err_str)
-                elif self.cur_minute >= 88.0:
-                    err_str = 'Bet is lost: side_bet_half={} and cur_minute many 88({})'.format(self.side_bet_half, self.cur_minute)
-                    prnt(err_str)
-                    raise BetIsLost(err_str)
+                prnt(self.msg.format(sys._getframe().f_code.co_name, 'CHECK FOR LOSS: ' + self.event_type))
+                if self.event_type == 'football':
+                    if self.side_bet_half == '1' and self.cur_minute >= 43.0:
+                        err_str = 'Bet is lost: side_bet_half={} and cur_minute many 43({})'.format(self.side_bet_half, self.cur_minute)
+                        prnt(err_str)
+                        raise BetIsLost(err_str)
+                    elif self.cur_minute >= 88.0:
+                        err_str = 'Bet is lost: side_bet_half={} and cur_minute many 88({})'.format(self.side_bet_half, self.cur_minute)
+                        prnt(err_str)
+                        raise BetIsLost(err_str)
 
                 # CHECK: SCORE CHANGED?
                 if self.cur_total != self.cur_total_new:
@@ -688,7 +690,7 @@ class BetManager:
                     prnt(self.msg.format(sys._getframe().f_code.co_name, 'SCORE CHANGED!'))
                     # strategy definition
                     if self.strat_name in ('П'):
-                        if self.cur_minute >= 80:
+                        if self.cur_minute >= 80 and self.event_type == 'football':
                             err_str = 'Strategy ' + self.strat_name + ': bet is lost, cur_minute many 80({})'.format(self.cur_minute)
                             prnt(err_str)
                             raise BetIsLost(err_str)
