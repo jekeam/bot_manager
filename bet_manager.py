@@ -255,7 +255,7 @@ class BetManager:
                     sys._getframe().f_code.co_name,
                     '2. Сумма после пересчета по общей сумме больше баланса, уменьшаем ее: {}->{}'.format(sum2, bal2)
                 ))
-                sum2, sum1 = get_sum_bets(k2, k1, bal2)
+                sum1, sum2 = get_sum_bets(k1, k2, bal2)
 
         prnt(' ')
         prnt(self.msg.format(
