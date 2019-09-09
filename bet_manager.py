@@ -345,8 +345,8 @@ class BetManager:
             try:
                 self.sign_in(shared)
                 self.wait_sign_in_opp(shared)
-
-                self.recheck(shared)
+                
+                # self.recheck(shared)
 
                 if self.created_fork == '' and 'created' in self.first_bet_in:
                     raise BetIsLost('Создалтель вилки не определен: ' + str(self.created_fork))
