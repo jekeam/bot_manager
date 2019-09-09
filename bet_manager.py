@@ -272,6 +272,7 @@ class BetManager:
             except Exception as e:
                 err_msg = 'recheck err (' + str(e.__class__.__name__) + '): ' + str(e)
                 prnt(self.msg_err.format(sys._getframe().f_code.co_name, err_msg))
+                raise BetIsLost(err_msg)
 
         prnt(self.msg.format(sys._getframe().f_code.co_name,
                              'get kof ' + self.bk_name + ': ' + str(self.val_bet_stat) + ' -> ' + str(self.cur_val_bet) + ', time req.:' + str(self.time_req)))

@@ -107,7 +107,7 @@ def get_olimp_info(id_matche, olimp_k, proxies=None):
                         bet_into[olimp_factor_short] = val_kof
 
     else:
-        raise ValueError(str(resp.get('error', {})))
+        raise BetIsLost(str(resp.get('error', {})))
     k = bet_into.get(olimp_k, 0)
     sc = bet_into.get('SCORE', '0:0').split(' ')[0]
     prnt('olimp score: ' + sc)
@@ -199,6 +199,7 @@ def get_fonbet_info(match_id, factor_id, param, bet_type=None):
                                     err_str = 'Тип ставки, например 1ТМ(2.5) - не задан: bet_type:' + bet_type
                             if err_str:
                                 prnt(err_str)
+                                raise BetIsLost(err_str)
                         k = kof.get('value', 0)
                         if kof.get('blocked'):
                             prnt('kof is blocked ' + str(kof), 'hide')
