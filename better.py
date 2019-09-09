@@ -493,9 +493,9 @@ def run_client():
 
     try:
         if 'Windows' == platform.system() or DEBUG:
-            conn = http.client.HTTPConnection(server_ip, 80, timeout=3.51)
+            conn = http.client.HTTPConnection(server_ip, 8888, timeout=3.51)
         else:
-            conn = http.client.HTTPConnection(server_ip, 80, timeout=6)
+            conn = http.client.HTTPConnection(server_ip, 8888, timeout=6)
 
         while True:
             if shutdown:
@@ -601,7 +601,7 @@ if __name__ == '__main__':
         prnt(' ')
         prnt('Long pool sec: ' + str(long_pool_wait))
         prnt('ID аккаунта: ' + str(ACC_ID))
-        prnt('IP-адрес сервера: ' + server_ip + ':80')
+        prnt('IP-адрес сервера: ' + server_ip + ':8888')
         prnt('Баланс в БК Олимп: ' + str(bal1))
         prnt('Баланс в БК Фонбет: ' + str(bal2))
 
