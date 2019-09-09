@@ -17,7 +17,7 @@ from meta_ol import ol_url_api, ol_payload, ol_headers, get_xtoken_bet
 from meta_fb import fb_payload, fb_payload_bet, get_random_str, get_dumped_payload, get_urls, get_common_url
 from meta_fb import fb_headers, get_new_bets_fonbet, payload_req, payload_coupon_sum, payload_coupon_sell, fb_payload_max_bet
 from meta_fb import payload_sell_check_result
-from utils import prnt, write_file, read_file, get_account_info, get_proxies, get_prop, get_new_sum_bets
+from utils import prnt, write_file, read_file, get_account_info, get_proxies, get_prop, get_new_sum_bets, get_sum_bets
 from fork_recheck import get_olimp_info, get_fonbet_info
 
 from exceptions import SessionNotDefined, BkOppBetError, NoMoney, BetError, SessionExpired, SaleError
@@ -237,31 +237,31 @@ class BetManager:
         if bet1 > int(get_prop('summ')):
             prnt(self.msg.format(
                 sys._getframe().f_code.co_name,
-                'Сумма после пересчета по максбету больше общей ставки, уменьшаем ее: {}->{}'.format(bet1, get_prop('summ'))
+                '0. Сумма после пересчета по максбету больше общей ставки, уменьшаем ее: {}->{}'.format(bet1, get_prop('summ'))
             ))
-            bet1 = int(get_prop('summ'))
+            sum1, sum2 = get_sum_bets(k1, k2, int(get_prop('summ')))
+            bet1 = sum1
 
             if bet1 > bal1:
                 prnt(self.msg.format(
                     sys._getframe().f_code.co_name,
-                    'Сумма после пересчета по общей сумме больше баланса, уменьшаем ее: {}->{}'.format(bet1, bal1)
+                    '1. Сумма после пересчета по общей сумме больше баланса, уменьшаем ее: {}->{}'.format(bet1, bal1)
                 ))
-                bet1 = bal1
+                sum1, sum2 = get_sum_bets(k1, k2, bal1)
+                bet1 = sum1
+
+            if sum2 > bal2:
+                prnt(self.msg.format(
+                    sys._getframe().f_code.co_name,
+                    '2. Сумма после пересчета по общей сумме больше баланса, уменьшаем ее: {}->{}'.format(sum2, bal2)
+                ))
+                sum2, sum1 = get_sum_bets(k2, k1, bal2)
 
         prnt(' ')
         prnt(self.msg.format(
             sys._getframe().f_code.co_name,
             'RECALС BY MAX-BET: {}->{}({}%)'.format(self.max_bet, bet1, get_prop('proc_by_max', '0'))
         ))
-        sum1, sum2 = get_new_sum_bets(k1, k2, bet1)
-
-        if sum1 > bal1 or sum2 > bal2:
-            if bal1 < bal2:
-                prnt(self.msg.format(sys._getframe().f_code.co_name, 'recalc bet [bal1 < bal2]'))
-                sum1, sum2 = get_new_sum_bets(k1, k2, bal1)
-            else:
-                prnt(self.msg.format(sys._getframe().f_code.co_name, 'recalc bet [bal1 > bal2]'))
-                sum2, sum1 = get_new_sum_bets(k2, k1, bal2)
 
         prnt(self.msg.format(sys._getframe().f_code.co_name, 'new sum, ' + self.bk_name + ': ' + str(sum1) + ', ' + self.bk_name_opposite + ': ' + str(sum2)))
         if sum1 > bal1 or sum2 > bal2:
