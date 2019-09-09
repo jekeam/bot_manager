@@ -1148,6 +1148,7 @@ class BetManager:
                 payload['amount'] = self.sum_sell
                 payload['session'] = self.session['session']
                 payload.update(copy.deepcopy(ol_payload))
+                payload.update({'sport_id': self.wager.get('sport_id')})
                 payload.pop('time_shift')
 
                 headers = copy.deepcopy(ol_headers)
@@ -1594,6 +1595,8 @@ class BetManager:
         req_url = ol_url_api.format('user/history')
 
         payload = copy.deepcopy(ol_payload)
+        payload.update({'sport_id': self.wager.get('sport_id')})
+        
         payload['filter'] = filter  # только не расчитанные
         payload['offset'] = offset
         payload['session'] = self.session['session']
