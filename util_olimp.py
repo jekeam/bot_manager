@@ -39,7 +39,6 @@ olimp_head = {
 olimp_data = {
     "live": 1,
     # "sport_id": 1,
-    "sport_id": 1,
     "platforma": "ANDROID1",
     "lang_id": 0,
     "time_shift": 0

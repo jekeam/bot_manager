@@ -14,13 +14,13 @@ import urllib3
 urllib3.disable_warnings()
 
 
-def get_olimp_info(id_matche, olimp_k, proxies=None):
+def get_olimp_info(id_matche, olimp_k, sport_id, proxies=None):
     prnt('get_olimp_info: id_matche=' + str(id_matche) + ';olimp_k=' + str(olimp_k) + ';proxies=' + str(proxies), 'hide')
     bet_into = {}
     olimp_data = copy.deepcopy(ol_payload)
     olimp_data.update({
-        "live": "1",
-        "sport_id": "1"
+        "live": 1,
+        "sport_id": sport_id
     })
     olimp_data.update({'id': id_matche})
 
