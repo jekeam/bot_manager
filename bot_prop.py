@@ -18,7 +18,7 @@ PY_PATH = 'python3.6'
 PY_PATH = 'python3.6'
 TOKEN = '598446286:AAEhbB2RDQ7oEe7pX2vif-IENIdIVIZ9xVk'
 ADMINS = [381868674]
-IP_SERVER = '62.109.10.57:80'
+IP_SERVER = '172.31.44.82:8888'
 
 # TEST
 # PY_PATH = 'D:\\YandexDisk\\Парсинг\\bot_manager\\venv\\Scripts\\python.exe'
