@@ -225,21 +225,48 @@ class BetManager:
                              self.bk_name + ' after wait ' + str(sec) + ' sec., get ' + event + ' in from ' + self.bk_name_opposite + ': ' + str(opp_stat)))
 
     def recalc_sum_by_maxbet(self, shared: dict):
-        cur_bet_sum = self.max_bet * int(get_prop('proc_by_max', 90)) / 100
-        if cur_bet_sum > int(get_prop('summ')):
-            cur_bet_sum = int(get_prop('summ'))
-            prnt(self.msg.format(sys._getframe().f_code.co_name, ' Сумма после пересчета по максбету больше общей ставки, уменьшаем ее: {}->{}'.format(cur_bet_sum, get_prop('summ'))))
+        self_opp_data = shared[self.bk_name_opposite].get('self', {})
+        bet1 = self.max_bet * int(get_prop('proc_by_max', 90)) / 100
+
+        bal1 = self.session.get('balance')
+        bal2 = self_opp_data.session.get('balance')
+
+        k1 = self.cur_val_bet
+        k2 = self_opp_data.cur_val_bet
+
+        if bet1 > int(get_prop('summ')):
+            prnt(self.msg.format(
+                sys._getframe().f_code.co_name,
+                'Сумма после пересчета по максбету больше общей ставки, уменьшаем ее: {}->{}'.format(bet1, get_prop('summ'))
+            ))
+            bet1 = int(get_prop('summ'))
+
+            if bet1 > bal1:
+                prnt(self.msg.format(
+                    sys._getframe().f_code.co_name,
+                    'Сумма после пересчета по общей сумме больше баланса, уменьшаем ее: {}->{}'.format(bet1, bal1)
+                ))
+                bet1 = bal1
 
         prnt(' ')
         prnt(self.msg.format(
             sys._getframe().f_code.co_name,
-            'RECALС BY MAX-BET: {}->{}({}%)'.format(self.max_bet, cur_bet_sum, get_prop('proc_by_max', '0'))
+            'RECALС BY MAX-BET: {}->{}({}%)'.format(self.max_bet, bet1, get_prop('proc_by_max', '0'))
         ))
-        # recalc sum bets
-        self_opp_data = shared[self.bk_name_opposite].get('self', {})
-        sum1, sum2 = get_new_sum_bets(self.cur_val_bet, self_opp_data.cur_val_bet, cur_bet_sum)
+        sum1, sum2 = get_new_sum_bets(k1, k2, bet1)
+
+        if sum1 > bal1 or sum2 > bal2:
+            if bal1 < bal2:
+                prnt(self.msg.format(sys._getframe().f_code.co_name, 'recalc bet [bal1 < bal2]'))
+                sum1, sum2 = get_new_sum_bets(k1, k2, bal1)
+            else:
+                prnt(self.msg.format(sys._getframe().f_code.co_name, 'recalc bet [bal1 > bal2]'))
+                sum2, sum1 = get_new_sum_bets(k2, k1, bal2)
+
         prnt(self.msg.format(sys._getframe().f_code.co_name, 'new sum, ' + self.bk_name + ': ' + str(sum1) + ', ' + self.bk_name_opposite + ': ' + str(sum2)))
-        if sum1 < self.min_bet or sum2 < self.min_bet:
+        if sum1 > bal1 or sum2 > bal2:
+            raise BetIsLost('Одна из ставок больше баланса: {}>{}, {}>{}' + str(sum1, bal1, sum2, bal2))
+        elif sum1 < self.min_bet or sum2 < self.min_bet:
             raise BetIsLost('Сумма одной из ставок после пересчета меньше min_bet: ' + str(self.min_bet))
         elif sum1 < 30 or sum2 < 30:
             raise BetIsLost('Сумма одной из ставок после пересчета меньше 30 рублей')
@@ -346,7 +373,7 @@ class BetManager:
             try:
                 self.sign_in(shared)
                 self.wait_sign_in_opp(shared)
-                
+
                 self.recheck(shared)
 
                 if self.created_fork == '' and 'created' in self.first_bet_in:
@@ -1594,7 +1621,7 @@ class BetManager:
         req_url = ol_url_api.format('user/history')
 
         payload = copy.deepcopy(ol_payload)
-        
+
         payload['filter'] = filter  # только не расчитанные
         payload['offset'] = offset
         payload['session'] = self.session['session']
