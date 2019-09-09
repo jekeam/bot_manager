@@ -346,7 +346,7 @@ class BetManager:
                 self.sign_in(shared)
                 self.wait_sign_in_opp(shared)
                 
-                # self.recheck(shared)
+                self.recheck(shared)
 
                 if self.created_fork == '' and 'created' in self.first_bet_in:
                     raise BetIsLost('Создалтель вилки не определен: ' + str(self.created_fork))
@@ -980,13 +980,13 @@ class BetManager:
 
         elif self.bk_name == 'fonbet':
 
-            # bet_place
+            # # bet_place
             # if self.vector == 'UP':
-            sleep(4)
-            try:
-                1 / 0
-            except Exception as e:
-                raise BetError(e)
+            #     sleep(4)
+            #     try:
+            #         1 / 0
+            #     except Exception as e:
+            #         raise BetError(e)
 
             if not self.server_fb:
                 self.server_fb = get_urls(self.mirror, self.proxies)
