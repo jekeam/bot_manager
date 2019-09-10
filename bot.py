@@ -422,7 +422,7 @@ def matches(update, context):
     except Exception as e:
         update.message.reply_text(text='Ошибка при запросе кол-ва TOP матчей: ' + str(e))
 
-    msg = 'Кол-во матчей: ' + len(cnt) +' \n'
+    msg = 'Кол-во матчей: ' + str(len(cnt)) +' \n'
     matches_dict = {}
     for match in cnt:
         match_type = match[2][0:1].upper() + match[2][1:]
