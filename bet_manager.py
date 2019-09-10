@@ -290,14 +290,14 @@ class BetManager:
                 err_msg = 'recheck err (' + str(e.__class__.__name__) + '): ' + str(e)
                 raise BetIsLost(err_msg)
             except Exception as e:
-                err_msg = 'recheck err (' + str(e.__class__.__name__) + '): ' + str(e)
+                err_msg = self.bk_name + ': recheck err (' + str(e.__class__.__name__) + '): ' + str(e)
                 prnt(self.msg_err.format(sys._getframe().f_code.co_name, err_msg))
 
         if self.bk_name == 'olimp':
             try:
                 self.cur_val_bet, self.cur_sc, self.time_req = get_olimp_info(match_id, self.bet_type, self.wager.get('sport_id'), proxies=self.proxies)
             except Exception as e:
-                err_msg = 'recheck err (' + str(e.__class__.__name__) + '): ' + str(e)
+                err_msg = self.bk_name + ': recheck err (' + str(e.__class__.__name__) + '): ' + str(e)
                 prnt(self.msg_err.format(sys._getframe().f_code.co_name, err_msg))
                 raise BetIsLost(err_msg)
 
