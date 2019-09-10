@@ -425,8 +425,8 @@ def matches(update, context):
     msg = 'Кол-во матчей: ' + len(cnt) +' \n'
     matches_dict = {}
     for match in cnt:
-        match_type = match[2]
-        is_top = 1 if match[0] in top or match[1] in top else 0
+        match_type = match[2][0:1].upper() + match[2][1:]
+        is_top = 1 if int(match[0]) in top or int(match[1]) in top else 0
         matches_dict[match_type] = {
             'cnt' : matches_dict.get(match_type, {}).get('cnt', 0) + 1, 
             'top': matches_dict.get(match_type, {}).get('top', 0) + is_top
