@@ -408,21 +408,21 @@ def close_prop(update, context):
 
 def matches(update, context):
     msg = ''
-    cnt = '0'
+    cnt = []
     try:
         resp = requests.get('http://' + bot_prop.IP_SERVER + '/get_cnt_matches', timeout=5)
         cnt = ast.literal_eval(resp.text)
     except Exception as e:
         update.message.reply_text(text='Ошибка при запросе кол-ва матчей: ' + str(e))
 
-    top = '0'
+    top = []
     try:
         resp_t = requests.get('http://' + bot_prop.IP_SERVER + '/get_cnt_top_matches', timeout=5)
         top = ast.literal_eval(resp_t.text)
     except Exception as e:
         update.message.reply_text(text='Ошибка при запросе кол-ва TOP матчей: ' + str(e))
 
-    msg = 'Кол-во матчей:\n'
+    msg = 'Кол-во матчей: ' + len(cnt) +' \n'
     matches_dict = {}
     for match in cnt:
         match_type = match[2]
@@ -432,9 +432,8 @@ def matches(update, context):
             'top': matches_dict.get(match_type, {}).get('top', 0) + is_top
         }
         
-    cnt_top = 0
     for match_type, match_cnt in matches_dict.items():
-        msg = msg + match_type + ': ' +str(match_cnt.get('cnt')) + ', top: ' + str(str(match_cnt.get('top'))) + '\n'
+        msg = msg + match_type + ': ' +str(match_cnt.get('cnt')) + ', top: ' + str(match_cnt.get('top')) + '\n'
     msg = msg.strip()
 
     update.message.reply_text(text=msg)
