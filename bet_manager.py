@@ -234,7 +234,7 @@ class BetManager:
         k2 = self_opp_data.cur_val_bet
         
         sum_bet_by_max_bet = self.max_bet * (int(get_prop('proc_by_max', 90)) / 100)
-        
+        prnt(self.msg.format(sys._getframe().f_code.co_name, 'RECALC_SUM_BY_MAXBET: sum_bet_by_max_bet:{}({}%)->{}'.format(self.max_bet, get_prop('proc_by_max', '90'), sum_bet_by_max_bet)))
         prnt(self.msg.format(sys._getframe().f_code.co_name, 'RECALC_SUM_BY_MAXBET: bal1:{}, bal2:{}, k1:{}, k2:{}, sum_bet_by_max_bet:{}'.format(bal1, bal2, k1, k2, sum_bet_by_max_bet)))
         sum1, sum2 = get_new_sum_bets(k1, k2, sum_bet_by_max_bet)
         
