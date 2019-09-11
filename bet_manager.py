@@ -247,8 +247,8 @@ class BetManager:
             sum1, sum2 = get_sum_bets(k1, k2, bal1)
             
         if sum2 >= bal2:
-            prnt(self.msg.format(sys._getframe().f_code.co_name, 'Сумма ставки 2й бк после пересчета по максбету, больше баланса 2й бк, уменьшаем ее: {}->{}'.format(sum1, bal1)))
-            sum1, sum2 = get_sum_bets(k1, k2, bal1)
+            prnt(self.msg.format(sys._getframe().f_code.co_name, 'Сумма ставки 2й бк после пересчета по максбету, больше баланса 2й бк, уменьшаем ее: {}->{}'.format(sum2, bal2)))
+            sum1, sum2 = get_sum_bets(k1, k2, bal2)
     
         if sum1 > bal1 or sum2 > bal2:
             raise BetIsLost('Одна из ставок больше баланса: {}>{}, {}>{}' + str(sum1, bal1, sum2, bal2))
