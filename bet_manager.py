@@ -360,8 +360,6 @@ class BetManager:
                 self.sign_in(shared)
                 self.wait_sign_in_opp(shared)
 
-                self.recheck(shared)
-
                 if self.created_fork == '' and 'created' in self.first_bet_in:
                     raise BetIsLost('Создалтель вилки не определен: ' + str(self.created_fork))
 
@@ -409,6 +407,7 @@ class BetManager:
                 if self.first_bet_in == 'parallel':
                     pass
 
+                self.recheck(shared)
                 self.bet_place(shared)
                 bet_done(shared)
             except BetError as e:
