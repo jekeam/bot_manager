@@ -571,6 +571,8 @@ last_fork_time = 0
 wait_before_start = 15
 long_pool_wait = randint(30, 60)
 
+msg_str_last = ''
+
 # wag_fb:{'event': '12797479', 'factor': '921', 'param': '', 'score': '0:0', 'value': '2.35'}
 # wag_fb:{'apid': '1144260386:45874030:1:3:-9999:3:NULL:NULL:1', 'factor': '1.66', 'sport_id': 1, 'event': '45874030'}
 
@@ -678,17 +680,21 @@ if __name__ == '__main__':
                 bal2 = FonbetBot(FONBET_USER).get_balance()  # Баланс в БК2
 
             # Показываем каждые 30 минут
-            cur_min = int(datetime.datetime.now().strftime('%M'))
-            ref_min = 30
-            if cur_min % ref_min == 0 and not printed:
-                prnt(' ')
-                msg_str = str(ACC_ID) + ': ' + 'Проставлено вилок: ' + str(len(cnt_fork_success)) + '\n' + 'Сделано выкупов: ' + str(cnt_fail) + '\n'
-                prnt(msg_str)
-                printed = True
-
+            # cur_min = int(datetime.datetime.now().strftime('%M'))
+            # ref_min = 30
+            # if cur_min % ref_min == 0 and not printed:
+            #     prnt(' ')
+            #     msg_str = str(ACC_ID) + ': ' + 'Проставлено вилок: ' + str(len(cnt_fork_success)) + '\n' + 'Сделано выкупов: ' + str(cnt_fail) + '\n'
+            #     prnt(msg_str)
+            #     printed = True
+            #     send_message_bot(USER_ID, msg_str)
+            # elif cur_min % ref_min != 0 and printed:
+            #     printed = False
+            
+            msg_str = str(ACC_ID) + ': ' + 'Проставлено вилок: ' + str(len(cnt_fork_success)) + '\n' + 'Сделано выкупов: ' + str(cnt_fail) + '\n'
+            if msg_str_last != msg_str:
+                msg_str_last = msg_str
                 send_message_bot(USER_ID, msg_str)
-            elif cur_min % ref_min != 0 and printed:
-                printed = False
 
             if server_forks:
                 for key, val_json in server_forks.items():
