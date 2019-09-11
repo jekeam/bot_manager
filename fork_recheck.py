@@ -52,7 +52,6 @@ def get_olimp_info(id_matche, olimp_k, sport_id, proxies=None):
         if str(stake.get('ms', '')) == '1':
             is_block = 'BLOCKED'  # 1 - block, 2 - available
             prnt('Олимп: ставки приостановлены: http://olimp.com/app/event/live/1/' + str(stake.get('id', '')))
-            prnt('olimp kof is blocked: ' + str(stake))
         bet_into['BLOCKED'] = is_block
 
         minutes = "-1"
