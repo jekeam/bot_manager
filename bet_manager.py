@@ -407,13 +407,13 @@ class BetManager:
                         self.wait_maxbet_check(shared)
                         self.opposite_stat_get(shared)
 
+                self.recheck(shared)
                 if (self.first_bet_in == 'auto' and self.vector == 'UP') or self.bk_name_opposite == self.first_bet_in:
                     self.opposite_stat_wait(shared)
                     self.opposite_stat_get(shared)
                 if self.first_bet_in == 'parallel':
                     pass
 
-                self.recheck(shared)
                 self.bet_place(shared)
                 bet_done(shared)
             except BetError as e:
