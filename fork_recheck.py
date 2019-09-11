@@ -48,6 +48,7 @@ def get_olimp_info(id_matche, olimp_k, sport_id, proxies=None):
         bet_into['ID'] = id_matche
 
         is_block = ''
+        prnt('olimp kof is blocked: ' + str(stake.get('ms', 'None')))
         if str(stake.get('ms', '')) == '1':
             is_block = 'BLOCKED'  # 1 - block, 2 - available
             prnt('Олимп: ставки приостановлены: http://olimp.com/app/event/live/1/' + str(stake.get('id', '')))
@@ -139,6 +140,7 @@ def get_fonbet_info(match_id, factor_id, param, bet_type=None):
     result = res.get('result')
 
     if result == "error":
+        prnt('fonbet err : ' + str(res))
         return 0, '0:0', round(resp.elapsed.total_seconds(), 2), {}
 
     for event in res.get("events"):
@@ -203,6 +205,7 @@ def get_fonbet_info(match_id, factor_id, param, bet_type=None):
                                 prnt(err_str)
                                 raise BetIsLost(err_str)
                         k = kof.get('value', 0)
+                        prnt('fonbet kof is blocked ' + str(kof.get('blocked', 'None')))
                         if kof.get('blocked'):
                             prnt('fonbet kof is blocked ' + str(kof))
                             k = 0
