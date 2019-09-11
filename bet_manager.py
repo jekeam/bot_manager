@@ -225,56 +225,40 @@ class BetManager:
                              self.bk_name + ' after wait ' + str(sec) + ' sec., get ' + event + ' in from ' + self.bk_name_opposite + ': ' + str(opp_stat)))
 
     def recalc_sum_by_maxbet(self, shared: dict):
-        sum1 = None
-        sum2 = None
         self_opp_data = shared[self.bk_name_opposite].get('self', {})
-        bet1 = self.max_bet * int(get_prop('proc_by_max', 90)) / 100
-
+        
         bal1 = self.session.get('balance')
         bal2 = self_opp_data.session.get('balance')
-
+        
         k1 = self.cur_val_bet
         k2 = self_opp_data.cur_val_bet
-
-        if bet1 > int(get_prop('summ')):
-            prnt(self.msg.format(
-                sys._getframe().f_code.co_name,
-                '0. Сумма после пересчета по максбету больше общей ставки, уменьшаем ее: {}->{}'.format(bet1, get_prop('summ'))
-            ))
+        
+        sum_bet_by_max_bet = self.max_bet * (int(get_prop('proc_by_max', 90)) / 100)
+        
+        prnt(self.msg.format(sys._getframe().f_code.co_name, 'RECALC_SUM_BY_MAXBET: bal1:{}, bal2:{}, k1:{}, k2:{}, sum_bet_by_max_bet:{}'.format(bal1, bal2, k1, k2, sum_bet_by_max_bet)))
+        sum1, sum2 = get_sum_bets(k1, k2, sum_bet_by_max_bet)
+        
+        if sum1 >= int(get_prop('summ')):
+            prnt(self.msg.format(sys._getframe().f_code.co_name, '1. Сумма после пересчета по максбету, больше общей ставки, уменьшаем ее: {}->{}'.format(sum1, int(get_prop('summ')))))
             sum1, sum2 = get_sum_bets(k1, k2, int(get_prop('summ')))
-            bet1 = sum1
-
-            if bet1 > bal1:
-                prnt(self.msg.format(
-                    sys._getframe().f_code.co_name,
-                    '1. Сумма после пересчета по общей сумме больше баланса, уменьшаем ее: {}->{}'.format(bet1, bal1)
-                ))
-                sum1, sum2 = get_sum_bets(k1, k2, bal1)
-                bet1 = sum1
-
-            if sum2 > bal2:
-                prnt(self.msg.format(
-                    sys._getframe().f_code.co_name,
-                    '2. Сумма после пересчета по общей сумме больше баланса, уменьшаем ее: {}->{}'.format(sum2, bal2)
-                ))
-                sum1, sum2 = get_sum_bets(k1, k2, bal2)
-
-        if sum1 is not None and sum2 is not None:
-            prnt(' ')
-            prnt(self.msg.format(
-                sys._getframe().f_code.co_name,
-                'RECALС BY MAX-BET: {}->{}({}%)'.format(self.max_bet, bet1, get_prop('proc_by_max', '0'))
-            ))
-            prnt(self.msg.format(sys._getframe().f_code.co_name, 'new sum, ' + self.bk_name + ': ' + str(sum1) + ', ' + self.bk_name_opposite + ': ' + str(sum2)))
-            if sum1 > bal1 or sum2 > bal2:
-                raise BetIsLost('Одна из ставок больше баланса: {}>{}, {}>{}' + str(sum1, bal1, sum2, bal2))
-            elif sum1 < self.min_bet or sum2 < self.min_bet:
-                raise BetIsLost('Сумма одной из ставок после пересчета меньше min_bet: ' + str(self.min_bet))
-            elif sum1 < 30 or sum2 < 30:
-                raise BetIsLost('Сумма одной из ставок после пересчета меньше 30 рублей')
-            else:
-                self.sum_bet, self_opp_data.sum_bet = sum1, sum2
-                self.sum_bet_stat, self_opp_data.sum_bet_stat = sum1, sum2
+            
+        if sum1 >= bal1:
+            prnt(self.msg.format(sys._getframe().f_code.co_name, '1. Сумма ставки 1й бк после пересчета по максбету, больше баланса 1й бк, уменьшаем ее: {}->{}'.format(sum1, bal1)))
+            sum1, sum2 = get_sum_bets(k1, k2, bal1)
+            
+        if sum2 >= bal2:
+            prnt(self.msg.format(sys._getframe().f_code.co_name, '1. Сумма ставки 2й бк после пересчета по максбету, больше баланса 2й бк, уменьшаем ее: {}->{}'.format(sum1, bal1)))
+            sum1, sum2 = get_sum_bets(k1, k2, bal1)
+    
+        if sum1 > bal1 or sum2 > bal2:
+            raise BetIsLost('Одна из ставок больше баланса: {}>{}, {}>{}' + str(sum1, bal1, sum2, bal2))
+        elif sum1 < self.min_bet:
+            raise BetIsLost('Сумма после пересчета меньше min_bet: {} < {}'.format(sum1, self.min_bet))
+        elif sum1 < 30 or sum2 < 30:
+            raise BetIsLost('Сумма одной из ставок после пересчета меньше 30 рублей, {}, {}'.format(sum1, sum2))
+        else:
+            self.sum_bet, self_opp_data.sum_bet = sum1, sum2
+            self.sum_bet_stat, self_opp_data.sum_bet_stat = sum1, sum2
 
     def recheck(self, shared):
         prnt(' ')
