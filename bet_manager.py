@@ -226,30 +226,33 @@ class BetManager:
 
     def recalc_sum_by_maxbet(self, shared: dict):
         self_opp_data = shared[self.bk_name_opposite].get('self', {})
-        
+
         bal1 = self.session.get('balance')
         bal2 = self_opp_data.session.get('balance')
-        
+
         k1 = self.cur_val_bet
         k2 = self_opp_data.cur_val_bet
-        
+
         sum_bet_by_max_bet = self.max_bet * (int(get_prop('proc_by_max', 90)) / 100)
-        prnt(self.msg.format(sys._getframe().f_code.co_name, 'RECALC_SUM_BY_MAXBET: sum_bet_by_max_bet:{}({}%)->{}'.format(self.max_bet, get_prop('proc_by_max', '90'), sum_bet_by_max_bet)))
-        prnt(self.msg.format(sys._getframe().f_code.co_name, 'RECALC_SUM_BY_MAXBET: bal1:{}, bal2:{}, k1:{}, k2:{}, sum_bet_by_max_bet:{}'.format(bal1, bal2, k1, k2, sum_bet_by_max_bet)))
+        prnt(self.msg.format(sys._getframe().f_code.co_name,
+                             'RECALC_SUM_BY_MAXBET: sum_bet_by_max_bet:{}({}%)->{}'.format(self.max_bet, get_prop('proc_by_max', '90'), sum_bet_by_max_bet)))
+        prnt(self.msg.format(sys._getframe().f_code.co_name,
+                             'RECALC_SUM_BY_MAXBET: bal1:{}, bal2:{}, k1:{}, k2:{}, sum_bet_by_max_bet:{}'.format(bal1, bal2, k1, k2, sum_bet_by_max_bet)))
         sum1, sum2 = get_new_sum_bets(k1, k2, sum_bet_by_max_bet)
-        
+
         if (sum1 + sum2) >= int(get_prop('summ')):
-            prnt(self.msg.format(sys._getframe().f_code.co_name, 'Сумма после пересчета по максбету, больше общей ставки, уменьшаем ее: {}->{}'.format((sum1 + sum2), int(get_prop('summ')))))
+            prnt(self.msg.format(sys._getframe().f_code.co_name,
+                                 'Сумма после пересчета по максбету, больше общей ставки, уменьшаем ее: {}->{}'.format((sum1 + sum2), int(get_prop('summ')))))
             sum1, sum2 = get_sum_bets(k1, k2, int(get_prop('summ')))
-            
+
         if sum1 >= bal1:
             prnt(self.msg.format(sys._getframe().f_code.co_name, 'Сумма ставки 1й бк после пересчета по максбету, больше баланса 1й бк, уменьшаем ее: {}->{}'.format(sum1, bal1)))
             sum1, sum2 = get_new_sum_bets(k1, k2, bal1)
-            
+
         if sum2 >= bal2:
             prnt(self.msg.format(sys._getframe().f_code.co_name, 'Сумма ставки 2й бк после пересчета по максбету, больше баланса 2й бк, уменьшаем ее: {}->{}'.format(sum2, bal2)))
             sum2, sum1 = get_new_sum_bets(k2, k1, bal2)
-    
+
         if sum1 > bal1 or sum2 > bal2:
             raise BetIsLost('Одна из ставок больше баланса: {}>{}, {}>{}' + str(sum1, bal1, sum2, bal2))
         elif sum1 < self.min_bet:
@@ -278,6 +281,8 @@ class BetManager:
             except Exception as e:
                 err_msg = self.bk_name + ': recheck err (' + str(e.__class__.__name__) + '): ' + str(e)
                 prnt(self.msg_err.format(sys._getframe().f_code.co_name, err_msg))
+            finally:
+                shared[self.bk_name + '_recheck'] = 'done'
 
         if self.bk_name == 'olimp':
             try:
@@ -286,11 +291,12 @@ class BetManager:
                 err_msg = self.bk_name + ': recheck err (' + str(e.__class__.__name__) + '): ' + str(e)
                 prnt(self.msg_err.format(sys._getframe().f_code.co_name, err_msg))
                 raise BetIsLost(err_msg)
+            finally:
+                shared[self.bk_name + '_recheck'] = 'done'
 
         prnt(self.msg.format(sys._getframe().f_code.co_name,
                              'get kof ' + self.bk_name + ': ' + str(self.val_bet_stat) + ' -> ' + str(self.cur_val_bet) + ', time req.:' + str(self.time_req)))
 
-        shared[self.bk_name + '_recheck'] = 'done'
         self.opposite_wait(shared, 'recheck')
 
         opp_cur_val_bet = shared[self.bk_name_opposite].get('self', {}).cur_val_bet
@@ -423,7 +429,6 @@ class BetManager:
             except BkOppBetError as e:
                 raise BkOppBetError(e)
             except (BetIsLost, NoMoney, SessionExpired, Exception) as e:
-                shared[self.bk_name + '_recheck'] = 'done'
                 exc_type, exc_value, exc_traceback = sys.exc_info()
                 err_msg = 'Ошибка: ' + str(e.__class__.__name__) + ' - ' + str(e) + '. ' + str(repr(traceback.format_exception(exc_type, exc_value, exc_traceback)))
                 shared[self.bk_name + '_err'] = err_msg
