@@ -239,15 +239,15 @@ class BetManager:
         sum1, sum2 = get_sum_bets(k1, k2, sum_bet_by_max_bet)
         
         if sum1 >= int(get_prop('summ')):
-            prnt(self.msg.format(sys._getframe().f_code.co_name, '1. Сумма после пересчета по максбету, больше общей ставки, уменьшаем ее: {}->{}'.format(sum1, int(get_prop('summ')))))
+            prnt(self.msg.format(sys._getframe().f_code.co_name, 'Сумма после пересчета по максбету, больше общей ставки, уменьшаем ее: {}->{}'.format(sum1, int(get_prop('summ')))))
             sum1, sum2 = get_sum_bets(k1, k2, int(get_prop('summ')))
             
         if sum1 >= bal1:
-            prnt(self.msg.format(sys._getframe().f_code.co_name, '1. Сумма ставки 1й бк после пересчета по максбету, больше баланса 1й бк, уменьшаем ее: {}->{}'.format(sum1, bal1)))
+            prnt(self.msg.format(sys._getframe().f_code.co_name, 'Сумма ставки 1й бк после пересчета по максбету, больше баланса 1й бк, уменьшаем ее: {}->{}'.format(sum1, bal1)))
             sum1, sum2 = get_sum_bets(k1, k2, bal1)
             
         if sum2 >= bal2:
-            prnt(self.msg.format(sys._getframe().f_code.co_name, '1. Сумма ставки 2й бк после пересчета по максбету, больше баланса 2й бк, уменьшаем ее: {}->{}'.format(sum1, bal1)))
+            prnt(self.msg.format(sys._getframe().f_code.co_name, 'Сумма ставки 2й бк после пересчета по максбету, больше баланса 2й бк, уменьшаем ее: {}->{}'.format(sum1, bal1)))
             sum1, sum2 = get_sum_bets(k1, k2, bal1)
     
         if sum1 > bal1 or sum2 > bal2:
