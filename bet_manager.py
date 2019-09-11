@@ -236,19 +236,19 @@ class BetManager:
         sum_bet_by_max_bet = self.max_bet * (int(get_prop('proc_by_max', 90)) / 100)
         
         prnt(self.msg.format(sys._getframe().f_code.co_name, 'RECALC_SUM_BY_MAXBET: bal1:{}, bal2:{}, k1:{}, k2:{}, sum_bet_by_max_bet:{}'.format(bal1, bal2, k1, k2, sum_bet_by_max_bet)))
-        sum1, sum2 = get_sum_bets(k1, k2, sum_bet_by_max_bet)
+        sum1, sum2 = get_new_sum_bets(k1, k2, sum_bet_by_max_bet)
         
-        if sum1 >= int(get_prop('summ')):
-            prnt(self.msg.format(sys._getframe().f_code.co_name, 'Сумма после пересчета по максбету, больше общей ставки, уменьшаем ее: {}->{}'.format(sum1, int(get_prop('summ')))))
+        if (sum1 + sum2) >= int(get_prop('summ')):
+            prnt(self.msg.format(sys._getframe().f_code.co_name, 'Сумма после пересчета по максбету, больше общей ставки, уменьшаем ее: {}->{}'.format((sum1 + sum2), int(get_prop('summ')))))
             sum1, sum2 = get_sum_bets(k1, k2, int(get_prop('summ')))
             
         if sum1 >= bal1:
             prnt(self.msg.format(sys._getframe().f_code.co_name, 'Сумма ставки 1й бк после пересчета по максбету, больше баланса 1й бк, уменьшаем ее: {}->{}'.format(sum1, bal1)))
-            sum1, sum2 = get_sum_bets(k1, k2, bal1)
+            sum1, sum2 = get_new_sum_bets(k1, k2, bal1)
             
         if sum2 >= bal2:
             prnt(self.msg.format(sys._getframe().f_code.co_name, 'Сумма ставки 2й бк после пересчета по максбету, больше баланса 2й бк, уменьшаем ее: {}->{}'.format(sum2, bal2)))
-            sum1, sum2 = get_sum_bets(k1, k2, bal2)
+            sum2, sum1 = get_new_sum_bets(k2, k1, bal2)
     
         if sum1 > bal1 or sum2 > bal2:
             raise BetIsLost('Одна из ставок больше баланса: {}>{}, {}>{}' + str(sum1, bal1, sum2, bal2))
