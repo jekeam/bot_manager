@@ -691,7 +691,7 @@ if __name__ == '__main__':
             # elif cur_min % ref_min != 0 and printed:
             #     printed = False
             
-            msg_str = str(ACC_ID) + ': ' + 'Проставлено вилок: ' + str(len(cnt_fork_success)) + '\n' + 'Сделано выкупов: ' + str(cnt_fail) + '\n'
+            msg_str = str(ACC_ID) + ': ' + 'Проставлено вилок: ' + str(len(cnt_fork_success)) + '\n' + 'Сделано выкупов: ' + str(cnt_fail)
             if msg_str_last != msg_str:
                 msg_str_last = msg_str
                 send_message_bot(USER_ID, msg_str)
