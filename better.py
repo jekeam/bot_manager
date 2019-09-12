@@ -679,7 +679,7 @@ if __name__ == '__main__':
                 bal1 = OlimpBot(OLIMP_USER).get_balance()  # Баланс в БК1
                 bal2 = FonbetBot(FONBET_USER).get_balance()  # Баланс в БК2
             
-            if len(cnt_fork_success) > 0 and str(cnt_fail) > 0:
+            if len(cnt_fork_success) > 0 and cnt_fail > 0:
                 msg_str = str(ACC_ID) + ': ' + 'Проставлено вилок: ' + str(len(cnt_fork_success)) + '\n' + 'Сделано выкупов: ' + str(cnt_fail)
                 if msg_str_last != msg_str:
                     msg_str_last = msg_str
