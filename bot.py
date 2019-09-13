@@ -241,9 +241,9 @@ def botlist(update, context, edit=False):
 
     acc_list = None
     if str(update.message.chat.id) in ['381868674', '33847743']:
-        acc_list = Account.select().order_by(Account.id)
+        acc_list = Account.select().where((Account.work_stat in ('active','inactive'))).order_by(Account.id)
     else:
-        acc_list = Account.select().where(Account.user == user.id).order_by(Account.id)
+        acc_list = Account.select().where((Account.user == user.id) & (Account.work_stat in ('active','inactive'))).order_by(Account.id)
 
     for acc in acc_list:
 
