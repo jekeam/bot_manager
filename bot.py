@@ -338,6 +338,8 @@ def button(update, context):
                 if acc_info.get().date_end:
                     if datetime.datetime.fromtimestamp(acc_info.get().date_end) < datetime.datetime.now():
                         update.callback_query.answer(show_alert=True, text="Аккаунт не активен")
+                    elif acc_info.get().status == 'active':
+                        prnt_acc_stat()
                 elif acc_info.get().status == 'active':
                     prnt_acc_stat()
                 else:
