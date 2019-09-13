@@ -267,7 +267,7 @@ def botlist(update, context, edit=False):
             if date_end < datetime.datetime.now() :
                 work_stat = work_stat_inactive
                 
-        if str(update.message.chat.id) in ['381868674', '33847743'] and str(acc.acc_id) in ['323214669']:
+        if str(update.message.chat.id) in ['381868674', '33847743'] and str(acc.id) in ['323214669']:
             work_stat = work_stat + emojize(':dollar:', use_aliases=True)
             
         keyboard.append([InlineKeyboardButton(text=str(acc.id) + ': ' + work_stat, callback_data=acc.key)])
