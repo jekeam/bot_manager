@@ -1416,6 +1416,7 @@ class BetManager:
                         substr = err_msg.replace(' ', '').replace('.', '').replace(',', '')
                         self.min_bet = int(re.search('(\d{1,})(-)(\d{1,})', substr).group(1))
                         self.max_bet = int(re.search('(\d{1,})(-)(\d{1,})', substr).group(3))
+                        prnt(self.msg.format(sys._getframe().f_code.co_name, 'min_bet={}, max_bet={}' + str(self.min_bet, self.max_bet)))
                         replay_bet(str(err_code))
                     except AttributeError as e:
                         prnt(self.msg.format(sys._getframe().f_code.co_name, str(e) + ': ' + err_msg))
@@ -1432,6 +1433,7 @@ class BetManager:
                 if 'Превышена cуммарная ставка для события' in err_msg:
                     try:
                         self.max_bet = int(re.sub(r'[^\d]', '', re.search('=(.+?)руб', err_msg).group(1)))
+                        prnt(self.msg.format(sys._getframe().f_code.co_name, 'max_bet=' + str(self.max_bet)))
                         replay_bet(str(err_code))
                     except AttributeError as e:
                         prnt(self.msg.format(sys._getframe().f_code.co_name, str(e) + ': ' + err_msg))
