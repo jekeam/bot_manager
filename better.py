@@ -571,7 +571,8 @@ last_fork_time = 0
 wait_before_start = 15
 long_pool_wait = randint(30, 60)
 
-msg_str_last = ''
+cnt_fork_success_old = 0
+cnt_fork_fail_old = 0
 
 # wag_fb:{'event': '12797479', 'factor': '921', 'param': '', 'score': '0:0', 'value': '2.35'}
 # wag_fb:{'apid': '1144260386:45874030:1:3:-9999:3:NULL:NULL:1', 'factor': '1.66', 'sport_id': 1, 'event': '45874030'}
@@ -583,7 +584,7 @@ if __name__ == '__main__':
 
         time_get_balance = datetime.datetime.now()
         time_live = datetime.datetime.now()
-        
+
         bk1_name = OlimpBot(OLIMP_USER).get_bk_name()
         bk2_name = FonbetBot(OLIMP_USER).get_bk_name()
 
@@ -675,21 +676,34 @@ if __name__ == '__main__':
                 time_get_balance = datetime.datetime.now()
                 bal1 = OlimpBot(OLIMP_USER).get_balance()  # Баланс в БК1
                 bal2 = FonbetBot(FONBET_USER).get_balance()  # Баланс в БК2
-            
-            if len(cnt_fork_success) > 0 or cnt_fail > 0:
-                msg_str = str(ACC_ID) + ': ' + 'Проставлено вилок: ' + str(len(cnt_fork_success)) + '\n' + 'Сделано выкупов: ' + str(cnt_fail)
-                if msg_str_last != msg_str:
-                    msg_str_last = msg_str
-                    send_message_bot(USER_ID, msg_str, ADMINS)
-            
-            one_proc = (bal1 + bal2)/100
-            if (bal1/one_proc) < 10 or (bal2/one_proc) < 10:
+
+            msg_str = str(ACC_ID) + ': '
+            msg_push = False
+            if len(cnt_fork_success) != cnt_fork_success_old:
+                cnt_fork_success_old = len(cnt_fork_success)
+                msg_str = msg_str + 'Проставлено вилок: {}->{}'.format(cnt_fork_success_old, len(cnt_fork_success)) + '\n'
+                msg_str = msg_str + 'Сделано выкупов: {}'.format(cnt_fail) + '\n'
+                msg_push = True
+            if cnt_fork_fail_old != cnt_fail:
+                cnt_fork_fail_old = cnt_fail
+                msg_str = msg_str + 'Проставлено вилок: {}'.format(len(cnt_fork_success)) + '\n'
+                msg_str = msg_str + 'Сделано выкупов: {}->{}'.format(cnt_fork_fail_old, cnt_fail) + '\n'
+                msg_push = True
+            if msg_push:
+                msg_push = False
+                send_message_bot(USER_ID, msg_str.strip(), ADMINS)
+
+            one_proc = (bal1 + bal2) / 100
+            if (bal1 / one_proc) < 10 or (bal2 / one_proc) < 10:
                 if len(cnt_fork_success) == 0 and cnt_fail == 0:
-                    raise ValueError('аккаунт остановлен: денег в одной из БК не достаточно для работы, просьба выровнять балансы.\n' + bk1_name + ': ' + str(bal1) + '\n' + bk2_name + ': ' + str(bal2))
+                    raise ValueError(
+                        'аккаунт остановлен: денег в одной из БК не достаточно для работы, просьба выровнять балансы.\n' + bk1_name + ': ' + str(bal1) + '\n' + bk2_name + ': ' + str(
+                            bal2))
                 else:
                     # Прошло больше 2ч., а балансы не выровнялись, иду на выгрзку
                     if (int(time.time()) - last_fork_time) > 7200:
-                        raise Shutdown('аккаунт остановлен: денег в одной из БК не достаточно для работы, просьба выровнять балансы.\n' + bk1_name + ': ' + str(bal1) + '\n' + bk2_name + ': ' + str(bal2))
+                        raise Shutdown('аккаунт остановлен: денег в одной из БК не достаточно для работы, просьба выровнять балансы.\n' + bk1_name + ': ' + str(
+                            bal1) + '\n' + bk2_name + ': ' + str(bal2))
 
             if server_forks:
                 for key, val_json in server_forks.items():
@@ -784,7 +798,8 @@ if __name__ == '__main__':
                         prnt('val_json: ' + str(val_json))
 
                         info = ''
-                    if (event_type == 'football' and get_prop('test_oth_sport', 'выкл') == 'выкл') or (event_type in ('hockey', 'football') and get_prop('test_oth_sport', 'выкл') == 'вкл'):
+                    if (event_type == 'football' and get_prop('test_oth_sport', 'выкл') == 'выкл') or (
+                            event_type in ('hockey', 'football') and get_prop('test_oth_sport', 'выкл') == 'вкл'):
                         if vect1 and vect2:
                             if deff_max < 3 and k1 > 0 < k2:
                                 round_bet = int(get_prop('round_fork'))
@@ -822,7 +837,7 @@ if __name__ == '__main__':
             if wait_before_exp:
                 msg_str = str(ACC_ID) + ': Ожидание ' + str(round(wait_before_exp / 60)) + ' минут, до выгрузки'
                 prnt(msg_str)
-                send_message_bot(USER_ID, msg_str)
+                send_message_bot(USER_ID, msg_str, ADMINS)
             while Account.select().where(Account.key == KEY).get().pid > 0 and Account.select().where(Account.key == KEY).get().work_stat == 'start' and wait_before_exp > 0:
                 wait_before_exp = wait_before_exp - 10
                 time.sleep(10)
