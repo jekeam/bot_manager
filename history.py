@@ -182,6 +182,7 @@ def export_hist(OLIMP_USER, FONBET_USER):
                     out = out + \
                           str(id) + ';' + \
                           str(time) + ';' + \
+                          str(max(info['fonbet'].get('event_type', ''), info['olimp'].get('event_type', '') ))+ ';' + \
                           str(float(info['fonbet'].get('kof', 0.0))).replace('.', ',') + ';' + \
                           str(float(info['olimp'].get('kof', 0.0))).replace('.', ',') + ';' + \
  \
@@ -234,7 +235,7 @@ def export_hist(OLIMP_USER, FONBET_USER):
                           str(info['fonbet'].get('err', '')) + ';' + \
                           str(info['olimp'].get('err', '')) + ';' + '\n'
 
-                header = 'ID;time;pre_fb_kof;pre_o_kof;pre_fb_sum;pre_o_sum;' \
+                header = 'ID;time;event_type;pre_fb_kof;pre_o_kof;pre_fb_sum;pre_o_sum;' \
                          'fb_id;o_id;fb_time;o_time;fb_kof;o_kof;fb_sum_bet;o_sum_bet;' \
                          'fb_profit;o_profit;fb_result;o_result;fb_name;o_name;fb_status;' \
                          'o_sum_sale;f_kof_type;o_kof_type;fb_vector;ol_vector;fb_time_bet;ol_time_bet;' \
