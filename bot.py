@@ -331,8 +331,15 @@ def button(update, context):
                     update.callback_query.answer(text=bot_prop.MSG_ACC_STOP_WAIT)
                     send_message_bot(acc_info.get().user_id, str(acc_info.get().id) + ': ' + bot_prop.MSG_ACC_STOP_WAIT_EXT)
                 else:
-                    Account.update(work_stat='start').where(Account.key == query.data).execute()
-                    update.callback_query.answer(text=bot_prop.MSG_ACC_START_WAIT)
+                    if acc_info.get().date_end:
+                        if datetime.datetime.fromtimestamp(acc_info.get().date_end) < datetime.datetime.now():
+                            update.callback_query.answer(show_alert=True, text="Аккаунт не активен")
+                        else:
+                            Account.update(work_stat='start').where(Account.key == query.data).execute()
+                            update.callback_query.answer(text=bot_prop.MSG_ACC_START_WAIT)
+                    else:
+                        Account.update(work_stat='start').where(Account.key == query.data).execute()
+                        update.callback_query.answer(text=bot_prop.MSG_ACC_START_WAIT)
                 prnt_acc_stat()
             elif query.message.text == bot_prop.MSG_CHANGE_ACC:
                 if acc_info.get().date_end:
