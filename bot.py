@@ -233,6 +233,7 @@ def send_text(update, context, msg: str = 'Привет мой господин!
 def botlist(update, context, edit=False):
     keyboard = []
     work_stat = None
+    date_end = None
 
     if edit:
         update = update.callback_query
