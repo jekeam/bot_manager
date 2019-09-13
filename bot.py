@@ -254,13 +254,12 @@ def botlist(update, context, edit=False):
             date_end_str = '(бессрочно)'
 
         work_stat_inactive = emojize(':x:', use_aliases=True) + ' Не активен' + ' ' + date_end_str
-        if acc.work_stat == 'start':
+        if acc.status == 'inactive':
+            work_stat = work_stat_inactive
+        elif acc.work_stat == 'start':
             work_stat = emojize(':arrow_forward:', use_aliases=True) + ' Работает ' + date_end_str
         elif acc.work_stat == 'stop':
             work_stat = emojize(':stop_button:', use_aliases=True) + ' Остановлен ' + date_end_str
-        
-        if acc.status == 'inactive':
-            work_stat = work_stat_inactive
         else:
             work_stat = work_stat_inactive
         # check for date
@@ -294,8 +293,7 @@ def button(update, context):
 
         reply_markup = InlineKeyboardMarkup(keyboard)
         query.message.edit_text(
-            text='*' + bot_prop.MSG_START_STOP + '\nID=' + str(acc_info.get().id) + '*\n' +
-                 get_prop_str(acc_info.get().id),
+            text='*' + bot_prop.MSG_START_STOP + '\nID=' + str(acc_info.get().id) + '*\n' + get_prop_str(acc_info.get().id),
             reply_markup=reply_markup,
             parse_mode=telegram.ParseMode.MARKDOWN
         )
@@ -337,8 +335,9 @@ def button(update, context):
                     update.callback_query.answer(text=bot_prop.MSG_ACC_START_WAIT)
                 prnt_acc_stat()
             elif query.message.text == bot_prop.MSG_CHANGE_ACC:
-                if min(acc_info.get().date_end, datetime.datetime.now()) < datetime.datetime.now():
-                    update.callback_query.answer(show_alert=True, text="Аккаунт не активен")
+                if acc_info.get().date_end:
+                    if acc_info.get().date_end < datetime.datetime.now():
+                        update.callback_query.answer(show_alert=True, text="Аккаунт не активен")
                 elif acc_info.get().status == 'active':
                     prnt_acc_stat()
                 else:
