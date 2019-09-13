@@ -679,12 +679,18 @@ if __name__ == '__main__':
 
             msg_str = str(ACC_ID) + ': '
             msg_push = False
-            if len(cnt_fork_success) != cnt_fork_success_old:
+            if cnt_fork_success_old == 0 and cnt_fork_fail_old == 0:
+                cnt_fork_success_old = len(cnt_fork_success)
+                cnt_fork_fail_old = cnt_fail
+                msg_str = msg_str + 'Сделано выкупов: {}'.format(cnt_fail) + '\n'
+                msg_str = msg_str + 'Проставлено вилок: {}'.format(len(cnt_fork_success)) + '\n'
+                msg_push = True
+            elif len(cnt_fork_success) != cnt_fork_success_old:
                 cnt_fork_success_old = len(cnt_fork_success)
                 msg_str = msg_str + 'Проставлено вилок: {}->{}'.format(cnt_fork_success_old, len(cnt_fork_success)) + '\n'
                 msg_str = msg_str + 'Сделано выкупов: {}'.format(cnt_fail) + '\n'
                 msg_push = True
-            if cnt_fork_fail_old != cnt_fail:
+            elif cnt_fork_fail_old != cnt_fail:
                 cnt_fork_fail_old = cnt_fail
                 msg_str = msg_str + 'Проставлено вилок: {}'.format(len(cnt_fork_success)) + '\n'
                 msg_str = msg_str + 'Сделано выкупов: {}->{}'.format(cnt_fork_fail_old, cnt_fail) + '\n'
