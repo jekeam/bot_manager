@@ -1359,6 +1359,10 @@ class BetManager:
     def check_result(self, shared: dict):
 
         def replay_bet(n: str):
+            prnt(self.msg.format(
+                sys._getframe().f_code.co_name,
+                'max_bet:{}, first_bet_in:{}, vector:{}, bk_name:{}'.format(self.max_bet, self.first_bet_in, self.vector, self.bk_name)
+            ))
             if self.max_bet and ((self.first_bet_in == 'auto' and self.vector == 'DOWN') or self.bk_name == self.first_bet_in):
                 wait_bet = self.sleep_bet * 2
                 prnt(self.msg.format(sys._getframe().f_code.co_name, 'Получен неявный максбет #' + n + ': ' + str(self.max_bet) + ', wait: ' + str(wait_bet)))
