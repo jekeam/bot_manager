@@ -682,10 +682,11 @@ if __name__ == '__main__':
                     msg_str_last = msg_str
                     send_message_bot(USER_ID, msg_str, ADMINS)
             
-            if len(cnt_fork_success) == 0 or cnt_fail == 0:        
-                one_proc = (bal1 + bal2)/100
-                if (bal1/one_proc) < 10 or (bal2/one_proc) < 10:
+            one_proc = (bal1 + bal2)/100
+            if (bal1/one_proc) < 10 or (bal2/one_proc) < 10:
+                if len(cnt_fork_success) == 0 and cnt_fail == 0:
                     raise ValueError('аккаунт остановлен: денег в одной из БК не достаточно для работы, просьба выровнять балансы.\n' + bk1_name + ': ' + str(bal1) + '\n' + bk2_name + ': ' + str(bal2))
+                # TODO Сделать анализ, если прошло больше 1ч. и балансы не выравнены, то идти на выгрузку
 
             if server_forks:
                 for key, val_json in server_forks.items():
