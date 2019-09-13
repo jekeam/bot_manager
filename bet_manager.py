@@ -334,7 +334,7 @@ class BetManager:
 
             while True:
                 try:
-                    if self.attempt_sale > 50:
+                    if self.attempt_sale > 100:
                         self.attempt_sale = 1
                         raise BetIsLost('To many attempt sale!')
                     else:
