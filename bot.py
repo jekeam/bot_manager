@@ -258,7 +258,10 @@ def botlist(update, context, edit=False):
             work_stat = emojize(':arrow_forward:', use_aliases=True) + ' Работает ' + date_end_str
         elif acc.work_stat == 'stop':
             work_stat = emojize(':stop_button:', use_aliases=True) + ' Остановлен ' + date_end_str
-        else: #  acc.status == 'inactive'
+        
+        if acc.status == 'inactive':
+            work_stat = work_stat_inactive
+        else:
             work_stat = work_stat_inactive
         # check for date
         if date_end:
