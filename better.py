@@ -583,13 +583,10 @@ if __name__ == '__main__':
 
         time_get_balance = datetime.datetime.now()
         time_live = datetime.datetime.now()
+        
+        bk1_name = OlimpBot(OLIMP_USER).bk_name
+        bk2name = FonbetBot(OLIMP_USER).bk_name
 
-        # if DEBUG:
-        #     bal1 = 20000
-        #     bal2 = 20000
-        #     # Общая масксимальная сумма ставки
-        #     total_bet = round(0.10 * (bal1 + bal2))
-        # else:
         bal1 = OlimpBot(OLIMP_USER).get_balance()  # Баланс в БК1
         bal2 = FonbetBot(FONBET_USER).get_balance()  # Баланс в БК2
         total_bet = int(get_prop('summ'))
@@ -684,6 +681,11 @@ if __name__ == '__main__':
                 if msg_str_last != msg_str:
                     msg_str_last = msg_str
                     send_message_bot(USER_ID, msg_str, ADMINS)
+            
+            if len(cnt_fork_success) == 0 or cnt_fail == 0:        
+                one_proc = (bal1 + bal2)/100
+                if (bal1/one_proc) < 10 or (bal2/one_proc) < 10:
+                    raise Shutdown('Ошибка, аккаунт остановлен: денег в одной из БК не достаточно для работы, просьба выровнять балансы. ' + bk1_name + ': ' + str(bal1) + ', ' + bk2_name + ': ' + str(bal2))
 
             if server_forks:
                 for key, val_json in server_forks.items():

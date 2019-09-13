@@ -35,6 +35,7 @@ class OlimpBot:
 
     def __init__(self, account: dict = DEFAULT_ACCOUNT) -> None:
         # self.session = get_session_with_proxy('')
+        self.bk_name = 'Olimp'
         self.attempt_login = 0
         self.session_payload = base_payload.copy()
         self._account = account
