@@ -337,7 +337,9 @@ def button(update, context):
                     update.callback_query.answer(text=bot_prop.MSG_ACC_START_WAIT)
                 prnt_acc_stat()
             elif query.message.text == bot_prop.MSG_CHANGE_ACC:
-                if acc_info.get().status == 'active':
+                if min(acc_info.get().date_end, datetime.datetime.now()) < datetime.datetime.now():
+                    update.callback_query.answer(show_alert=True, text="Аккаунт не активен")
+                elif acc_info.get().status == 'active':
                     prnt_acc_stat()
                 else:
                     update.callback_query.answer(show_alert=True, text="Аккаунт не активен")
