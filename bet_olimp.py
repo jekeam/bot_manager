@@ -108,6 +108,9 @@ class OlimpBot:
             return floor(self.balance / 100) * 100
         else:
             return self.balance
+            
+    def get_bk_name(self):
+        return self.bk_name
 
     def place_bet(self, obj={}) -> None:
         """

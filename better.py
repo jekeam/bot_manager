@@ -584,8 +584,8 @@ if __name__ == '__main__':
         time_get_balance = datetime.datetime.now()
         time_live = datetime.datetime.now()
         
-        bk1_name = OlimpBot(OLIMP_USER).bk_name
-        bk2_name = FonbetBot(OLIMP_USER).bk_name
+        bk1_name = OlimpBot(OLIMP_USER).get_bk_name()
+        bk2_name = FonbetBot(OLIMP_USER).get_bk_name()
 
         bal1 = OlimpBot(OLIMP_USER).get_balance()  # Баланс в БК1
         bal2 = FonbetBot(FONBET_USER).get_balance()  # Баланс в БК2

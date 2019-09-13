@@ -218,6 +218,9 @@ class FonbetBot:
 
     def get_reg_id(self):
         return self.reg_id
+        
+    def get_bk_name(self):
+        return self.bk_name        
 
     def set_session_state(self):
         f = open('fonbet_session.txt', 'w+')
