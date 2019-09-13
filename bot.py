@@ -253,16 +253,16 @@ def botlist(update, context, edit=False):
             date_end_str = '(бессрочно)'
 
         work_stat_inactive = emojize(':x:', use_aliases=True) + ' Не активен' + ' ' + date_end_str
-
         if acc.work_stat == 'start':
             work_stat = emojize(':arrow_forward:', use_aliases=True) + ' Работает ' + date_end_str
         elif acc.work_stat == 'stop':
             work_stat = emojize(':stop_button:', use_aliases=True) + ' Остановлен ' + date_end_str
         else: #  acc.status == 'inactive'
             work_stat = work_stat_inactive
-        
-        if date_end and date_end < datetime.datetime.now() :
-            work_stat = work_stat_inactive
+        # check for date
+        if date_end:
+            if date_end < datetime.datetime.now() :
+                work_stat = work_stat_inactive
             
         keyboard.append([InlineKeyboardButton(text=str(acc.id) + ': ' + work_stat, callback_data=acc.key)])
 
