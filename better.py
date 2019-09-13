@@ -685,7 +685,7 @@ if __name__ == '__main__':
             if len(cnt_fork_success) == 0 or cnt_fail == 0:        
                 one_proc = (bal1 + bal2)/100
                 if (bal1/one_proc) < 10 or (bal2/one_proc) < 10:
-                    raise ValueError('Аккаунт остановлен: денег в одной из БК не достаточно для работы, просьба выровнять балансы. ' + bk1_name + ': ' + str(bal1) + ', ' + bk2_name + ': ' + str(bal2))
+                    raise ValueError('аккаунт остановлен: денег в одной из БК не достаточно для работы, просьба выровнять балансы.\n' + bk1_name + ': ' + str(bal1) + '\n' + bk2_name + ': ' + str(bal2))
 
             if server_forks:
                 for key, val_json in server_forks.items():
