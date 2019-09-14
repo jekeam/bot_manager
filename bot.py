@@ -465,8 +465,8 @@ def matches(update, context):
 
 def del_msg(update, context):
     print('del_msg')
-    print(context.bot.get_chat())
-    print(context.bot.getUpdates(limit=10))
+    print(telegram.bot.get_chat())
+    print(telegram.bot.getUpdates(limit=10))
     for msg in Message().where((Message.date_send > -1)).order_by(Message.id.desc()):
         print('{}, {}'.format(msg.id, msg.text))
 
