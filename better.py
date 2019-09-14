@@ -573,7 +573,7 @@ long_pool_wait = randint(30, 60)
 
 cnt_fork_success_old = 0
 cnt_fork_fail_old = 0
-first_send = True
+start_message_send = False
 
 # wag_fb:{'event': '12797479', 'factor': '921', 'param': '', 'score': '0:0', 'value': '2.35'}
 # wag_fb:{'apid': '1144260386:45874030:1:3:-9999:3:NULL:NULL:1', 'factor': '1.66', 'sport_id': 1, 'event': '45874030'}
@@ -659,9 +659,6 @@ if __name__ == '__main__':
         if not DEBUG:
             time.sleep(wait_before_start)
 
-        if Account.select().where(Account.key == KEY).get().work_stat == 'start':
-            send_message_bot(USER_ID, str(ACC_ID) + ': Начал работу', ADMINS)
-
         while Account.select().where(Account.key == KEY).get().work_stat == 'start':
             # print(str(Account.select().where(Account.key == KEY).get().id) + ': ' + Account.select().where(Account.key == KEY).get().work_stat)
 
@@ -677,16 +674,21 @@ if __name__ == '__main__':
                 time_get_balance = datetime.datetime.now()
                 bal1 = OlimpBot(OLIMP_USER).get_balance()  # Баланс в БК1
                 bal2 = FonbetBot(FONBET_USER).get_balance()  # Баланс в БК2
+            one_proc = (bal1 + bal2) / 100
 
             msg_str = str(ACC_ID) + ': '
             msg_push = False
-            if cnt_fork_success_old == 0 and cnt_fork_fail_old == 0 and first_send:
+
+            if not start_message_send:
                 cnt_fork_success_old = len(cnt_fork_success)
                 cnt_fork_fail_old = cnt_fail
-                msg_str = msg_str + 'Проставлено вилок: {}'.format(len(cnt_fork_success)) + '\n'
-                msg_str = msg_str + 'Сделано выкупов: {}'.format(cnt_fail) + '\n'
+                msg_str = str(ACC_ID) + ': Начал работу.\nРаспределение балансов:\n' + bk1_name + ': ' + str(bal1 / one_proc) + '%\n' + bk2_name + ': ' + str(bal2 / one_proc) + '%'
+                if cnt_fork_success_old != 0:
+                    msg_str = msg_str + '\nПроставлено вилок: {}->{}'.format(cnt_fork_success_old, len(cnt_fork_success))
+                if cnt_fork_fail_old != 0:
+                    msg_str = msg_str + '\nСделано выкупов: {}'.format(cnt_fail)
                 msg_push = True
-                first_send = False
+                start_message_send = True
             elif len(cnt_fork_success) != cnt_fork_success_old:
                 msg_str = msg_str + 'Проставлено вилок: {}->{}'.format(cnt_fork_success_old, len(cnt_fork_success)) + '\n'
                 msg_str = msg_str + 'Сделано выкупов: {}'.format(cnt_fail) + '\n'
@@ -697,11 +699,11 @@ if __name__ == '__main__':
                 msg_str = msg_str + 'Сделано выкупов: {}->{}'.format(cnt_fork_fail_old, cnt_fail) + '\n'
                 cnt_fork_fail_old = cnt_fail
                 msg_push = True
+
             if msg_push:
                 msg_push = False
                 send_message_bot(USER_ID, msg_str.strip(), ADMINS)
 
-            one_proc = (bal1 + bal2) / 100
             if (bal1 / one_proc) < 10 or (bal2 / one_proc) < 10:
                 if len(cnt_fork_success) == 0 and cnt_fail == 0:
                     raise ValueError(
