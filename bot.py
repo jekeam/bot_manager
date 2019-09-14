@@ -462,15 +462,6 @@ def matches(update, context):
 
     update.message.reply_text(text=msg)
 
-
-def del_msg(update, context):
-    print('del_msg')
-    print(telegram.bot.get_chat())
-    print(telegram.bot.getUpdates(limit=10))
-    for msg in Message().where((Message.date_send > -1)).order_by(Message.id.desc()):
-        print('{}, {}'.format(msg.id, msg.text))
-
-
 if __name__ == '__main__':
     updater = Updater(bot_prop.TOKEN, use_context=True, request_kwargs=bot_prop.REQUEST_KWARGS)
     dispatcher = updater.dispatcher
@@ -483,7 +474,6 @@ if __name__ == '__main__':
     updater.dispatcher.add_handler(CommandHandler('hello', send_text))
     updater.dispatcher.add_handler(CommandHandler('botlist', botlist))
     updater.dispatcher.add_handler(CommandHandler('matches', matches))
-    updater.dispatcher.add_handler(CommandHandler('del_msg', del_msg))
     updater.dispatcher.add_handler(CallbackQueryHandler(button))
     updater.dispatcher.add_handler(RegexHandler(patterns, choose_prop))
     updater.dispatcher.add_handler(RegexHandler('^(' + bot_prop.BTN_CLOSE + ')$', close_prop))
