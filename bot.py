@@ -463,7 +463,7 @@ def matches(update, context):
     update.message.reply_text(text=msg)
 
 
-def matches(update, context):
+def del_msg(update, context):
     for msg in Message.update(date_send=-1).where((Message.date_send > 1568337565) & (Message.text == '9: Проставлено вилок: 0\nСделано выкупов: 0')).order_by(Message.id.desc()):
         print(msg.id)
 
