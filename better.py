@@ -573,6 +573,7 @@ long_pool_wait = randint(30, 60)
 
 cnt_fork_success_old = 0
 cnt_fork_fail_old = 0
+first_send = True
 
 # wag_fb:{'event': '12797479', 'factor': '921', 'param': '', 'score': '0:0', 'value': '2.35'}
 # wag_fb:{'apid': '1144260386:45874030:1:3:-9999:3:NULL:NULL:1', 'factor': '1.66', 'sport_id': 1, 'event': '45874030'}
@@ -679,12 +680,13 @@ if __name__ == '__main__':
 
             msg_str = str(ACC_ID) + ': '
             msg_push = False
-            if cnt_fork_success_old == 0 and cnt_fork_fail_old == 0:
+            if cnt_fork_success_old == 0 and cnt_fork_fail_old == 0 and first_send:
                 cnt_fork_success_old = len(cnt_fork_success)
                 cnt_fork_fail_old = cnt_fail
                 msg_str = msg_str + 'Проставлено вилок: {}'.format(len(cnt_fork_success)) + '\n'
                 msg_str = msg_str + 'Сделано выкупов: {}'.format(cnt_fail) + '\n'
                 msg_push = True
+                first_send = False
             elif len(cnt_fork_success) != cnt_fork_success_old:
                 msg_str = msg_str + 'Проставлено вилок: {}->{}'.format(cnt_fork_success_old, len(cnt_fork_success)) + '\n'
                 msg_str = msg_str + 'Сделано выкупов: {}'.format(cnt_fail) + '\n'
