@@ -682,7 +682,7 @@ if __name__ == '__main__':
             if not start_message_send:
                 cnt_fork_success_old = len(cnt_fork_success)
                 cnt_fork_fail_old = cnt_fail
-                msg_str = str(ACC_ID) + ': Начал работу.\nРаспределение балансов:\n' + bk1_name + ': ' + str(bal1 / one_proc) + '%\n' + bk2_name + ': ' + str(bal2 / one_proc) + '%'
+                msg_str = str(ACC_ID) + ': Начал работу.\nРаспределение балансов:\n' + bk1_name + ': ' + str(round(bal1 / one_proc)) + '%\n' + bk2_name + ': ' + str(round(bal2 / one_proc)) + '%'
                 if cnt_fork_success_old != 0:
                     msg_str = msg_str + '\nПроставлено вилок: {}->{}'.format(cnt_fork_success_old, len(cnt_fork_success))
                 if cnt_fork_fail_old != 0:
