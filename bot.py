@@ -464,6 +464,7 @@ def matches(update, context):
 
 
 def del_msg(update, context):
+    print(update.getUpdates())
     for msg in Message().where((Message.date_send > 1568337565)).order_by(Message.id.desc()):
         print('{}, {}'.format(msg.id, msg.text))
 
