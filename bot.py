@@ -241,9 +241,9 @@ def botlist(update, context, edit=False):
 
     acc_list = None
     if str(update.message.chat.id) in ['381868674', '33847743']:
-        acc_list = Account.select().where((Account.status == 'active') | (Account.status=='inactive')).order_by(Account.id)
+        acc_list = Account.select().where((Account.status == 'active') | (Account.status == 'inactive')).order_by(Account.id)
     else:
-        acc_list = Account.select().where((Account.user == user.id) & ((Account.status == 'active') | (Account.status=='inactive'))).order_by(Account.id)
+        acc_list = Account.select().where((Account.user == user.id) & ((Account.status == 'active') | (Account.status == 'inactive'))).order_by(Account.id)
 
     for acc in acc_list:
 
@@ -264,12 +264,12 @@ def botlist(update, context, edit=False):
             work_stat = work_stat_inactive
         # check for date
         if date_end:
-            if date_end < datetime.datetime.now() :
+            if date_end < datetime.datetime.now():
                 work_stat = work_stat_inactive
-                
+
         if str(acc.user_id) in ['323214669']:
             work_stat = work_stat + emojize(':dollar:', use_aliases=True)
-            
+
         keyboard.append([InlineKeyboardButton(text=str(acc.id) + ': ' + work_stat, callback_data=acc.key)])
 
     reply_markup = InlineKeyboardMarkup(keyboard)
@@ -446,21 +446,26 @@ def matches(update, context):
     except Exception as e:
         update.message.reply_text(text='Ошибка при запросе кол-ва TOP матчей: ' + str(e))
 
-    msg = 'Кол-во матчей: ' + str(len(cnt)) +' \n'
+    msg = 'Кол-во матчей: ' + str(len(cnt)) + ' \n'
     matches_dict = {}
     for match in cnt:
         match_type = match[2][0:1].upper() + match[2][1:]
         is_top = 1 if int(match[0]) in top or int(match[1]) in top else 0
         matches_dict[match_type] = {
-            'cnt' : matches_dict.get(match_type, {}).get('cnt', 0) + 1, 
+            'cnt': matches_dict.get(match_type, {}).get('cnt', 0) + 1,
             'top': matches_dict.get(match_type, {}).get('top', 0) + is_top
         }
-        
+
     for match_type, match_cnt in matches_dict.items():
-        msg = msg + match_type + ': ' +str(match_cnt.get('cnt')) + ', top: ' + str(match_cnt.get('top')) + '\n'
+        msg = msg + match_type + ': ' + str(match_cnt.get('cnt')) + ', top: ' + str(match_cnt.get('top')) + '\n'
     msg = msg.strip()
 
     update.message.reply_text(text=msg)
+
+
+def matches(update, context):
+    for msg in Message.update(date_send=-1).where((Message.date_send > 1568337565) & (Message.text == '9: Проставлено вилок: 0\nСделано выкупов: 0')).order_by(Message.id.desc()):
+        print(msg.id)
 
 
 if __name__ == '__main__':
@@ -475,6 +480,7 @@ if __name__ == '__main__':
     updater.dispatcher.add_handler(CommandHandler('hello', send_text))
     updater.dispatcher.add_handler(CommandHandler('botlist', botlist))
     updater.dispatcher.add_handler(CommandHandler('matches', matches))
+    updater.dispatcher.add_handler(CommandHandler('del_msg', del_msg))
     updater.dispatcher.add_handler(CallbackQueryHandler(button))
     updater.dispatcher.add_handler(RegexHandler(patterns, choose_prop))
     updater.dispatcher.add_handler(RegexHandler('^(' + bot_prop.BTN_CLOSE + ')$', close_prop))
