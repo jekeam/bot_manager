@@ -218,8 +218,9 @@ def choose_prop(update, context):
 
 
 def start(update, context):
-    msg = get_user_str(update.message.chat.id)
-    if 'id' not in msg:
+    try:
+        msg = get_user_str(update.message.chat.id)
+    except:
         msg = 'Ваш ID в тегерамм: ' + str(update.message.chat.id)
     update.message.reply_text(msg, parse_mode=telegram.ParseMode.MARKDOWN)
 
