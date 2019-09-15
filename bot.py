@@ -218,7 +218,10 @@ def choose_prop(update, context):
 
 
 def start(update, context):
-    update.message.reply_text(get_user_str(update.message.chat.id), parse_mode=telegram.ParseMode.MARKDOWN)
+    msg = get_user_str(update.message.chat.id)
+    if 'id' not in msg:
+        msg = 'Ваш ID в тегерамм: ' + str(update.message.chat.id)
+    update.message.reply_text(msg, parse_mode=telegram.ParseMode.MARKDOWN)
 
 
 def send_text(update, context, msg: str = 'Привет мой господин!'):
@@ -461,6 +464,7 @@ def matches(update, context):
     msg = msg.strip()
 
     update.message.reply_text(text=msg)
+
 
 if __name__ == '__main__':
     updater = Updater(bot_prop.TOKEN, use_context=True, request_kwargs=bot_prop.REQUEST_KWARGS)
