@@ -225,6 +225,10 @@ def start(update, context):
     update.message.reply_text(msg, parse_mode=telegram.ParseMode.MARKDOWN)
 
 
+def get_time(update, context):
+    update.message.reply_text('Time: ' + str(int(datetime.datetime.timestamp(datetime.datetime.now()))))
+
+
 def send_text(update, context, msg: str = 'Привет мой господин!'):
     acc_list = User.select().where(User.role == 'admin')
     for admin in acc_list:
@@ -479,6 +483,7 @@ if __name__ == '__main__':
     updater.dispatcher.add_handler(CommandHandler('hello', send_text))
     updater.dispatcher.add_handler(CommandHandler('botlist', botlist))
     updater.dispatcher.add_handler(CommandHandler('matches', matches))
+    updater.dispatcher.add_handler(CommandHandler('time', get_time))
     updater.dispatcher.add_handler(CallbackQueryHandler(button))
     updater.dispatcher.add_handler(RegexHandler(patterns, choose_prop))
     updater.dispatcher.add_handler(RegexHandler('^(' + bot_prop.BTN_CLOSE + ')$', close_prop))
