@@ -5,23 +5,23 @@ from json import loads, dumps
 if __name__ == '__main__':
     uid = uuid1()
     print(uid)
-    user = 'folofeint'
-    pswd = 'F4y6LtD'
-    ip = '6.8.158.213'
-    port = '45785'
+    user = 'amirikanetsT7'
+    pswd = 'J7u3YxE'
+    ip = '185.200.170.107'
+    port = '34512'
     proxy = user + ':' + pswd + '@' + ip + ':' + port
 
     proxies = '{`fonbet`:{`http`:`http://' + proxy + '`,`https`:`https://' + proxy + '`},`olimp`:{`http`:`http://' + proxy + '`,`https`:`https://' + proxy + '`}}'
     print('proxies: ' + proxies)
-    olu = '89323089913'
-    olp = 'sWRd0124H'
-    fbu = '6829980'
-    fbp = 'mDB4jQIYZ8T'
+    olu = '7098204'
+    olp = 'e7u9BpSd'
+    fbu = '5384726'
+    fbp = 't4HM827q'
     accounts = '{`olimp`:{`login`:`' + olu + '`,`password`:`' + olp + '`,`mirror`:`olimp.com`},`fonbet`:{`login`:' + fbu + ',`password`:`' + fbp + '`,`mirror`:`fonbet.com`}}'
     print('accounts: ' + accounts)
     try:
         acc = Account.create(
-            user=233850144,
+            user=782928513,
             key=uid,
             date_end=get_trunc_sysdate(30),
             status='active',
