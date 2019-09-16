@@ -573,8 +573,8 @@ class BetManager:
             if not self.cur_total_new:
                 self.cur_total_new = self.cur_total
 
-            self.cur_half = self.dop_stat['period']
-            self.cur_minute = self.dop_stat['minutes']
+            self.cur_half = self.dop_stat.get('period', 0)
+            self.cur_minute = self.dop_stat.get('minutes', 9999)
 
             if self.cur_total is not None and self.total_bet is not None:
                 self.total_stock = self.total_bet - self.cur_total
