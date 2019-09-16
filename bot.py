@@ -358,6 +358,8 @@ def button(update, context):
                         update.callback_query.answer(show_alert=True, text="Аккаунт не активен")
                     elif acc_info.get().status == 'active':
                         prnt_acc_stat()
+                    else:
+                        update.callback_query.answer(show_alert=True, text="Аккаунт не активен")
                 elif acc_info.get().status == 'active':
                     prnt_acc_stat()
                 else:
@@ -392,7 +394,7 @@ def error_callback(bot, update, error):
 
 
 def sender(context):
-    while True:
+    rm while True:
         for msg in Message.select().where(Message.date_send.is_null()).order_by(Message.id):
             try:
                 if msg.file_type == 'document':
