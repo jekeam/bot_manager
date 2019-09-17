@@ -605,6 +605,10 @@ if __name__ == '__main__':
         prnt('IP-адрес сервера: ' + server_ip + ':8888')
         prnt('Баланс в БК Олимп: ' + str(bal1))
         prnt('Баланс в БК Фонбет: ' + str(bal2))
+        
+        prnt('Блокировка вывода: ' + str(FonbetBot(FONBET_USER).get_acc_info('pay')))
+        prnt('Блокировка ставки: ' + str(FonbetBot(FONBET_USER).get_acc_info('bet')))
+        prnt('Группа лимита: ' + str(FonbetBot(FONBET_USER).get_acc_info('group')))
 
         get_round_fork = int(get_prop('round_fork'))
         if get_round_fork not in (5, 10, 50, 100, 1000):

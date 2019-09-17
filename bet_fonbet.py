@@ -63,7 +63,7 @@ class FonbetBot:
         self.add_sleep = 0
         self.timeout = 4
         self.fonbet_bet_type = None
-        
+
         self.limit_group = None
         self.pay_blocked = None
         self.live_blocked = None
@@ -211,16 +211,16 @@ class FonbetBot:
     def get_common_url(self):
         urls = self.get_urls()
         client_url = urls["clients-api"][0]
-        self.timeout = 4 # urls["timeout"] / 100
+        self.timeout = 4  # urls["timeout"] / 100
         prnt('BET_FONBET.PY: set timeout: ' + str(self.timeout))
 
         return "https:{url}/session/".format(url=client_url) + "{}"
 
     def get_reg_id(self):
         return self.reg_id
-        
+
     def get_bk_name(self):
-        return self.bk_name        
+        return self.bk_name
 
     def set_session_state(self):
         f = open('fonbet_session.txt', 'w+')
@@ -266,21 +266,21 @@ class FonbetBot:
             self.fsid = res["fsid"]
 
             self.balance = float(res.get("saldo"))
-            
+
             self.limit_group = res.get("limitGroup")
-            
-            self.pay_blocked = res.get("attributes",{}).get("payBlocked")
+
+            self.pay_blocked = res.get("attributes", {}).get("payBlocked")
             if self.pay_blocked:
                 self.pay_blocked = 'Да'
             else:
                 self.pay_blocked = 'Нет'
-            
-            self.live_blocked = res.get("attributes",{}).get("liveBlocked")
+
+            self.live_blocked = res.get("attributes", {}).get("liveBlocked")
             if self.live_blocked:
                 self.live_blocked = 'Да'
             else:
                 self.live_blocked = 'Нет'
-            
+
             # self.balance_in_play = 0.0
             self.payload = payload
             prnt('BET_FONBET.PY: balance: ' + str(self.balance))
@@ -303,6 +303,14 @@ class FonbetBot:
             return floor(self.balance / 100) * 100
         else:
             return self.balance
+
+    def get_acc_info(self, param):
+        if param == 'bet':
+            return self.live_blocked
+        elif param == 'pay':
+            return self.pay_bocked
+        elif param == 'group':
+            return self.limit_group
 
     def _check_in_bounds(self, wager: dict, amount: int) -> None:
         """Check if amount is in allowed bounds"""
@@ -972,13 +980,13 @@ def get_new_bets_fonbet(match_id, proxies, time_out):
 
 
 if __name__ == '__main__':
-    
     PROXIES = dict()
-    
+
     FONBET_USER = {
-        "login": 7139029, "password": "69Nuvego", "mirror":"fonbet-0fef5.com"}
-    
-    wager_fonbet = {'time_req': 1552746519, 'fonbet_bet_type':"ТБ1(2.5)", 'event': 13759645, 'value': 2.6, 'param': 250, 'factor': '1815', 'score': '0:0', 'vector': 'UP', 'hist': {'time_change': 1552746510, 'avg_change': [0, 39, 31, 1, 9, 33, 27, 92, 31, 27, 93, 1, 78, 31, 179, 15, 39], '1': 2.6, '2': 2.6, '3': 2.6, '4': 2.6, '5': 2.6}}
+        "login": 7139029, "password": "69Nuvego", "mirror": "fonbet-0fef5.com"}
+
+    wager_fonbet = {'time_req': 1552746519, 'fonbet_bet_type': "ТБ1(2.5)", 'event': 13759645, 'value': 2.6, 'param': 250, 'factor': '1815', 'score': '0:0', 'vector': 'UP',
+                    'hist': {'time_change': 1552746510, 'avg_change': [0, 39, 31, 1, 9, 33, 27, 92, 31, 27, 93, 1, 78, 31, 179, 15, 39], '1': 2.6, '2': 2.6, '3': 2.6, '4': 2.6, '5': 2.6}}
     obj = {}
     obj['wager_fonbet'] = wager_fonbet
     obj['amount_fonbet'] = 110
@@ -986,8 +994,8 @@ if __name__ == '__main__':
 
     fonbet = FonbetBot(FONBET_USER)
     fonbet.sign_in()
-    #fonbet.place_bet(obj)
-    #time.sleep(3)
-    #fonbet.sale_bet(15102409046)
+    # fonbet.place_bet(obj)
+    # time.sleep(3)
+    # fonbet.sale_bet(15102409046)
     # fonbet_reg_id = fonbet.place_bet(amount_fonbet, wager_fonbet)
     # {'e': 12264423, 'f': 931, 'v': 1.4, 'p': 250, 'pt': '2.5', 'isLive': True}
