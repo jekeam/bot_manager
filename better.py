@@ -586,11 +586,14 @@ if __name__ == '__main__':
         time_get_balance = datetime.datetime.now()
         time_live = datetime.datetime.now()
 
-        bk1_name = OlimpBot(OLIMP_USER).get_bk_name()
-        bk2_name = FonbetBot(OLIMP_USER).get_bk_name()
+        bk1 = OlimpBot(OLIMP_USER)
+        bk2 = FonbetBot(FONBET_USER)
 
-        bal1 = OlimpBot(OLIMP_USER).get_balance()  # Баланс в БК1
-        bal2 = FonbetBot(FONBET_USER).get_balance()  # Баланс в БК2
+        bk1_name = bk1.get_bk_name()
+        bk2_name = bk2.get_bk_name()
+
+        bal1 = bk1.get_balance()  # Баланс в БК1
+        bal2 = bk2.get_balance()  # Баланс в БК2
         total_bet = int(get_prop('summ'))
 
         if not DEBUG:
@@ -606,9 +609,9 @@ if __name__ == '__main__':
         prnt('Баланс в БК Олимп: ' + str(bal1))
         prnt('Баланс в БК Фонбет: ' + str(bal2))
 
-        prnt('Блокировка вывода: ' + str(FonbetBot(FONBET_USER).get_acc_info('pay')))
-        prnt('Блокировка ставки: ' + str(FonbetBot(FONBET_USER).get_acc_info('bet')))
-        prnt('Группа лимита: ' + str(FonbetBot(FONBET_USER).get_acc_info('group')))
+        prnt('Блокировка вывода: ' + str(bk2.get_acc_info('pay')))
+        prnt('Блокировка ставки: ' + str(bk2.get_acc_info('bet')))
+        prnt('Группа лимита: ' + str(bk2.get_acc_info('group')))
 
         get_round_fork = int(get_prop('round_fork'))
         if get_round_fork not in (5, 10, 50, 100, 1000):
@@ -676,8 +679,8 @@ if __name__ == '__main__':
                 prnt(' ')
                 prnt('Прошло больше ' + str(ref_balace) + ' минут, пора обновить балансы:')
                 time_get_balance = datetime.datetime.now()
-                bal1 = OlimpBot(OLIMP_USER).get_balance()  # Баланс в БК1
-                bal2 = FonbetBot(FONBET_USER).get_balance()  # Баланс в БК2
+                bal1 = bk1.get_balance()  # Баланс в БК1
+                bal2 = bk2.get_balance()  # Баланс в БК2
             one_proc = (bal1 + bal2) / 100
 
             msg_str = str(ACC_ID) + ': '
