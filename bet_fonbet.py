@@ -308,7 +308,7 @@ class FonbetBot:
         if param == 'bet':
             return self.live_blocked
         elif param == 'pay':
-            return self.pay_bocked
+            return self.pay_blocked
         elif param == 'group':
             return self.limit_group
 
