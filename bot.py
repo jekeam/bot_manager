@@ -47,6 +47,7 @@ if patterns:
 
 def print_stat(acc_id: str) -> str:
     cnt_fail = 0
+    cnt_fail_plus = 0
     black_list_matches = 0
     cnt_fork_success = 0
     min_profit = 0
@@ -69,12 +70,19 @@ def print_stat(acc_id: str) -> str:
 
                     if err_bk1 != 'ok' or err_bk2 != 'ok':
                         if not bet_skip:
-                            cnt_fail += 1
                             black_list_matches += 1
                             if bk1.get('sale_profit') != 0:
                                 sale_profit = sale_profit + bk1.get('sale_profit')
+                                if bk1.get('sale_profit') > 0:
+                                    cnt_fail_plus += 1
+                                else:
+                                    cnt_fail += 1
                             elif bk2.get('sale_profit') != 0:
                                 sale_profit = sale_profit + bk2.get('sale_profit')
+                                if bk2.get('sale_profit') > 0:
+                                    cnt_fail_plus += 1
+                                else:
+                                    cnt_fail += 1
 
 
                     elif not bet_skip:
@@ -89,11 +97,12 @@ def print_stat(acc_id: str) -> str:
 
             res_str = ''
             res_str = res_str + 'Проставлено вилок: *' + str(cnt_fork_success) + '*\n'
-            res_str = res_str + 'Кол-во выкупов: *' + str(cnt_fail) + '*\n'
+            res_str = res_str + 'Кол-во минусовы выкупов: *' + str(cnt_fail) + '*\n'
+            res_str = res_str + 'Кол-во плюсовых выкупов: *' + str(cnt_fail_plus) + '*\n'
+            res_str = res_str + 'Профит от выкупов: *' + '{:,}'.format(round(sale_profit)).replace(',', ' ') + '*\n'
             res_str = res_str + 'Минимальный профит: *' + '{:,}'.format(round(min_profit)).replace(',', ' ') + '*\n'
             res_str = res_str + 'Максимальный профит: *' + '{:,}'.format(round(max_profit)).replace(',', ' ') + '*\n'
             res_str = res_str + 'Средний профит: *' + '{:,}'.format(round((max_profit + min_profit) / 2)).replace(',', ' ') + '*\n'
-            res_str = res_str + 'Профит от выкупов: *' + '{:,}'.format(round(sale_profit)).replace(',', ' ') + '*\n'
             res_str = res_str + '\n*Примерный доход: ' + '{:,}'.format(round((max_profit + min_profit) / 2) + round(sale_profit)).replace(',', ' ') + '*\n'
 
             return res_str.strip()
