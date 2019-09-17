@@ -686,6 +686,15 @@ if __name__ == '__main__':
             msg_str = str(ACC_ID) + ': '
             msg_push = False
 
+            if bk2.get_acc_info('bet').lower() != 'Нет'.lower():
+                raise ValueError('обнаружена блокировка ставки в Фонбет, аккаунт остановлен!')
+
+            if bk2.get_acc_info('pay').lower() != 'Нет'.lower():
+                ValueError(USER_ID, 'Обнаружена блокировка вывода, нужно пройти верификацию в Фонбет, аккаунт остановлен!')
+
+            if str(bk2.get_acc_info('group')).lower() == '4'.lower():
+                raise ValueError('обнаружена порезка до 4й группы, аккаунт остановлен!')
+
             if not start_message_send:
                 cnt_fork_success_old = len(cnt_fork_success)
                 cnt_fork_fail_old = cnt_fail
