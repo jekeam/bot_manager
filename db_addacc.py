@@ -4,26 +4,37 @@ from json import loads, dumps
 
 if __name__ == '__main__':
     uid = uuid1()
-    print(uid)
-    user = 'amirikanetsT7'
-    pswd = 'J7u3YxE'
-    ip = '185.200.170.107'
-    port = '34512'
-    proxy = user + ':' + pswd + '@' + ip + ':' + port
 
-    proxies = '{`fonbet`:{`http`:`http://' + proxy + '`,`https`:`https://' + proxy + '`},`olimp`:{`http`:`http://' + proxy + '`,`https`:`https://' + proxy + '`}}'
-    print('proxies: ' + proxies)
+    # PROXY
+    # proxy user name
+    user = 'amirikanetsT7'
+    # proxy password
+    pswd = 'J7u3YxE'
+    # proxy ip
+    ip = '185.200.170.107'
+    # proxy port
+    port = '34512'
+
+    # BK
+    # olimp user name
     olu = '7098204'
+    # olimp password
     olp = 'e7u9BpSd'
+
+    # fonbet user name
     fbu = '5384726'
+    # fonbet password
     fbp = 't4HM827q'
+
+    proxy = user + ':' + pswd + '@' + ip + ':' + port
+    proxies = '{`fonbet`:{`http`:`http://' + proxy + '`,`https`:`https://' + proxy + '`},`olimp`:{`http`:`http://' + proxy + '`,`https`:`https://' + proxy + '`}}'
     accounts = '{`olimp`:{`login`:`' + olu + '`,`password`:`' + olp + '`,`mirror`:`olimp.com`},`fonbet`:{`login`:' + fbu + ',`password`:`' + fbp + '`,`mirror`:`fonbet.com`}}'
-    print('accounts: ' + accounts)
     try:
         acc = Account.create(
+            # user id from telegram
             user=782928513,
             key=uid,
-            date_end=get_trunc_sysdate(30),
+            date_end=get_trunc_sysdate(30),  # cnt days
             status='active',
             proxies=proxies,
             accounts=accounts
@@ -46,6 +57,7 @@ if __name__ == '__main__':
             prop = Properties.create(acc=acc.id, key=k, val=v)
     except Exception as e:
         print(e)
+    print('OK')
 
     # USERS
     # try:
