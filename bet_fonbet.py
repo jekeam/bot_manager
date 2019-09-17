@@ -262,14 +262,24 @@ class FonbetBot:
                 prnt(err_str)
                 raise LoadException("BET_FONBET.PY: " + err_str)
 
-            self.set_acc_info(res)
-
             payload["fsid"] = res["fsid"]
             self.fsid = res["fsid"]
 
             self.balance = float(res.get("saldo"))
 
-            self.set_acc_info(res)
+            self.limit_group = res.get("limitGroup")
+
+            self.pay_blocked = res.get("attributes", {}).get("payBlocked")
+            if self.pay_blocked:
+                self.pay_blocked = 'Да'
+            else:
+                self.pay_blocked = 'Нет'
+
+            self.live_blocked = res.get("attributes", {}).get("liveBlocked")
+            if self.live_blocked:
+                self.live_blocked = 'Да'
+            else:
+                self.live_blocked = 'Нет'
 
             # self.balance_in_play = 0.0
             self.payload = payload
@@ -293,21 +303,6 @@ class FonbetBot:
             return floor(self.balance / 100) * 100
         else:
             return self.balance
-
-    def set_acc_info(self, res):
-        self.limit_group = res.get("limitGroup")
-
-        self.pay_blocked = res.get("attributes", {}).get("payBlocked")
-        if self.pay_blocked:
-            self.pay_blocked = 'Да'
-        else:
-            self.pay_blocked = 'Нет'
-
-        self.live_blocked = res.get("attributes", {}).get("liveBlocked")
-        if self.live_blocked:
-            self.live_blocked = 'Да'
-        else:
-            self.live_blocked = 'Нет'
 
     def get_acc_info(self, param):
         if param == 'bet':
