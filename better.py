@@ -208,7 +208,7 @@ def upd_last_fork_time(v_time: int = None):
         last_fork_time = int(time.time())
 
 
-def set_statistics(key, err_bk1, err_bk2, fork_info=None):
+def set_statistics(key, err_bk1, err_bk2, fork_info=None, bk1_sale_profit=0, bk2_sale_profit=0):
     global cnt_fail, black_list_matches, cnt_fork_success
     bet_skip = False
     if err_bk1 and err_bk2:
@@ -220,7 +220,8 @@ def set_statistics(key, err_bk1, err_bk2, fork_info=None):
 
     if err_bk1 != 'ok' or err_bk2 != 'ok':
         if not bet_skip:
-            cnt_fail = cnt_fail + 1
+            if bk1_sale_profit < 0 or bk2_sale_profit < 0:
+                cnt_fail = cnt_fail + 1
             black_list_matches.append(key.split('@')[0])
             black_list_matches.append(key.split('@')[1])
             # Добавим доп инфу о проставлении
@@ -468,7 +469,14 @@ def go_bets(wag_ol, wag_fb, key, deff_max, vect1, vect2, sc1, sc2, created, even
             raise MaxFail(msg_str)
 
         # CALC/SET STATISTICS
-        set_statistics(key, shared.get('olimp_err'), shared.get('fonbet_err'), fork_info=fork_info[fork_id])
+        set_statistics(
+            key,
+            shared.get('olimp_err'),
+            shared.get('fonbet_err'),
+            fork_info[fork_id],
+            shared['olimp'].get('sale_profit', 0),
+            shared['fonbet'].get('sale_profit', 0)
+        )
         get_statistics()
         msg_errs = ' ' + shared.get('olimp_err') + shared.get('fonbet_err')
         if not 'BkOppBetError'.lower() in msg_errs.lower():
@@ -648,7 +656,13 @@ if __name__ == '__main__':
                     for key, val in js.items():
                         bet_key = str(val.get('olimp', {}).get('id')) + '@' + str(val.get('fonbet', {}).get('id')) + '@' + \
                                   val.get('olimp', {}).get('bet_type') + '@' + val.get('fonbet', {}).get('bet_type')
-                        set_statistics(bet_key, val.get('olimp').get('err'), val.get('fonbet').get('err'))
+                        set_statistics(
+                            bet_key,
+                            val.get('olimp').get('err'),
+                            val.get('fonbet').get('err'),
+                            val.get('olimp').get('sale_profit', 0),
+                            val.get('fonbet').get('sale_profit', 0)
+                        )
 
                         if int(key) > last_time_temp:
                             last_time_temp = int(key)
@@ -702,17 +716,17 @@ if __name__ == '__main__':
                 if cnt_fork_success_old != 0:
                     msg_str = msg_str + '\nПроставлено вилок: {}'.format(len(cnt_fork_success))
                 if cnt_fork_fail_old != 0:
-                    msg_str = msg_str + '\nСделано выкупов: {}'.format(cnt_fail)
+                    msg_str = msg_str + '\nСделано минусовы выкупов: {}'.format(cnt_fail)
                 msg_push = True
                 start_message_send = True
             elif len(cnt_fork_success) != cnt_fork_success_old:
                 msg_str = msg_str + 'Проставлено вилок: {}->{}'.format(cnt_fork_success_old, len(cnt_fork_success)) + '\n'
-                msg_str = msg_str + 'Сделано выкупов: {}'.format(cnt_fail) + '\n'
+                msg_str = msg_str + 'Сделано минусовы выкупов: {}'.format(cnt_fail) + '\n'
                 cnt_fork_success_old = len(cnt_fork_success)
                 msg_push = True
             elif cnt_fork_fail_old != cnt_fail:
                 msg_str = msg_str + 'Проставлено вилок: {}'.format(len(cnt_fork_success)) + '\n'
-                msg_str = msg_str + 'Сделано выкупов: {}->{}'.format(cnt_fork_fail_old, cnt_fail) + '\n'
+                msg_str = msg_str + 'Сделано минусовы выкупов: {}->{}'.format(cnt_fork_fail_old, cnt_fail) + '\n'
                 cnt_fork_fail_old = cnt_fail
                 msg_push = True
 
