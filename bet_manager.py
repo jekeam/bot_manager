@@ -605,7 +605,7 @@ class BetManager:
             k_opp = self_opp_data.cur_val_bet
             sum_opp = self_opp_data.sum_bet_stat
             try:
-                self_opp_data.get_sum_sell()
+                self_opp_data.get_sum_sell(shared)
             except CouponBlocked as e:
                 prnt(self.msg.format(sys._getframe().f_code.co_name, 'Ошибка: ' + e.__class__.__name__ + ' - ' + str(e)))
 
@@ -975,12 +975,12 @@ class BetManager:
                 self.attempt_bet += 1
                 return self.bet_place(shared)
 
-            self.check_responce(err_msg)
+            self.check_responce(shared, err_msg)
 
             if err_code == 0:
                 self.match_id = self.wager['event']
 
-                self.get_cur_max_bet_id()
+                self.get_cur_max_bet_id(shared)
 
                 shared[self.bk_name]['reg_id'] = self.reg_id
 
@@ -1038,7 +1038,7 @@ class BetManager:
                     raise BetIsLost(err_str)
                 try:
                     self.attempt_get_req_id = self.attempt_get_req_id - 1
-                    self.get_request_id()
+                    self.get_request_id(shared)
                     break
                 except Exception as e:
                     prnt(self.msg_err.format(sys._getframe().f_code.co_name, 'get_request_id err: ' + str(e) + ', replay'))
@@ -1063,7 +1063,7 @@ class BetManager:
 
             result = res.get('result')
             msg_str = res.get('errorMessage')
-            self.check_responce(msg_str)
+            self.check_responce(shared, msg_str)
 
             if result == 'betDelay':
                 self.sleep_bet = (float(res.get('betDelay')) / 1000)
@@ -1075,10 +1075,10 @@ class BetManager:
 
             self.check_result(shared)
 
-    def get_sum_sell(self, url: str = None):
+    def get_sum_sell(self, shared, url: str = None):
         self.sum_sell = 0
         if self.bk_name == 'olimp':
-            coupon = self.get_cur_max_bet_id()
+            coupon = self.get_cur_max_bet_id(shared)
 
             self.cashout_allowed = coupon.get('cashout_allowed', False)
             self.sum_sell = coupon.get('cashout_amount', 0)
@@ -1111,7 +1111,7 @@ class BetManager:
             result = res.get('result')
             msg_str = res.get('errorMessage')
             msg_code = res.get('errorCode', -1)
-            self.check_responce(msg_str)
+            self.check_responce(shared, msg_str)
 
             timer_update = float(res.get('recommendedUpdateFrequency', 3))
 
@@ -1156,7 +1156,7 @@ class BetManager:
             #     1 / 0
             # except Exception as e:
             #     raise CouponBlocked(e)
-            self.get_sum_sell()
+            self.get_sum_sell(shared)
             self.sale_profit = round((self.sum_sell / self.sum_sell_divider) - self.sum_bet)
 
             if self.cashout_allowed and self.sum_sell > 0:
@@ -1187,7 +1187,7 @@ class BetManager:
 
                 err_code = res.get('error', {}).get('err_code')
                 err_msg = res.get('error', {}).get('err_desc')
-                self.check_responce(err_msg)
+                self.check_responce(shared, err_msg)
 
                 if res.get('data') and res.get('data').get('status', 'err') == 'ok':
                     prnt(self.msg.format(sys._getframe().f_code.co_name, 'code: ' + str(err_code) + ', ' + res.get('data', {}).get('msg')))
@@ -1213,7 +1213,7 @@ class BetManager:
                 url, self.timeout = get_common_url(self.server_fb)
                 url = url.replace('session/', '')
 
-                self.get_sum_sell(url)
+                self.get_sum_sell(shared, url)
                 self.sale_profit = round((self.sum_sell / self.sum_sell_divider) - self.sum_bet)
 
                 # step2 get rqid for sell coupn
@@ -1235,7 +1235,7 @@ class BetManager:
                 res = resp.json()
                 result = res.get('result')
                 msg_str = res.get('errorMessage')
-                self.check_responce(msg_str)
+                self.check_responce(shared, msg_str)
 
                 if res.get('result') == 'requestId':
                     self.reqIdSale = res.get('requestId')
@@ -1262,7 +1262,7 @@ class BetManager:
                 res = resp.json()
                 result = res.get('result')
                 msg_str = res.get('errorMessage')
-                self.check_responce(msg_str)
+                self.check_responce(shared, msg_str)
 
                 if result == 'sellDelay':
                     sell_delay_sec = (float(res.get('sellDelay')) / 1000)
@@ -1271,20 +1271,20 @@ class BetManager:
 
                 return self.check_sell_result(shared)
 
-    def check_responce(self, err_msg):
+    def check_responce(self, shared, err_msg):
 
         if err_msg:
-            if 'не вошли в систему'.lower() in err_msg.lower() or \
-                    'Not token access'.lower() in err_msg.lower() or \
-                    'invalid session id'.lower() in err_msg.lower():
+            if 'не вошли в систему'.lower() in err_msg.lower() or 'Not token access'.lower() in err_msg.lower() or 'invalid session id'.lower() in err_msg.lower():
                 err_str = self.msg_err.format(sys._getframe().f_code.co_name, 'session expired: ' + self.session['session'])
                 raise SessionExpired(err_msg + ' ' + err_str)
+
             elif 'Продажа ставки недоступна'.lower() in err_msg.lower() or 'Изменилась сумма продажи ставки'.lower() in err_msg.lower():
                 raise CouponBlocked(self.msg.format(sys._getframe().f_code.co_name, err_msg))
+
             elif 'Слишком частые ставки на событие'.lower() in err_msg.lower():
                 raise BetIsLost(err_msg)
-            elif 'Нет прав на выполнение операции'.lower() in err_msg.lower() or \
-                    'No rights for operation'.lower() in err_msg.lower():
+
+            elif 'Нет прав на выполнение операции'.lower() in err_msg.lower() or 'No rights for operation'.lower() in err_msg.lower():
                 shared[self.bk_name + '_err_fatal'] = err_msg
                 raise BetIsLost(err_msg)
 
@@ -1332,7 +1332,7 @@ class BetManager:
 
         result = res.get('result')
         msg_str = res.get('errorMessage')
-        self.check_responce(msg_str)
+        self.check_responce(shared, msg_str)
 
         if 'min' not in res:
             err_str = self.msg_err.format(sys._getframe().f_code.co_name, 'min sum not found')
@@ -1402,7 +1402,7 @@ class BetManager:
         err_msg_eng = res.get('coupon', {}).get('errorMessageEng')
 
         self.opposite_stat_get(shared)
-        self.check_responce(err_msg)
+        self.check_responce(shared, err_msg)
 
         if result == 'couponResult':
             if err_code == 0:
@@ -1527,7 +1527,7 @@ class BetManager:
         if not self.session.get('session'):
             self.session['session'] = read_file(self.session_file)
 
-    def get_request_id(self):
+    def get_request_id(self, shared):
 
         if not self.server_fb:
             self.server_fb = get_urls(self.mirror, self.proxies)
@@ -1554,7 +1554,7 @@ class BetManager:
 
         result = res.get('result')
         msg_str = res.get('errorMessage')
-        self.check_responce(msg_str)
+        self.check_responce(shared, msg_str)
 
         if 'requestId' not in res:
             err_str = self.msg_err.format(sys._getframe().f_code.co_name, 'key requestId not found in response')
@@ -1589,7 +1589,7 @@ class BetManager:
         res = resp.json()
         result = res.get('result')
         msg_str = res.get('errorMessage')
-        self.check_responce(msg_str)
+        self.check_responce(shared, msg_str)
 
         if result == 'error' and 'temporary unknown result' in msg_str:
             raise CouponBlocked('Get temporary unknown result: ' + str(msg_str))
@@ -1613,7 +1613,7 @@ class BetManager:
         else:
             raise BetIsLost
 
-    def get_cur_max_bet_id(self, filter='0100', offset='0'):
+    def get_cur_max_bet_id(self, shared, filter='0100', offset='0'):
 
         # req_url = ol_url_api.format(self.server_olimp, 'user/history')
         req_url = ol_url_api.format('user/history')
@@ -1641,7 +1641,7 @@ class BetManager:
 
         err_code = res.get('error', {}).get('err_code')
         err_msg = res.get('error', {}).get('err_desc')
-        self.check_responce(err_msg)
+        self.check_responce(shared, err_msg)
 
         max_bet_id = 0
         coupon_data = {}
