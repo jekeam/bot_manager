@@ -1361,13 +1361,14 @@ class BetManager:
         def replay_bet(n: str):
             prnt(self.msg.format(
                 sys._getframe().f_code.co_name,
-                'max_bet:{}, first_bet_in:{}, vector:{}, bk_name:{}'.format(self.max_bet, self.first_bet_in, self.vector, self.bk_name)
+                'max_bet:{}, first_bet_in:{}, vector:{}, bk_name:{}, n:{}, attempt_bet:{}'.format(self.max_bet, self.first_bet_in, self.vector, self.bk_name, n, self.attempt_bet)
             ))
             if self.max_bet and ((self.first_bet_in == 'auto' and self.vector == 'DOWN') or self.bk_name == self.first_bet_in):
                 wait_bet = self.sleep_bet * 2
                 prnt(self.msg.format(sys._getframe().f_code.co_name, 'Получен неявный максбет #' + n + ': ' + str(self.max_bet) + ', wait: ' + str(wait_bet)))
                 self.recalc_sum_by_maxbet(shared)
                 sleep(wait_bet)
+                self.attempt_bet = self.attempt_bet + 1
                 return self.bet_place(shared)
             else:
                 raise AttributeError(err_msg)
