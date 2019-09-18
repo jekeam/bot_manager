@@ -1162,9 +1162,7 @@ class BetManager:
             if self.cashout_allowed and self.sum_sell > 0:
                 payload = {}
                 payload['bet_id'] = self.reg_id
-                if self.bk_name == 'olimp':
-                    self.sum_bet = 0
-                payload['amount'] = self.sum_sell
+                payload['amount'] = 0
                 payload['session'] = self.session['session']
                 payload.update(copy.deepcopy(ol_payload))
                 payload.pop('time_shift')
