@@ -709,6 +709,9 @@ if __name__ == '__main__':
             if str(bk2.get_acc_info('group')).lower() == '4'.lower():
                 raise ValueError('обнаружена порезка до 4й группы, аккаунт остановлен!')
 
+            if bal1 == 0 or bal2 == 0:
+                raise Shutdown('баланс в одной из БК равен 0')
+
             if not start_message_send:
                 cnt_fork_success_old = len(cnt_fork_success)
                 cnt_fork_fail_old = cnt_fail
