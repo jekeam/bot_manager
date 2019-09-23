@@ -85,12 +85,9 @@ class OlimpBot:
 
             check_status_with_resp(resp, 'olimp')
 
-            try:
-                res = resp.json()
-                if res.get('error', {}).get('err_code', 0) == 401:
-                    raise ValueError('Olimp:' + res.get('error', {}).get('err_desc'))
-            except Exception as e:
-                prnt('BET_OLIMP.PY: ' + str(e))
+            res = resp.json()
+            if res.get('error', {}).get('err_code', 0) == 401:
+                raise ValueError('Olimp:' + res.get('error', {}).get('err_desc'))
 
             self.session_payload["session"] = res["data"]["session"]
             login_info = dict(res['data'])
