@@ -86,7 +86,7 @@ class OlimpBot:
 
             res = resp.json()
             if res.get('error', {}).get('err_code', 0) == 401:
-                raise ValueError(res.get('error', {})).get('err_desc')
+                raise ValueError(res.get('error', {}).get('err_desc'))
 
             self.session_payload["session"] = res["data"]["session"]
             login_info = dict(res['data'])
@@ -95,6 +95,7 @@ class OlimpBot:
             self.balance_in_play = float(self.login_info.get('cs'))
             prnt('BET_OLIMP.PY: balance: ' + str(self.balance))
         except Exception as e:
+            prnt(e)
             self.attempt_login += 1
             if self.attempt_login > 3 and resp:
                 str_err = 'Attempt login many: ' + str(self.attempt_login) + ', err: ' + str(e) + ', resp: ' + str(resp.text)
@@ -103,7 +104,6 @@ class OlimpBot:
                 raise ValueError(str_err)
             else:
                 raise ValueError('Нет ответа от сервера Олимп, проверьте работоспособность приложения, возможно сменился сервер')
-            prnt(e)
             return self.sign_in()
 
     def get_balance(self):
