@@ -729,8 +729,8 @@ if __name__ == '__main__':
                         msg_err = msg_err + '\n' + 'аккаунт остановлен: денег в одной из БК не достаточно для работы, просьба выровнять балансы.\n' + bk1_name + ': ' + str(bal1) + '\n' + bk2_name + ': ' + str(bal2)
 
             if msg_err != '':
-                prnt(msg_err)
-                raise Shutdown(msg_err)
+                prnt(msg_err.strip())
+                raise Shutdown(msg_err.strip())
 
             if not start_message_send:
                 cnt_fork_success_old = len(cnt_fork_success)
