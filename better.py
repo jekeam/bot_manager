@@ -875,7 +875,7 @@ if __name__ == '__main__':
             prnt(' ')
             prnt(str(e))
 
-            send_message_bot(USER_ID, str(ACC_ID) + ': ' + str(e))
+            send_message_bot(USER_ID, str(ACC_ID) + ': ' + str(e), ADMINS)
 
             last_fork_time_diff = int(time.time()) - last_fork_time
             wait_before_exp = max(60 * 60 * 2 - last_fork_time_diff, 0)
