@@ -84,6 +84,9 @@ class OlimpBot:
             prnt('BET_OLIMP.PY: Olimp, sign_in responce: ' + str(resp.status_code) + ' ' + resp.text, 'hide')
             check_status_with_resp(resp)
 
+            if resp.json().get('error', {}).get('err_code', 0) == 401:
+                raise ValueError(resp.json().get('error', {})).get('err_desc')
+
             self.session_payload["session"] = resp.json()["data"]["session"]
             login_info = dict(resp.json()['data'])
             self.login_info = login_info
@@ -108,7 +111,7 @@ class OlimpBot:
             return floor(self.balance / 100) * 100
         else:
             return self.balance
-            
+
     def get_bk_name(self):
         return self.bk_name
 
