@@ -7,7 +7,7 @@ from utils import prnt, get_account_info, get_prop, get_sum_bets, get_new_sum_be
 import threading
 from multiprocessing import Manager, Process
 import time
-from random import randint
+from random import randint, uniform
 import platform
 from exceptions import FonbetBetError, OlimpBetError, Shutdown, MaxFail, MaxFork
 import http.client
@@ -864,7 +864,7 @@ if __name__ == '__main__':
                         prnt('Вилка исключена, т.к. вид спорта: ' + event_type)
             else:
                 pass
-            ts = randint(1, 5)
+            ts = round(uniform(1, 3), 2)
             prnt('ts:' + str(ts), 'hide')
             time.sleep(ts)
 
