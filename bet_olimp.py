@@ -87,7 +87,7 @@ class OlimpBot:
 
             res = resp.json()
             if res.get('error', {}).get('err_code', 0) == 401:
-                raise ValueError(res.get('error', {}).get('err_desc'))
+                raise ValueError('Olimp:' + res.get('error', {}).get('err_desc'))
 
             self.session_payload["session"] = res["data"]["session"]
             login_info = dict(res['data'])
