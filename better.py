@@ -712,6 +712,14 @@ if __name__ == '__main__':
             if bal1 == 0 or bal2 == 0:
                 raise Shutdown('Баланс в одной из БК равен 0, аккаунт остановлен!\n' + bk1_name + ': ' + str(bal1) + '\n' + bk2_name + ': ' + str(bal2))
 
+            if (bal1 / one_proc) < 10 or (bal2 / one_proc) < 10:
+                if len(cnt_fork_success) == 0 and cnt_fail == 0:
+                    raise ValueError('аккаунт остановлен: денег в одной из БК не достаточно для работы, просьба выровнять балансы.\n' + bk1_name + ': ' + str(bal1) + '\n' + bk2_name + ': ' + str(bal2))
+                else:
+                    # Прошло больше 2ч., а балансы не выровнялись, иду на выгрзку
+                    if (int(time.time()) - last_fork_time) > 7200:
+                        raise Shutdown('аккаунт остановлен: денег в одной из БК не достаточно для работы, просьба выровнять балансы.\n' + bk1_name + ': ' + str(bal1) + '\n' + bk2_name + ': ' + str(bal2))
+
             if not start_message_send:
                 cnt_fork_success_old = len(cnt_fork_success)
                 cnt_fork_fail_old = cnt_fail
@@ -736,20 +744,6 @@ if __name__ == '__main__':
             if msg_push:
                 msg_push = False
                 send_message_bot(USER_ID, msg_str.strip(), ADMINS)
-
-            if (bal1 / one_proc) < 10 or (bal2 / one_proc) < 10:
-                if len(cnt_fork_success) == 0 and cnt_fail == 0:
-                    raise ValueError(
-                        'аккаунт остановлен: денег в одной из БК не достаточно для работы, просьба выровнять балансы.\n' +
-                        bk1_name + ': ' + str(bal1) + '\n' + bk2_name + ': ' + str(bal2)
-                    )
-                else:
-                    # Прошло больше 2ч., а балансы не выровнялись, иду на выгрзку
-                    if (int(time.time()) - last_fork_time) > 7200:
-                        raise Shutdown(
-                            'аккаунт остановлен: денег в одной из БК не достаточно для работы, просьба выровнять балансы.\n' +
-                            bk1_name + ': ' + str(bal1) + '\n' + bk2_name + ': ' + str(bal2)
-                        )
 
             if server_forks:
                 for key, val_json in server_forks.items():
