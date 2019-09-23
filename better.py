@@ -611,6 +611,7 @@ if __name__ == '__main__':
 
         MIN_PROC = float(get_prop('min_proc').replace(',', '.'))
         prnt(' ')
+        prnt('Current Time: ' + str(datetime.datetime.now()))
         prnt('Long pool sec: ' + str(long_pool_wait))
         prnt('ID аккаунта: ' + str(ACC_ID))
         prnt('IP-адрес сервера: ' + server_ip + ':8888')
