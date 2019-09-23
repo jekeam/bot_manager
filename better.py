@@ -2,6 +2,7 @@
 from bet_fonbet import *
 from bet_olimp import *
 import datetime
+import time
 from fork_recheck import get_kof_olimp, get_kof_fonbet
 from utils import prnt, get_account_info, get_prop, get_sum_bets, get_new_sum_bets, get_proxies
 import threading
@@ -586,6 +587,8 @@ cnt_fork_success_old = 0
 cnt_fork_fail_old = 0
 start_message_send = False
 
+temp_lock_fork = {}
+
 # wag_fb:{'event': '12797479', 'factor': '921', 'param': '', 'score': '0:0', 'value': '2.35'}
 # wag_fb:{'apid': '1144260386:45874030:1:3:-9999:3:NULL:NULL:1', 'factor': '1.66', 'sport_id': 1, 'event': '45874030'}
 
@@ -854,8 +857,15 @@ if __name__ == '__main__':
                                 if check_fork(key, l, k1, k2, live_fork, live_fork_total, bk1_score, bk2_score, event_type,
                                               minute, time_break_fonbet, period, name, name_rus, deff_max, is_top, info) or DEBUG:
                                     prnt(' ')
-                                    prnt('Go bets: ' + key + ' ' + info)
-                                    fork_success = go_bets(val_json.get('kof_olimp'), val_json.get('kof_fonbet'), key, deff_max, vect1, vect2, sc1, sc2, created_fork, event_type)
+
+                                    now_timestamp = int(time.time())
+                                    last_timestamp = temp_lock_fork.get(key, now_timestamp)
+                                    prnt('now_timestamp: ' + str(now_timestamp) + ', last_timestamp:' + str(last_timestamp))
+
+                                    if (now_timestamp - last_timestamp) > 60 or (now_timestamp - last_timestamp) == 0:
+                                        temp_lock_fork.update({key: now_timestamp})
+                                        prnt('Go bets: ' + key + ' ' + info)
+                                        fork_success = go_bets(val_json.get('kof_olimp'), val_json.get('kof_fonbet'), key, deff_max, vect1, vect2, sc1, sc2, created_fork, event_type)
                             elif deff_max >= 3:
                                 pass
                         else:
