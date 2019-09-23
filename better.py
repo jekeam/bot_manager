@@ -860,9 +860,11 @@ if __name__ == '__main__':
 
                                     now_timestamp = int(time.time())
                                     last_timestamp = temp_lock_fork.get(key, now_timestamp)
-                                    prnt('now_timestamp: ' + str(now_timestamp) + ', last_timestamp:' + str(last_timestamp))
+                                    prnt('now_timestamp: ' + str(now_timestamp) + ', last_timestamp:' + str(last_timestamp) + ', server_forks:' + str(len(server_forks)))
 
-                                    if (now_timestamp - last_timestamp) > 60 or (now_timestamp - last_timestamp) == 0:
+                                    if 0 < (now_timestamp - last_timestamp) < 60 and len(server_forks) > 1:
+                                        prnt('Вилка исключена, т.к. мы ее пытались проставить успешно/не успешно, но прошло менее 60 секунд и есть еще вилки, будем ставить другие, новые')
+                                    else:
                                         temp_lock_fork.update({key: now_timestamp})
                                         prnt('Go bets: ' + key + ' ' + info)
                                         fork_success = go_bets(val_json.get('kof_olimp'), val_json.get('kof_fonbet'), key, deff_max, vect1, vect2, sc1, sc2, created_fork, event_type)
