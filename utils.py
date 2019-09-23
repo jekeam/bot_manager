@@ -320,7 +320,7 @@ def check_status_with_resp(resp, olimp=None):
             or (olimp is not None and resp.status_code not in (200, 400, 417, 406, 403, 500)):
         raise LoadException("Site is not responding, status code: {}".format(resp.status_code))
     if '149-ФЗ'.lower() in resp.text.lower():
-        raise LoadException('Прокси при запросе к ' + str(resp.url) + ', был заблокирован на основании 149-ФЗ, нужно сменить прокси.')
+        raise LoadException('Прокси был заблокирован на основании 149-ФЗ, нужно сменить прокси. ' + str(resp.url))
 
 
 def get_session_with_proxy(name):
