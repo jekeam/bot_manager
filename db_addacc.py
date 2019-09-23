@@ -33,7 +33,7 @@ if __name__ == '__main__':
     try:
         acc = Account.create(
             # user id from telegram
-            user=782928513,
+            user=304415738,
             key=uid,
             date_end=get_trunc_sysdate(30),  # cnt days
             status='active',
