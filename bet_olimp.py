@@ -82,11 +82,15 @@ class OlimpBot:
                 proxies=self.proxies
             )
             prnt('BET_OLIMP.PY: Olimp, sign_in responce: ' + str(resp.status_code) + ' ' + resp.text, 'hide')
-            check_status_with_resp(resp)
 
-            res = resp.json()
-            if res.get('error', {}).get('err_code', 0) == 401:
-                raise ValueError(res.get('error', {}).get('err_desc'))
+            try:
+                res = resp.json()
+                if res.get('error', {}).get('err_code', 0) == 401:
+                    raise ValueError(res.get('error', {}).get('err_desc'))
+            except:
+                pass
+
+            check_status_with_resp(resp)
 
             self.session_payload["session"] = res["data"]["session"]
             login_info = dict(res['data'])
