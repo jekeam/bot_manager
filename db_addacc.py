@@ -6,25 +6,26 @@ if __name__ == '__main__':
     uid = uuid1()
 
     # PROXY
-    # proxy user name
-    user = 'amirikanetsT7'
-    # proxy password
-    pswd = 'J7u3YxE'
-    # proxy ip
-    ip = '185.200.170.107'
-    # proxy port
-    port = '34512'
+    # user name
+    user = 'Selpodpoyasannyi'
+
+    # password
+    pswd = 'I5x7OsO'
+
+    # ip
+    ip = '91.200.150.28'
+
+    # port
+    port = '45785'
 
     # BK
-    # olimp user name
-    olu = '7098204'
-    # olimp password
-    olp = 'e7u9BpSd'
+    # olimp
+    olu = '3177428'
+    olp = 'dramma19'
 
-    # fonbet user name
-    fbu = '5384726'
-    # fonbet password
-    fbp = 't4HM827q'
+    # fonbet
+    fbu = '6539320'
+    fbp = 'dramma19'
 
     proxy = user + ':' + pswd + '@' + ip + ':' + port
     proxies = '{`fonbet`:{`http`:`http://' + proxy + '`,`https`:`https://' + proxy + '`},`olimp`:{`http`:`http://' + proxy + '`,`https`:`https://' + proxy + '`}}'
@@ -40,21 +41,11 @@ if __name__ == '__main__':
             accounts=accounts
         )
 
-        p = {
-            "SUMM": 400,
-            "RANDOM_SUMM_PROC": 30,
-            "FORK_LIFE_TIME": 2,
-            "SERVER_IP_TEST": "149.154.70.53",
-            "SERVER_IP": "62.109.10.57",
-            "WORK_HOUR_END": 5,
-            "ROUND_FORK": 5,
-            "MAX_FORK": 10,
-            "MAX_FAIL": 2,
-            "MIN_PROC": 0,
-            "SERVER_OLIMP": "olimpkzapi.ru"
-        }
-        for k, v in p.items():
-            prop = Properties.create(acc=acc.id, key=k, val=v)
+        print(acc.id)
+
+        Properties.insert_from(
+            Properties.select(Properties.val, Properties.key),
+            [acc.id, Properties.val, Properties.key]).execute()
     except Exception as e:
         print(e)
     print('OK')
