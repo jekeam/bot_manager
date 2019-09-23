@@ -710,7 +710,7 @@ if __name__ == '__main__':
                 raise ValueError('обнаружена порезка до 4й группы, аккаунт остановлен!')
 
             if bal1 == 0 or bal2 == 0:
-                raise Shutdown('баланс в одной из БК равен 0')
+                raise Shutdown('Баланс в одной из БК равен 0, аккаунт остановлен!')
 
             if not start_message_send:
                 cnt_fork_success_old = len(cnt_fork_success)
