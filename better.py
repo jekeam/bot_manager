@@ -685,7 +685,6 @@ if __name__ == '__main__':
             time.sleep(wait_before_start)
 
         while Account.select().where(Account.key == KEY).get().work_stat == 'start':
-            # print(str(Account.select().where(Account.key == KEY).get().id) + ': ' + Account.select().where(Account.key == KEY).get().work_stat)
 
             if get_prop('work_hour_end') and int(get_prop('work_hour_end')) == int(datetime.datetime.now().strftime('%H')):
                 msg_str = 'Время выгрузки: {} ч., я завершил работу'.format(get_prop('work_hour_end'))
@@ -865,7 +864,9 @@ if __name__ == '__main__':
                         prnt('Вилка исключена, т.к. вид спорта: ' + event_type)
             else:
                 pass
-            time.sleep(1)
+            ts = randint(1, 5)
+            prnt('ts:' + str(ts), 'hide')
+            time.sleep(ts)
 
     except (Shutdown, MaxFail, MaxFork) as e:
         try:
