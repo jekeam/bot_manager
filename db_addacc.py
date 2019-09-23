@@ -44,7 +44,7 @@ if __name__ == '__main__':
         print(acc.id)
 
         Properties.insert_from(
-            Properties.select(Properties.val, Properties.key),
+            Properties.select(Properties.val, Properties.key).where(Properties.acc_id == 18),
             [acc.id, Properties.val, Properties.key]).execute()
     except Exception as e:
         print(e)
