@@ -83,7 +83,7 @@ class OlimpBot:
             )
             prnt('BET_OLIMP.PY: Olimp, sign_in responce: ' + str(resp.status_code) + ' ' + resp.text, 'hide')
 
-            check_status_with_resp(resp, olimp)
+            check_status_with_resp(resp, 'olimp')
 
             try:
                 res = resp.json()
