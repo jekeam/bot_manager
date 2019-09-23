@@ -198,6 +198,7 @@ class FonbetBot:
         if not url:
             url = 'fonbet.com'
         url = "https://" + url + "/urls.json?{}".format(random())
+        prnt('BET_FONBET.PY: Fonbet, get_urls request: ' + str(url) + '\n' + str(browser_headers), 'hide')
         resp = requests_retry_session().get(
             url,
             headers=browser_headers,
@@ -205,6 +206,7 @@ class FonbetBot:
             timeout=self.timeout,
             proxies=self.proxies
         )
+        prnt('BET_FONBET.PY: Fonbet, get_urls responce: ' + str(resp.status_code) + ', ' + str(resp.text), 'hide')
         check_status_with_resp(resp)
         return resp.json()
 
