@@ -84,11 +84,12 @@ class OlimpBot:
             prnt('BET_OLIMP.PY: Olimp, sign_in responce: ' + str(resp.status_code) + ' ' + resp.text, 'hide')
             check_status_with_resp(resp)
 
-            if resp.json().get('error', {}).get('err_code', 0) == 401:
-                raise ValueError(resp.json().get('error', {})).get('err_desc')
+            res = resp.json()
+            if res.get('error', {}).get('err_code', 0) == 401:
+                raise ValueError(res.get('error', {})).get('err_desc')
 
-            self.session_payload["session"] = resp.json()["data"]["session"]
-            login_info = dict(resp.json()['data'])
+            self.session_payload["session"] = res["data"]["session"]
+            login_info = dict(res['data'])
             self.login_info = login_info
             self.balance = float(self.login_info.get('s'))
             self.balance_in_play = float(self.login_info.get('cs'))
