@@ -103,6 +103,9 @@ def check_fork(key, L, k1, k2, live_fork, live_fork_total, bk1_score, bk2_score,
     fork_exclude_text = ''
     v = True
 
+    if L < 0.70:
+        fork_exclude_text = fork_exclude_text + 'Вилка ' + str(L) + ' (' + str(round((1 - L) * 100, 2)) + '%), вилка исключена т.к. доходноть высокая > 30%\n'
+
     if get_prop('team_junior', 'выкл') == 'выкл':
         if re.search('(u\d{2}|\(.*\d{2}\))', name_rus.lower()):
             fork_exclude_text = fork_exclude_text + 'Вилка исключена по названию команд: ' + name_rus + '\n'
