@@ -693,8 +693,8 @@ if __name__ == '__main__':
                 msg_str = 'Время выгрузки: {} ч., я завершил работу'.format(get_prop('work_hour_end'))
                 raise Shutdown(msg_str)
 
-            # Обновление баланса каждые 60 минут
-            ref_balace = 60
+            # Обновление баланса каждые 120 минут
+            ref_balace = 120
             if (datetime.datetime.now() - time_get_balance).total_seconds() > (60 * ref_balace):
                 prnt(' ')
                 prnt('Прошло больше ' + str(ref_balace) + ' минут, пора обновить балансы:')
