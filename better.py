@@ -758,7 +758,7 @@ if __name__ == '__main__':
                 send_message_bot(USER_ID, msg_str.strip(), ADMINS)
 
             if server_forks:
-                for key, val_json in server_forks.items():
+                for key, val_json in sorted(server_forks.items(), key=lambda x: random.random()):
                     l = val_json.get('l', 0.0)
                     k1_type = key.split('@')[-1]
                     k2_type = key.split('@')[-2]
@@ -850,8 +850,7 @@ if __name__ == '__main__':
                         prnt('val_json: ' + str(val_json))
 
                         info = ''
-                    if (event_type == 'football' and get_prop('test_oth_sport', 'выкл') == 'выкл') or (
-                            event_type in ('hockey', 'football') and get_prop('test_oth_sport', 'выкл') == 'вкл'):
+                    if (event_type == 'football' and get_prop('test_oth_sport', 'выкл') == 'выкл') or (event_type in ('hockey', 'football') and get_prop('test_oth_sport', 'выкл') == 'вкл'):
                         if vect1 and vect2:
                             if deff_max < 3 and k1 > 0 < k2:
                                 round_bet = int(get_prop('round_fork'))
@@ -860,8 +859,7 @@ if __name__ == '__main__':
 
                                 recalc_bets()
                                 # Проверим вилку на исключения
-                                if check_fork(key, l, k1, k2, live_fork, live_fork_total, bk1_score, bk2_score, event_type,
-                                              minute, time_break_fonbet, period, name, name_rus, deff_max, is_top, info) or DEBUG:
+                                if check_fork(key, l, k1, k2, live_fork, live_fork_total, bk1_score, bk2_score, event_type, minute, time_break_fonbet, period, name, name_rus, deff_max, is_top, info) or DEBUG:
                                     prnt(' ')
 
                                     now_timestamp = int(time.time())
