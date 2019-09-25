@@ -685,7 +685,7 @@ if __name__ == '__main__':
         start_see_fork.start()
 
         if not DEBUG:
-            wait_before_start_sec = randint(1, 60)
+            wait_before_start_sec = randint(1, 300)
             send_message_bot(USER_ID, str(ACC_ID) + ': ' + 'Аккаунт запущен, начну работу через ' + str(wait_before_start_sec) + ' сек...', ADMINS)
             time.sleep(wait_before_start_sec)
 
