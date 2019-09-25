@@ -685,6 +685,7 @@ if __name__ == '__main__':
 
         if not DEBUG:
             wait_before_start_sec = randint(1, 60)
+            send_message_bot(USER_ID, str(ACC_ID) + ': ' + 'Аккаунт запущен, начну работу через ' + str(wait_before_start_sec) + ' сек...', ADMINS)
             time.sleep(wait_before_start_sec)
 
         while Account.select().where(Account.key == KEY).get().work_stat == 'start':

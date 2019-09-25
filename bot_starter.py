@@ -27,7 +27,6 @@ if __name__ == '__main__':
         while True:
             for acc in Account.select().where((Account.status == 'active') & (Account.work_stat == 'start') & (Account.pid == 0)):
                 Account.update(pid=1).where(Account.id == acc.id).execute()
-                send_message_bot(acc.user_id, str(acc.id) + ': ' + bot_prop.MSG_ACC_START_WAIT)
                 print(''.ljust(120, '*'))
                 print('start: ', acc.id)  # acc.work_dir,
                 acc_start = Thread(target=start, args=(acc.id,))  # acc.work_dir,
