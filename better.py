@@ -580,7 +580,6 @@ black_list_matches = []
 cnt_fork_success = []
 printed = False
 last_fork_time = 0
-wait_before_start = 15
 long_pool_wait = randint(30, 60)
 
 cnt_fork_success_old = 0
@@ -685,7 +684,8 @@ if __name__ == '__main__':
         start_see_fork.start()
 
         if not DEBUG:
-            time.sleep(wait_before_start)
+            wait_before_start_sec = randint(1, 60)
+            time.sleep(wait_before_start_sec)
 
         while Account.select().where(Account.key == KEY).get().work_stat == 'start':
 
