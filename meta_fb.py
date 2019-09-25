@@ -72,7 +72,7 @@ fb_payload_bet = {
             "system": 0
         },
     "appVersion": "5.1.3b",
-    "carrier": "MegaFon",
+    "carrier": "",
     "deviceManufacturer": "LENOVO",
     "deviceModel": "Lenovo " + LENOVO_MODEL,
     "fsid": "",
@@ -104,7 +104,7 @@ fb_payload_max_bet = {
             "system": 0
         },
     "appVersion": "5.1.3b",
-    "carrier": "MegaFon",
+    "carrier": "",
     "deviceManufacturer": "LENOVO",
     "deviceModel": "Lenovo " + LENOVO_MODEL,
     "fsid": "",
@@ -119,7 +119,7 @@ fb_payload_max_bet = {
 payload_req = {
     "client": {"id": 0},
     "appVersion": "5.1.3b",
-    "carrier": "MegaFon",
+    "carrier": "",
     "deviceManufacturer": "LENOVO",
     "deviceModel": "Lenovo " + LENOVO_MODEL,
     "fsid": "",

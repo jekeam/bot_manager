@@ -105,7 +105,7 @@ class FonbetBot:
                     "system": 0
                 },
             "appVersion": "5.1.3b",
-            "carrier": "MegaFon",
+            "carrier": "",
             "deviceManufacturer": "LENOVO",
             "deviceModel": "Lenovo " + LENOVO_MODEL,
             "fsid": "",
@@ -120,7 +120,7 @@ class FonbetBot:
         self.payload_req = {
             "client": {"id": 0},
             "appVersion": "5.1.3b",
-            "carrier": "MegaFon",
+            "carrier": "",
             "deviceManufacturer": "LENOVO",
             "deviceModel": "Lenovo " + LENOVO_MODEL,
             "fsid": "",
@@ -179,7 +179,7 @@ class FonbetBot:
         self.coupon_info = {
             "regId": 0,
             "appVersion": "5.1.3b",
-            "carrier": "MegaFon",
+            "carrier": "",
             "deviceManufacturer": "LENOVO",
             "deviceModel": "Lenovo " + LENOVO_MODEL,
             "fsid": "",
