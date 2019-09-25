@@ -20,6 +20,7 @@ import os
 from db_model import send_message_bot, prop_abr
 from bot_prop import ADMINS
 from ml import get_vect, check_vect, check_noise, get_creater
+import random
 
 if __name__ == '__main__':
     from history import export_hist
