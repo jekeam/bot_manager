@@ -876,6 +876,16 @@ class BetManager:
                 prnt(self.msg.format(sys._getframe().f_code.co_name, 'rs: ' + str(resp.status_code) + ' ' + str(resp.text.strip())), 'hide')
                 res = resp.json()
 
+                try:
+                    if res.get('errorCode', -1) == 2:
+                        prnt(self.msg.format(sys._getframe().f_code.co_name, res.get('errorMessage', '')))
+                        prnt(self.msg.format(sys._getframe().f_code.co_name, 'replay sign_in'))
+                        return self.sign_in(shared)
+                except Exception as e:
+                    exc_type, exc_value, exc_traceback = sys.exc_info()
+                    err_msg_login = 'err(' + str(e.__class__.__name__) + '): ' + str(e) + '. ' + str(repr(traceback.format_exception(exc_type, exc_value, exc_traceback)))
+                    prnt(self.msg_err.format(sys._getframe().f_code.co_name, err_msg_login))
+
                 self.session['session'] = res.get('fsid')
                 self.session['balance'] = float(res.get('saldo'))
                 self.session['currency'] = res.get('currency').get('currency')
