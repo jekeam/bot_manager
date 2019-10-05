@@ -694,7 +694,7 @@ if __name__ == '__main__':
                 time.sleep(0.5)
             else:
                 if get_prop('work_hour_end') and int(get_prop('work_hour_end')) == int(datetime.datetime.now().strftime('%H')):
-                    msg_str = 'Время выгрузки: {} ч., я завершил работу'.format(get_prop('work_hour_end'))
+                    msg_str = 'Время выгрузки: {} ч., начинаю выгрузку...'.format(get_prop('work_hour_end'))
                     raise Shutdown(msg_str)
 
                 # Обновление баланса каждые 120 минут
