@@ -292,6 +292,9 @@ class FonbetBot:
             prnt('BET_FONBET.PY: balance: ' + str(self.balance))
 
             # self._check_in_bounds(payload, 30)
+        except LoadException as e:
+            prnt(e)
+            raise ValueError(e)
         except Exception as e:
             self.attempt_login += 1
             if self.attempt_login > 3:
