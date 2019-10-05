@@ -689,7 +689,8 @@ if __name__ == '__main__':
         send_message_bot(USER_ID, str(ACC_ID) + ': ' + 'Аккаунт запущен, начну работу через ' + str(wait_before_start_sec) + ' сек...', ADMINS)
         while Account.select().where(Account.key == KEY).get().work_stat == 'start':
 
-            if --wait_before_start_sec > 0:
+            if wait_before_start_sec > 0:
+                wait_before_start_sec = wait_before_start_sec - 1
                 time.sleep(1)
             else:
                 if get_prop('work_hour_end') and int(get_prop('work_hour_end')) == int(datetime.datetime.now().strftime('%H')):
