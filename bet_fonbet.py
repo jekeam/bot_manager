@@ -261,8 +261,8 @@ class FonbetBot:
             prnt('BET_FONBET.PY: Fonbet, sign_in request: ' + str(resp.status_code))
 
             if res.get('result', '') == 'error':
-                raise LoadException(res.get('errorMessage'))
-            
+                raise LoadException('Fonber: ' + res.get('errorMessage'))
+
             if "fsid" not in res:
                 err_str = 'BET_FONBET.PY: key "fsid" not found in response: ' + str(res)
                 prnt(err_str)
