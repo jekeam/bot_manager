@@ -302,6 +302,7 @@ class FonbetBot:
                 prnt(str_err)
                 raise ValueError(str_err)
             prnt(e)
+            time.sleep(5)
             return self.sign_in()
 
     def get_balance(self):
