@@ -722,15 +722,12 @@ if __name__ == '__main__':
                 msg_err = msg_err + '\n' + 'обнаружена порезка до 4й группы, аккаунт остановлен!'
 
             if bal1 == 0 or bal2 == 0:
-                msg_err = msg_err + '\n' + 'баланс в одной из БК равен 0, аккаунт остановлен!\n' + bk1_name + ': ' + str(bal1) + '\n' + bk2_name + ': ' + str(bal2)
+                if (len(cnt_fork_success) == 0 and cnt_fail == 0) or ((int(time.time()) - last_fork_time) > 7200):
+                    msg_err = msg_err + '\n' + 'баланс в одной из БК равен 0, аккаунт остановлен!\n' + bk1_name + ': ' + str(bal1) + '\n' + bk2_name + ': ' + str(bal2)
 
             if (bal1 / one_proc) < 10 or (bal2 / one_proc) < 10:
-                if len(cnt_fork_success) == 0 and cnt_fail == 0:
+                if (len(cnt_fork_success) == 0 and cnt_fail == 0) or ((int(time.time()) - last_fork_time) > 7200):
                     msg_err = msg_err + '\n' + 'аккаунт остановлен: денег в одной из БК не достаточно для работы, просьба выровнять балансы.\n' + bk1_name + ': ' + str(bal1) + '\n' + bk2_name + ': ' + str(bal2)
-                else:
-                    # Прошло больше 2ч., а балансы не выровнялись, иду на выгрзку
-                    if (int(time.time()) - last_fork_time) > 7200:
-                        msg_err = msg_err + '\n' + 'аккаунт остановлен: денег в одной из БК не достаточно для работы, просьба выровнять балансы.\n' + bk1_name + ': ' + str(bal1) + '\n' + bk2_name + ': ' + str(bal2)
 
             if msg_err != '':
                 prnt(msg_err.strip())
