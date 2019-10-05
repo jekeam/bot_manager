@@ -685,13 +685,13 @@ if __name__ == '__main__':
         start_see_fork = threading.Thread(target=run_client)  # , args=(server_forks,))
         start_see_fork.start()
 
-        wait_before_start_sec = randint(1, 300)
+        wait_before_start_sec = float(randint(1, 300))
         send_message_bot(USER_ID, str(ACC_ID) + ': ' + 'Аккаунт запущен, начну работу через ' + str(wait_before_start_sec) + ' сек...', ADMINS)
         while Account.select().where(Account.key == KEY).get().work_stat == 'start':
 
             if wait_before_start_sec > 0:
-                wait_before_start_sec = wait_before_start_sec - 1
-                time.sleep(1)
+                wait_before_start_sec = wait_before_start_sec - 0.5
+                time.sleep(0.5)
             else:
                 if get_prop('work_hour_end') and int(get_prop('work_hour_end')) == int(datetime.datetime.now().strftime('%H')):
                     msg_str = 'Время выгрузки: {} ч., я завершил работу'.format(get_prop('work_hour_end'))
