@@ -264,7 +264,7 @@ def save_plt(folder, filename, plt):
     plt.savefig(os.path.join(folder, filename))
 
 
-def go_bets(wag_ol, wag_fb, key, deff_max, vect1, vect2, sc1, sc2, created, event_type):
+def go_bets(wag_ol, wag_fb, key, deff_max, vect1, vect2, sc1, sc2, created, event_type, l, l_fisrt):
     global bal1, bal2, cnt_fail, cnt_fork_success, k1, k2, total_bet, bet1, bet2, OLIMP_USER, FONBET_USER
 
     olimp_bet_type = str(key.split('@')[-2])
@@ -442,6 +442,8 @@ def go_bets(wag_ol, wag_fb, key, deff_max, vect1, vect2, sc1, sc2, created, even
         fork_info[fork_id]['olimp']['time_bet'] = shared['olimp'].get('time_bet')
         fork_info[fork_id]['fonbet']['time_bet'] = shared['fonbet'].get('time_bet')
         fork_info[fork_id]['fonbet']['bet_delay'] = shared['fonbet'].get('bet_delay')
+        fork_info[fork_id]['fonbet']['l'] = l
+        fork_info[fork_id]['fonbet']['l_fisrt'] = l_fisrt
 
         fork_info[fork_id]['olimp']['new_bet_sum'] = shared['olimp'].get('new_bet_sum')
         fork_info[fork_id]['fonbet']['new_bet_sum'] = shared['fonbet'].get('new_bet_sum')
@@ -762,6 +764,7 @@ if __name__ == '__main__':
             if server_forks:
                 for key, val_json in sorted(server_forks.items(), key=lambda x: random.random()):
                     l = val_json.get('l', 0.0)
+                    l_fisrt = val_json.get('l_fisrt', 0.0)
                     k1_type = key.split('@')[-1]
                     k2_type = key.split('@')[-2]
 
@@ -873,7 +876,7 @@ if __name__ == '__main__':
                                     else:
                                         temp_lock_fork.update({key: now_timestamp})
                                         prnt('Go bets: ' + key + ' ' + info)
-                                        fork_success = go_bets(val_json.get('kof_olimp'), val_json.get('kof_fonbet'), key, deff_max, vect1, vect2, sc1, sc2, created_fork, event_type)
+                                        fork_success = go_bets(val_json.get('kof_olimp'), val_json.get('kof_fonbet'), key, deff_max, vect1, vect2, sc1, sc2, created_fork, event_type, l, l_fisrt)
                             elif deff_max >= 3:
                                 pass
                         else:

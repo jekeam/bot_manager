@@ -182,7 +182,7 @@ def export_hist(OLIMP_USER, FONBET_USER):
                     out = out + \
                           str(id) + ';' + \
                           str(time) + ';' + \
-                          str(max(info['fonbet'].get('event_type', ''), info['olimp'].get('event_type', '') ))+ ';' + \
+                          str(max(info['fonbet'].get('event_type', ''), info['olimp'].get('event_type', ''))) + ';' + \
                           str(float(info['fonbet'].get('kof', 0.0))).replace('.', ',') + ';' + \
                           str(float(info['olimp'].get('kof', 0.0))).replace('.', ',') + ';' + \
  \
@@ -232,6 +232,10 @@ def export_hist(OLIMP_USER, FONBET_USER):
  \
                           str(info['fonbet'].get('bet_delay', '')) + ';' + \
  \
+                          str(info['fonbet'].get('l', '0.0')) + ';' + \
+ \
+                          str(info['fonbet'].get('l_fisrt', '0.0')) + ';' + \
+ \
                           str(info['fonbet'].get('err', '')) + ';' + \
                           str(info['olimp'].get('err', '')) + ';' + '\n'
 
@@ -239,7 +243,7 @@ def export_hist(OLIMP_USER, FONBET_USER):
                          'fb_id;o_id;fb_time;o_time;fb_kof;o_kof;fb_sum_bet;o_sum_bet;' \
                          'fb_profit;o_profit;fb_result;o_result;fb_name;o_name;fb_status;' \
                          'o_sum_sale;f_kof_type;o_kof_type;fb_vector;ol_vector;fb_time_bet;ol_time_bet;' \
-                         'fb_new_bet_sum;ol_new_bet_sum;fb_bal;ol_bal;fb_max_bet;fb_bet_delay;fb_err;ol_err;\n'
+                         'fb_new_bet_sum;ol_new_bet_sum;fb_bal;ol_bal;fb_max_bet;fb_bet_delay;l;l_fisrt;fb_err;ol_err;\n'
 
             with open(csv_name, 'w', encoding='utf-8') as f:
                 f.write(header + out)
