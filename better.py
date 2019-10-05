@@ -75,8 +75,7 @@ def check_l(L):
     # if L <= 0.90 and str(ACC_ID) != '3':
     #         l_exclude_text = l_exclude_text + 'Вилка ' + str(L) + ' (' + str(round((1 - L) * 100, 2)) + '%), вилка исключена т.к. доходноть высокая >= 10%\n'
     if L > MIN_L:
-        l_exclude_text = l_exclude_text + 'Вилка ' + \
-                         str(L) + ' (' + str(round((1 - L) * 100, 3)) + '%), беру вилки только >= ' + str(round((1 - MIN_L) * 100, 3)) + '%\n'
+        l_exclude_text = l_exclude_text + 'Вилка ' + str(L) + ' (' + str(round((1 - L) * 100, 3)) + '%), беру вилки только >= ' + str(round((1 - MIN_L) * 100, 3)) + '%\n'
 
     if l_exclude_text != '':
         return l_exclude_text
