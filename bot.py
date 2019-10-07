@@ -264,25 +264,23 @@ def botlist(update, context, edit=False):
 
     for acc in acc_list:
 
+        work_stat_inactive = emojize(':x:', use_aliases=True) + ' Не активен' + ' ' + date_end_str
+        
         if acc.date_end:
             date_end = datetime.datetime.fromtimestamp(acc.date_end)
             date_end_str = '(до ' + date_end.strftime('%d.%m.%Y') + ')'
-        else:
-            date_end_str = '(бессрочно)'
-
-        work_stat_inactive = emojize(':x:', use_aliases=True) + ' Не активен' + ' ' + date_end_str
-        if acc.status == 'inactive':
-            work_stat = work_stat_inactive
-        elif acc.work_stat == 'start':
-            work_stat = emojize(':arrow_forward:', use_aliases=True) + ' Работает ' + date_end_str
-        elif acc.work_stat == 'stop':
-            work_stat = emojize(':stop_button:', use_aliases=True) + ' Остановлен ' + date_end_str
-        else:
-            work_stat = work_stat_inactive
-        # check for date
-        if date_end:
+            # check for date
             if date_end < datetime.datetime.now():
                 work_stat = work_stat_inactive
+            elif acc.status == 'inactive':
+                work_stat = work_stat_inactive
+            elif acc.work_stat == 'start':
+                work_stat = emojize(':arrow_forward:', use_aliases=True) + ' Работает ' + date_end_str
+            elif acc.work_stat == 'stop':
+                work_stat = emojize(':stop_button:', use_aliases=True) + ' Остановлен ' + date_end_str
+        else:
+            date_end_str = '(бессрочно)'
+        
 
         if str(acc.user_id) in ['323214669']:
             work_stat = work_stat + emojize(':dollar:', use_aliases=True)
