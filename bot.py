@@ -313,6 +313,7 @@ def button(update, context):
         keyboard.append([InlineKeyboardButton(text=bot_prop.BTN_BACK, callback_data='botlist')])
 
         reply_markup = InlineKeyboardMarkup(keyboard)
+        
         query.message.edit_text(
             text='*' + bot_prop.MSG_START_STOP + '\n[ID=' + str(acc_info.get().id) + '*](tg://user?id=' + str(acc_info.get().user_id) + ')\n' + get_prop_str(acc_info.get().id),
             reply_markup=reply_markup,
