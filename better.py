@@ -263,7 +263,7 @@ def save_plt(folder, filename, plt):
     plt.savefig(os.path.join(folder, filename))
 
 
-def go_bets(wag_ol, wag_fb, key, deff_max, vect1, vect2, sc1, sc2, created, event_type, l, l_fisrt):
+def go_bets(wag_ol, wag_fb, key, deff_max, vect1, vect2, sc1, sc2, created, event_type, l, l_fisrt, is_top):
     global bal1, bal2, cnt_fail, cnt_fork_success, k1, k2, total_bet, bet1, bet2, OLIMP_USER, FONBET_USER
 
     olimp_bet_type = str(key.split('@')[-2])
@@ -460,6 +460,9 @@ def go_bets(wag_ol, wag_fb, key, deff_max, vect1, vect2, sc1, sc2, created, even
         fork_info[fork_id]['fonbet']['err'] = str(shared.get('fonbet_err', 'ok'))
 
         fork_info[fork_id]['fonbet']['max_bet'] = shared['fonbet'].get('max_bet')
+
+        fork_info[fork_id]['fonbet']['is_top'] = is_top
+        fork_info[fork_id]['fonbet']['is_hot'] = wag_fb.get('is_hot')
 
         fork_info[fork_id]['fonbet']['avg_change'] = str(x)
         fork_info[fork_id]['fonbet']['order_kof'] = str(y)
@@ -873,7 +876,7 @@ if __name__ == '__main__':
                                         else:
                                             temp_lock_fork.update({key: now_timestamp})
                                             prnt('Go bets: ' + key + ' ' + info)
-                                            fork_success = go_bets(val_json.get('kof_olimp'), val_json.get('kof_fonbet'), key, deff_max, vect1, vect2, sc1, sc2, created_fork, event_type, l, l_fisrt)
+                                            fork_success = go_bets(val_json.get('kof_olimp'), val_json.get('kof_fonbet'), key, deff_max, vect1, vect2, sc1, sc2, created_fork, event_type, l, l_fisrt, is_top)
                                 elif deff_max >= 3:
                                     pass
                             else:
