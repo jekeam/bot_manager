@@ -275,7 +275,7 @@ def botlist(update, context, edit=False):
                 work_stat_inactive = emojize(':x:', use_aliases=True) + ' Не активен' + ' ' + date_end_str
         else:
             date_end_str = '[бессрочно]'
-        
+
         if not work_stat_inactive:
             if acc.work_stat == 'start':
                 work_stat = emojize(':arrow_forward:', use_aliases=True) + ' Работает ' + ' ' + date_end_str
@@ -283,7 +283,6 @@ def botlist(update, context, edit=False):
                 work_stat = emojize(':stop_button:', use_aliases=True) + ' Остановлен ' + ' ' + date_end_str
         else:
             work_stat = work_stat_inactive
-        
 
         if str(acc.user_id) in ['323214669']:
             work_stat = work_stat + emojize(':dollar:', use_aliases=True)
@@ -313,9 +312,9 @@ def button(update, context):
         keyboard.append([InlineKeyboardButton(text=bot_prop.BTN_BACK, callback_data='botlist')])
 
         reply_markup = InlineKeyboardMarkup(keyboard)
-        
+
         query.message.edit_text(
-            text=bot_prop.MSG_START_STOP + ' [ID: ' + str(acc_info.get().id) + ', User: ' + str(acc_info.get().user_id) + '](tg://user?id=' + str(acc_info.get().user_id) + ')\n' + get_prop_str(acc_info.get().id),
+            text=bot_prop.MSG_START_STOP + ' [ID: ' + str(acc_info.get().id) + '@' + str(acc_info.get().user_id) + '](tg://user?id=' + str(acc_info.get().user_id) + ')\n' + get_prop_str(acc_info.get().id),
             reply_markup=reply_markup,
             parse_mode=telegram.ParseMode.MARKDOWN
         )
