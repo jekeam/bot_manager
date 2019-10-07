@@ -263,23 +263,26 @@ def botlist(update, context, edit=False):
         acc_list = Account.select().where((Account.user == user.id) & ((Account.status == 'active') | (Account.status == 'inactive'))).order_by(Account.id)
 
     for acc in acc_list:
-
-        work_stat_inactive = emojize(':x:', use_aliases=True) + ' Не активен' + ' ' + date_end_str
-        
+        work_stat_inactive = None
+        date_end_str = ''
         if acc.date_end:
             date_end = datetime.datetime.fromtimestamp(acc.date_end)
-            date_end_str = '(до ' + date_end.strftime('%d.%m.%Y') + ')'
+            date_end_str = '[до ' + date_end.strftime('%d.%m.%Y') + ']'
             # check for date
             if date_end < datetime.datetime.now():
-                work_stat = work_stat_inactive
+                work_stat_inactive = emojize(':x:', use_aliases=True) + ' Не активен' + ' ' + date_end_str
             elif acc.status == 'inactive':
-                work_stat = work_stat_inactive
-            elif acc.work_stat == 'start':
-                work_stat = emojize(':arrow_forward:', use_aliases=True) + ' Работает ' + date_end_str
-            elif acc.work_stat == 'stop':
-                work_stat = emojize(':stop_button:', use_aliases=True) + ' Остановлен ' + date_end_str
+                work_stat_inactive = emojize(':x:', use_aliases=True) + ' Не активен' + ' ' + date_end_str
         else:
-            date_end_str = '(бессрочно)'
+            date_end_str = '[бессрочно]'
+        
+        if not work_stat_inactive:
+            if acc.work_stat == 'start':
+                work_stat = emojize(':arrow_forward:', use_aliases=True) + ' Работает ' + ' ' + date_end_str
+            elif acc.work_stat == 'stop':
+                work_stat = emojize(':stop_button:', use_aliases=True) + ' Остановлен ' + ' ' + date_end_str
+        else:
+            work_stat = work_stat_inactive
         
 
         if str(acc.user_id) in ['323214669']:
