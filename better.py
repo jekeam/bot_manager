@@ -702,7 +702,7 @@ if __name__ == '__main__':
                 (Properties.key == 'MIN_PROC') & 
                 (Properties.val >= round(MIN_PROC)) 
             )#.count()
-            xx = ''
+            x = ''
             for c in cnt:
                 x = x + str(c.id) + ','
             print(x)
