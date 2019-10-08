@@ -436,6 +436,8 @@ class BetManager:
                 self.opposite_stat_wait(shared)
 
                 if shared.get(self.bk_name_opposite, {}).get('reg_id'):
+                    if get_prop('sale_bet', 'вкл') == 'выкл':
+                        raise ValueError(err_msg)
                     sale_opp(e, shared)
                     raise ValueError(err_msg)
                 else:
@@ -621,6 +623,11 @@ class BetManager:
                     prnt(self.msg.format(sys._getframe().f_code.co_name, 'Потеря при выкупе: ' + str(self.sale_profit)))
             else:
                 prnt(self.msg.format(sys._getframe().f_code.co_name, 'Сумма выкупа неизвестна'))
+
+            if get_prop('sale_bet', 'вкл') == 'выкл' and (self_opp_data.sum_sell is None or self_opp_data.sum_sell <= -50):
+                err_str = 'Выкуп ставки отключен, сумма выкупа ' + str(self_opp_data.sum_sell)
+                prnt(self.msg.format(sys._getframe().f_code.co_name, err_str))
+                raise BetIsLost(err_str)
 
             self.recalc_sum_bet(shared)
 
