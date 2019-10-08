@@ -693,27 +693,29 @@ if __name__ == '__main__':
         start_see_fork = threading.Thread(target=run_client)  # , args=(server_forks,))
         start_see_fork.start()
 
-        wait_before_start_sec = float(randint(1, 300))
+        wait_before_start_sec = 0
+        if str(ACC_ID) != '3':
+            wait_before_start_sec = float(randint(1, 600))
         send_message_bot(USER_ID, str(ACC_ID) + ': ' + 'Аккаунт запущен', ADMINS)
         prnt('начну работу через ' + str(round(wait_before_start_sec)) + ' сек...')
-        
+
         while Account.select().where(Account.key == KEY).get().work_stat == 'start':
 
             if wait_before_start_sec > 0:
                 wait_before_start_sec = wait_before_start_sec - 0.5
                 time.sleep(0.5)
             else:
-                
+
                 time_export = False
                 if get_prop('work_hour_end'):
                     if int(get_prop('work_hour_end')) == int(datetime.datetime.now().strftime('%H')):
                         time_export = True
-                
+
                 if os.path.exists('./' + str(ACC_ID) + '_id_forks.txt'):
                     if export_block:
                         if not time_export:
                             export_block = False
-                    else: 
+                    else:
                         if time_export:
                             msg_str = 'Время выгрузки: {} ч., начинаю выгрузку...'.format(get_prop('work_hour_end'))
                             raise Shutdown(msg_str)
@@ -895,17 +897,17 @@ if __name__ == '__main__':
                                             prnt('Вилка исключена, т.к. мы ее пытались проставить успешно/не успешно, но прошло менее 60 секунд и есть еще вилки, будем ставить другие, новые')
                                         else:
                                             temp_lock_fork.update({key: now_timestamp})
-                                            
-                                            cnt_act_acc = Account.select().join(Properties).where( 
-                                                (Account.work_stat == 'start') & 
-                                                (Properties.key == 'MIN_PROC') & 
+
+                                            cnt_act_acc = Account.select().join(Properties).where(
+                                                (Account.work_stat == 'start') &
+                                                (Properties.key == 'MIN_PROC') &
                                                 (Properties.val >= MIN_PROC)
                                             ).count()
-                                            
+
                                             prnt('Активных аккаунтов со ставкой >= ' + str(MIN_PROC) + ', ' + str(cnt_act_acc))
                                             is_bet = randint(0, 1)
                                             prnt('Случайное число: ' + str(is_bet))
-                                            
+
                                             prnt('Go bets: ' + key + ' ' + info)
                                             fork_success = go_bets(val_json.get('kof_olimp'), val_json.get('kof_fonbet'), key, deff_max, vect1, vect2, sc1, sc2, created_fork, event_type, l, l_fisrt, is_top, is_bet)
                                 elif deff_max >= 3:
