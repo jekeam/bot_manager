@@ -263,7 +263,7 @@ def save_plt(folder, filename, plt):
     plt.savefig(os.path.join(folder, filename))
 
 
-def go_bets(wag_ol, wag_fb, key, deff_max, vect1, vect2, sc1, sc2, created, event_type, l, l_fisrt, is_top):
+def go_bets(wag_ol, wag_fb, key, deff_max, vect1, vect2, sc1, sc2, created, event_type, l, l_fisrt, is_top, is_bet):
     global bal1, bal2, cnt_fail, cnt_fork_success, k1, k2, total_bet, bet1, bet2, OLIMP_USER, FONBET_USER
 
     olimp_bet_type = str(key.split('@')[-2])
@@ -463,6 +463,7 @@ def go_bets(wag_ol, wag_fb, key, deff_max, vect1, vect2, sc1, sc2, created, even
 
         fork_info[fork_id]['fonbet']['is_top'] = is_top
         fork_info[fork_id]['fonbet']['is_hot'] = wag_fb.get('is_hot')
+        fork_info[fork_id]['fonbet']['is_bet'] = is_bet
 
         fork_info[fork_id]['fonbet']['avg_change'] = str(x)
         fork_info[fork_id]['fonbet']['order_kof'] = str(y)
@@ -694,20 +695,6 @@ if __name__ == '__main__':
         send_message_bot(USER_ID, str(ACC_ID) + ': ' + 'Аккаунт запущен', ADMINS)
         prnt('начну работу через ' + str(round(wait_before_start_sec)) + ' сек...')
         
-        if str(ACC_ID) == '3':
-            #select count(*) from account a where a.work_stat = 'start' and exists(select 1 from properties p where p. `key` = 'MIN_PROC' and round(cast(p.val as decimal(3, 1))) = round(3) and p.acc_id = a.id); 
-            
-            cnt = Account.select().join(Properties).where( 
-                (Account.work_stat == 'start') & 
-                (Properties.key == 'MIN_PROC') & 
-                (Properties.val >= round(MIN_PROC)-2) 
-            )#.count()
-            x = ''
-            for c in cnt:
-                x = x + str(c.id) + ','
-            prnt(x)
-                
-        
         while Account.select().where(Account.key == KEY).get().work_stat == 'start':
 
             if wait_before_start_sec > 0:
@@ -906,8 +893,19 @@ if __name__ == '__main__':
                                             prnt('Вилка исключена, т.к. мы ее пытались проставить успешно/не успешно, но прошло менее 60 секунд и есть еще вилки, будем ставить другие, новые')
                                         else:
                                             temp_lock_fork.update({key: now_timestamp})
+                                            
+                                            cnt_act_acc = Account.select().join(Properties).where( 
+                                                (Account.work_stat == 'start') & 
+                                                (Properties.key == 'MIN_PROC') & 
+                                                (Properties.val >= MIN_PROC)
+                                            ).count()
+                                            
+                                            prnt('Активных аккаунтов со ставкой >= ' + str(MIN_PROC) + ', ' + str(cnt_act_acc))
+                                            is_bet = randint(0, 1)
+                                            prnt('Случайное число: ' + str(is_bet))
+                                            
                                             prnt('Go bets: ' + key + ' ' + info)
-                                            fork_success = go_bets(val_json.get('kof_olimp'), val_json.get('kof_fonbet'), key, deff_max, vect1, vect2, sc1, sc2, created_fork, event_type, l, l_fisrt, is_top)
+                                            fork_success = go_bets(val_json.get('kof_olimp'), val_json.get('kof_fonbet'), key, deff_max, vect1, vect2, sc1, sc2, created_fork, event_type, l, l_fisrt, is_top, is_bet)
                                 elif deff_max >= 3:
                                     pass
                             else:
