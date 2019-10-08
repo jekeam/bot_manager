@@ -264,7 +264,7 @@ def save_plt(folder, filename, plt):
 
 
 def go_bets(wag_ol, wag_fb, key, deff_max, vect1, vect2, sc1, sc2, created, event_type, l, l_fisrt, is_top, is_bet):
-    global bal1, bal2, cnt_fail, cnt_fork_success, k1, k2, total_bet, bet1, bet2, OLIMP_USER, FONBET_USER
+    global bal1, bal2, cnt_fail, cnt_fork_success, k1, k2, total_bet, bet1, bet2, OLIMP_USER, FONBET_USER, ACC_ID
 
     olimp_bet_type = str(key.split('@')[-2])
     fonbet_bet_type = str(key.split('@')[-1])
@@ -327,6 +327,7 @@ def go_bets(wag_ol, wag_fb, key, deff_max, vect1, vect2, sc1, sc2, created, even
         shared = dict()
 
         shared['olimp'] = {
+            'acc_id': ACC_ID,
             'opposite': 'fonbet',
             'created': created,
             'amount': bet1,
@@ -340,6 +341,7 @@ def go_bets(wag_ol, wag_fb, key, deff_max, vect1, vect2, sc1, sc2, created, even
             'event_type': event_type,
         }
         shared['fonbet'] = {
+            'acc_id': ACC_ID,
             'opposite': 'olimp',
             'created': created,
             'amount': bet2,
