@@ -295,8 +295,7 @@ class BetManager:
             finally:
                 shared[self.bk_name + '_recheck'] = 'done'
 
-        prnt(self.msg.format(sys._getframe().f_code.co_name,
-                             'get kof ' + self.bk_name + ': ' + str(self.val_bet_stat) + ' -> ' + str(self.cur_val_bet) + ', time req.:' + str(self.time_req)))
+        prnt(self.msg.format(sys._getframe().f_code.co_name, 'get kof ' + self.bk_name + ': ' + str(self.val_bet_stat) + ' -> ' + str(self.cur_val_bet) + ', time req.:' + str(self.time_req)))
 
         self.opposite_wait(shared, 'recheck')
 
@@ -343,8 +342,7 @@ class BetManager:
                     self_opp.sale_bet(shared)
                     break
                 except (SaleError, CouponBlocked) as e:
-                    prnt(self.msg.format(sys._getframe().f_code.co_name,
-                                         'Ошибка: ' + e.__class__.__name__ + ' - ' + str(e) + '. Пробую проставить и пробую выкупить еще! (' + str(self.attempt_sale) + ')'))
+                    prnt(self.msg.format(sys._getframe().f_code.co_name, 'Ошибка: ' + e.__class__.__name__ + ' - ' + str(e) + '. Пробую проставить и пробую выкупить еще! (' + str(self.attempt_sale) + ')'))
                     sleep(15)
 
         def bet_done(shared):
@@ -424,11 +422,8 @@ class BetManager:
                 self.opposite_stat_wait(shared)
                 self.opposite_stat_get(shared)
 
-                if get_prop('sale_bet', 'вкл') == 'вкл':
-                    prnt(self.msg.format(sys._getframe().f_code.co_name, 'Ошибка при проставлении ставки в ' + self.bk_name + ', передаю его завершающему'))
-                    self.bet_safe(shared)
-                else:
-                    prnt(self.msg.format(sys._getframe().f_code.co_name, 'Выкуп ставки отключен'))
+                prnt(self.msg.format(sys._getframe().f_code.co_name, 'Ошибка при проставлении ставки в ' + self.bk_name + ', передаю его завершающему'))
+                self.bet_safe(shared)
 
             except BkOppBetError as e:
                 raise BkOppBetError(e)
@@ -567,12 +562,10 @@ class BetManager:
                     self.cur_total = sum(map(int, self.cur_sc_main.split(':')))
             except AttributeError as e:
                 exc_type, exc_value, exc_traceback = sys.exc_info()
-                prnt(
-                    self.msg.format(
-                        sys._getframe().f_code.co_name,
-                        'Ошибка парсинга счета: (' + e.__class__.__name__ + ') ' + str(e) + ' ' + str(repr(traceback.format_exception(exc_type, exc_value, exc_traceback)))
-                    )
-                )
+                prnt(self.msg.format(
+                    sys._getframe().f_code.co_name,
+                    'Ошибка парсинга счета: (' + e.__class__.__name__ + ') ' + str(e) + ' ' + str(repr(traceback.format_exception(exc_type, exc_value, exc_traceback)))
+                ))
 
             if not self.cur_total_new:
                 self.cur_total_new = self.cur_total
@@ -622,7 +615,7 @@ class BetManager:
 
                 if self.sale_profit > 0:
                     err_str = self.msg_err.format(sys._getframe().f_code.co_name, 'Сумма выкупа больше чем ставка на ' + str(self.sale_profit) + ', пробую выкупить')
-                    prnt(err_str)
+                    prnt(self.msg.format(sys._getframe().f_code.co_name, err_str))
                     raise BetIsLost(err_str)
                 else:
                     prnt(self.msg.format(sys._getframe().f_code.co_name, 'Потеря при выкупе: ' + str(self.sale_profit)))
@@ -636,7 +629,7 @@ class BetManager:
             elif self_opp_data.sum_sell and self.sale_profit > self.bet_profit:
                 # sell bet
                 err_str = 'Выкуп за: {} выгоднее, чем возможные потери после перерасчета: {}'.format(self.sale_profit, self.bet_profit)
-                prnt(err_str)
+                prnt(self.msg.format(sys._getframe().f_code.co_name, err_str))
                 raise BetIsLost(err_str)
             else:
                 prnt(self.msg.format(sys._getframe().f_code.co_name, 'Ставка: {} выгоднее выкупа: {}, работаю дальше'.format(self.bet_profit, self.sale_profit)))
