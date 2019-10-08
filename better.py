@@ -694,12 +694,15 @@ if __name__ == '__main__':
         send_message_bot(USER_ID, str(ACC_ID) + ': ' + 'Аккаунт запущен', ADMINS)
         prnt('начну работу через ' + str(round(wait_before_start_sec)) + ' сек...')
         
-        # if str(ACC_ID) == '3':
-        #     Account.select().where(Account.work_stat == 'start').get().count()
-        #     #select count(*) from account a where a.work_stat = 'start' and exists(select 1 from properties p where p. `key` = 'MIN_PROC' and round(cast(p.val as decimal(3, 1))) = round(3) and p.acc_id = a.id); 
+        if str(ACC_ID) == '3':
+            #select count(*) from account a where a.work_stat = 'start' and exists(select 1 from properties p where p. `key` = 'MIN_PROC' and round(cast(p.val as decimal(3, 1))) = round(3) and p.acc_id = a.id); 
             
-        #     subquery = Properties.select(Param('1')).where((Properties.key == 'MIN_PROC') & (Properties.val.cast('INTEGER') == round(MIN_PROC)) & (Properties.acc_id = Account.id)))
-        #     parents_with_children = Account.select().where(Clause(SQL('EXISTS'), subquery) & (Account.work_stat == 'start'))
+            cnt = Account.select().join(Properties).where( 
+                (Account.work_stat == 'start') & 
+                (Properties.key == 'MIN_PROC') & 
+                (Properties.val.cast('INTEGER') >= round(MIN_PROC)) 
+            ).count()
+            prnt(cnt)
         
         while Account.select().where(Account.key == KEY).get().work_stat == 'start':
 
