@@ -703,7 +703,7 @@ if __name__ == '__main__':
                 (Properties.val >= round(MIN_PROC)) 
             )#.count()
             for c in cnt:
-                prnt('{}, {}, {}'.format(c.id, c.work_stat, c.val))
+                prnt('{}, {}, {}'.format(c.id, c.work_stat, c.pid))
         
         while Account.select().where(Account.key == KEY).get().work_stat == 'start':
 
