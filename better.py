@@ -689,7 +689,8 @@ if __name__ == '__main__':
         start_see_fork.start()
 
         wait_before_start_sec = float(randint(1, 300))
-        send_message_bot(USER_ID, str(ACC_ID) + ': ' + 'Аккаунт запущен, начну работу через ' + str(round(wait_before_start_sec)) + ' сек...', ADMINS)
+        send_message_bot(USER_ID, str(ACC_ID) + ': ' + 'Аккаунт запущен', ADMINS)
+        prnt('начну работу через ' + str(round(wait_before_start_sec)) + ' сек...')
         while Account.select().where(Account.key == KEY).get().work_stat == 'start':
 
             if wait_before_start_sec > 0:
