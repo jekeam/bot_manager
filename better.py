@@ -697,7 +697,7 @@ if __name__ == '__main__':
                 wait_before_start_sec = wait_before_start_sec - 0.5
                 time.sleep(0.5)
             else:
-                if get_prop('work_hour_end') and int(get_prop('work_hour_end')) == int(datetime.datetime.now().strftime('%H')):
+                if get_prop('work_hour_end') and int(get_prop('work_hour_end')) == int(datetime.datetime.now().strftime('%H')) and os.path.exists('./' + str(ACC_ID) + '_id_forks.txt'):
                     msg_str = 'Время выгрузки: {} ч., начинаю выгрузку...'.format(get_prop('work_hour_end'))
                     raise Shutdown(msg_str)
 
