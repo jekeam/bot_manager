@@ -423,8 +423,11 @@ class BetManager:
                 self.opposite_stat_wait(shared)
                 self.opposite_stat_get(shared)
 
-                prnt(self.msg.format(sys._getframe().f_code.co_name, 'Ошибка при проставлении ставки в ' + self.bk_name + ', передаю его завершающему'))
-                self.bet_safe(shared)
+                if get_prop('sale_bet', 'вкл') == 'вкл':
+                    prnt(self.msg.format(sys._getframe().f_code.co_name, 'Ошибка при проставлении ставки в ' + self.bk_name + ', передаю его завершающему'))
+                    self.bet_safe(shared)
+                else:
+                    prnt(self.msg.format(sys._getframe().f_code.co_name, 'Выкуп ставки отключен'))
 
             except BkOppBetError as e:
                 raise BkOppBetError(e)
