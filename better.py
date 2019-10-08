@@ -593,6 +593,8 @@ start_message_send = False
 
 temp_lock_fork = {}
 
+export_block = False
+
 # wag_fb:{'event': '12797479', 'factor': '921', 'param': '', 'score': '0:0', 'value': '2.35'}
 # wag_fb:{'apid': '1144260386:45874030:1:3:-9999:3:NULL:NULL:1', 'factor': '1.66', 'sport_id': 1, 'event': '45874030'}
 
@@ -697,9 +699,22 @@ if __name__ == '__main__':
                 wait_before_start_sec = wait_before_start_sec - 0.5
                 time.sleep(0.5)
             else:
-                if get_prop('work_hour_end') and int(get_prop('work_hour_end')) == int(datetime.datetime.now().strftime('%H')) and os.path.exists('./' + str(ACC_ID) + '_id_forks.txt'):
-                    msg_str = 'Время выгрузки: {} ч., начинаю выгрузку...'.format(get_prop('work_hour_end'))
-                    raise Shutdown(msg_str)
+                
+                time_export = False
+                if get_prop('work_hour_end'):
+                    if int(get_prop('work_hour_end')) == int(datetime.datetime.now().strftime('%H')):
+                        time_export = True
+                
+                if os.path.exists('./' + str(ACC_ID) + '_id_forks.txt'):
+                    if export_block:
+                        if not time_export:
+                            export_block = False
+                    else: 
+                        if time_export:
+                            msg_str = 'Время выгрузки: {} ч., начинаю выгрузку...'.format(get_prop('work_hour_end'))
+                            raise Shutdown(msg_str)
+                else:
+                    export_block = True
 
                 # Обновление баланса каждые 120 минут
                 ref_balace = 120
