@@ -701,9 +701,9 @@ if __name__ == '__main__':
                 (Account.work_stat == 'start') & 
                 (Properties.key == 'MIN_PROC') & 
                 (Properties.val >= round(MIN_PROC)) 
-            ).count()
-            prnt(cnt)
-            prnt(cnt.sql())
+            )#.count()
+            for c in cnt:
+                prnt('{}, {}, {}'.format(c.id, c.work_stat, c.val))
         
         while Account.select().where(Account.key == KEY).get().work_stat == 'start':
 
