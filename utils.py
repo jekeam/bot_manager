@@ -8,7 +8,7 @@ import datetime
 import statistics
 import copy
 
-from db_model import Account
+from db_model import Account, Properties
 import sys
 
 DEBUG = False
