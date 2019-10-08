@@ -50,7 +50,7 @@ class BetManager:
 
     def __init__(self, shared: dict, bk_name: str, bk_container: dict):
 
-        self.acc_id = shared.get('acc_id')
+        self.acc_id = shared.get(bk_name, {}).get('acc_id')
         self.bk_name = bk_name
         self.bk_container = bk_container
         self.wager = bk_container['wager']
