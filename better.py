@@ -700,7 +700,7 @@ if __name__ == '__main__':
             cnt = Account.select().join(Properties).where( 
                 (Account.work_stat == 'start') & 
                 (Properties.key == 'MIN_PROC') & 
-                (Properties.val >= round(MIN_PROC)) 
+                (Properties.val >= round(MIN_PROC)-2) 
             )#.count()
             x = ''
             for c in cnt:
