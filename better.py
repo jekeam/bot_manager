@@ -705,7 +705,7 @@ if __name__ == '__main__':
             x = ''
             for c in cnt:
                 x = x + str(c.id) + ','
-            print(x)
+            prnt(x)
                 
         
         while Account.select().where(Account.key == KEY).get().work_stat == 'start':
