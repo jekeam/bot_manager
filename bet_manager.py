@@ -50,6 +50,7 @@ class BetManager:
 
     def __init__(self, shared: dict, bk_name: str, bk_container: dict):
 
+        self.acc_id = shared.get('acc_id')
         self.bk_name = bk_name
         self.bk_container = bk_container
         self.wager = bk_container['wager']
@@ -935,13 +936,14 @@ class BetManager:
 
         if self.bk_name == 'olimp':
 
-            # # bet_place
-            # if self.vector == 'UP':
-            #     sleep(20)
-            #     try:
-            #         1 / 0
-            #     except Exception as e:
-            #         raise BetError(e)
+            # bet_place
+            if self.vector == 'UP':
+                if str(self.acc_id) == '3':
+                    sleep(20)
+                    try:
+                        1 / 0
+                    except Exception as e:
+                        raise BetError(e)
 
             payload = copy.deepcopy(ol_payload)
 
@@ -1012,13 +1014,12 @@ class BetManager:
 
         elif self.bk_name == 'fonbet':
 
-            # # bet_place
-            # if self.vector == 'UP':
-            #     sleep(4)
-            #     try:
-            #         1 / 0
-            #     except Exception as e:
-            #         raise BetError(e)
+            if str(self.acc_id) == '3':
+                sleep(20)
+                try:
+                    1 / 0
+                except Exception as e:
+                    raise BetError(e)
 
             if not self.server_fb:
                 self.server_fb = get_urls(self.mirror, self.proxies)
