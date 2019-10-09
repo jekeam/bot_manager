@@ -721,8 +721,9 @@ if __name__ == '__main__':
                             msg_str = 'Время выгрузки: {} ч., начинаю выгрузку...'.format(get_prop('work_hour_end'))
                             raise Shutdown(msg_str)
                 else:
-                    prnt('Файл не найден, выставлена блокировка выгрузки на тек. час')
-                    export_block = True
+                    if not export_block:
+                        prnt('Файл не найден, выставлена блокировка выгрузки на тек. час')
+                        export_block = True
 
                 # Обновление баланса каждые 120 минут
                 ref_balace = 120
