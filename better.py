@@ -466,6 +466,10 @@ def go_bets(wag_ol, wag_fb, key, deff_max, vect1, vect2, sc1, sc2, created, even
         fork_info[fork_id]['fonbet']['is_top'] = is_top
         fork_info[fork_id]['fonbet']['is_hot'] = wag_fb.get('is_hot')
         fork_info[fork_id]['fonbet']['is_bet'] = is_bet
+        
+        fork_info[fork_id]['fonbet']['fork_time_type'] = get_prop('fork_time_type', 'auto')
+        fork_info[fork_id]['fonbet']['fork_life_time'] = get_prop('fork_life_time', '0')
+        fork_info[fork_id]['fonbet']['min_proc'] = get_prop('min_proc', '0')
 
         fork_info[fork_id]['fonbet']['avg_change'] = str(x)
         fork_info[fork_id]['fonbet']['order_kof'] = str(y)
