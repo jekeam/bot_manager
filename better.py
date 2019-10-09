@@ -714,12 +714,14 @@ if __name__ == '__main__':
                 if os.path.exists('./' + str(ACC_ID) + '_id_forks.txt'):
                     if export_block:
                         if not time_export:
+                            prnt('Час выгрузки прошел, снимаю блокировку')
                             export_block = False
                     else:
                         if time_export:
                             msg_str = 'Время выгрузки: {} ч., начинаю выгрузку...'.format(get_prop('work_hour_end'))
                             raise Shutdown(msg_str)
                 else:
+                    prnt('Файл не найден, выставлена блокировка выгрузки на тек. час')
                     export_block = True
 
                 # Обновление баланса каждые 120 минут
