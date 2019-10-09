@@ -624,20 +624,27 @@ class BetManager:
             else:
                 prnt(self.msg.format(sys._getframe().f_code.co_name, 'Сумма выкупа неизвестна'))
 
-            prnt(self.msg.format(
-                sys._getframe().f_code.co_name, 
-                'Параметр НЕвыкупа: {}, была ставка: {}, выкуп доступен за: {}, профит:{}, % потери: {}'.format(
-                    get_prop('sale_bet', '0'),  
-                    sum_opp, 
-                    (self_opp_data.sum_sell / self_opp_data.sum_sell_divider),
-                    self.sale_profit,
-                    round(self.sale_profit/(sum_opp/100))
-                )
-            ))
-            # if get_prop('sale_bet', '0') != '0' and (self_opp_data.sum_sell is None or self_opp_data.sum_sell <= -50):
-            #     err_str = 'Выкуп ставки отключен, сумма выкупа ' + str(self_opp_data.sum_sell)
-            #     prnt(self.msg.format(sys._getframe().f_code.co_name, err_str))
-            #     raise BetIsLost(err_str)
+            
+            sale_bet_proc = int(''.join(re.findall(r'\d+', get_prop('sale_bet', '0'))))
+            if sale_bet_proc > 0:
+                sale_prof_minus = round(self.sale_profit/(sum_opp/100)) * -1
+                prnt(self.msg.format(
+                    sys._getframe().f_code.co_name, 
+                    'Параметр НЕвыкупа: {}, была ставка: {}, выкуп доступен за: {}, профит:{}, % потери: {}'.format(
+                        get_prop('sale_bet', '0'),  
+                        sum_opp, 
+                        (self_opp_data.sum_sell / self_opp_data.sum_sell_divider),
+                        self.sale_profit,
+                        sale_prof_minus
+                    )
+                ))
+                
+                
+                if self_opp_data.sum_sell:
+                    if sale_prof_minus >= sale_bet_proc:
+                        err_str = 'Выкуп ставки отключен, плече брошено согласно настройке'
+                        prnt(self.msg.format(sys._getframe().f_code.co_name, err_str))
+                        raise BetIsLost(err_str)
 
             self.recalc_sum_bet(shared)
 
