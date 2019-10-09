@@ -1152,10 +1152,7 @@ class BetManager:
             if msg_code == 2:
                 raise CouponBlocked(msg_str)
             if not coupon_found:
-                err_str = self.msg_err.format(
-                    sys._getframe().f_code.co_name,
-                    'coupon regId ' + str(self.reg_id) +
-                    ' not found, retry, after sec: ' + str(timer_update))
+                err_str = self.msg_err.format(sys._getframe().f_code.co_name, 'coupon regId ' + str(self.reg_id) + ' not found, retry, after sec: ' + str(timer_update))
                 self.sale_bet(shared)
 
     def sale_bet(self, shared: dict):
