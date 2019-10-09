@@ -38,7 +38,7 @@ prop_abr = {
     "MAX_BET_FONBET": {"abr": "MAX BET в Fonbet", "type": "int", "max": "1000", "min": "0", "access_list": ["0", "100", "200", "300", "400", "500", "600", "700", "800", "900", "1000"], "error": ""},
     "SERVER_OLIMP": {"abr": "Сервер Олимп", "type": "str", "max": "", "min": "", "access_list": [], "error": ""},
     "TEST_OTH_SPORT": {"abr": "Новые виды спорта", "type": "str", "max": "", "min": "", "access_list": ["вкл", "выкл"], "error": ""},
-    "SALE_BET": {"abr": "НЕвыкуп ставки, %", "type": "int", "max": "100", "min": "0", "access_list": [], "error": ""},
+    "SALE_BET": {"abr": "НЕвыкуп при потере, %", "type": "int", "max": "100", "min": "0", "access_list": [], "error": ""},
 
     # "SERVER_IP_TEST": {"abr": "IP-адрес тест. сервера", "type": "", "max": "", "min": "", "access_list": [], "error": ""},
     # "SERVER_IP": {"abr": "IP-адрес бой сервера", "type": "", "max": "", "min": "", "access_list": [], "error": ""},
