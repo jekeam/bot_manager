@@ -66,3 +66,6 @@ class CouponBlocked(Exception):
 
 class SessionExpired(Exception):
     pass
+
+class BetIsDrop(Exception):
+    pass

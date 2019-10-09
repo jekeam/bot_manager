@@ -20,7 +20,7 @@ from meta_fb import payload_sell_check_result
 from utils import prnt, write_file, read_file, get_account_info, get_proxies, get_prop, get_new_sum_bets, get_sum_bets
 from fork_recheck import get_olimp_info, get_fonbet_info
 
-from exceptions import SessionNotDefined, BkOppBetError, NoMoney, BetError, SessionExpired, SaleError
+from exceptions import SessionNotDefined, BkOppBetError, NoMoney, BetError, SessionExpired, SaleError, BetIsDrop
 from exceptions import CouponBlocked, BetIsLost
 
 if get_prop('debug'):
@@ -645,7 +645,7 @@ class BetManager:
                     if sale_prof_minus >= sale_bet_proc:
                         err_str = 'Выкуп ставки отключен, плече брошено согласно настройке'
                         prnt(self.msg.format(sys._getframe().f_code.co_name, err_str))
-                        raise BetIsLost(err_str)
+                        raise BetIsDrop(err_str)
 
             self.recalc_sum_bet(shared)
 
@@ -777,6 +777,10 @@ class BetManager:
                 else:
                     prnt(self.msg.format(sys._getframe().f_code.co_name, 'Ставка не возможна'))
 
+            except BetIsDrop as e:
+                err_msg = str(e.__class__.__name__) + ': ' + str(e)
+                raise BetIsLost(err_msg)
+                
             except BetIsLost as e:
                 if shared.get(self.bk_name + '_err', 'err') != 'ok':
                     err_msg = str(e.__class__.__name__) + ': ' + str(e)
