@@ -1204,6 +1204,9 @@ class BetManager:
 
                 if res.get('data') and res.get('data').get('status', 'err') == 'ok':
                     prnt(self.msg.format(sys._getframe().f_code.co_name, 'code: ' + str(err_code) + ', ' + res.get('data', {}).get('msg')))
+                elif err_code == 403 and 'code:20' in err_msg:
+                    prnt(self.msg.format(sys._getframe().f_code.co_name, 'Error code: ' + str(err_code) + ', Error msg: ' + err_msg))
+                    return self.sale_bet(shared)
                 else:
                     raise SaleError(err_msg)
 
