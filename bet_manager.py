@@ -174,10 +174,7 @@ class BetManager:
         push_ok = False
         while maxbet_stat == 'wait':
             if not push_ok:
-                prnt(self.msg.format(
-                    sys._getframe().f_code.co_name,
-                    self.bk_name + ' wait maxbet from ' +
-                    self.bk_name_opposite + ': ' + str(maxbet_stat)))
+                prnt(self.msg.format(sys._getframe().f_code.co_name, self.bk_name + ' wait maxbet from ' + self.bk_name_opposite + ': ' + str(maxbet_stat)))
                 push_ok = True
             maxbet_stat = shared.get('maxbet_in_' + self.bk_name_opposite, 'wait')
             sleep(0.1)
