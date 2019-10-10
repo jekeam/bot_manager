@@ -614,6 +614,10 @@ if __name__ == '__main__':
         send_message_bot(USER_ID, str(ACC_ID) + ': ' + 'Аккаунт запущен', ADMINS)
         prnt('начну работу через ' + str(round(wait_before_start_sec)) + ' сек...')
         
+        if wait_before_start_sec > 0 and Account.select().where(Account.key == KEY).get().work_stat == 'start':
+            wait_before_start_sec = wait_before_start_sec - 1
+            time.sleep(1)
+        
         Account.update(pid=os.getpid(), time_start=round(time.time())).where(Account.key == KEY).execute()
         prnt('DEBUG: ' + str(DEBUG))
 
