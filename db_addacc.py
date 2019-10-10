@@ -7,22 +7,22 @@ if __name__ == '__main__':
 
     # PROXY
     # user name
-    user = 'amirikanetsT7'
+    user = 'r7yudm'
     # password
-    pswd = 'J7u3YxE'
+    pswd = 'WwWtQV'
     # ip
-    ip = '217.147.169.95'
+    ip = '45.132.78.210'
     # port
-    port = '34512'
+    port = '8000'
 
     # BK
     # olimp
-    olu = '7105866'
-    olp = 'sTart07sPo'
+    olu = '8262617'
+    olp = 'sTart17sPo'
 
     # fonbet
-    fbu = '5816931'
-    fbp = 'y2w3VS72'
+    fbu = '5982042'
+    fbp = 'x51BT660'
 
     proxy = user + ':' + pswd + '@' + ip + ':' + port
     proxies = '{`fonbet`:{`http`:`http://' + proxy + '`,`https`:`https://' + proxy + '`},`olimp`:{`http`:`http://' + proxy + '`,`https`:`https://' + proxy + '`}}'
