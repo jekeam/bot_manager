@@ -284,8 +284,8 @@ def botlist(update, context, edit=False):
         else:
             work_stat = work_stat_inactive
 
-        if str(acc.user_id) in ['323214669']:
-            work_stat = work_stat + emojize(':dollar:', use_aliases=True)
+        # if str(acc.user_id) in ['323214669']:
+        #     work_stat = work_stat + emojize(':dollar:', use_aliases=True)
 
         keyboard.append([InlineKeyboardButton(text=str(acc.id) + ': ' + work_stat, callback_data=acc.key)])
 
