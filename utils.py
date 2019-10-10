@@ -340,6 +340,6 @@ def get_proxies():
         D = dict()
         D = {
             'fonbet': {'http': '', 'https': ''},
-            'olimp': {'http': 'https://217.168.76.230:59021', 'https': 'https://217.168.76.230:59021'}
+            'olimp': {'http': 'https://Selsuinegne:R5v7JwJ@193.233.30.155:45785', 'https': 'https://Selsuinegne:R5v7JwJ@193.233.30.155:45785'}
         }
         return D
