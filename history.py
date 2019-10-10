@@ -16,7 +16,6 @@ from join_csv import join_csv
 global ACC_ID, USER_ID
 
 file_name = str(ACC_ID) + '_id_forks.txt'
-csv_name = datetime.now().strftime("%d_%m_%Y") + '_' + str(ACC_ID) + '_statistics.csv'
 balance_str = ''
 balance_int = 0
 olimp_bet_min = 1000000000
@@ -124,11 +123,13 @@ def fonbet_get_hist(FONBET_USER):
 
 
 def export_hist(OLIMP_USER, FONBET_USER):
-    global file_name, csv_name
+    global file_name
     global olimp_bet_min
     global fonbet_bet_min
     global ACC_ID, USER_ID
     global balance_str, balance_int
+    
+    csv_name = datetime.now().strftime("%d_%m_%Y") + '_' + str(ACC_ID) + '_statistics.csv'
 
     if os.path.isfile(file_name):
 
