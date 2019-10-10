@@ -1033,13 +1033,13 @@ class BetManager:
 
         elif self.bk_name == 'fonbet':
 
-            # if self.vector == 'UP':
-            #     if str(self.acc_id) == '3':
-            #         sleep(20)
-            #         try:
-            #             1 / 0
-            #         except Exception as e:
-            #             raise BetError(e)
+            if self.vector == 'UP':
+                if str(self.acc_id) == '3':
+                    # sleep(20)
+                    try:
+                        1 / 0
+                    except Exception as e:
+                        raise BetError(e)
 
             if not self.server_fb:
                 self.server_fb = get_urls(self.mirror, self.proxies)
