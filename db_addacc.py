@@ -32,7 +32,7 @@ if __name__ == '__main__':
             # user id from telegram
             user=782928513,
             key=uid,
-            date_end=get_trunc_sysdate(35),  # cnt days
+            date_end=get_trunc_sysdate(30),  # cnt days
             status='active',
             proxies=proxies,
             accounts=accounts
