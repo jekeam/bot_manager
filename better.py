@@ -905,18 +905,23 @@ if __name__ == '__main__':
                                         else:
                                             temp_lock_fork.update({key: now_timestamp})
 
+                                            cur_proc = round((1 - l) * 100, 2)
                                             cnt_act_acc = Account.select().join(Properties).where(
                                                 (Account.work_stat == 'start') &
                                                 (Properties.key == 'MIN_PROC') &
-                                                (Properties.val >= MIN_PROC)
+                                                (Properties.val <= cur_proc)
                                             ).count()
 
-                                            prnt('Активных аккаунтов со ставкой >= ' + str(MIN_PROC) + ', ' + str(cnt_act_acc))
+                                            prnt('Активных аккаунтов на вилку: ' + str(MIN_PROC) + ', ' + str(cnt_act_acc))
                                             is_bet = randint(1, 100)
                                             prnt('Случайное число: ' + str(is_bet))
-                                            if is_bet <= 70:
+                                            if is_bet <= 70 or cnt_act_acc <= 5:
                                                 prnt('Go bets: ' + key + ' ' + info)
-                                                fork_success = go_bets(val_json.get('kof_olimp'), val_json.get('kof_fonbet'), key, deff_max, vect1, vect2, sc1, sc2, created_fork, event_type, l, l_fisrt, is_top, is_bet)
+                                                fork_success = go_bets(
+                                                    val_json.get('kof_olimp'), val_json.get('kof_fonbet'), 
+                                                    key, deff_max, vect1, vect2, sc1, sc2, created_fork, event_type, l, l_fisrt, is_top, 
+                                                    str(is_bet) + '/' + str(cnt_act_acc)
+                                                )
                                 elif deff_max >= 3:
                                     pass
                             else:
