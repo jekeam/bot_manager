@@ -912,11 +912,11 @@ if __name__ == '__main__':
                                             ).count()
 
                                             prnt('Активных аккаунтов со ставкой >= ' + str(MIN_PROC) + ', ' + str(cnt_act_acc))
-                                            is_bet = randint(0, 1)
+                                            is_bet = randint(0, 100)
                                             prnt('Случайное число: ' + str(is_bet))
-
-                                            prnt('Go bets: ' + key + ' ' + info)
-                                            fork_success = go_bets(val_json.get('kof_olimp'), val_json.get('kof_fonbet'), key, deff_max, vect1, vect2, sc1, sc2, created_fork, event_type, l, l_fisrt, is_top, is_bet)
+                                            if is_bet <= 70:
+                                                prnt('Go bets: ' + key + ' ' + info)
+                                                fork_success = go_bets(val_json.get('kof_olimp'), val_json.get('kof_fonbet'), key, deff_max, vect1, vect2, sc1, sc2, created_fork, event_type, l, l_fisrt, is_top, is_bet)
                                 elif deff_max >= 3:
                                     pass
                             else:
@@ -926,7 +926,7 @@ if __name__ == '__main__':
                 else:
                     pass
                 ts = round(uniform(1, 3), 2)
-                prnt('ts:' + str(ts), 'hide')
+                # prnt('ts:' + str(ts), 'hide')
                 time.sleep(ts)
 
     except (Shutdown, MaxFail, MaxFork) as e:
