@@ -912,7 +912,7 @@ if __name__ == '__main__':
                                             ).count()
 
                                             prnt('Активных аккаунтов со ставкой >= ' + str(MIN_PROC) + ', ' + str(cnt_act_acc))
-                                            is_bet = randint(0, 100)
+                                            is_bet = randint(1, 100)
                                             prnt('Случайное число: ' + str(is_bet))
                                             if is_bet <= 70:
                                                 prnt('Go bets: ' + key + ' ' + info)
