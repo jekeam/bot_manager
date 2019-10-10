@@ -287,11 +287,11 @@ def export_hist(OLIMP_USER, FONBET_USER):
         join_file_name = join_csv(cur_date_str)
         if join_file_name:
             for admin in ADMINS:
-                with open(csv_name, 'r', encoding='utf-8') as f:
+                with open(join_file_name, 'r', encoding='utf-8') as f:
                     db_model.Message.insert({
                         db_model.Message.to_user: admin,
                         db_model.Message.blob: f.read(),
-                        db_model.Message.file_name: csv_name,
+                        db_model.Message.file_name: join_file_name,
                         db_model.Message.file_type: 'document'
                     }).execute()
     except Exception as e:
