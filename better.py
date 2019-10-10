@@ -607,6 +607,13 @@ export_block = False
 
 if __name__ == '__main__':
     try:
+        
+        wait_before_start_sec = 0
+        if str(ACC_ID) != '3':
+            wait_before_start_sec = float(randint(1, 600))
+        send_message_bot(USER_ID, str(ACC_ID) + ': ' + 'Аккаунт запущен', ADMINS)
+        prnt('начну работу через ' + str(round(wait_before_start_sec)) + ' сек...')
+        
         Account.update(pid=os.getpid(), time_start=round(time.time())).where(Account.key == KEY).execute()
         prnt('DEBUG: ' + str(DEBUG))
 
@@ -696,12 +703,6 @@ if __name__ == '__main__':
         server_forks = dict()
         start_see_fork = threading.Thread(target=run_client)  # , args=(server_forks,))
         start_see_fork.start()
-
-        wait_before_start_sec = 0
-        if str(ACC_ID) != '3':
-            wait_before_start_sec = float(randint(1, 600))
-        send_message_bot(USER_ID, str(ACC_ID) + ': ' + 'Аккаунт запущен', ADMINS)
-        prnt('начну работу через ' + str(round(wait_before_start_sec)) + ' сек...')
 
         while Account.select().where(Account.key == KEY).get().work_stat == 'start':
 
