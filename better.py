@@ -263,7 +263,7 @@ def save_plt(folder, filename, plt):
     plt.savefig(os.path.join(folder, filename))
 
 
-def go_bets(wag_ol, wag_fb, key, deff_max, vect1, vect2, sc1, sc2, created, event_type, l, l_fisrt, is_top, is_bet):
+def go_bets(wag_ol, wag_fb, key, deff_max, vect1, vect2, sc1, sc2, created, event_type, l, l_fisrt, is_top, fork_slice, cnt_act_acc):
     global bal1, bal2, cnt_fail, cnt_fork_success, k1, k2, total_bet, bet1, bet2, OLIMP_USER, FONBET_USER, ACC_ID
 
     olimp_bet_type = str(key.split('@')[-2])
@@ -465,7 +465,8 @@ def go_bets(wag_ol, wag_fb, key, deff_max, vect1, vect2, sc1, sc2, created, even
 
         fork_info[fork_id]['fonbet']['is_top'] = is_top
         fork_info[fork_id]['fonbet']['is_hot'] = wag_fb.get('is_hot')
-        fork_info[fork_id]['fonbet']['is_bet'] = is_bet
+        fork_info[fork_id]['fonbet']['fork_slice'] = fork_slice
+        fork_info[fork_id]['fonbet']['cnt_act_acc'] = cnt_act_acc
 
         fork_info[fork_id]['fonbet']['fork_time_type'] = get_prop('fork_time_type', 'auto')
         fork_info[fork_id]['fonbet']['fork_life_time'] = get_prop('fork_life_time', '0')
@@ -917,12 +918,17 @@ if __name__ == '__main__':
                                                 prnt('Активных аккаунтов на вилку: ' + str(MIN_PROC) + ', ' + str(cnt_act_acc))
                                                 is_bet = randint(1, 100)
                                                 prnt('Случайное число: ' + str(is_bet))
-                                                if is_bet <= 50 or cnt_act_acc <= 5:
+                                                fork_slice = int(get_prop('FORK_SLICE', 50))
+                                                if fork_slice <= is_bet or cnt_act_acc <= 5:
                                                     prnt('Go bets: ' + key + ' ' + info)
                                                     fork_success = go_bets(
                                                         val_json.get('kof_olimp'), val_json.get('kof_fonbet'),
-                                                        key, deff_max, vect1, vect2, sc1, sc2, created_fork, event_type, l, l_fisrt, is_top,
-                                                        str(is_bet) + '/' + str(cnt_act_acc)
+                                                        key, deff_max, vect1, vect2, sc1, sc2, created_fork, event_type, 
+                                                        l, 
+                                                        l_fisrt, 
+                                                        is_top,
+                                                        str(fork_slice),
+                                                        str(cnt_act_acc)
                                                     )
                                     elif deff_max >= 3:
                                         pass
