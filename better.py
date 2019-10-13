@@ -189,7 +189,7 @@ def check_fork(key, L, k1, k2, live_fork, live_fork_total, bk1_score, bk2_score,
     if get_prop('top', 'выкл') == 'вкл' and not is_top:
         fork_exclude_text = fork_exclude_text + 'Вилка исключена т.к. это не топовый матч: ' + name_rus + '\n'
 
-    if get_prop('hot', 'выкл') == 'вкл' and not is_hot:
+    if get_prop('top_kof', 'выкл') == 'вкл' and not is_hot:
         fork_exclude_text = fork_exclude_text + 'Вилка исключена т.к. это не популярная катировка: ' + key + '\n'
 
     pour_into = get_prop('pour_into', 'auto')
