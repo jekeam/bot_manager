@@ -98,7 +98,7 @@ def bet_type_is_work(key):
     return True
 
 
-def check_fork(key, L, k1, k2, live_fork, live_fork_total, bk1_score, bk2_score, event_type, minute, time_break_fonbet, period, name, name_rus, deff_max, is_top, info=''):
+def check_fork(key, L, k1, k2, live_fork, live_fork_total, bk1_score, bk2_score, event_type, minute, time_break_fonbet, period, name, name_rus, deff_max, is_top, is_hot, info=''):
     global bal1, bal2, bet1, bet2, cnt_fork_success, black_list_matches
 
     fork_exclude_text = ''
@@ -188,6 +188,9 @@ def check_fork(key, L, k1, k2, live_fork, live_fork_total, bk1_score, bk2_score,
 
     if get_prop('top', 'выкл') == 'вкл' and not is_top:
         fork_exclude_text = fork_exclude_text + 'Вилка исключена т.к. это не топовый матч: ' + name_rus + '\n'
+
+    if get_prop('hot', 'выкл') == 'вкл' and not is_hot:
+        fork_exclude_text = fork_exclude_text + 'Вилка исключена т.к. это не популярная катировка: ' + key + '\n'
 
     pour_into = get_prop('pour_into', 'auto')
     if pour_into != 'auto':
@@ -896,7 +899,8 @@ if __name__ == '__main__':
 
                                         recalc_bets()
                                         # Проверим вилку на исключения
-                                        if check_fork(key, l, k1, k2, live_fork, live_fork_total, bk1_score, bk2_score, event_type, minute, time_break_fonbet, period, name, name_rus, deff_max, is_top, info) or DEBUG:
+                                        if check_fork(key, l, k1, k2, live_fork, live_fork_total, bk1_score, bk2_score, event_type, minute, time_break_fonbet, period, name, name_rus, deff_max, is_top,
+                                                      val_json.get('kof_fonbet').get('is_hot'), info) or DEBUG:
                                             prnt(' ')
 
                                             now_timestamp = int(time.time())
@@ -906,6 +910,7 @@ if __name__ == '__main__':
                                             if 0 < (now_timestamp - last_timestamp) < 60 and len(server_forks) > 1:
                                                 prnt('Вилка исключена, т.к. мы ее пытались проставить успешно/не успешно, но прошло менее 60 секунд и есть еще вилки, будем ставить другие, новые')
                                             else:
+                                                temp_lock_fork.update({key: now_timestamp})
                                                 temp_lock_fork.update({key: now_timestamp})
 
                                                 cur_proc = round((1 - l) * 100, 2)
@@ -923,9 +928,9 @@ if __name__ == '__main__':
                                                     prnt('Go bets: ' + key + ' ' + info)
                                                     fork_success = go_bets(
                                                         val_json.get('kof_olimp'), val_json.get('kof_fonbet'),
-                                                        key, deff_max, vect1, vect2, sc1, sc2, created_fork, event_type, 
-                                                        l, 
-                                                        l_fisrt, 
+                                                        key, deff_max, vect1, vect2, sc1, sc2, created_fork, event_type,
+                                                        l,
+                                                        l_fisrt,
                                                         is_top,
                                                         str(fork_slice),
                                                         str(cnt_act_acc)
