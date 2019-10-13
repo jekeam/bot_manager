@@ -7,22 +7,22 @@ if __name__ == '__main__':
 
     # PROXY
     # user name
-    user = 'MaycWe'
+    user = 'W1m937'
     # password
-    pswd = '7arVkmY7Ay'
+    pswd = 'U5C6nr'
     # ip
-    ip = '109.248.55.252'
+    ip = '194.242.126.94'
     # port
-    port = '1050'
+    port = '8000'
 
     # BK
     # olimp
-    olu = '3532210'
-    olp = 'gtnE2833'
+    olu = '471838'
+    olp = '269310adsl'
 
     # fonbet
-    fbu = '763607'
-    fbp = '16384AaA'
+    fbu = '2067102'
+    fbp = '269310Adsl'
 
     proxy = user + ':' + pswd + '@' + ip + ':' + port
     proxies = '{`fonbet`:{`http`:`http://' + proxy + '`,`https`:`https://' + proxy + '`},`olimp`:{`http`:`http://' + proxy + '`,`https`:`https://' + proxy + '`}}'
@@ -30,7 +30,7 @@ if __name__ == '__main__':
     try:
         acc = Account.create(
             # user id from telegram
-            user=476232117,
+            user=705046819,
             key=uid,
             date_end=get_trunc_sysdate(30),  # cnt days
             status='active',
