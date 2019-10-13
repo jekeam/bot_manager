@@ -28,7 +28,7 @@ prop_abr = {
     "TEAM_FEMALE": {"abr": "Жен. команды", "type": "str", "max": "", "min": "", "access_list": ["вкл", "выкл"], "error": ""},
     "TEAM_JUNIOR": {"abr": "Юнош. команды", "type": "str", "max": "", "min": "", "access_list": ["вкл", "выкл"], "error": ""},
     "TOP": {"abr": "Только TOP матчи", "type": "str", "max": "", "min": "", "access_list": ["вкл", "выкл"], "error": ""},
-    "TOP_KOF": {"abr": "Только TOP кат-ки ", "type": "str", "max": "", "min": "", "access_list": ["вкл", "выкл"], "error": ""},
+    "HOT": {"abr": "Только TOP катировки", "type": "str", "max": "", "min": "", "access_list": ["вкл", "выкл"], "error": ""},
     "RANDOM_SUMM_PROC": {"abr": "% Разброс ставки", "type": "int", "max": "30", "min": "0", "access_list": [], "error": ""},
     "FORK_LIFE_TIME": {"abr": "Вилки от сек.", "type": "int", "max": "500", "min": "2", "access_list": [], "error": ""},
     "FORK_TIME_TYPE": {"abr": "Тип времени вилки", "type": "str", "max": "", "min": "", "access_list": ["текущее", "общее"], "error": ""},
@@ -38,7 +38,7 @@ prop_abr = {
     "POUR_INTO": {"abr": "Перелить в", "type": "str", "max": "", "min": "", "access_list": bks, "error": ""},
     "DOUBLE_BET": {"abr": "Дубли ставок", "type": "str", "max": "", "min": "", "access_list": ["вкл", "выкл"], "error": ""},
     "MAX_BET_FONBET": {"abr": "MAX BET в Fonbet", "type": "int", "max": "1000", "min": "0", "access_list": ["0", "100", "200", "300", "400", "500", "600", "700", "800", "900", "1000"], "error": ""},
-    # "SERVER_OLIMP": {"abr": "Сервер Олимп", "type": "str", "max": "", "min": "", "access_list": [], "error": ""},
+    "SERVER_OLIMP": {"abr": "Сервер Олимп", "type": "str", "max": "", "min": "", "access_list": [], "error": ""},
     "TEST_OTH_SPORT": {"abr": "Новые виды спорта", "type": "str", "max": "", "min": "", "access_list": ["вкл", "выкл"], "error": ""},
     "SALE_BET": {"abr": "НЕвыкуп при потере, %", "type": "int", "max": "100", "min": "0", "access_list": [], "error": ""},
 
