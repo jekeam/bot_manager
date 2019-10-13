@@ -5,8 +5,8 @@ from emoji import emojize
 # new_proxy = 'socks5://suineg:8veh34@185.161.211.100:12974'
 # new_proxy_http = 'http://suineg:8veh34@185.161.211.100:2974'
 
-new_proxy = 'socks5://Selsuinegne:R5v7JwJ@193.233.30.155:45786'
-new_proxy_http = 'http://Selsuinegne:R5v7JwJ@193.233.30.155:45785'
+new_proxy = 'socks5://shaggy:hzsyk4@45.139.30.105:19199'
+new_proxy_http = 'http://shaggy:hzsyk4@45.139.30.105:9199'
 
 # BOI
 PY_PATH = 'python3.6'
