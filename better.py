@@ -741,8 +741,14 @@ if __name__ == '__main__':
                         prnt(' ')
                         prnt('Прошло больше ' + str(ref_balace) + ' минут, пора обновить балансы:')
                         time_get_balance = datetime.datetime.now()
-                        bal1 = bk1.get_balance()  # Баланс в БК1
-                        bal2 = bk2.get_balance()  # Баланс в БК2
+                        
+                        bal1_new = bk1.get_balance()  # Баланс в БК1
+                        prnt('bal1: {}->{}'.format(bal1, bal1_new))
+                        bal1 = bal1_new
+                        
+                        bal2_new  = bk2.get_balance()  # Баланс в БК2
+                        prnt('bal2: {}->{}'.format(bal2, bal2_new))
+                        bal2 = bal2_new
                     one_proc = (bal1 + bal2) / 100
 
                     msg_str = str(ACC_ID) + ': '
