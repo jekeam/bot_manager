@@ -99,7 +99,7 @@ def bet_type_is_work(key):
 
 
 def check_fork(key, L, k1, k2, live_fork, live_fork_total, bk1_score, bk2_score, event_type, minute, time_break_fonbet, period, name, name_rus, deff_max, is_top, is_hot, info=''):
-    global bal1, bal2, bet1, bet2, cnt_fork_success, black_list_matches
+    global bal1, bal2, bet1, bet2, cnt_fork_success, black_list_matches, matchs_success
 
     fork_exclude_text = ''
     v = True
@@ -145,6 +145,10 @@ def check_fork(key, L, k1, k2, live_fork, live_fork_total, bk1_score, bk2_score,
     if get_prop('double_bet', 'выкл') == 'выкл':
         if cnt_fork_success.count(key) > 0:
             fork_exclude_text = fork_exclude_text + 'Вилка не проставлена, т.к. уже проставляли на эту вилку: ' + key + '\n'
+            
+    if get_prop('one_bet', 'выкл') == 'вкл':
+        if matchs_success.count(str(key.split('@')[0])) > 0 or matchs_success.count(str(key.split('@')[1])) > 0:
+            fork_exclude_text = fork_exclude_text + 'Вилка не проставлена, т.к. уже ставили 1 вилку на данный матч: ' + str(matchs_success) + '\n'            
 
     if black_list_matches.count(key.split('@')[0]) > 0 or black_list_matches.count(key.split('@')[1]) > 0:
         fork_exclude_text = fork_exclude_text + 'Вилка исключена, т.к. матч занесен в blacklist: ' + key + ', ' + str(black_list_matches) + '\n'
@@ -216,7 +220,7 @@ def upd_last_fork_time(v_time: int = None):
 
 
 def set_statistics(key, err_bk1, err_bk2, fork_info=None, bk1_sale_profit=0, bk2_sale_profit=0):
-    global cnt_fail, black_list_matches, cnt_fork_success
+    global cnt_fail, black_list_matches, cnt_fork_success, matchs_success
     bet_skip = False
     if err_bk1 and err_bk2:
         if 'BkOppBetError' in err_bk1 and 'BkOppBetError' in err_bk2:
@@ -235,6 +239,8 @@ def set_statistics(key, err_bk1, err_bk2, fork_info=None, bk1_sale_profit=0, bk2
             upd_last_fork_time()
     elif not bet_skip:
         cnt_fork_success.append(key)
+        matchs_success.append(str(key.split('@')[0]))
+        matchs_success.append(str(key.split('@')[1]))
         upd_last_fork_time()
 
 
@@ -594,6 +600,7 @@ time_live = datetime.datetime.now()
 cnt_fail = 0
 black_list_matches = []
 cnt_fork_success = []
+matchs_success = []
 printed = False
 last_fork_time = 0
 long_pool_wait = randint(30, 60)
