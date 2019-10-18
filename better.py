@@ -539,13 +539,13 @@ def run_client():
                 err_str = 'Основной поток завершен и run_client тоже.'
                 conn.close()
                 raise Shutdown(err_str)
-            prnt('Get /get_forks')
+            prnt('Get /get_forks', hide=True)
             conn.request('GET', '/get_forks')
             rs = conn.getresponse()
             data = rs.read().decode('utf-8')
             data_json = json.loads(data)
             server_forks = data_json
-            prnt('End /get_forks')
+            prnt('End /get_forks', hide=True)
     except Shutdown as e:
         prnt(str(e.__class__.__name__) + ' - ' + str(e))
         raise Shutdown(e)
