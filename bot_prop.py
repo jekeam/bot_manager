@@ -5,24 +5,21 @@ from emoji import emojize
 # new_proxy = 'socks5://suineg:8veh34@185.161.211.100:12974'
 # new_proxy_http = 'http://suineg:8veh34@185.161.211.100:2974'
 
-# new_proxy = 'socks5://shaggy:hzsyk4@45.139.30.105:19199'
-# new_proxy_http = 'http://shaggy:hzsyk4@45.139.30.105:9199'
-
 # SERVER: TURBO
-new_proxy = 'socks5://Sela89823703090:H5f7LlK@176.114.8.78:45786'
+# new_proxy = 'socks5://Sela89823703090:H5f7LlK@176.114.8.78:45786'
 new_proxy_http = 'http://Sela89823703090:H5f7LlK@176.114.8.78:45785'
 
 # BOI
-# PY_PATH = 'python3.6'
-# TOKEN = '843081630:AAFmVT4hi5R71mgJpojVxOmTGEaZJA-LWYI'
-# ADMINS = [381868674, 33847743, 337186802]
-# IP_SERVER = '62.109.10.57:8888'
+PY_PATH = 'python3.6'
+TOKEN = '843081630:AAFmVT4hi5R71mgJpojVxOmTGEaZJA-LWYI'
+ADMINS = [381868674, 33847743, 337186802]
+IP_SERVER = '80.87.193.55:8888'
 
 # TEST FROM SERVER
-PY_PATH = 'python3.6'
-TOKEN = '598446286:AAEhbB2RDQ7oEe7pX2vif-IENIdIVIZ9xVk'
-ADMINS = [381868674]
-IP_SERVER = '80.87.193.55:8888'
+# PY_PATH = 'python3.6'
+# TOKEN = '598446286:AAEhbB2RDQ7oEe7pX2vif-IENIdIVIZ9xVk'
+# ADMINS = [381868674]
+# IP_SERVER = '80.87.193.55:8888'
 
 # TEST
 # PY_PATH = 'D:\\YandexDisk\\Парсинг\\bot_manager\\venv\\Scripts\\python.exe'
@@ -30,10 +27,10 @@ IP_SERVER = '80.87.193.55:8888'
 # ADMINS = [381868674]
 # IP_SERVER = '149.154.70.53:80'
 
-PROXY = {
-    'http': new_proxy,
-    'https': new_proxy
-}
+# PROXY = {
+#     'http': new_proxy,
+#     'https': new_proxy
+# }
 
 REQUEST_KWARGS = {
     'proxy_url': new_proxy_http,
