@@ -18,7 +18,7 @@ if __name__ == '__main__':
         if os.path.isfile('better.py'):
             call_str = bot_prop.PY_PATH + ' better.py --acc_id ' + str(acc_id)
             prnt('dir: ' + str(os.getcwd()) + ', command: ' + call_str)
-            subprocess.call(call_str, shell=True)
+            subprocess.call(call_str, shell=False)
         else:
             prnt('file better.py not found in ' + str(os.getcwd()))
 
