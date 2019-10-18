@@ -145,10 +145,10 @@ def check_fork(key, L, k1, k2, live_fork, live_fork_total, bk1_score, bk2_score,
     if get_prop('double_bet', 'выкл') == 'выкл':
         if cnt_fork_success.count(key) > 0:
             fork_exclude_text = fork_exclude_text + 'Вилка не проставлена, т.к. уже проставляли на эту вилку: ' + key + '\n'
-            
+
     if get_prop('one_bet', 'выкл') == 'вкл':
         if matchs_success.count(str(key.split('@')[0])) > 0 or matchs_success.count(str(key.split('@')[1])) > 0:
-            fork_exclude_text = fork_exclude_text + 'Вилка не проставлена, т.к. уже ставили 1 вилку на данный матч: ' + str(matchs_success) + '\n'            
+            fork_exclude_text = fork_exclude_text + 'Вилка не проставлена, т.к. уже ставили 1 вилку на данный матч: ' + str(matchs_success) + '\n'
 
     if black_list_matches.count(key.split('@')[0]) > 0 or black_list_matches.count(key.split('@')[1]) > 0:
         fork_exclude_text = fork_exclude_text + 'Вилка исключена, т.к. матч занесен в blacklist: ' + key + ', ' + str(black_list_matches) + '\n'
@@ -524,7 +524,7 @@ def run_client():
     global server_forks
     global shutdown
     global server_ip
-    
+
     long_pool_wait = randint(30, 60)
     prnt('Long pool sec: ' + str(long_pool_wait))
 
@@ -553,7 +553,7 @@ def run_client():
         prnt('better: ' + str(e.__class__.__name__) + ' - ' + str(e))
         server_forks = {}
         conn.close()
-        time.sleep(10)
+        time.sleep(long_pool_wait)
         return run_client()
 
 
@@ -750,12 +750,12 @@ if __name__ == '__main__':
                         prnt(' ')
                         prnt('Прошло больше ' + str(ref_balace) + ' минут, пора обновить балансы:')
                         time_get_balance = datetime.datetime.now()
-                        
+
                         bal1_new = bk1.get_balance()  # Баланс в БК1
                         prnt('bal1: {}->{}'.format(bal1, bal1_new))
                         bal1 = bal1_new
-                        
-                        bal2_new  = bk2.get_balance()  # Баланс в БК2
+
+                        bal2_new = bk2.get_balance()  # Баланс в БК2
                         prnt('bal2: {}->{}'.format(bal2, bal2_new))
                         bal2 = bal2_new
                     one_proc = (bal1 + bal2) / 100
