@@ -524,12 +524,15 @@ def run_client():
     global server_forks
     global shutdown
     global server_ip
+    
+    long_pool_wait = randint(30, 60)
+    prnt('Long pool sec: ' + str(long_pool_wait))
 
     try:
         if 'Windows' == platform.system() or DEBUG:
-            conn = http.client.HTTPConnection(server_ip, 8888, timeout=3.51)
+            conn = http.client.HTTPConnection(server_ip, 8888, timeout=long_pool_wait)
         else:
-            conn = http.client.HTTPConnection(server_ip, 8888, timeout=6)
+            conn = http.client.HTTPConnection(server_ip, 8888, timeout=long_pool_wait)
 
         while True:
             if shutdown:
@@ -541,7 +544,6 @@ def run_client():
             data = rs.read().decode('utf-8')
             data_json = json.loads(data)
             server_forks = data_json
-            time.sleep(1)
     except Shutdown as e:
         prnt(str(e.__class__.__name__) + ' - ' + str(e))
         raise Shutdown(e)
@@ -603,7 +605,6 @@ cnt_fork_success = []
 matchs_success = []
 printed = False
 last_fork_time = 0
-long_pool_wait = randint(30, 60)
 
 cnt_fork_success_old = 0
 cnt_fork_fail_old = 0
@@ -655,7 +656,6 @@ if __name__ == '__main__':
                 MIN_PROC = float(get_prop('min_proc').replace(',', '.'))
                 prnt(' ')
                 prnt('Current Time: ' + str(datetime.datetime.now()))
-                prnt('Long pool sec: ' + str(long_pool_wait))
                 prnt('ID аккаунта: ' + str(ACC_ID))
                 prnt('IP-адрес сервера: ' + server_ip + ':8888')
                 prnt('Баланс в БК Олимп: ' + str(bal1))
