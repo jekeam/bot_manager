@@ -40,7 +40,7 @@ if __name__ == '__main__':
 
         prop = (
             Properties.insert_from(
-                Properties.select(acc.id, Properties.val, Properties.key).where(Properties.acc_id == 18),
+                Properties.select(acc.id, Properties.val, Properties.key).where(Properties.acc_id == 62),
                 fields=[Properties.acc_id, Properties.val, Properties.key]
             ).execute()
         )
