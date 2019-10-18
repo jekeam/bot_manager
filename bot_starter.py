@@ -16,7 +16,7 @@ if __name__ == '__main__':
     def start(acc_id: str):  # abs_path:str
         # os.chdir(abs_path)
         if os.path.isfile('better.py'):
-            call_str = bot_prop.PY_PATH + ' better.py --acc_id ' + str(acc_id)
+            call_str = bot_prop.PY_PATH + ' ' + os.getcwd() + '/better.py --acc_id ' + str(acc_id)
             prnt('dir: ' + str(os.getcwd()) + ', command: ' + call_str)
             subprocess.call(call_str, shell=True)
         else:
