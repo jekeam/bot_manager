@@ -1,5 +1,6 @@
 # coding:utf-8
 import urllib3
+from utils import prnt
 
 urllib3.disable_warnings(urllib3.exceptions.InsecureRequestWarning)
 
@@ -16,10 +17,10 @@ if __name__ == '__main__':
         # os.chdir(abs_path)
         if os.path.isfile('better.py'):
             call_str = bot_prop.PY_PATH + ' better.py --acc_id ' + str(acc_id)
-            print('dir: ' + str(os.getcwd()) + ', command: ' + call_str)
+            prnt('dir: ' + str(os.getcwd()) + ', command: ' + call_str)
             subprocess.call(call_str, shell=True)
         else:
-            print('file better.py not found in ' + str(os.getcwd()))
+            prnt('file better.py not found in ' + str(os.getcwd()))
 
 
     if __name__ == '__main__':
@@ -27,8 +28,8 @@ if __name__ == '__main__':
         while True:
             for acc in Account.select().where((Account.status == 'active') & (Account.work_stat == 'start') & (Account.pid == 0)):
                 Account.update(pid=1).where(Account.id == acc.id).execute()
-                print(''.ljust(120, '*'))
-                print('start: ', acc.id)  # acc.work_dir,
+                prnt(''.ljust(120, '*'))
+                prnt('start: ', acc.id)  # acc.work_dir,
                 acc_start = Thread(target=start, args=(acc.id,))  # acc.work_dir,
                 acc_start.start()
             time.sleep(1)
