@@ -69,26 +69,26 @@ def get_olimp_info(id_matche, olimp_k, sport_id, proxies=None):
         bet_into['SCORE'] = stake.get('sc', '0:0')  # .get('sc', '0:0').split(' ')[0]
         for c in stake.get('it', []):
             # if c.get('n','') in ['Main Bets', 'Goals', 'Corners', 'Individual total', 'Additional total']:
-            if c.get('n', '') in ['Основные', 'Голы', 'Угловые', 'Инд.тотал', 'Доп.тотал', 'Исходы по таймам']:
+            if c.get('n', '').replace(' ', '').lower() in ['основные', 'голы', 'угловые', 'инд.тотал', 'доп.тотал', 'исходыпотаймам']:
                 for d in c.get('i', []):
-                    if 'Обе забьют: ' \
-                            in d.get('n', '') \
-                            or 'забьет: ' \
-                            in d.get('n', '') \
-                            or 'Никто не забьет: ' \
-                            in d.get('n', '') \
-                            or 'Победа ' \
+                    if 'обе забьют: '.lower() \
+                            in d.get('n', '').lower() \
+                            or 'забьет: '.lower() \
+                            in d.get('n', '').lower() \
+                            or 'никто не забьет: '.lower() \
+                            in d.get('n', '').lower() \
+                            or 'победа '.lower() \
                             in d.get('n', '') \
                             or d.get('n', '').endswith(' бол') \
                             or d.get('n', '').endswith(' мен') \
-                            or 'Первая не проиграет' \
-                            in d.get('n', '') \
-                            or 'Вторая не проиграет' \
-                            in d.get('n', '') \
-                            or 'Ничьей не будет' \
-                            in d.get('n', '') \
-                            or 'Ничья' \
-                            in d.get('n', ''):
+                            or 'первая не проиграет'.lower() \
+                            in d.get('n', '').lower() \
+                            or 'вторая не проиграет'.lower() \
+                            in d.get('n', '').lower() \
+                            or 'ничьей не будет' \
+                            in d.get('n', '').lower() \
+                            or 'ничья'.lower() \
+                            in d.get('n', '').lower():
                         # prnt(key_r)
                         key_r = d.get('n', '').replace(stake.get('c1', ''), 'Т1').replace(stake.get('c2', ''), 'Т2')
                         olimp_factor_short = str([
