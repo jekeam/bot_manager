@@ -623,7 +623,7 @@ if __name__ == '__main__':
     try:
 
         wait_before_start_sec = 0
-        if str(ACC_ID) != '3':
+        if str(ACC_ID) not in ['3', '18']:
             wait_before_start_sec = float(randint(1, 600))
         send_message_bot(USER_ID, str(ACC_ID) + ': ' + 'Аккаунт запущен', ADMINS)
         prnt('начну работу через ' + str(round(wait_before_start_sec)) + ' сек...')
