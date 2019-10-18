@@ -10,7 +10,7 @@ from emoji import emojize
 new_proxy_http = 'http://Sela89823703090:H5f7LlK@176.114.8.78:45785'
 
 # BOI
-PY_PATH = '/usr/bin/python3.6'
+PY_PATH = 'python3.6'
 TOKEN = '843081630:AAFmVT4hi5R71mgJpojVxOmTGEaZJA-LWYI'
 ADMINS = [381868674, 33847743, 337186802]
 IP_SERVER = '80.87.193.55:8888'
