@@ -622,22 +622,20 @@ class BetManager:
             else:
                 prnt(self.msg.format(sys._getframe().f_code.co_name, 'Сумма выкупа неизвестна'))
 
-            
             sale_bet_proc = int(''.join(re.findall(r'\d+', get_prop('sale_bet', '0'))))
             if sale_bet_proc > 0:
-                sale_prof_minus = round(self.sale_profit/(sum_opp/100)) * -1
+                sale_prof_minus = round(self.sale_profit / (sum_opp / 100)) * -1
                 prnt(self.msg.format(
-                    sys._getframe().f_code.co_name, 
+                    sys._getframe().f_code.co_name,
                     'Параметр НЕвыкупа: {}, была ставка: {}, выкуп доступен за: {}, профит:{}, % потери: {}'.format(
-                        get_prop('sale_bet', '0'),  
-                        sum_opp, 
+                        get_prop('sale_bet', '0'),
+                        sum_opp,
                         (self_opp_data.sum_sell / self_opp_data.sum_sell_divider),
                         self.sale_profit,
                         sale_prof_minus
                     )
                 ))
-                
-                
+
                 if self_opp_data.sum_sell:
                     if sale_prof_minus >= sale_bet_proc:
                         err_str = 'Выкуп ставки отключен, плече брошено согласно настройке'
@@ -777,7 +775,7 @@ class BetManager:
             except BetIsDrop as e:
                 err_msg = str(e.__class__.__name__) + ': ' + str(e)
                 raise BetIsLost(err_msg)
-                
+
             except BetIsLost as e:
                 if shared.get(self.bk_name + '_err', 'err') != 'ok':
                     err_msg = str(e.__class__.__name__) + ': ' + str(e)
