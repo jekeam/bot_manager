@@ -15,7 +15,7 @@ urllib3.disable_warnings()
 
 
 def get_olimp_info(id_matche, olimp_k, sport_id, proxies=None):
-    prnt('get_olimp_info: id_matche=' + str(id_matche) + ';olimp_k=' + str(olimp_k) + ';proxies=' + str(proxies), 'hide')
+    prnt('get_olimp_info: id_matche=' + str(id_matche) + ';sport_id=' + str(sport_id) + ';olimp_k=' + str(olimp_k) + ';proxies=' + str(proxies), 'hide')
     bet_into = {}
     olimp_data = copy.deepcopy(ol_payload)
     olimp_data.update({
@@ -112,7 +112,10 @@ def get_olimp_info(id_matche, olimp_k, sport_id, proxies=None):
     if is_block == 'BLOCKED':
         k = 0
     sc = bet_into.get('SCORE', '0:0').split(' ')[0]
+    prnt('olimp is_block: ' + str(is_block))
     prnt('olimp score: ' + sc)
+    prnt('olimp bet_into: ' + str(bet_into))
+    prnt('olimp k: ' + str(k))
     prnt('FORK_RECHECK.PY: get_olimp_info end work', 'hide')
     return k, sc, round(res.elapsed.total_seconds(), 2)
 
