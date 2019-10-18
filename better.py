@@ -961,7 +961,8 @@ if __name__ == '__main__':
                                 prnt('Вилка исключена, т.к. вид спорта: ' + event_type)
                     else:
                         pass
-                    ts = round(uniform(1, 3), 2)
+                    # ts = round(uniform(1, 3), 2)
+                    ts = 0.9
                     # prnt('ts:' + str(ts), 'hide')
                     time.sleep(ts)
 
