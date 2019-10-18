@@ -130,10 +130,9 @@ def export_hist(OLIMP_USER, FONBET_USER):
     global balance_str, balance_int
     
     csv_name = datetime.now().strftime("%d_%m_%Y") + '_' + str(ACC_ID) + '_statistics.csv'
+    cur_date_str = datetime.now().strftime("%d_%m_%Y")
 
     if os.path.isfile(file_name):
-
-        cur_date_str = datetime.now().strftime("%d_%m_%Y")
 
         with open(file_name, encoding='utf-8') as f:
             for line in f.readlines():
