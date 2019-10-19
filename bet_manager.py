@@ -411,12 +411,12 @@ class BetManager:
                 if self.first_bet_in == 'parallel':
                     pass
 
-                if self.bk_name == 'olimp':
-                    if str(self.acc_id) == '18':
-                        prnt('До ставки увеличиваем коф, чтоб получить 1ю ошибку')
-                        prnt(self.wager['factor'])
-                        self.wager['factor'] = self.cur_val_bet + 1
-                        prnt(self.wager['factor'])
+                # if self.bk_name == 'olimp':
+                #     if str(self.acc_id) == '18':
+                #         prnt('До ставки увеличиваем коф, чтоб получить 1ю ошибку')
+                #         prnt(self.wager['factor'])
+                #         self.wager['factor'] = self.cur_val_bet + 1
+                #         prnt(self.wager['factor'])
 
                 self.bet_place(shared)
                 bet_done(shared)
