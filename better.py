@@ -619,7 +619,6 @@ start_message_send = False
 temp_lock_fork = {}
 
 export_block = False
-
 # wag_fb:{'event': '12797479', 'factor': '921', 'param': '', 'score': '0:0', 'value': '2.35'}
 # wag_fb:{'apid': '1144260386:45874030:1:3:-9999:3:NULL:NULL:1', 'factor': '1.66', 'sport_id': 1, 'event': '45874030'}
 
@@ -748,11 +747,10 @@ if __name__ == '__main__':
                             prnt('Файл не найден, выставлена блокировка выгрузки на тек. час')
                             export_block = True
 
-                    # Обновление баланса каждые 120 минут
-                    ref_balace = 120
-                    if (datetime.datetime.now() - time_get_balance).total_seconds() > (60 * ref_balace):
+                    # Обновление баланса каждые 120 минут, после последней ставки
+                    if ((int(time.time()) - last_fork_time) > 7200) and last_fork_time > 0:
                         prnt(' ')
-                        prnt('Прошло больше ' + str(ref_balace) + ' минут, пора обновить балансы:')
+                        prnt('Прошло больше 2 часов, с момента последней ставки, пора обновить балансы:')
                         time_get_balance = datetime.datetime.now()
 
                         bal1_new = bk1.get_balance()  # Баланс в БК1
