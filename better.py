@@ -748,20 +748,6 @@ if __name__ == '__main__':
                             prnt('Файл не найден, выставлена блокировка выгрузки на тек. час')
                             export_block = True
 
-                    # Обновление баланса каждые 120 минут, после последней ставки
-                    if ((int(time.time()) - last_fork_time) > 7200) and ((int(time.time()) - last_refresh_time) > 7200) and last_fork_time > 0:
-                        last_refresh_time = int(time.time())
-                        prnt(' ')
-                        prnt('Прошло больше 2 часов, с момента последней ставки, пора обновить балансы:')
-                        time_get_balance = datetime.datetime.now()
-
-                        bal1_new = bk1.get_balance()  # Баланс в БК1
-                        prnt('bal1: {}->{}'.format(bal1, bal1_new))
-                        bal1 = bal1_new
-
-                        bal2_new = bk2.get_balance()  # Баланс в БК2
-                        prnt('bal2: {}->{}'.format(bal2, bal2_new))
-                        bal2 = bal2_new
                     one_proc = (bal1 + bal2) / 100
 
                     msg_str = str(ACC_ID) + ': '
@@ -778,12 +764,29 @@ if __name__ == '__main__':
                     if str(bk2.get_acc_info('group')).lower() == '4'.lower():
                         msg_err = msg_err + '\n' + 'обнаружена порезка до 4й группы, аккаунт остановлен!'
 
-                    if bal1 == 0 or bal2 == 0:
-                        if (len(cnt_fork_success) == 0 and cnt_fail == 0) or ((int(time.time()) - last_fork_time) > 7200):
+                    bal_is_null = (bal1 == 0 or bal2 == 0)
+                    bal_small = ((bal1 / one_proc) < 10 or (bal2 / one_proc) < 10)
+                    need_time = (len(cnt_fork_success) == 0 and cnt_fail == 0) or ((int(time.time()) - last_fork_time) > 7200)
+
+                    if (bal_is_null) or (bal_small):
+                        if need_time and last_fork_time > 0:
+                            prnt('Прошло больше 2 часов, с момента последней ставки, пора обновить балансы:')
+                            time_get_balance = datetime.datetime.now()
+
+                            bal1_new = bk1.get_balance()  # Баланс в БК1
+                            prnt('bal1: {}->{}'.format(bal1, bal1_new))
+                            bal1 = bal1_new
+
+                            bal2_new = bk2.get_balance()  # Баланс в БК2
+                            prnt('bal2: {}->{}'.format(bal2, bal2_new))
+                            bal2 = bal2_new
+
+                    if bal_is_null:
+                        if need_time:
                             msg_err = msg_err + '\n' + 'баланс в одной из БК равен 0, аккаунт остановлен!\n' + bk1_name + ': ' + str(bal1) + '\n' + bk2_name + ': ' + str(bal2)
 
-                    if (bal1 / one_proc) < 10 or (bal2 / one_proc) < 10:
-                        if (len(cnt_fork_success) == 0 and cnt_fail == 0) or ((int(time.time()) - last_fork_time) > 7200):
+                    if bal_small:
+                        if need_time:
                             msg_err = msg_err + '\n' + 'аккаунт остановлен: денег в одной из БК не достаточно для работы, просьба выровнять балансы.\n' + bk1_name + ': ' + str(bal1) + '\n' + bk2_name + ': ' + str(bal2)
 
                     if msg_err != '':
