@@ -723,6 +723,8 @@ if __name__ == '__main__':
                     prnt(e)
                 check_statistics()
 
+                prnt('С момента поледней ставки прошло: ' + str((int(time.time()) - last_fork_time) / 60) + ' мин.')
+
                 server_forks = dict()
                 start_see_fork = threading.Thread(target=run_client)  # , args=(server_forks,))
                 start_see_fork.start()
