@@ -611,6 +611,7 @@ cnt_fork_success = []
 matchs_success = []
 printed = False
 last_fork_time = 0
+last_refresh_time = 0
 
 cnt_fork_success_old = 0
 cnt_fork_fail_old = 0
@@ -748,7 +749,8 @@ if __name__ == '__main__':
                             export_block = True
 
                     # Обновление баланса каждые 120 минут, после последней ставки
-                    if ((int(time.time()) - last_fork_time) > 7200) and last_fork_time > 0:
+                    if ((int(time.time()) - last_fork_time) > 7200) and ((int(time.time()) - last_refresh_time) > 7200) and last_fork_time > 0:
+                        last_refresh_time = int(time.time())
                         prnt(' ')
                         prnt('Прошло больше 2 часов, с момента последней ставки, пора обновить балансы:')
                         time_get_balance = datetime.datetime.now()
