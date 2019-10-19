@@ -11,18 +11,18 @@ if __name__ == '__main__':
     # password
     pswd = '1Nx259'
     # ip
-    ip = '188.119.78.6'
+    ip = '176.53.141.48'
     # port
     port = '8000'
 
     # BK
     # olimp
-    olu = '9750207'
-    olp = '147258369mnb'
+    olu = '4781137'
+    olp = '0267452F'
 
     # fonbet
-    fbu = '7822320'
-    fbp = '30fB3PmT'
+    fbu = '7822269'
+    fbp = '653vR1aE'
 
     proxy = user + ':' + pswd + '@' + ip + ':' + port
     proxies = '{`fonbet`:{`http`:`http://' + proxy + '`,`https`:`https://' + proxy + '`},`olimp`:{`http`:`http://' + proxy + '`,`https`:`https://' + proxy + '`}}'
