@@ -764,11 +764,10 @@ if __name__ == '__main__':
                     if str(bk2.get_acc_info('group')).lower() == '4'.lower():
                         msg_err = msg_err + '\n' + 'обнаружена порезка до 4й группы, аккаунт остановлен!'
 
-                    bal_is_null = (bal1 == 0 or bal2 == 0)
                     bal_small = ((bal1 / one_proc) < 10 or (bal2 / one_proc) < 10)
                     need_time = (len(cnt_fork_success) == 0 and cnt_fail == 0) or ((int(time.time()) - last_fork_time) > 7200)
 
-                    if (bal_is_null) or (bal_small):
+                    if bal_small:
                         if need_time and last_fork_time > 0:
                             prnt('Прошло больше 2 часов, с момента последней ставки, пора обновить балансы:')
                             time_get_balance = datetime.datetime.now()
@@ -780,10 +779,6 @@ if __name__ == '__main__':
                             bal2_new = bk2.get_balance()  # Баланс в БК2
                             prnt('bal2: {}->{}'.format(bal2, bal2_new))
                             bal2 = bal2_new
-
-                    if bal_is_null:
-                        if need_time:
-                            msg_err = msg_err + '\n' + 'баланс в одной из БК равен 0, аккаунт остановлен!\n' + bk1_name + ': ' + str(bal1) + '\n' + bk2_name + ': ' + str(bal2)
 
                     if bal_small:
                         if need_time:
