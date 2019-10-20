@@ -764,7 +764,8 @@ if __name__ == '__main__':
                         msg_err = msg_err + '\n' + 'обнаружена блокировка вывода, нужно пройти верификацию в Фонбет, аккаунт остановлен!'
 
                     if str(bk2.get_acc_info('group')).lower() == '4'.lower():
-                        msg_err = msg_err + '\n' + 'обнаружена порезка до 4й группы, аккаунт остановлен!'
+                        send_message_bot(USER_ID, str(ACC_ID) + ': ' + 'обнаружена порезка до 4й группы', ADMINS)
+                    #     msg_err = msg_err + '\n' + 'обнаружена порезка до 4й группы, аккаунт остановлен!'
 
                     bal_small = ((bal1 / one_proc) < 10 or (bal2 / one_proc) < 10)
                     need_time = (len(cnt_fork_success) == 0 and cnt_fail == 0) or ((int(time.time()) - last_fork_time) > 7200)
