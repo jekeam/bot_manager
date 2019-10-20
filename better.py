@@ -549,7 +549,7 @@ def run_client():
             server_forks = data_json
             # prnt('End /get_forks', hide=True)
             # prnt('End /get_forks')
-            time.sleep(round(uniform(1, 3), 2))
+            time.sleep(0.9)
     except Shutdown as e:
         prnt(str(e.__class__.__name__) + ' - ' + str(e))
         raise Shutdown(e)
@@ -963,10 +963,11 @@ if __name__ == '__main__':
                                 prnt('Вилка исключена, т.к. вид спорта: ' + event_type)
                     else:
                         pass
-                    ts = round(uniform(1, 3), 2)
-                    # ts = 1
+                    # ts = round(uniform(1, 3), 2)
                     # prnt('ts:' + str(ts), 'hide')
+                    ts = 0.5
                     time.sleep(ts)
+
 
     except (Shutdown, MaxFail, MaxFork) as e:
         try:
