@@ -779,7 +779,7 @@ if __name__ == '__main__':
                         msg_err = msg_err + '\n' + 'обнаружена блокировка вывода, нужно пройти верификацию в Фонбет, аккаунт остановлен!'
 
                     if str(bk2.get_acc_info('group')).lower() == '4'.lower():
-                        msg_str = msg_str + '\n**Обнаружена порезка до 4й группы**'
+                        msg_str = msg_str + 'Обнаружена порезка до 4й группы\n'
 
                     if bal_small:
                         if need_time:
@@ -792,11 +792,11 @@ if __name__ == '__main__':
                     if not start_message_send:
                         cnt_fork_success_old = len(cnt_fork_success)
                         cnt_fork_fail_old = cnt_fail
-                        msg_str = msg_str + '\nРаспределение балансов:\n' + bk1_name + ': ' + str(round(bal1 / one_proc)) + '%\n' + bk2_name + ': ' + str(round(bal2 / one_proc)) + '%'
+                        msg_str = msg_str + 'Распределение балансов:\n' + bk1_name + ': ' + str(round(bal1 / one_proc)) + '%\n' + bk2_name + ': ' + str(round(bal2 / one_proc)) + '%\n'
                         if cnt_fork_success_old != 0:
-                            msg_str = msg_str + '\nПроставлено вилок: {}'.format(len(cnt_fork_success))
+                            msg_str = msg_str + 'Проставлено вилок: {}\n'.format(len(cnt_fork_success))
                         if cnt_fork_fail_old != 0:
-                            msg_str = msg_str + '\nСделано минусовы выкупов: {}'.format(cnt_fail)
+                            msg_str = msg_str + 'Сделано минусовы выкупов: {}\n'.format(cnt_fail)
                         msg_push = True
                         start_message_send = True
                     elif len(cnt_fork_success) != cnt_fork_success_old:
