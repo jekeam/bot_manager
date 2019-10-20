@@ -751,22 +751,6 @@ if __name__ == '__main__':
                             export_block = True
 
                     one_proc = (bal1 + bal2) / 100
-
-                    msg_str = str(ACC_ID) + ': '
-                    msg_push = False
-
-                    msg_err = ''
-
-                    if bk2.get_acc_info('bet').lower() != 'Нет'.lower():
-                        msg_err = msg_err + '\n' + 'обнаружена блокировка ставки в Фонбет, аккаунт остановлен!'
-
-                    if bk2.get_acc_info('pay').lower() != 'Нет'.lower():
-                        msg_err = msg_err + '\n' + 'обнаружена блокировка вывода, нужно пройти верификацию в Фонбет, аккаунт остановлен!'
-
-                    if str(bk2.get_acc_info('group')).lower() == '4'.lower():
-                        send_message_bot(USER_ID, str(ACC_ID) + ': ' + 'обнаружена порезка до 4й группы', ADMINS)
-                    #     msg_err = msg_err + '\n' + 'обнаружена порезка до 4й группы, аккаунт остановлен!'
-
                     bal_small = ((bal1 / one_proc) < 10 or (bal2 / one_proc) < 10)
                     need_time = (len(cnt_fork_success) == 0 and cnt_fail == 0) or ((int(time.time()) - last_fork_time) > 7200)
 
@@ -782,6 +766,20 @@ if __name__ == '__main__':
                             bal2_new = bk2.get_balance()  # Баланс в БК2
                             prnt('bal2: {}->{}'.format(bal2, bal2_new))
                             bal2 = bal2_new
+
+                    msg_str = str(ACC_ID) + ': '
+                    msg_push = False
+
+                    msg_err = ''
+
+                    if bk2.get_acc_info('bet').lower() != 'Нет'.lower():
+                        msg_err = msg_err + '\n' + 'обнаружена блокировка ставки в Фонбет, аккаунт остановлен!'
+
+                    if bk2.get_acc_info('pay').lower() != 'Нет'.lower():
+                        msg_err = msg_err + '\n' + 'обнаружена блокировка вывода, нужно пройти верификацию в Фонбет, аккаунт остановлен!'
+
+                    if str(bk2.get_acc_info('group')).lower() == '4'.lower():
+                        msg_str = msg_str + '\n' + str(ACC_ID) + ': обнаружена порезка до 4й группы'
 
                     if bal_small:
                         if need_time:
