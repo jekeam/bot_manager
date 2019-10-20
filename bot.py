@@ -383,24 +383,24 @@ def help(update, context):
 def error(update, context):
     """Log Errors caused by Updates."""
     logger.warning('Update "%s" caused error "%s"', update, context.error)
-
-
-def error_callback(bot, update, error):
-    try:
-        raise error
-    # except Unauthorized:
-    #     # remove update.message.chat_id from conversation list
-    except BadRequest as e:
-        print('BadRequest: ' + str(e))
-        # handle malformed requests - read more below!
-    # except TimedOut:
-    #     # handle slow connection problems
-    # except NetworkError:
-    #     # handle other connection problems
-    # except ChatMigrated as e:
-    #     # the chat_id of a group has changed, use e.new_chat_id instead
-    # except TelegramError:
-    #     # handle all other telegram related errors
+#
+#
+# def error_callback(bot, update, error):
+#     try:
+#         raise error
+#     # except Unauthorized:
+#     #     # remove update.message.chat_id from conversation list
+#     except BadRequest as e:
+#         print('BadRequest: ' + str(e))
+#         # handle malformed requests - read more below!
+#     # except TimedOut:
+#     #     # handle slow connection problems
+#     # except NetworkError:
+#     #     # handle other connection problems
+#     # except ChatMigrated as e:
+#     #     # the chat_id of a group has changed, use e.new_chat_id instead
+#     # except TelegramError:
+#     #     # handle all other telegram related errors
 
 
 def sender(context):
@@ -501,7 +501,7 @@ if __name__ == '__main__':
     updater.dispatcher.add_handler(RegexHandler('^(' + bot_prop.BTN_CLOSE + ')$', close_prop))
     updater.dispatcher.add_handler(MessageHandler(Filters.text, set_prop))
     updater.dispatcher.add_handler(CommandHandler('help', help))
-    updater.dispatcher.add_error_handler(error_callback)
+    # updater.dispatcher.add_error_handler(error_callback)
 
     # Start the Bot
     updater.start_polling()
