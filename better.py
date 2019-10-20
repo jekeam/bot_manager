@@ -925,10 +925,10 @@ if __name__ == '__main__':
 
                                             now_timestamp = int(time.time())
                                             last_timestamp = temp_lock_fork.get(key, now_timestamp)
-                                            prnt('now_timestamp: ' + str(now_timestamp) + ', last_timestamp:' + str(last_timestamp) + ', server_forks:' + str(len(server_forks)) + '\n' + str(server_forks))
+                                            # prnt('now_timestamp: ' + str(now_timestamp) + ', last_timestamp:' + str(last_timestamp) + ', server_forks:' + str(len(server_forks)) + '\n' + str(server_forks))
 
                                             if 0 < (now_timestamp - last_timestamp) < 60 and len(server_forks) > 1:
-                                                prnt('Вилка исключена, т.к. мы ее пытались проставить успешно/не успешно, но прошло менее 60 секунд и есть еще вилки, будем ставить другие, новые')
+                                                prnt('Вилка ' + str(key) + ' исключена, т.к. мы ее пытались проставить успешно/не успешно, но прошло менее 60 секунд и есть еще вилки, будем ставить другие, новые')
                                             else:
                                                 temp_lock_fork.update({key: now_timestamp})
                                                 temp_lock_fork.update({key: now_timestamp})
