@@ -779,6 +779,7 @@ if __name__ == '__main__':
                         bal_small = ((bal1 / one_proc) < 10 or (bal2 / one_proc) < 10)
 
                     msg_err = ''
+                    msg_str = ''
 
                     if bk2.get_acc_info('bet').lower() != 'Нет'.lower():
                         msg_err = msg_err + '\n' + 'обнаружена блокировка ставки в Фонбет, аккаунт остановлен!'
