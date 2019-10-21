@@ -766,6 +766,9 @@ if __name__ == '__main__':
                             bal2_new = bk2.get_balance()  # Баланс в БК2
                             prnt('bal2: {}->{}'.format(bal2, bal2_new))
                             bal2 = bal2_new
+                            
+                            one_proc = (bal1 + bal2) / 100
+                            bal_small = ((bal1 / one_proc) < 10 or (bal2 / one_proc) < 10)
 
                     msg_str = str(ACC_ID) + ': '
                     msg_push = False
