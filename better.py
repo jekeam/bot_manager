@@ -754,23 +754,25 @@ if __name__ == '__main__':
 
                     one_proc = (bal1 + bal2) / 100
                     bal_small = ((bal1 / one_proc) < 10 or (bal2 / one_proc) < 10)
-                    need_time = (len(cnt_fork_success) == 0 and cnt_fail == 0) or ((int(time.time()) - last_fork_time) > 7200)
+                    time_after_bet = 7200
+                    need_time = (len(cnt_fork_success) == 0 and cnt_fail == 0) or ((int(time.time()) - last_fork_time) > time_after_bet)
 
-                    if bal_small:
-                        if need_time and last_fork_time > 0:
-                            prnt('Прошло больше 2 часов, с момента последней ставки, пора обновить балансы:')
-                            time_get_balance = datetime.datetime.now()
+                    # Обновление баланса каждые 120 минут
+                    ref_balace = 30
+                    if (bal_small or need_time and last_fork_time > 0) or ((datetime.datetime.now() - time_get_balance).total_seconds() > (60 * ref_balace)):
+                        prnt('Прошло больше ' + str(ref_balace) +' мин. или ' + str(time_after_bet/60) + ' мин. с момента последней ставки, пора обновить балансы:')
+                        time_get_balance = datetime.datetime.now()
 
-                            bal1_new = bk1.get_balance()  # Баланс в БК1
-                            prnt('bal1: {}->{}'.format(bal1, bal1_new))
-                            bal1 = bal1_new
+                        bal1_new = bk1.get_balance()  # Баланс в БК1
+                        prnt('bal1: {}->{}'.format(bal1, bal1_new))
+                        bal1 = bal1_new
 
-                            bal2_new = bk2.get_balance()  # Баланс в БК2
-                            prnt('bal2: {}->{}'.format(bal2, bal2_new))
-                            bal2 = bal2_new
-                            
-                            one_proc = (bal1 + bal2) / 100
-                            bal_small = ((bal1 / one_proc) < 10 or (bal2 / one_proc) < 10)
+                        bal2_new = bk2.get_balance()  # Баланс в БК2
+                        prnt('bal2: {}->{}'.format(bal2, bal2_new))
+                        bal2 = bal2_new
+                        
+                        one_proc = (bal1 + bal2) / 100
+                        bal_small = ((bal1 / one_proc) < 10 or (bal2 / one_proc) < 10)
 
                     msg_str = str(ACC_ID) + ': '
                     msg_push = False
