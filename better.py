@@ -527,8 +527,8 @@ def run_client():
     global shutdown
     global server_ip
 
-    # long_pool_wait = randint(30, 60)
-    long_pool_wait = 4
+    long_pool_wait = randint(30, 60)
+    # long_pool_wait = 4
     prnt('Long pool sec: ' + str(long_pool_wait))
 
     try:
@@ -551,7 +551,7 @@ def run_client():
             server_forks = data_json
             # prnt('End /get_forks', hide=True)
             # prnt('End /get_forks')
-            time.sleep(0.9)
+            time.sleep(1)
     except Shutdown as e:
         prnt(str(e.__class__.__name__) + ' - ' + str(e))
         raise Shutdown(e)
@@ -968,8 +968,7 @@ if __name__ == '__main__':
                         pass
                     # ts = round(uniform(1, 3), 2)
                     # prnt('ts:' + str(ts), 'hide')
-                    ts = 0.5
-                    time.sleep(ts)
+                    time.sleep(1)
 
 
     except (Shutdown, MaxFail, MaxFork) as e:
