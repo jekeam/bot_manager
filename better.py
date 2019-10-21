@@ -623,8 +623,8 @@ temp_lock_fork = {}
 
 export_block = False
 
-msg_str_old = str(ACC_ID) + ': '
-msg_str = str(ACC_ID) + ': '
+msg_str_old = ''
+msg_str = ''
 
 # wag_fb:{'event': '12797479', 'factor': '921', 'param': '', 'score': '0:0', 'value': '2.35'}
 # wag_fb:{'apid': '1144260386:45874030:1:3:-9999:3:NULL:NULL:1', 'factor': '1.66', 'sport_id': 1, 'event': '45874030'}
@@ -764,7 +764,7 @@ if __name__ == '__main__':
                     # Обновление баланса каждые 120 минут
                     ref_balace = 30
                     if (bal_small or need_time and last_fork_time > 0) or ((datetime.datetime.now() - time_get_balance).total_seconds() > (60 * ref_balace)):
-                        prnt('Прошло больше ' + str(ref_balace) +' мин. или ' + str(time_after_bet/60) + ' мин. с момента последней ставки, пора обновить балансы:')
+                        prnt('Прошло больше ' + str(ref_balace) + ' мин. или ' + str(time_after_bet / 60) + ' мин. с момента последней ставки, пора обновить балансы:')
                         time_get_balance = datetime.datetime.now()
 
                         bal1_new = bk1.get_balance()  # Баланс в БК1
@@ -774,12 +774,11 @@ if __name__ == '__main__':
                         bal2_new = bk2.get_balance()  # Баланс в БК2
                         prnt('bal2: {}->{}'.format(bal2, bal2_new))
                         bal2 = bal2_new
-                        
+
                         one_proc = (bal1 + bal2) / 100
                         bal_small = ((bal1 / one_proc) < 10 or (bal2 / one_proc) < 10)
 
                     msg_err = ''
-                    msg_str = str(ACC_ID) + ': '
 
                     if bk2.get_acc_info('bet').lower() != 'Нет'.lower():
                         msg_err = msg_err + '\n' + 'обнаружена блокировка ставки в Фонбет, аккаунт остановлен!'
@@ -808,7 +807,7 @@ if __name__ == '__main__':
                             msg_str_t = msg_str_t + 'Сделано минусовы выкупов: {}\n'.format(cnt_fail)
                         send_message_bot(USER_ID, msg_str_t, ADMINS)
                         start_message_send = True
-                        
+
                     elif len(cnt_fork_success) != cnt_fork_success_old:
                         msg_str = msg_str + 'Проставлено вилок: {}->{}'.format(cnt_fork_success_old, len(cnt_fork_success)) + '\n'
                         msg_str = msg_str + 'Сделано минусовы выкупов: {}'.format(cnt_fail) + '\n'
@@ -820,7 +819,7 @@ if __name__ == '__main__':
 
                     if msg_str != msg_str_old:
                         msg_str_old = msg_str
-                        send_message_bot(USER_ID, msg_str_old, ADMINS)
+                        send_message_bot(USER_ID, str(ACC_ID) + ': ' + msg_str_old, ADMINS)
 
                     if server_forks:
                         for key, val_json in sorted(server_forks.items(), key=lambda x: random.random()):
