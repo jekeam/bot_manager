@@ -184,10 +184,12 @@ def check_fork(key, L, k1, k2, live_fork, live_fork_total, bk1_score, bk2_score,
     # Вилка живет достаточно
     long_livers = int(get_prop('fork_life_time'))
     if get_prop('fork_time_type', 'auto') in ('auto', 'текущее'):
-        if live_fork - deff_max < long_livers:
+        # if live_fork - deff_max < long_livers:
+        if live_fork < long_livers:
             fork_exclude_text = fork_exclude_text + 'Вилка ' + str(round((1 - L) * 100, 2)) + '% исключена т.к. живет меньше ' + str(long_livers) + ' сек. \n'
     else:
-        if live_fork_total - deff_max < long_livers:
+        # if live_fork_total - deff_max < long_livers:
+        if live_fork_total < long_livers:
             fork_exclude_text = fork_exclude_text + 'Вилка ' + str(round((1 - L) * 100, 2)) + '% исключена т.к. живет в общем меньше ' + str(long_livers) + ' сек. \n'
 
     if get_prop('top', 'выкл') == 'вкл' and not is_top:
