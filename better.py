@@ -622,6 +622,10 @@ start_message_send = False
 temp_lock_fork = {}
 
 export_block = False
+
+msg_str_old = str(ACC_ID) + ': '
+msg_str = str(ACC_ID) + ': '
+
 # wag_fb:{'event': '12797479', 'factor': '921', 'param': '', 'score': '0:0', 'value': '2.35'}
 # wag_fb:{'apid': '1144260386:45874030:1:3:-9999:3:NULL:NULL:1', 'factor': '1.66', 'sport_id': 1, 'event': '45874030'}
 
@@ -774,10 +778,8 @@ if __name__ == '__main__':
                         one_proc = (bal1 + bal2) / 100
                         bal_small = ((bal1 / one_proc) < 10 or (bal2 / one_proc) < 10)
 
-                    msg_str = str(ACC_ID) + ': '
-                    msg_push = False
-
                     msg_err = ''
+                    msg_str = str(ACC_ID) + ': '
 
                     if bk2.get_acc_info('bet').lower() != 'Нет'.lower():
                         msg_err = msg_err + '\n' + 'обнаружена блокировка ставки в Фонбет, аккаунт остановлен!'
@@ -804,22 +806,20 @@ if __name__ == '__main__':
                             msg_str = msg_str + 'Проставлено вилок: {}\n'.format(len(cnt_fork_success))
                         if cnt_fork_fail_old != 0:
                             msg_str = msg_str + 'Сделано минусовы выкупов: {}\n'.format(cnt_fail)
-                        msg_push = True
                         start_message_send = True
+                        
                     elif len(cnt_fork_success) != cnt_fork_success_old:
                         msg_str = msg_str + 'Проставлено вилок: {}->{}'.format(cnt_fork_success_old, len(cnt_fork_success)) + '\n'
                         msg_str = msg_str + 'Сделано минусовы выкупов: {}'.format(cnt_fail) + '\n'
                         cnt_fork_success_old = len(cnt_fork_success)
-                        msg_push = True
                     elif cnt_fork_fail_old != cnt_fail:
                         msg_str = msg_str + 'Проставлено вилок: {}'.format(len(cnt_fork_success)) + '\n'
                         msg_str = msg_str + 'Сделано минусовы выкупов: {}->{}'.format(cnt_fork_fail_old, cnt_fail) + '\n'
                         cnt_fork_fail_old = cnt_fail
-                        msg_push = True
 
-                    if msg_push:
-                        msg_push = False
-                        send_message_bot(USER_ID, msg_str.strip(), ADMINS)
+                    if msg_str != msg_str_old:
+                        msg_str_old = msg_str
+                        send_message_bot(USER_ID, msg_str_old, ADMINS)
 
                     if server_forks:
                         for key, val_json in sorted(server_forks.items(), key=lambda x: random.random()):
