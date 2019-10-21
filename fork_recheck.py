@@ -96,7 +96,7 @@ def get_olimp_info(id_matche, olimp_k, sport_id, proxies=None):
                                                      if c.replace(' ', '') in abbreviations.keys()
                                                      else c.replace(' ', '')
                                                      if '(' not in c.replace(' ', '')
-                                                     else to_abb(c.replace(' ', ''))
+                                                     else to_abb(c)
                                                      for c in [key_r]
                                                  ][0])
 

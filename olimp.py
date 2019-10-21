@@ -27,15 +27,14 @@ def get_xtoken(payload, secret_key):
 
 
 def to_abb(sbet):
+    sbet = sbet.replace(' ', '').replace('\t', '')
     value = re.findall('\((.*)\)', sbet)[0]
     key = re.sub('\((.*)\)', '', sbet)
     abr = ''
-    # error to_add("ХунтеларК.(Аякс)(0.5)бол"), value=Аякс)(0.5, key=ХунтеларК.бол
     try:
         abr = abbreviations[key].format(value)
-    except:
-        # pass
-        prnt('error to_add("' + sbet + '"), value=' + value + ', key=' + key)
+    except Exception as e:
+        print('error: ' + str(e) + ', to_abb("' + sbet + '"), value=' + value + ', key=' + key)
     return abr
 
 
@@ -137,7 +136,7 @@ def stake(i, a, shared_list, secret_key, new_url, wager_dict):
                                                              if c.replace(' ', '') in abbreviations.keys()
                                                              else c.replace(' ', '')
                                                              if '(' not in c.replace(' ', '')
-                                                             else to_abb(c.replace(' ', ''))
+                                                             else to_abb(c)
                                                              for c in [key_r]
                                                          ][0])
                                 key_wager = str(b.get('id', '')) + '-' + olimp_factor_short

@@ -167,15 +167,14 @@ def get_xtoken(payload, olimp_secret_key):
 
 
 def to_abb(sbet):
+    sbet = sbet.replace(' ', '').replace('\t', '')
     value = re.findall('\((.*)\)', sbet)[0]
     key = re.sub('\((.*)\)', '', sbet)
     abr = ''
-    # error to_add("ХунтеларК.(Аякс)(0.5)бол"), value=Аякс)(0.5, key=ХунтеларК.бол
     try:
         abr = abbreviations[key].format(value)
-    except:
-        # pass
-        prnts('error to_add("' + sbet + '"), value=' + value + ', key=' + key)
+    except Exception as e:
+        prnts('error: ' + str(e) + ', to_abb("' + sbet + '"), value=' + value + ', key=' + key)
     return abr
 
 
@@ -395,7 +394,7 @@ def get_bets_olimp(bets_olimp, match_id, proxies_olimp, proxy, time_out, pair_ma
                                            if c.replace(' ', '') in abbreviations.keys()
                                            else c.replace(' ', '')
                                            if '(' not in c.replace(' ', '')
-                                           else to_abb(c.replace(' ', ''))
+                                           else to_abb(c)
                                            for c in [key_r]
                                        ][0])
                             hist5 = bets_olimp[key_id].get('kofs', {}).get(coef, {}).get('hist', {}).get('4', 0)
