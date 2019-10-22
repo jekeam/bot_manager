@@ -543,14 +543,14 @@ def run_client():
                 conn.close()
                 raise Shutdown(err_str)
             # prnt('Get /get_forks', hide=True)
-            prnt('Get /get_forks')
+            # prnt('Get /get_forks')
             conn.request('GET', '/get_forks')
             rs = conn.getresponse()
             data = rs.read().decode('utf-8')
             data_json = json.loads(data)
             server_forks = data_json
             # prnt('End /get_forks', hide=True)
-            prnt('End /get_forks, len: ' + str(len(data_json)) + '\n' + str(data_json))
+            # prnt('End /get_forks, len: ' + str(len(data_json)) + '\n' + str(data_json))
             time.sleep(1)
     except Shutdown as e:
         prnt(str(e.__class__.__name__) + ' - ' + str(e))
