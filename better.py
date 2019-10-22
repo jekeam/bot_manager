@@ -952,7 +952,7 @@ if __name__ == '__main__':
                         pass
                     # ts = round(uniform(1, 3), 2)
                     # prnt('ts:' + str(ts), 'hide')
-                    time.sleep(1)
+                    time.sleep(0.5)
 
 
     except (Shutdown, MaxFail, MaxFork) as e:
