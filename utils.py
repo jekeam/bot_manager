@@ -79,7 +79,7 @@ except:
     pass
 
 try:
-    START_SLEEP = = sys.argv[2]
+    START_SLEEP = sys.argv[3]
 except:
     pass
 
