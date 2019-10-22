@@ -5,27 +5,27 @@ from json import loads, dumps
 if __name__ == '__main__':
     uid = uuid1()
 
-    CNT_DAYS = 30
+    CNT_DAYS = 25
     USER_ID = 782928513
 
     # PROXY
     # user name
-    user = 'amirikanetsT7'
+    user = 'VnaaRorbj'
     # password
-    pswd = 'J7u3YxE'
+    pswd = 'KqK36nkL8'
     # ip
-    ip = '176.114.10.185'
+    ip = '45.86.171.149'
     # port
-    port = '34512'
+    port = '10895'
 
     # BK
     # olimp
-    olu = '7642403'
-    olp = 'X4kAyk04'
+    olu = '5811830'
+    olp = 'qeKjH6Kg'
 
     # fonbet
-    fbu = '7773142'
-    fbp = '9Up4RdN7'
+    fbu = '7779141'
+    fbp = '9a2114e1'
 
     proxy = user + ':' + pswd + '@' + ip + ':' + port
     proxies = '{`fonbet`:{`http`:`http://' + proxy + '`,`https`:`https://' + proxy + '`},`olimp`:{`http`:`http://' + proxy + '`,`https`:`https://' + proxy + '`}}'
