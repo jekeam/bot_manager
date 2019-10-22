@@ -635,6 +635,7 @@ if __name__ == '__main__':
         wait_before_start_sec = 0
         if START_SLEEP != '':
             wait_before_start_sec = float(randint(1, 600))
+            Account.update(work_stat='start').where(Account.key == KEY).execute()
         send_message_bot(USER_ID, str(ACC_ID) + ': ' + 'Аккаунт запущен', ADMINS)
         prnt('начну работу через ' + str(round(wait_before_start_sec)) + ' сек...')
 
@@ -645,7 +646,6 @@ if __name__ == '__main__':
             else:
 
                 Account.update(pid=os.getpid(), time_start=round(time.time())).where(Account.key == KEY).execute()
-                Account.update(work_stat='start').where(Account.key == KEY).execute()
                 prnt('DEBUG: ' + str(DEBUG))
 
                 time_get_balance = datetime.datetime.now()
