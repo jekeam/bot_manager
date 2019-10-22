@@ -25,7 +25,7 @@ if __name__ == '__main__':
     if __name__ == '__main__':
         Account.update(pid=0).where(Account.pid > 0).execute()
         while True:
-            for acc in Account.select().where((Account.status == 'active') & (Account.work_stat in ('start', 'start_sleep')) & (Account.pid == 0)):
+            for acc in Account.select().where((Account.status == 'active') & (Account.work_stat == 'start_sleep') & (Account.pid == 0)):
                 Account.update(pid=1).where(Account.id == acc.id).execute()
                 print(''.ljust(120, '*'))
                 if acc.work_stat == 'start':
