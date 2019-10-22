@@ -645,6 +645,7 @@ if __name__ == '__main__':
             else:
 
                 Account.update(pid=os.getpid(), time_start=round(time.time())).where(Account.key == KEY).execute()
+                Account.update(work_stat='start').where(Account.key == KEY).execute()
                 prnt('DEBUG: ' + str(DEBUG))
 
                 time_get_balance = datetime.datetime.now()
