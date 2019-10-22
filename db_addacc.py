@@ -5,6 +5,9 @@ from json import loads, dumps
 if __name__ == '__main__':
     uid = uuid1()
 
+    CNT_DAYS = 30
+    USER_ID = 782928513
+
     # PROXY
     # user name
     user = 'amirikanetsT7'
@@ -30,9 +33,9 @@ if __name__ == '__main__':
     try:
         acc = Account.create(
             # user id from telegram
-            user=782928513,
+            user=USER_ID,
             key=uid,
-            date_end=get_trunc_sysdate(25),  # cnt days
+            date_end=get_trunc_sysdate(CNT_DAYS),  # cnt days
             status='active',
             proxies=proxies,
             accounts=accounts
