@@ -25,7 +25,7 @@ import random
 if __name__ == '__main__':
     from history import export_hist
 
-global KEY, ACC_ID
+global KEY, ACC_ID, START_SLEEP
 
 shutdown = False
 if get_prop('debug'):
@@ -104,8 +104,8 @@ def check_fork(key, L, k1, k2, live_fork, live_fork_total, bk1_score, bk2_score,
     fork_exclude_text = ''
     v = True
 
-    if L < 0.70:
-        fork_exclude_text = fork_exclude_text + 'Вилка ' + str(L) + ' (' + str(round((1 - L) * 100, 2)) + '%), вилка исключена т.к. доходноть высокая > 30%\n'
+    if L < 0.20:
+        fork_exclude_text = fork_exclude_text + 'Вилка ' + str(L) + ' (' + str(round((1 - L) * 100, 2)) + '%), вилка исключена т.к. доходноть высокая > 20%\n'
 
     if get_prop('team_junior', 'выкл') == 'выкл':
         if re.search('(u\d{2}|\(.*\d{2}\))', name_rus.lower()):
@@ -550,7 +550,7 @@ def run_client():
             data_json = json.loads(data)
             server_forks = data_json
             # prnt('End /get_forks', hide=True)
-            # prnt('End /get_forks')
+            # prnt('End /get_forks, len: ' + str(len(data_json)) + '\n' + str(data_json))
             time.sleep(1)
     except Shutdown as e:
         prnt(str(e.__class__.__name__) + ' - ' + str(e))
@@ -633,12 +633,13 @@ if __name__ == '__main__':
     try:
 
         wait_before_start_sec = 0
-        # if str(ACC_ID) not in ['3', '18']:
-        #     wait_before_start_sec = float(randint(1, 600))
-        # send_message_bot(USER_ID, str(ACC_ID) + ': ' + 'Аккаунт запущен', ADMINS)
-        # prnt('начну работу через ' + str(round(wait_before_start_sec)) + ' сек...')
+        if START_SLEEP != '':
+            wait_before_start_sec = float(randint(1, 600))
+            Account.update(work_stat='start').where(Account.key == KEY).execute()
+        send_message_bot(USER_ID, str(ACC_ID) + ': ' + 'Аккаунт запущен', ADMINS)
+        prnt('начну работу через ' + str(round(wait_before_start_sec)) + ' сек...')
 
-        while Account.select().where(Account.key == KEY).get().work_stat == 'start':
+        while Account.select().where(Account.key == KEY).get().work_stat in ('start', 'start_sleep'):
             if wait_before_start_sec > 0:
                 wait_before_start_sec = wait_before_start_sec - 0.5
                 time.sleep(0.5)
@@ -667,6 +668,7 @@ if __name__ == '__main__':
 
                 MIN_PROC = float(get_prop('min_proc').replace(',', '.'))
                 prnt(' ')
+                prnt('START_SLEEP: ' + str(START_SLEEP))
                 prnt('Current Time: ' + str(datetime.datetime.now()))
                 prnt('ID аккаунта: ' + str(ACC_ID))
                 prnt('IP-адрес сервера: ' + server_ip + ':8888')
@@ -758,25 +760,6 @@ if __name__ == '__main__':
 
                     one_proc = (bal1 + bal2) / 100
                     bal_small = ((bal1 / one_proc) < 10 or (bal2 / one_proc) < 10)
-                    time_after_bet = 7200
-                    need_time = (len(cnt_fork_success) == 0 and cnt_fail == 0) or ((int(time.time()) - last_fork_time) > time_after_bet)
-
-                    # Обновление баланса каждые 120 минут
-                    ref_balace = 30
-                    if (bal_small or need_time and last_fork_time > 0) or ((datetime.datetime.now() - time_get_balance).total_seconds() > (60 * ref_balace)):
-                        prnt('Прошло больше ' + str(ref_balace) + ' мин. или ' + str(time_after_bet / 60) + ' мин. с момента последней ставки, пора обновить балансы:')
-                        time_get_balance = datetime.datetime.now()
-
-                        bal1_new = bk1.get_balance()  # Баланс в БК1
-                        prnt('bal1: {}->{}'.format(bal1, bal1_new))
-                        bal1 = bal1_new
-
-                        bal2_new = bk2.get_balance()  # Баланс в БК2
-                        prnt('bal2: {}->{}'.format(bal2, bal2_new))
-                        bal2 = bal2_new
-
-                        one_proc = (bal1 + bal2) / 100
-                        bal_small = ((bal1 / one_proc) < 10 or (bal2 / one_proc) < 10)
 
                     msg_err = ''
                     msg_str = ''
@@ -801,7 +784,7 @@ if __name__ == '__main__':
                     if not start_message_send:
                         cnt_fork_success_old = len(cnt_fork_success)
                         cnt_fork_fail_old = cnt_fail
-                        msg_str_t = str(ACC_ID) + ': Начал работу\nРаспределение балансов:\n' + bk1_name + ': ' + str(round(bal1 / one_proc)) + '%\n' + bk2_name + ': ' + str(round(bal2 / one_proc)) + '%\n'
+                        msg_str_t = str(ACC_ID) + ': Распределение балансов:\n' + bk1_name + ': ' + str(round(bal1 / one_proc)) + '%\n' + bk2_name + ': ' + str(round(bal2 / one_proc)) + '%\n'
                         if cnt_fork_success_old != 0:
                             msg_str_t = msg_str_t + 'Проставлено вилок: {}\n'.format(len(cnt_fork_success))
                         if cnt_fork_fail_old != 0:
@@ -820,7 +803,8 @@ if __name__ == '__main__':
 
                     if msg_str != msg_str_old:
                         msg_str_old = msg_str
-                        send_message_bot(USER_ID, str(ACC_ID) + ': ' + msg_str_old, ADMINS)
+                        if msg_str:
+                            send_message_bot(USER_ID, str(ACC_ID) + ': ' + msg_str, ADMINS)
 
                     if server_forks:
                         for key, val_json in sorted(server_forks.items(), key=lambda x: random.random()):
@@ -971,7 +955,7 @@ if __name__ == '__main__':
                         pass
                     # ts = round(uniform(1, 3), 2)
                     # prnt('ts:' + str(ts), 'hide')
-                    time.sleep(1)
+                    time.sleep(0.5)
 
 
     except (Shutdown, MaxFail, MaxFork) as e:

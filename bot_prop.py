@@ -19,7 +19,7 @@ IP_SERVER = '80.87.193.55:8888'
 # PY_PATH = 'python3.6'
 # TOKEN = '598446286:AAEhbB2RDQ7oEe7pX2vif-IENIdIVIZ9xVk'
 # ADMINS = [381868674]
-# IP_SERVER = '80.87.193.55:8888'
+# IP_SERVER = '62.109.10.57:8888'
 
 # TEST
 # PY_PATH = 'D:\\YandexDisk\\Парсинг\\bot_manager\\venv\\Scripts\\python.exe'
