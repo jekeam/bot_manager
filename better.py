@@ -638,7 +638,7 @@ if __name__ == '__main__':
         send_message_bot(USER_ID, str(ACC_ID) + ': ' + 'Аккаунт запущен', ADMINS)
         prnt('начну работу через ' + str(round(wait_before_start_sec)) + ' сек...')
 
-        while Account.select().where(Account.key == KEY).get().work_stat == 'start':
+        while Account.select().where(Account.key == KEY).get().work_stat in ('start', 'start_sleep'):
             if wait_before_start_sec > 0:
                 wait_before_start_sec = wait_before_start_sec - 0.5
                 time.sleep(0.5)
