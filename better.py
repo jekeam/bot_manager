@@ -25,7 +25,7 @@ import random
 if __name__ == '__main__':
     from history import export_hist
 
-global KEY, ACC_ID
+global KEY, ACC_ID, START_SLEEP
 
 shutdown = False
 if get_prop('debug'):
@@ -633,10 +633,10 @@ if __name__ == '__main__':
     try:
 
         wait_before_start_sec = 0
-        # if str(ACC_ID) not in ['3', '18']:
-        #     wait_before_start_sec = float(randint(1, 600))
-        # send_message_bot(USER_ID, str(ACC_ID) + ': ' + 'Аккаунт запущен', ADMINS)
-        # prnt('начну работу через ' + str(round(wait_before_start_sec)) + ' сек...')
+        if START_SLEEP != '':
+            wait_before_start_sec = float(randint(1, 600))
+        send_message_bot(USER_ID, str(ACC_ID) + ': ' + 'Аккаунт запущен', ADMINS)
+        prnt('начну работу через ' + str(round(wait_before_start_sec)) + ' сек...')
 
         while Account.select().where(Account.key == KEY).get().work_stat == 'start':
             if wait_before_start_sec > 0:
@@ -667,6 +667,7 @@ if __name__ == '__main__':
 
                 MIN_PROC = float(get_prop('min_proc').replace(',', '.'))
                 prnt(' ')
+                prnt('START_SLEEP: ' + str(START_SLEEP))
                 prnt('Current Time: ' + str(datetime.datetime.now()))
                 prnt('ID аккаунта: ' + str(ACC_ID))
                 prnt('IP-адрес сервера: ' + server_ip + ':8888')
@@ -782,7 +783,7 @@ if __name__ == '__main__':
                     if not start_message_send:
                         cnt_fork_success_old = len(cnt_fork_success)
                         cnt_fork_fail_old = cnt_fail
-                        msg_str_t = str(ACC_ID) + ': Начал работу\nРаспределение балансов:\n' + bk1_name + ': ' + str(round(bal1 / one_proc)) + '%\n' + bk2_name + ': ' + str(round(bal2 / one_proc)) + '%\n'
+                        msg_str_t = str(ACC_ID) + ': Распределение балансов:\n' + bk1_name + ': ' + str(round(bal1 / one_proc)) + '%\n' + bk2_name + ': ' + str(round(bal2 / one_proc)) + '%\n'
                         if cnt_fork_success_old != 0:
                             msg_str_t = msg_str_t + 'Проставлено вилок: {}\n'.format(len(cnt_fork_success))
                         if cnt_fork_fail_old != 0:

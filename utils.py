@@ -69,11 +69,17 @@ opposition = {
 
 KEY = ''
 ACC_ID = 0
+START_SLEEP = ''
 USER_ID = 0
 PROPERTIES = {}
 ACCOUNTS = {}
 try:
     ACC_ID = sys.argv[2]
+except:
+    pass
+
+try:
+    START_SLEEP = = sys.argv[2]
 except:
     pass
 
