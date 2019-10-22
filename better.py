@@ -803,7 +803,8 @@ if __name__ == '__main__':
 
                     if msg_str != msg_str_old:
                         msg_str_old = msg_str
-                        send_message_bot(USER_ID, str(ACC_ID) + ': ' + msg_str_old, ADMINS)
+                        if msg_str:
+                            send_message_bot(USER_ID, str(ACC_ID) + ': ' + msg_str, ADMINS)
 
                     if server_forks:
                         for key, val_json in sorted(server_forks.items(), key=lambda x: random.random()):
