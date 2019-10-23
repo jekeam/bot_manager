@@ -11,11 +11,11 @@ if __name__ == '__main__':
 
     # PROXY
     # user name
-    user = 'zBxxQd'
+    user = 'cJX8KT'
     # password
-    pswd = 'LbcTHJ'
+    pswd = 'hsUmYx'
     # ip
-    ip = '45.133.34.68'
+    ip = '45.133.32.57'
     # port
     port = '8000'
 
