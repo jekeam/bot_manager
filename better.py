@@ -774,8 +774,7 @@ if __name__ == '__main__':
                         msg_str = msg_str + 'Обнаружена порезка до 4й группы\n'
 
                     if bal_small:
-                        if need_time:
-                            msg_err = msg_err + '\n' + 'аккаунт остановлен: денег в одной из БК не достаточно для работы, просьба выровнять балансы.\n' + bk1_name + ': ' + str(bal1) + '\n' + bk2_name + ': ' + str(bal2)
+                        msg_err = msg_err + '\n' + 'аккаунт остановлен: денег в одной из БК не достаточно для работы, просьба выровнять балансы.\n' + bk1_name + ': ' + str(bal1) + '\n' + bk2_name + ': ' + str(bal2)
 
                     if msg_err != '':
                         prnt(msg_err.strip())
