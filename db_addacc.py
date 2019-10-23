@@ -7,6 +7,7 @@ if __name__ == '__main__':
 
     CNT_DAYS = 30
     USER_ID = 94974020
+    COPY_PROP_ACC_ID = 62
 
     # PROXY
     # user name
@@ -43,7 +44,7 @@ if __name__ == '__main__':
 
         prop = (
             Properties.insert_from(
-                Properties.select(acc.id, Properties.val, Properties.key).where(Properties.acc_id == 62),
+                Properties.select(acc.id, Properties.val, Properties.key).where(Properties.acc_id == COPY_PROP_ACC_ID),
                 fields=[Properties.acc_id, Properties.val, Properties.key]
             ).execute()
         )
