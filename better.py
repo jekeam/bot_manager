@@ -104,7 +104,7 @@ def check_fork(key, L, k1, k2, live_fork, live_fork_total, bk1_score, bk2_score,
     fork_exclude_text = ''
     v = True
 
-    if L < 0.20:
+    if L < 0.80:
         fork_exclude_text = fork_exclude_text + 'Вилка ' + str(L) + ' (' + str(round((1 - L) * 100, 2)) + '%), вилка исключена т.к. доходноть высокая > 20%\n'
 
     if get_prop('team_junior', 'выкл') == 'выкл':
