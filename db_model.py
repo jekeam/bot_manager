@@ -12,31 +12,34 @@ first_bet_in = ["created", "notcreator", "fonbet", "olimp", "parallel", "auto"]
 bks = ["fonbet", "olimp", "auto"]
 
 prop_abr = {
-    "FORK_SLICE": {"abr": "Уникальность ставок, %", "type": "int", "max": "90", "min": "0", "access_list": [], "error": ""},
+    "MIN_PROC": {"abr": "% Вилки от", "type": "float", "max": "10", "min": "0", "access_list": [], "error": ""},  # !
+    "FORK_LIFE_TIME": {"abr": "Вилки от сек.", "type": "int", "max": "500", "min": "0", "access_list": [], "error": ""},  # !
     "MAX_FORK": {"abr": "MAX ставок", "type": "int", "max": "100", "min": "1", "access_list": [], "error": ""},
     "MAX_FAIL": {"abr": "MAX выкупов", "type": "int", "max": "10", "min": "1", "access_list": [], "error": ""},
     "SUMM": {"abr": "Общая ставка", "type": "int", "max": "10000", "min": "400", "access_list": [], "error": ""},
     "WORK_HOUR_END": {"abr": "Остановка в", "type": "int", "max": "23", "min": "0", "access_list": [], "error": ""},
-    "MIN_PROC": {"abr": "% Вилки от", "type": "float", "max": "10", "min": "0", "access_list": [], "error": ""},
-    "FORK_LIFE_TIME": {"abr": "Вилки от сек.", "type": "int", "max": "500", "min": "0", "access_list": [], "error": ""},
     "ROUND_FORK": {"abr": "Округление", "type": "int", "max": "100", "min": "5", "access_list": ["5", "10", "50", "100"], "error": ""},
+
     "CHECK_MAX_BET": {"abr": "Проверка maxbet", "type": "str", "max": "", "min": "", "access_list": ["вкл", "выкл"], "error": ""},
     "SUM_BY_MAX": {"abr": "Пересчет maxbet", "type": "str", "max": "", "min": "", "access_list": ["вкл", "выкл"], "error": ""},
     "PROC_BY_MAX": {"abr": "% от maxbet", "type": "int", "max": "100", "min": "10", "access_list": [], "error": ""},
+
     "TIMEOUT_FORK": {"abr": "Ждать после ставки", "type": "int", "max": "5400", "min": "30", "access_list": [], "error": ""},
+
     "TEAM_RES": {"abr": "Рез-е команды", "type": "str", "max": "", "min": "", "access_list": ["вкл", "выкл"], "error": ""},
     "TEAM_STUD": {"abr": "Студ. команды", "type": "str", "max": "", "min": "", "access_list": ["вкл", "выкл"], "error": ""},
     "TEAM_FEMALE": {"abr": "Жен. команды", "type": "str", "max": "", "min": "", "access_list": ["вкл", "выкл"], "error": ""},
     "TEAM_JUNIOR": {"abr": "Юнош. команды", "type": "str", "max": "", "min": "", "access_list": ["вкл", "выкл"], "error": ""},
+
     "TOP": {"abr": "Только TOP матчи", "type": "str", "max": "", "min": "", "access_list": ["вкл", "выкл"], "error": ""},
     "HOT": {"abr": "Только TOP катировки", "type": "str", "max": "", "min": "", "access_list": ["вкл", "выкл"], "error": ""},
     "ONE_BET": {"abr": "1 ставка на матч", "type": "str", "max": "", "min": "", "access_list": ["вкл", "выкл"], "error": ""},
     "RANDOM_SUMM_PROC": {"abr": "% Разброс ставки", "type": "int", "max": "30", "min": "0", "access_list": [], "error": ""},
-    "FORK_TIME_TYPE": {"abr": "Тип времени вилки", "type": "str", "max": "", "min": "", "access_list": ["текущее", "общее"], "error": ""},
+    # "FORK_TIME_TYPE": {"abr": "Тип времени вилки", "type": "str", "max": "", "min": "", "access_list": ["текущее", "общее"], "error": ""},
     "FIRST_BET_IN": {"abr": "Первая ставка в", "type": "str", "max": "", "min": "", "access_list": first_bet_in, "error": ""},
     "MAX_KOF": {"abr": "MAX коэф-т", "type": "float", "max": "1000", "min": "1.02", "access_list": [], "error": ""},
     "ML_NOISE": {"abr": "ML: исключить шум", "type": "str", "max": "", "min": "", "access_list": ["вкл", "выкл"], "error": ""},
-    "POUR_INTO": {"abr": "Перелить в", "type": "str", "max": "", "min": "", "access_list": bks, "error": ""},
+    # "POUR_INTO": {"abr": "Перелить в", "type": "str", "max": "", "min": "", "access_list": bks, "error": ""},
     "DOUBLE_BET": {"abr": "Дубли ставок", "type": "str", "max": "", "min": "", "access_list": ["вкл", "выкл"], "error": ""},
     "MAX_BET_FONBET": {"abr": "MAX BET в Fonbet", "type": "int", "max": "1000", "min": "0", "access_list": ["0", "100", "200", "300", "400", "500", "600", "700", "800", "900", "1000"], "error": ""},
     # "SERVER_OLIMP": {"abr": "Сервер Олимп", "type": "str", "max": "", "min": "", "access_list": [], "error": ""},
@@ -76,7 +79,9 @@ class Account(BaseModel):
     work_stat = CharField(null=False, default='stop')
     pid = IntegerField(null=False, default=0)
     work_dir = CharField(null=True)
+    # TODO unique=True
     proxies = CharField(null=True, max_length=4096)
+    # TODO unique=True
     accounts = CharField(null=True, max_length=4096)
     time_start = IntegerField(null=True)
     time_stop = IntegerField(null=True)
