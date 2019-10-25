@@ -6,27 +6,27 @@ if __name__ == '__main__':
     uid = uuid1()
 
     CNT_DAYS = 30
-    USER_ID = 323214669
+    USER_ID = 304415738
     COPY_PROP_ACC_ID = 62
 
     # PROXY
     # user name
-    user = 'Selmrzakutskiy'
+    user = '6ppTa6'
     # password
-    pswd = 'F4b6PpM'
+    pswd = 'nrN0XX'
     # ip
-    ip = '185.242.84.252'
+    ip = '77.83.185.190'
     # port
-    port = '45785'
+    port = '8000'
 
     # BK
     # olimp
-    olu = '7087564'
-    olp = 'ss334455'
+    olu = '5227044'
+    olp = 'skvorets22'
 
     # fonbet
-    fbu = '7867497'
-    fbp = '7HYTfQHS'
+    fbu = '6503060'
+    fbp = 'tevatanya88'
 
     proxy = user + ':' + pswd + '@' + ip + ':' + port
     proxies = '{`fonbet`:{`http`:`http://' + proxy + '`,`https`:`https://' + proxy + '`},`olimp`:{`http`:`http://' + proxy + '`,`https`:`https://' + proxy + '`}}'
