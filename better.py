@@ -953,9 +953,11 @@ if __name__ == '__main__':
                                     elif deff_max >= 3:
                                         pass
                                 else:
-                                    prnt('Вектор направления коф-та не определен: VECT1=' + str(vect1) + ', VECT2=' + str(vect2))
+                                    # prnt('Вектор направления коф-та не определен: VECT1=' + str(vect1) + ', VECT2=' + str(vect2))
+                                    pass
                             else:
-                                prnt('Вилка исключена, т.к. вид спорта: ' + event_type + ', base_line: ' + str(base_line))
+                                # prnt('Вилка исключена, т.к. вид спорта: ' + event_type + ', base_line: ' + str(base_line))
+                                pass
                     else:
                         pass
                     # ts = round(uniform(1, 3), 2)
