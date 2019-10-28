@@ -847,11 +847,14 @@ if __name__ == '__main__':
                             deff_fonbet = round(float(time.time() - float(val_json.get('time_req_fonbet', 0))))
                             deff_max = max(0, deff_olimp, deff_fonbet)
 
-                            bk1_bet_json = val_json.get('kof_olimp')
-                            bk2_bet_json = val_json.get('kof_fonbet')
+                            bk1_bet_json = val_json.get('kof_olimp', {})
+                            bk2_bet_json = val_json.get('kof_fonbet', {})
 
                             bk1_hist = bk1_bet_json.get('hist', {})
                             bk2_hist = bk2_bet_json.get('hist', {})
+                            
+                            base_line = bk2_bet_json.get('base_line', False)
+                            is_hot = bk2_bet_json.get('is_hot', False)
 
                             bk1_avg_change = bk1_hist.get('avg_change')
                             bk2_avg_change = bk2_hist.get('avg_change')
@@ -899,7 +902,7 @@ if __name__ == '__main__':
                                 prnt('val_json: ' + str(val_json))
 
                                 info = ''
-                            if (event_type == 'football' and get_prop('test_oth_sport', 'выкл') == 'выкл') or (event_type in ('hockey', 'football') and get_prop('test_oth_sport', 'выкл') == 'вкл'):
+                            if (event_type in ('football', 'hockey') or (get_prop('test_oth_sport', 'выкл') == 'вкл' and base_line)):
                                 if vect1 and vect2:
                                     if deff_max < 3 and k1 > 0 < k2:
                                         round_bet = int(get_prop('round_fork'))
@@ -908,8 +911,8 @@ if __name__ == '__main__':
 
                                         recalc_bets()
                                         # Проверим вилку на исключения
-                                        if check_fork(key, l, k1, k2, live_fork, live_fork_total, bk1_score, bk2_score, event_type, minute, time_break_fonbet, period, name, name_rus, deff_max, is_top,
-                                                      val_json.get('kof_fonbet').get('is_hot'), info) or DEBUG:
+                                        if check_fork(key, l, k1, k2, live_fork, live_fork_total, bk1_score, bk2_score, event_type, minute, time_break_fonbet, period, name, name_rus, deff_max, is_top, is_hot, info) \
+                                        or DEBUG:
                                             prnt(' ')
 
                                             now_timestamp = int(time.time())
