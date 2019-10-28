@@ -902,7 +902,10 @@ if __name__ == '__main__':
                                 prnt('val_json: ' + str(val_json))
 
                                 info = ''
-                            if (event_type in ('football', 'hockey') or (get_prop('test_oth_sport', 'выкл') == 'вкл' and base_line)):
+                            if (
+                                ( event_type in ('football', 'hockey') and str(ACC_ID) not in ('44', '74') ) or 
+                                (str(ACC_ID) in ('44', '74') and event_type not in ('football', 'hockey') and base_line)
+                            ):
                                 if vect1 and vect2:
                                     if deff_max < 3 and k1 > 0 < k2:
                                         round_bet = int(get_prop('round_fork'))
