@@ -955,7 +955,7 @@ if __name__ == '__main__':
                                 else:
                                     prnt('Вектор направления коф-та не определен: VECT1=' + str(vect1) + ', VECT2=' + str(vect2))
                             else:
-                                prnt('Вилка исключена, т.к. вид спорта: ' + event_type)
+                                prnt('Вилка исключена, т.к. вид спорта: ' + event_type + ', base_line: ' + str(base_line))
                     else:
                         pass
                     # ts = round(uniform(1, 3), 2)
