@@ -902,9 +902,11 @@ if __name__ == '__main__':
                                 prnt('val_json: ' + str(val_json))
 
                                 info = ''
+                                
+                            check_acc = str(ACC_ID) in ('44', '74', '18')
                             if (
-                                ( event_type in ('football', 'hockey') and str(ACC_ID) not in ('44', '74') ) or 
-                                (str(ACC_ID) in ('44', '74', '18') and event_type not in ('football', 'hockey') and base_line)
+                                ( event_type in ('football', 'hockey') and str(ACC_ID) not in check_acc ) or 
+                                ( check_acc and event_type not in ('football', 'hockey') and base_line)
                             ):
                                 if vect1 and vect2:
                                     if deff_max < 3 and k1 > 0 < k2:
