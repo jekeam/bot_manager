@@ -12,6 +12,7 @@ first_bet_in = ["created", "notcreator", "fonbet", "olimp", "parallel", "auto"]
 bks = ["fonbet", "olimp", "auto"]
 
 prop_abr = {
+    "FORK_SLICE": {"abr": "Уникальность ставок, %", "type": "int", "max": "90", "min": "0", "access_list": [], "error": ""},
     "MIN_PROC": {"abr": "% Вилки от", "type": "float", "max": "10", "min": "0", "access_list": [], "error": ""},  # !
     "FORK_LIFE_TIME": {"abr": "Вилки от сек.", "type": "int", "max": "500", "min": "0", "access_list": [], "error": ""},  # !
     "MAX_FORK": {"abr": "MAX ставок", "type": "int", "max": "100", "min": "1", "access_list": [], "error": ""},
