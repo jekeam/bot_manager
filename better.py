@@ -909,7 +909,7 @@ if __name__ == '__main__':
                                 check_acc = True
                                 
                             if (
-                                ( event_type in ('football', 'hockey') and not in check_acc ) or 
+                                ( event_type in ('football', 'hockey') and not check_acc ) or 
                                 ( check_acc and event_type not in ('football', 'hockey') and base_line)
                             ):
                                 if vect1 and vect2:
