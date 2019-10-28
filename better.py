@@ -677,7 +677,8 @@ if __name__ == '__main__':
 
                 prnt('Блокировка вывода: ' + str(bk2.get_acc_info('pay')))
                 prnt('Блокировка ставки: ' + str(bk2.get_acc_info('bet')))
-                prnt('Группа лимита: ' + str(bk2.get_acc_info('group')))
+                group_limit_id = str(bk2.get_acc_info('group'))
+                prnt('Группа лимита: ' + group_limit_id)
 
                 get_round_fork = int(get_prop('round_fork'))
                 if get_round_fork not in (5, 10, 50, 100, 1000):
@@ -770,7 +771,7 @@ if __name__ == '__main__':
                     if bk2.get_acc_info('pay').lower() != 'Нет'.lower():
                         msg_err = msg_err + '\n' + 'обнаружена блокировка вывода, нужно пройти верификацию в Фонбет, аккаунт остановлен!'
 
-                    if str(bk2.get_acc_info('group')).lower() == '4'.lower():
+                    if group_limit_id == '4':
                         msg_str = msg_str + 'Обнаружена порезка до 4й группы\n'
 
                     if bal_small:
@@ -903,13 +904,18 @@ if __name__ == '__main__':
 
                                 info = ''
                                 
-                            check_acc = str(ACC_ID) in ('44', '74', '18')
+                            check_acc = False
+                            if str(ACC_ID) in ('44', '74', '18'):
+                                check_acc = True
+                                
                             if (
                                 ( event_type in ('football', 'hockey') and str(ACC_ID) not in check_acc ) or 
                                 ( check_acc and event_type not in ('football', 'hockey') and base_line)
                             ):
                                 if vect1 and vect2:
-                                    if deff_max < 3 and k1 > 0 < k2:
+                                    if group_limit_id == '4' and vect2 == 'UP':
+                                        prnt('Вилка исключена, т.к. акк порезан до 4й группы и вектор в фонбет UP', 'hide')
+                                    elif deff_max < 3 and k1 > 0 < k2:
                                         round_bet = int(get_prop('round_fork'))
                                         total_bet = round(randint(total_bet_min, total_bet_max) / round_bet) * round_bet
                                         prnt('total_bet random: ' + str(total_bet), 'hide')
