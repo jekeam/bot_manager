@@ -69,7 +69,8 @@ def get_olimp_info(id_matche, olimp_k, sport_id, proxies=None):
         bet_into['SCORE'] = stake.get('sc', '0:0')  # .get('sc', '0:0').split(' ')[0]
         for c in stake.get('it', []):
             # if c.get('n','') in ['Main Bets', 'Goals', 'Corners', 'Individual total', 'Additional total']:
-            if c.get('n', '').replace(' ', '').lower() in ['основные', 'голы', 'угловые', 'инд.тотал', 'доп.тотал', 'исходыпотаймам']:
+            # if c.get('n', '').replace(' ', '').lower() in ['основные', 'голы', 'угловые', 'инд.тотал', 'доп.тотал', 'исходыпотаймам']:
+            if c.get('n', '').replace(' ', '').lower() in ['основные', 'голы', 'инд.тотал', 'доп.тотал', 'исходыпотаймам']:
                 for d in c.get('i', []):
                     if 'обе забьют: '.lower() \
                             in d.get('n', '').lower() \

@@ -105,7 +105,8 @@ def stake(i, a, shared_list, secret_key, new_url, wager_dict):
                 # prnt(b.get('c1','')+' '+b.get('c2',''))
                 for c in stakes.get('data', {}).get('it', []):
                     # if c.get('n','') in ['Main Bets', 'Goals', 'Corners', 'Individual total', 'Additional total']:
-                    if c.get('n', '') in ['Основные', 'Голы', 'Угловые', 'Инд.тотал', 'Доп.тотал', 'Исходы по таймам']:
+                    # if c.get('n', '') in ['Основные', 'Голы', 'Угловые', 'Инд.тотал', 'Доп.тотал', 'Исходы по таймам']:
+                    if c.get('n', '') in ['Основные', 'Голы', 'Инд.тотал', 'Доп.тотал', 'Исходы по таймам']:
                         for d in c.get('i', []):
                             if 'Обе забьют: ' \
                                     in d.get('n', '') \
