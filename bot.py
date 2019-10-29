@@ -245,6 +245,14 @@ def send_text(update, context, msg: str = 'Привет мой господин!
             context.bot.send_message(admin.id, msg)
         except:
             pass
+        
+def get_acc_list(update):
+    acc_list = None
+    if str(update.message.chat.id) in ['381868674', '33847743']:
+        acc_list = Account.select().where((Account.status == 'active') | (Account.status == 'inactive')).order_by(Account.id)
+    else:
+        acc_list = Account.select().where((Account.user == user.id) & ((Account.status == 'active') | (Account.status == 'inactive'))).order_by(Account.id)
+    return acc_list
 
 
 def botlist(update, context, edit=False):
@@ -256,11 +264,7 @@ def botlist(update, context, edit=False):
         update = update.callback_query
     user = update.message.chat
 
-    acc_list = None
-    if str(update.message.chat.id) in ['381868674', '33847743']:
-        acc_list = Account.select().where((Account.status == 'active') | (Account.status == 'inactive')).order_by(Account.id)
-    else:
-        acc_list = Account.select().where((Account.user == user.id) & ((Account.status == 'active') | (Account.status == 'inactive'))).order_by(Account.id)
+    acc_list = get_acc_list(update)
 
     for acc in acc_list:
         work_stat_inactive = None
@@ -295,6 +299,15 @@ def botlist(update, context, edit=False):
         update.message.reply_text(text=bot_prop.MSG_CHANGE_ACC, reply_markup=reply_markup)
     else:
         update.message.edit_text(text=bot_prop.MSG_CHANGE_ACC, reply_markup=reply_markup)
+
+
+def botstat(update, context):
+    keyboard = []
+    acc_list = get_acc_list(update)
+    for acc in acc_list:
+        keyboard.append([InlineKeyboardButton(text=str(acc.id), callback_data=acc.key)])
+    reply_markup = InlineKeyboardMarkup(keyboard)
+    update.message.reply_text(text=bot_prop.MSG_CHANGE_ACC, reply_markup=reply_markup)
 
 
 def button(update, context):
@@ -496,6 +509,7 @@ if __name__ == '__main__':
     updater.dispatcher.add_handler(CommandHandler('botlist', botlist))
     updater.dispatcher.add_handler(CommandHandler('matches', matches))
     updater.dispatcher.add_handler(CommandHandler('time', get_time))
+    updater.dispatcher.add_handler(CommandHandler('botstat', botstat))
     updater.dispatcher.add_handler(CallbackQueryHandler(button))
     updater.dispatcher.add_handler(RegexHandler(patterns, choose_prop))
     updater.dispatcher.add_handler(RegexHandler('^(' + bot_prop.BTN_CLOSE + ')$', close_prop))
