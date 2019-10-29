@@ -904,13 +904,14 @@ if __name__ == '__main__':
 
                                 info = ''
                                 
-                            check_acc = False
-                            if str(ACC_ID) in ('44', '74', '18'):
-                                check_acc = True
+                            # check_acc = False
+                            # if str(ACC_ID) in ('44', '74', '18'):
+                            #     check_acc = True
                                 
                             if (
-                                ( event_type in ('football', 'hockey') and not check_acc ) or 
-                                ( check_acc and event_type not in ('football', 'hockey') and base_line)
+                                # ( event_type in ('football', 'hockey') and not check_acc ) or 
+                                ( event_type in ('football', 'hockey')) #or 
+                                # ( check_acc and event_type not in ('football', 'hockey') and base_line)
                             ):
                                 if vect1 and vect2:
                                     if group_limit_id == '4' and vect2 == 'UP':
