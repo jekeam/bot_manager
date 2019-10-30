@@ -19,7 +19,7 @@ prop_abr = {
     "MAX_FAIL": {"abr": "MAX выкупов", "type": "int", "max": "10", "min": "1", "access_list": [], "error": ""},
     "SUMM": {"abr": "Общая ставка", "type": "int", "max": "10000", "min": "400", "access_list": [], "error": ""},
     "WORK_HOUR_END": {"abr": "Остановка в", "type": "int", "max": "23", "min": "0", "access_list": [], "error": ""},
-    "ROUND_FORK": {"abr": "Округление", "type": "int", "max": "100", "min": "5", "access_list": ["1", "5", "10", "50", "100"], "error": ""},
+    "ROUND_FORK": {"abr": "Округление", "type": "int", "max": "100", "min": "1", "access_list": ["1", "5", "10", "50", "100"], "error": ""},
 
     "CHECK_MAX_BET": {"abr": "Проверка maxbet", "type": "str", "max": "", "min": "", "access_list": ["вкл", "выкл"], "error": ""},
     "SUM_BY_MAX": {"abr": "Пересчет maxbet", "type": "str", "max": "", "min": "", "access_list": ["вкл", "выкл"], "error": ""},
