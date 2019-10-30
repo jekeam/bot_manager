@@ -248,10 +248,11 @@ def send_text(update, context, msg: str = 'Привет мой господин!
         
 def get_acc_list(update):
     acc_list = None
-    if str(update.message.chat.id) in ['381868674', '33847743']:
+    user_id = update.message.chat.id
+    if str(user_id) in ['381868674', '33847743']:
         acc_list = Account.select().where((Account.status == 'active') | (Account.status == 'inactive')).order_by(Account.id)
     else:
-        acc_list = Account.select().where((Account.user == user.id) & ((Account.status == 'active') | (Account.status == 'inactive'))).order_by(Account.id)
+        acc_list = Account.select().where((Account.user_id == user_id) & ((Account.status == 'active') | (Account.status == 'inactive'))).order_by(Account.id)
     return acc_list
 
 
