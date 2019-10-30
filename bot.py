@@ -301,6 +301,11 @@ def botlist(update, context, edit=False):
         update.message.edit_text(text=bot_prop.MSG_CHANGE_ACC, reply_markup=reply_markup)
 
 
+def list_split(ls:list, col=2):
+    for i in ls:
+        pass
+    
+
 def botstat(update, context):
     keyboard = []
     acc_list = get_acc_list(update)
