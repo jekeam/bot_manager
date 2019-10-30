@@ -45,7 +45,7 @@ if patterns:
     patterns += ')'
 
 
-def print_stat(acc_id: str) -> str:
+def print_stat(acc_id: str, short=False) -> str:
     cnt_fail = 0
     cnt_fail_plus = 0
     black_list_matches = 0
@@ -97,13 +97,15 @@ def print_stat(acc_id: str) -> str:
 
             res_str = ''
             res_str = res_str + 'Проставлено вилок: *' + str(cnt_fork_success) + '*\n'
-            res_str = res_str + 'Кол-во минусовы выкупов: *' + str(cnt_fail) + '*\n'
-            res_str = res_str + 'Кол-во плюсовых выкупов: *' + str(cnt_fail_plus) + '*\n'
-            res_str = res_str + 'Профит от выкупов: *' + '{:,}'.format(round(sale_profit)).replace(',', ' ') + '*\n'
-            res_str = res_str + 'Минимальный профит: *' + '{:,}'.format(round(min_profit)).replace(',', ' ') + '*\n'
-            res_str = res_str + 'Максимальный профит: *' + '{:,}'.format(round(max_profit)).replace(',', ' ') + '*\n'
-            res_str = res_str + 'Средний профит: *' + '{:,}'.format(round((max_profit + min_profit) / 2)).replace(',', ' ') + '*\n'
-            res_str = res_str + '\n*Примерный доход: ' + '{:,}'.format(round((max_profit + min_profit) / 2) + round(sale_profit)).replace(',', ' ') + '*\n'
+            if not short:
+                res_str = res_str + 'Кол-во минусовы выкупов: *' + str(cnt_fail) + '*\n'
+                res_str = res_str + 'Кол-во плюсовых выкупов: *' + str(cnt_fail_plus) + '*\n'
+                res_str = res_str + 'Профит от выкупов: *' + '{:,}'.format(round(sale_profit)).replace(',', ' ') + '*\n'
+                res_str = res_str + 'Минимальный профит: *' + '{:,}'.format(round(min_profit)).replace(',', ' ') + '*\n'
+                res_str = res_str + 'Максимальный профит: *' + '{:,}'.format(round(max_profit)).replace(',', ' ') + '*\n'
+                res_str = res_str + 'Средний профит: *' + '{:,}'.format(round((max_profit + min_profit) / 2)).replace(',', ' ') + '*\n'
+                res_str = res_str + '\n'
+            res_str = res_str + '*Примерный доход: ' + '{:,}'.format(round((max_profit + min_profit) / 2) + round(sale_profit)).replace(',', ' ') + '*\n'
 
             return res_str.strip()
 
@@ -249,7 +251,7 @@ def send_text(update, context, msg: str = 'Привет мой господин!
 def get_acc_list(update):
     acc_list = None
     user_id = update.message.chat.id
-    if str(user_id) in ['381868674', '33847743']:
+    if user_id in bot_prop.ADMINS:
         acc_list = Account.select().where((Account.status == 'active') | (Account.status == 'inactive')).order_by(Account.id)
     else:
         acc_list = Account.select().where((Account.user_id == user_id) & ((Account.status == 'active') | (Account.status == 'inactive'))).order_by(Account.id)
@@ -303,15 +305,31 @@ def botlist(update, context, edit=False):
 
 
 def list_split(ls:list, col=2):
-    for i in ls:
-        pass
-    
+    main = []
+    cur_col = 1
+    buff = []
+    last_el = 0
+    if len(ls) > col:
+        for n, val in enumerate(ls):
+            buff.append(val)
+            cur_col += 1
+            if cur_col == (col+1):
+                main.append(buff)
+                cur_col = 1
+                buff = []
+                last_el = n
+    else:
+        main.append(ls)
+    if last_el+1 != len(ls) and len(ls) > col:
+        main.append(ls[last_el+1:len(ls)])
+    return main
 
 def botstat(update, context):
     keyboard = []
     acc_list = get_acc_list(update)
     for acc in acc_list:
-        keyboard.append([InlineKeyboardButton(text=str(acc.id), callback_data=acc.key)])
+        keyboard.append(InlineKeyboardButton(text=str(acc.id), callback_data='get_stat_short:'+str((acc.id))))
+    keyboard = list_split(keyboard, 7)
     reply_markup = InlineKeyboardMarkup(keyboard)
     update.message.reply_text(text=bot_prop.MSG_CHANGE_ACC, reply_markup=reply_markup)
 
@@ -360,6 +378,10 @@ def button(update, context):
             markup = ReplyKeyboardRemove()
             acc_id_str = str(context.user_data.get('acc_id'))
             query.message.reply_text(acc_id_str + ': ' + print_stat(acc_id_str), reply_markup=markup, parse_mode=telegram.ParseMode.MARKDOWN)
+        elif 'get_stat_short' in query.data:
+            markup = ReplyKeyboardRemove()
+            acc_id_str = query.data.split(':')[1]
+            query.message.reply_text(acc_id_str + ': ' + print_stat(acc_id_str, 'short'), reply_markup=markup, parse_mode=telegram.ParseMode.MARKDOWN)
 
         acc_info = Account.select().where(Account.key == query.data)
         if acc_info:
