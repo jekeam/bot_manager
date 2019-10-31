@@ -771,7 +771,7 @@ if __name__ == '__main__':
                     if bk2.get_acc_info('pay').lower() != 'Нет'.lower():
                         msg_err = msg_err + '\n' + 'обнаружена блокировка вывода, нужно пройти верификацию в Фонбет, аккаунт остановлен!'
 
-                    if group_limit_id == '4':
+                    if group_limit_id == '4' and not start_message_send:
                         msg_str = msg_str + 'Обнаружена порезка до 4й группы\n'
 
                     if bal_small:
