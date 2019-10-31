@@ -948,7 +948,7 @@ if __name__ == '__main__':
                                                 is_bet = randint(1, 100)
                                                 prnt('Случайное число: ' + str(is_bet))
                                                 fork_slice = int(get_prop('FORK_SLICE', 50))
-                                                if fork_slice <= is_bet or cnt_act_acc <= 5:
+                                                if fork_slice <= is_bet or cnt_act_acc <= 5 or fork_slice == 0:
                                                     prnt('Go bets: ' + key + ' ' + info)
                                                     fork_success = go_bets(
                                                         val_json.get('kof_olimp'), val_json.get('kof_fonbet'),
