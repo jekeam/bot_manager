@@ -944,10 +944,12 @@ if __name__ == '__main__':
                                                     (Properties.val <= cur_proc)
                                                 ).count()
 
-                                                prnt('Активных аккаунтов на вилку: ' + str(MIN_PROC) + ', ' + str(cnt_act_acc))
-                                                is_bet = randint(1, 100)
-                                                prnt('Случайное число: ' + str(is_bet))
+                                            
                                                 fork_slice = int(get_prop('FORK_SLICE', 50))
+                                                is_bet = randint(1, 100)
+                                                if fork_slice:
+                                                    prnt('Активных аккаунтов на вилку: ' + str(MIN_PROC) + ', ' + str(cnt_act_acc))
+                                                    prnt('Случайное число: ' + str(is_bet))
                                                 if fork_slice <= is_bet or cnt_act_acc <= 5 or fork_slice == 0:
                                                     prnt('Go bets: ' + key + ' ' + info)
                                                     fork_success = go_bets(
