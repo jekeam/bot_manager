@@ -946,6 +946,7 @@ if __name__ == '__main__':
 
                                             
                                                 fork_slice = int(get_prop('FORK_SLICE', 50))
+                                                prnt('% уникальности: ' + str(fork_slice))
                                                 is_bet = randint(1, 100)
                                                 if fork_slice:
                                                     prnt('Активных аккаунтов на вилку: ' + str(MIN_PROC) + ', ' + str(cnt_act_acc))
