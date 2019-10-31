@@ -760,7 +760,7 @@ if __name__ == '__main__':
                             export_block = True
 
                     one_proc = (bal1 + bal2) / 100
-                    bal_small = ((bal1 / one_proc) < 10 or (bal2 / one_proc) < 10)
+                    bal_small = (bal1 <= 400 or bal2 <= 400)
 
                     msg_err = ''
                     msg_str = ''
