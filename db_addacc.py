@@ -5,7 +5,7 @@ from json import loads, dumps
 if __name__ == '__main__':
     uid = uuid1()
 
-    CNT_DAYS = None
+    CNT_DAYS = 0
     USER_ID = 381868674
     COPY_PROP_ACC_ID = 18
 
@@ -30,12 +30,16 @@ if __name__ == '__main__':
     proxy = user + ':' + pswd + '@' + ip + ':' + port
     proxies = '{`fonbet`:{`http`:`http://' + proxy + '`,`https`:`https://' + proxy + '`},`olimp`:{`http`:`http://' + proxy + '`,`https`:`https://' + proxy + '`}}'
     accounts = '{`olimp`:{`login`:`' + olu + '`,`password`:`' + olp + '`,`mirror`:`olimp.com`},`fonbet`:{`login`:' + fbu + ',`password`:`' + fbp + '`,`mirror`:`fonbet.com`}}'
+    if CNT_DAYS:
+        date_end = get_trunc_sysdate(CNT_DAYS)
+    else:
+        date_end = None
     try:
         acc = Account.create(
             # user id from telegram
             user=USER_ID,
             key=uid,
-            date_end=get_trunc_sysdate(CNT_DAYS),  # cnt days
+            date_end=date_end,  # cnt days
             status='active',
             proxies=proxies,
             accounts=accounts
