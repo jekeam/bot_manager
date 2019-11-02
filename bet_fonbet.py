@@ -838,6 +838,7 @@ class FonbetBot:
         sign = hmac.new(key=self.account['password'].encode(), msg=msg.encode(), digestmod=sha512).hexdigest()
         payload["sign"] = sign
         data = get_dumped_payload(payload)
+        prnt('BET_FONBET.PY - get_coupon_info rq: ' + str(data), 'hide')
         resp = requests_retry_session().post(
             url,
             headers=self.fonbet_headers,
@@ -846,6 +847,7 @@ class FonbetBot:
             timeout=self.timeout,
             proxies=self.proxies
         )
+        prnt('BET_FONBET.PY - get_coupon_info rs: ' + str(resp.text), 'hide')
         check_status_with_resp(resp)
         res = resp.json()
 
