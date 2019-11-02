@@ -178,7 +178,7 @@ class FonbetBot:
 
         self.coupon_info = {
             "regId": 0,
-            "appVersion": "5.1.3b",
+            "appVersion": "5.3.13b",
             "carrier": "",
             "deviceManufacturer": "LENOVO",
             "deviceModel": "Lenovo " + LENOVO_MODEL,
@@ -830,7 +830,7 @@ class FonbetBot:
 
         payload = self.coupon_info
         payload["random"] = get_random_str()
-        # payload["sign"] = "secret password"
+        payload["sign"] = "secret password"
         payload["regId"] = reg_id
         payload['fsid'] = self.payload['fsid']
 
