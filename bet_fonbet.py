@@ -824,7 +824,7 @@ class FonbetBot:
             raise LoadException("BET_FONBET.PY: " + str(resp))
 
     def get_coupon_info(self, reg_id):
-        url = self.common_url.format("coupon/info?lang")
+        url = self.common_url.format("coupon/info")
 
         self.coupon_info["clientId"] = self.account['login']
 
