@@ -212,7 +212,7 @@ class FonbetBot:
 
     def get_common_url(self):
         urls = self.get_urls()
-        client_url = urls["clients-api"][0]
+        client_url = urls["clients-api"][1]
         self.timeout = 4  # urls["timeout"] / 100
         prnt('BET_FONBET.PY: set timeout: ' + str(self.timeout))
 
@@ -824,7 +824,7 @@ class FonbetBot:
             raise LoadException("BET_FONBET.PY: " + str(resp))
 
     def get_coupon_info(self, reg_id):
-        url = self.common_url.format("coupon/info")
+        url = self.common_url.format("coupon/info?lang")
 
         self.coupon_info["clientId"] = self.account['login']
 
