@@ -212,7 +212,7 @@ class FonbetBot:
 
     def get_common_url(self):
         urls = self.get_urls()
-        client_url = urls["clients-api"][2]
+        client_url = urls["clients-api"][0]
         self.timeout = 4  # urls["timeout"] / 100
         prnt('BET_FONBET.PY: set timeout: ' + str(self.timeout))
 
@@ -830,7 +830,7 @@ class FonbetBot:
 
         payload = self.coupon_info
         payload["random"] = get_random_str()
-        payload["sign"] = "secret password"
+        # payload["sign"] = "secret password"
         payload["regId"] = reg_id
         payload['fsid'] = self.payload['fsid']
 
