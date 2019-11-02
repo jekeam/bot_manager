@@ -178,7 +178,7 @@ class FonbetBot:
 
         self.coupon_info = {
             "regId": 0,
-            "appVersion": "5.3.13b",
+            "appVersion": "5.1.3b",
             "carrier": "",
             "deviceManufacturer": "LENOVO",
             "deviceModel": "Lenovo " + LENOVO_MODEL,
