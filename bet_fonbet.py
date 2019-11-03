@@ -196,7 +196,7 @@ class FonbetBot:
     def get_urls(self):
         url = get_account_info('fonbet', 'mirror')
         if not url:
-            url = 'fonbet.com'
+            url = 'fonbet-cc19e.com'
         url = "https://" + url + "/urls.json?{}".format(random())
         prnt('BET_FONBET.PY: Fonbet, get_urls request: ' + str(url) + '\n' + str(browser_headers), 'hide')
         resp = requests_retry_session().get(
@@ -825,7 +825,7 @@ class FonbetBot:
             raise LoadException("BET_FONBET.PY: " + str(resp))
 
     def get_coupon_info(self, reg_id):
-        url = self.common_url.format("coupon/info?lang")
+        url = self.common_url.format("coupon/info?lang=ru")
 
         self.coupon_info["clientId"] = self.account['login']
 
@@ -841,7 +841,7 @@ class FonbetBot:
         data = get_dumped_payload(payload)
         prnt('BET_FONBET.PY - get_coupon_info rq: ' + str(data), 'hide')
         resp = requests_retry_session().post(
-            url,
+            "https://23.111.26.250/session/coupon/info?lang=en",
             headers=self.fonbet_headers,
             data=data,
             verify=False,
@@ -993,7 +993,7 @@ def get_new_bets_fonbet(match_id, proxies, time_out):
 if __name__ == '__main__':
     PROXIES = dict()
 
-    FONBET_USER = {"login": 5989155, "password": "6ya8y4eK", "mirror": "fonbet.com"}
+    FONBET_USER = {"login": 5989155, "password": "6ya8y4eK", "mirror": "fonbet-cc19e.com"}
 
     wager_fonbet = {}
     obj = {}
@@ -1003,17 +1003,7 @@ if __name__ == '__main__':
 
     fonbet = FonbetBot(FONBET_USER)
     fonbet.sign_in()
-    fonbet.sign_in()
-    data = fonbet.get_operations(500)
-    is_get_list = list()
-    coupon_list = dict()
-    fonbet_bet_min = 999999999999999999999
-    for operation in data.get('operations'):
-        reg_id = operation.get('marker')
-        if reg_id not in is_get_list and reg_id >= fonbet_bet_min:
-            is_get_list.append(reg_id)
-            bet_info = fonbet.get_coupon_info(reg_id)
-            1 / 0
+    bet_info = fonbet.get_coupon_info(20196089803)
     # fonbet.place_bet(obj)
     # time.sleep(3)
     # fonbet.sale_bet(15102409046)

@@ -348,7 +348,7 @@ def get_proxies():
     except:
         D = dict()
         D = {
-            'fonbet': {'http': '', 'https': ''},
-            'olimp': {'http': 'https://Selsuinegne:R5v7JwJ@193.233.30.155:45785', 'https': 'https://Selsuinegne:R5v7JwJ@193.233.30.155:45785'}
+            # 'fonbet': {'http': '192.168.1.143:8888', 'https': '192.168.1.143:8888'},
+            'olimp': {'http': '', 'https': ''}
         }
         return D
