@@ -839,9 +839,10 @@ class FonbetBot:
         sign = hmac.new(key=self.account['password'].encode(), msg=msg.encode(), digestmod=sha512).hexdigest()
         payload["sign"] = sign
         data = get_dumped_payload(payload)
-        prnt('BET_FONBET.PY - get_coupon_info rq: ' + str(data), 'hide')
+        url = 'https://23.111.26.249/session/coupon/info?lang=en'
+        prnt('BET_FONBET.PY - get_coupon_info rq ' + str(url) + ': ' + str(data), 'hide')
         resp = requests_retry_session().post(
-            "https://23.111.26.249/session/coupon/info?lang=en",
+            url,
             headers=self.fonbet_headers,
             data=data,
             verify=False,
