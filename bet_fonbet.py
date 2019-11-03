@@ -246,8 +246,7 @@ class FonbetBot:
             sign = hmac.new(key=self.account['password'].encode(), msg=msg.encode(), digestmod=sha512).hexdigest()
             payload["sign"] = sign
             data = get_dumped_payload(payload)
-            prnt('BET_FONBET.PY: Fonbet, sign_in request: ' + str(self.account['password'].encode()) + ' ' + str(data),
-                 'hide')
+            prnt('BET_FONBET.PY: Fonbet, sign_in request: ' + str(self.account['password'].encode()) + ' ' + str(data), 'hide')
             resp = requests_retry_session_post(
                 self.common_url.format("login"),
                 headers=self.fonbet_headers,
