@@ -12,7 +12,6 @@ from bot_prop import ADMINS
 import pandas as pd
 from join_csv import join_csv
 
-
 global ACC_ID, USER_ID
 
 file_name = str(ACC_ID) + '_id_forks.txt'
@@ -128,7 +127,7 @@ def export_hist(OLIMP_USER, FONBET_USER):
     global fonbet_bet_min
     global ACC_ID, USER_ID
     global balance_str, balance_int
-    
+
     csv_name = datetime.now().strftime("%d_%m_%Y") + '_' + str(ACC_ID) + '_statistics.csv'
     cur_date_str = datetime.now().strftime("%d_%m_%Y")
 
@@ -237,7 +236,7 @@ def export_hist(OLIMP_USER, FONBET_USER):
                           str(info['fonbet'].get('is_hot', '')) + ';' + \
                           str(info['fonbet'].get('fork_slice', '')) + ';' + \
                           str(info['fonbet'].get('cnt_act_acc', '')) + ';' + \
-\
+ \
                           str(info['fonbet'].get('fork_time_type', '')) + ';' + \
                           str(info['fonbet'].get('fork_life_time', '')) + ';' + \
                           str(info['fonbet'].get('min_proc', '')) + ';' + \
@@ -283,7 +282,7 @@ def export_hist(OLIMP_USER, FONBET_USER):
                 db_model.Message.file_name: csv_name,
                 db_model.Message.file_type: 'document'
             }).execute()
-            
+
     try:
         join_file_name = join_csv(cur_date_str)
         # TODO FIX: error: (1406, "Data too long for column 'blob' at row 1")
@@ -298,8 +297,6 @@ def export_hist(OLIMP_USER, FONBET_USER):
         #             }).execute()
     except Exception as e:
         prnt('def join_csv, error: ' + str(e))
-        
-
 
 
 if __name__ == "__main__":
