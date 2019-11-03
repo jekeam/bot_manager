@@ -841,7 +841,7 @@ class FonbetBot:
         data = get_dumped_payload(payload)
         prnt('BET_FONBET.PY - get_coupon_info rq: ' + str(data), 'hide')
         resp = requests_retry_session().post(
-            "https://23.111.26.250/session/coupon/info?lang=en",
+            "https://23.111.26.249/session/coupon/info?lang=en",
             headers=self.fonbet_headers,
             data=data,
             verify=False,
