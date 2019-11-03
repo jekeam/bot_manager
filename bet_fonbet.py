@@ -12,7 +12,7 @@ from exceptions import OlimpBetError
 urllib3.disable_warnings(urllib3.exceptions.InsecureRequestWarning)
 
 # "deviceid":"c2c1c82f1b9e1b8299fc3ab10e1960c8"
-LENOVO_MODEL = ''
+LENOVO_MODEL = 'A5000'
 
 browser_headers = {
     "User-Agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/63.0.3239.132 Safari/537.36"
@@ -179,14 +179,14 @@ class FonbetBot:
         self.coupon_info = {
             "regId": 0,
             "appVersion": "5.1.3b",
-            "carrier": "",
+            "carrier": "MegaFon",
             "deviceManufacturer": "LENOVO",
             "deviceModel": "Lenovo " + LENOVO_MODEL,
             "fsid": "",
             "lang": "ru",
             "platform": "mobile_android",
             "rooted": False,
-            "sdkVersion": 21,
+            "sdkVersion": 28,
             "sysId": 4,
             "clientId": 0,
             "random": "",
@@ -246,7 +246,8 @@ class FonbetBot:
             sign = hmac.new(key=self.account['password'].encode(), msg=msg.encode(), digestmod=sha512).hexdigest()
             payload["sign"] = sign
             data = get_dumped_payload(payload)
-            prnt('BET_FONBET.PY: Fonbet, sign_in request: ' + str(self.account['password'].encode()) + ' ' + str(data), 'hide')
+            prnt('BET_FONBET.PY: Fonbet, sign_in request: ' + str(self.account['password'].encode()) + ' ' + str(data),
+                 'hide')
             resp = requests_retry_session_post(
                 self.common_url.format("login"),
                 headers=self.fonbet_headers,
@@ -298,7 +299,8 @@ class FonbetBot:
         except Exception as e:
             self.attempt_login += 1
             if self.attempt_login > 3:
-                str_err = 'Attempt login many: ' + str(self.attempt_login) + ', err: ' + str(e) + ', resp: ' + str(resp.text)
+                str_err = 'Attempt login many: ' + str(self.attempt_login) + ', err: ' + str(e) + ', resp: ' + str(
+                    resp.text)
                 prnt(str_err)
                 raise ValueError(str_err)
             prnt(e)
@@ -992,11 +994,9 @@ def get_new_bets_fonbet(match_id, proxies, time_out):
 if __name__ == '__main__':
     PROXIES = dict()
 
-    FONBET_USER = {
-        "login": 7139029, "password": "69Nuvego", "mirror": "fonbet-0fef5.com"}
+    FONBET_USER = {"login": 5989155, "password": "6ya8y4eK", "mirror": "fonbet.com"}
 
-    wager_fonbet = {'time_req': 1552746519, 'fonbet_bet_type': "ТБ1(2.5)", 'event': 13759645, 'value': 2.6, 'param': 250, 'factor': '1815', 'score': '0:0', 'vector': 'UP',
-                    'hist': {'time_change': 1552746510, 'avg_change': [0, 39, 31, 1, 9, 33, 27, 92, 31, 27, 93, 1, 78, 31, 179, 15, 39], '1': 2.6, '2': 2.6, '3': 2.6, '4': 2.6, '5': 2.6}}
+    wager_fonbet = {}
     obj = {}
     obj['wager_fonbet'] = wager_fonbet
     obj['amount_fonbet'] = 110
@@ -1004,6 +1004,17 @@ if __name__ == '__main__':
 
     fonbet = FonbetBot(FONBET_USER)
     fonbet.sign_in()
+    fonbet.sign_in()
+    data = fonbet.get_operations(500)
+    is_get_list = list()
+    coupon_list = dict()
+    fonbet_bet_min = 999999999999999999999
+    for operation in data.get('operations'):
+        reg_id = operation.get('marker')
+        if reg_id not in is_get_list and reg_id >= fonbet_bet_min:
+            is_get_list.append(reg_id)
+            bet_info = fonbet.get_coupon_info(reg_id)
+            1 / 0
     # fonbet.place_bet(obj)
     # time.sleep(3)
     # fonbet.sale_bet(15102409046)
