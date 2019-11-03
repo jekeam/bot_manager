@@ -840,7 +840,7 @@ class FonbetBot:
         payload["sign"] = sign
         data = get_dumped_payload(payload)
         url = 'https://23.111.26.249/session/coupon/info?lang=en'
-        prnt('BET_FONBET.PY - get_coupon_info rq ' + str(url) + ': ' + str(data), 'hide')
+        prnt('BET_FONBET.PY - get_coupon_info rq: ' + str(url) + ': ' + str(data), 'hide')
         resp = requests_retry_session().post(
             url,
             headers=self.fonbet_headers,
