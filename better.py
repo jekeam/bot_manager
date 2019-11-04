@@ -775,7 +775,8 @@ if __name__ == '__main__':
                         msg_str = msg_str + 'Обнаружена порезка до 4й группы\n'
 
                     if bal_small:
-                        msg_err = msg_err + '\n' + 'аккаунт остановлен: денег в одной из БК не достаточно для работы, просьба выровнять балансы.\n' + bk1_name + ': ' + str(bal1) + '\n' + bk2_name + ': ' + str(bal2)
+                        msg_err = msg_err + '\n' + 'аккаунт остановлен: денег в одной из БК не достаточно для работы, просьба выровнять балансы.\n' + bk1_name + ': ' + str(
+                            bal1) + '\n' + bk2_name + ': ' + str(bal2)
 
                     if msg_err != '':
                         prnt(msg_err.strip())
@@ -853,7 +854,7 @@ if __name__ == '__main__':
 
                             bk1_hist = bk1_bet_json.get('hist', {})
                             bk2_hist = bk2_bet_json.get('hist', {})
-                            
+
                             base_line = bk2_bet_json.get('base_line', False)
                             is_hot = bk2_bet_json.get('is_hot', False)
 
@@ -903,28 +904,29 @@ if __name__ == '__main__':
                                 prnt('val_json: ' + str(val_json))
 
                                 info = ''
-                                
+
                             # check_acc = False
                             # if str(ACC_ID) in ('44', '74', '18'):
                             #     check_acc = True
-                                
+
                             if (
-                                # ( event_type in ('football', 'hockey') and not check_acc ) or 
-                                ( event_type in ('football', 'hockey')) #or 
-                                # ( check_acc and event_type not in ('football', 'hockey') and base_line)
+                                    # ( event_type in ('football', 'hockey') and not check_acc ) or
+                                    (event_type in ('football', 'hockey'))  # or
+                                    # ( check_acc and event_type not in ('football', 'hockey') and base_line)
                             ):
                                 if vect1 and vect2:
-                                    # if group_limit_id == '4' and vect2 == 'UP':
-                                    #     prnt('Вилка исключена, т.к. акк порезан до 4й группы и вектор в фонбет UP', 'hide')
-                                    if deff_max < 3 and k1 > 0 < k2:
+                                    if group_limit_id == '4' and vect2 == 'UP':
+                                        prnt('Вилка исключена, т.к. акк порезан до 4й группы и вектор в фонбет UP', 'hide')
+                                    elif deff_max < 3 and k1 > 0 < k2:
                                         round_bet = int(get_prop('round_fork'))
                                         total_bet = round(randint(total_bet_min, total_bet_max) / round_bet) * round_bet
                                         prnt('total_bet random: ' + str(total_bet), 'hide')
 
                                         recalc_bets()
                                         # Проверим вилку на исключения
-                                        if check_fork(key, l, k1, k2, live_fork, live_fork_total, bk1_score, bk2_score, event_type, minute, time_break_fonbet, period, name, name_rus, deff_max, is_top, is_hot, info) \
-                                        or DEBUG:
+                                        if check_fork(key, l, k1, k2, live_fork, live_fork_total, bk1_score, bk2_score, event_type, minute, time_break_fonbet, period, name, name_rus, deff_max, is_top,
+                                                      is_hot, info) \
+                                                or DEBUG:
                                             prnt(' ')
 
                                             now_timestamp = int(time.time())
@@ -932,7 +934,8 @@ if __name__ == '__main__':
                                             # prnt('now_timestamp: ' + str(now_timestamp) + ', last_timestamp:' + str(last_timestamp) + ', server_forks:' + str(len(server_forks)) + '\n' + str(server_forks))
 
                                             if 0 < (now_timestamp - last_timestamp) < 60 and len(server_forks) > 1:
-                                                prnt('Вилка ' + str(key) + ' исключена, т.к. мы ее пытались проставить успешно/не успешно, но прошло менее 60 секунд и есть еще вилки, будем ставить другие, новые')
+                                                prnt('Вилка ' + str(
+                                                    key) + ' исключена, т.к. мы ее пытались проставить успешно/не успешно, но прошло менее 60 секунд и есть еще вилки, будем ставить другие, новые')
                                             else:
                                                 temp_lock_fork.update({key: now_timestamp})
                                                 temp_lock_fork.update({key: now_timestamp})
@@ -944,7 +947,6 @@ if __name__ == '__main__':
                                                     (Properties.val <= cur_proc)
                                                 ).count()
 
-                                            
                                                 fork_slice = int(get_prop('FORK_SLICE', 50))
                                                 prnt('% уникальности: ' + str(fork_slice))
                                                 is_bet = randint(1, 100)
