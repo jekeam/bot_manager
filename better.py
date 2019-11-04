@@ -17,7 +17,7 @@ import re
 import sys
 import traceback
 import os
-from db_model import send_message_bot, prop_abr
+from db_model import db, send_message_bot, prop_abr
 from bot_prop import ADMINS
 from ml import get_vect, check_vect, check_noise, get_creater
 import random
@@ -632,6 +632,32 @@ msg_str_old = ''
 msg_str = ''
 info_csv = {}
 
+cnt_acc_sql = "select count(*)\n" + \
+              "from(\n" + \
+              "  select\n" + \
+              "    id,\n" + \
+              "    sum(case when prop = 'MIN_PROC' and val <= :cur_proc then 1 else 0 end) as min_proc,\n" + \
+              "    sum(case when prop = 'FORK_LIFE_TIME' and val <= :live_fork then 1 else 0 end) as live_fork,\n" + \
+              "    sum(case when (prop = upper(':team_type') and val = 'ВКЛ') or ':team_type' = '' then 1 else 0 end) as team,\n" + \
+              "    sum(case when (prop = 'TOP' and val = 'ВКЛ' and :is_top = 'True') or\n" + \
+              "				  (prop = 'TOP' and not exists(select 1 from properties n where upper(n.`key`) = 'TOP' and upper(n.val) = 'ВКЛ' and n.acc_id = x.id))\n" + \
+              "	    then 1 else 0 end) as top\n" + \
+              "  from (\n" + \
+              "    select a.id, upper(p.`key`) as prop, upper(p.val) as val\n" + \
+              "    from properties p\n" + \
+              "    join account a\n" + \
+              "    on a.id = p.acc_id and\n" + \
+              "	   a.work_stat = 'start' and\n" + \
+              "	   status = 'active'\n" + \
+              "  ) x\n" + \
+              "where id != :acc_id\n" + \
+              "  group by id\n" + \
+              ") y\n" + \
+              "where min_proc = 1\n" + \
+              "  and live_fork = 1\n" + \
+              "  and team >= 1\n" + \
+              "  and top = 1;"
+
 # wag_fb:{'event': '12797479', 'factor': '921', 'param': '', 'score': '0:0', 'value': '2.35'}
 # wag_fb:{'apid': '1144260386:45874030:1:3:-9999:3:NULL:NULL:1', 'factor': '1.66', 'sport_id': 1, 'event': '45874030'}
 
@@ -947,17 +973,24 @@ if __name__ == '__main__':
                                             last_timestamp = temp_lock_fork.get(key, now_timestamp)
 
                                             if 0 < (now_timestamp - last_timestamp) < 60 and len(server_forks) > 1:
-                                                prnt('Вилка ' + str(
-                                                    key) + ' исключена, т.к. мы ее пытались проставить успешно/не успешно, но прошло менее 60 секунд и есть еще вилки, будем ставить другие, новые')
+                                                prnt(
+                                                    'Вилка ' + str(key) +
+                                                    ' исключена, т.к. мы ее пытались проставить успешно/не успешно, но прошло менее 60 секунд и есть еще вилки, будем ставить другие, новые'
+                                                )
                                             else:
                                                 temp_lock_fork.update({key: now_timestamp})
 
                                                 cur_proc = round((1 - l) * 100, 2)
-                                                cnt_act_acc = Account.select().join(Properties).where(
-                                                    (Account.work_stat == 'start') &
-                                                    (Properties.key == 'MIN_PROC') &
-                                                    (Properties.val <= cur_proc)
-                                                ).count()
+
+                                                cursor = db.execute_sql(
+                                                    cnt_acc_sql
+                                                        .replace(':cur_proc', str(cur_proc))
+                                                        .replace(':live_fork', str(live_fork))
+                                                        .replace(':team_type', str(team_type))
+                                                        .replace(':is_top', str(is_top))
+                                                        .replace(':acc_id', str(ACC_ID))
+                                                )
+                                                cnt_act_acc = cursor.fetchone()[0]
 
                                                 fork_slice = int(get_prop('FORK_SLICE', 50))
                                                 prnt('% уникальности: ' + str(fork_slice))
