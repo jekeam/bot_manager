@@ -176,8 +176,7 @@ def check_fork(key, L, k1, k2, live_fork, live_fork_total, bk1_score, bk2_score,
     if event_type == 'football':
         # Больше 43 минуты и не идет перерыв и это 1 период
         if 43.0 < float(minute) and not time_break_fonbet and period == 1:
-            fork_exclude_text = fork_exclude_text + 'Вилка ' + str(round((1 - L) * 100, 2)) + '% исключена т.к. идет ' + \
-                                str(minute) + ' минута матча и это не перерыв / не 2-й период \n'
+            fork_exclude_text = fork_exclude_text + 'Вилка ' + str(round((1 - L) * 100, 2)) + '% исключена т.к. идет ' + str(minute) + ' минута матча и это не перерыв / не 2-й период \n'
 
         if float(minute) > 88.0:
             fork_exclude_text = fork_exclude_text + 'Вилка ' + str(round((1 - L) * 100, 2)) + '% исключена т.к. идет ' + str(minute) + ' минута матча \n'
