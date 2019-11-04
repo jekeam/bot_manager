@@ -274,7 +274,7 @@ def save_plt(folder, filename, plt):
     plt.savefig(os.path.join(folder, filename))
 
 
-def go_bets(wag_ol, wag_fb, key, deff_max, vect1, vect2, sc1, sc2, created, event_type, l, l_fisrt, is_top, fork_slice, cnt_act_acc):
+def go_bets(wag_ol, wag_fb, key, deff_max, vect1, vect2, sc1, sc2, created, event_type, l, l_fisrt, is_top, fork_slice, cnt_act_acc, info_csv):
     global bal1, bal2, cnt_fail, cnt_fork_success, k1, k2, total_bet, bet1, bet2, OLIMP_USER, FONBET_USER, ACC_ID
 
     olimp_bet_type = str(key.split('@')[-2])
@@ -482,6 +482,11 @@ def go_bets(wag_ol, wag_fb, key, deff_max, vect1, vect2, sc1, sc2, created, even
         fork_info[fork_id]['fonbet']['fork_time_type'] = get_prop('fork_time_type', 'auto')
         fork_info[fork_id]['fonbet']['fork_life_time'] = get_prop('fork_life_time', '0')
         fork_info[fork_id]['fonbet']['min_proc'] = get_prop('min_proc', '0')
+
+        fork_info[fork_id]['fonbet']['user_id'] = info_csv.get('user_id', '')
+        fork_info[fork_id]['fonbet']['group_limit_id'] = info_csv.get('group_limit_id', '')
+        fork_info[fork_id]['fonbet']['live_fork'] = info_csv.get('live_fork', '')
+        fork_info[fork_id]['fonbet']['team_type'] = info_csv.get('team_type', '')
 
         fork_info[fork_id]['fonbet']['avg_change'] = str(x)
         fork_info[fork_id]['fonbet']['order_kof'] = str(y)
@@ -974,11 +979,7 @@ if __name__ == '__main__':
                                                     fork_success = go_bets(
                                                         val_json.get('kof_olimp'), val_json.get('kof_fonbet'),
                                                         key, deff_max, vect1, vect2, sc1, sc2, created_fork, event_type,
-                                                        l,
-                                                        l_fisrt,
-                                                        is_top,
-                                                        str(fork_slice),
-                                                        str(cnt_act_acc)
+                                                        l, l_fisrt, is_top, str(fork_slice), str(cnt_act_acc), info_csv
                                                     )
                                     elif deff_max >= 3:
                                         pass
