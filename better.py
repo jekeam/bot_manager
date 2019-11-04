@@ -98,7 +98,20 @@ def bet_type_is_work(key):
     return True
 
 
-def check_fork(key, L, k1, k2, live_fork, live_fork_total, bk1_score, bk2_score, event_type, minute, time_break_fonbet, period, name, name_rus, deff_max, is_top, is_hot, info=''):
+def get_team_type(name_rus: str, name: str):
+    if re.search('(u\d{2}|\(.*\d{2}\))', name_rus.lower()) or re.search('u\d{2}', name.lower()):
+        return 'team_junior', 'rus: ' + str(name_rus) + ', en: ' + str(name)
+    elif re.search('(\(жен\)|\(ж\))', name_rus.lower()) or re.search('\(w\)', name.lower()):
+        return 'team_female', 'rus: ' + str(name_rus) + ', en: ' + str(name)
+    elif re.search('(\s|-|\(\.)студ', name_rus.lower()) or re.search('(\s|-|\(\.)stud', name.lower()):
+        return 'team_stud', 'rus: ' + str(name_rus) + ', en: ' + str(name)
+    elif re.search('(\(р\)|\(рез\))', name_rus.lower()) or re.search('(\(r\)|\(res\)|\(reserves\))', name.lower()):
+        return 'team_res', 'rus: ' + str(name_rus) + ', en: ' + str(name)
+    else:
+        return '', 'rus: ' + str(name_rus) + ', en: ' + str(name)
+
+
+def check_fork(key, L, k1, k2, live_fork, live_fork_total, bk1_score, bk2_score, event_type, minute, time_break_fonbet, period, team_type, team_names, deff_max, is_top, is_hot, info=''):
     global bal1, bal2, bet1, bet2, cnt_fork_success, black_list_matches, matchs_success
 
     fork_exclude_text = ''
@@ -108,32 +121,20 @@ def check_fork(key, L, k1, k2, live_fork, live_fork_total, bk1_score, bk2_score,
         fork_exclude_text = fork_exclude_text + 'Вилка ' + str(L) + ' (' + str(round((1 - L) * 100, 2)) + '%), вилка исключена т.к. доходноть высокая > 20%\n'
 
     if get_prop('team_junior', 'выкл') == 'выкл':
-        if re.search('(u\d{2}|\(.*\d{2}\))', name_rus.lower()):
-            fork_exclude_text = fork_exclude_text + 'Вилка исключена по названию команд: ' + name_rus + '\n'
-
-        if re.search('u\d{2}', name.lower()):
-            fork_exclude_text = fork_exclude_text + 'Вилка исключена по названию команд: ' + name + '\n'
+        if team_type == 'team_junior':
+            fork_exclude_text = fork_exclude_text + 'Вилка исключена по названию команд: ' + team_names + '\n'
 
     if get_prop('team_female', 'выкл') == 'выкл':
-        if re.search('(\(жен\)|\(ж\))', name_rus.lower()):
-            fork_exclude_text = fork_exclude_text + 'Вилка исключена по названию команд: ' + name_rus + '\n'
-
-        if re.search('\(w\)', name.lower()):
-            fork_exclude_text = fork_exclude_text + 'Вилка исключена по названию команд: ' + name + '\n'
+        if team_type == 'team_female':
+            fork_exclude_text = fork_exclude_text + 'Вилка исключена по названию команд: ' + team_names + '\n'
 
     if get_prop('team_stud', 'выкл') == 'выкл':
-        if re.search('(\s|-|\(\.)студ', name_rus.lower()):
-            fork_exclude_text = fork_exclude_text + 'Вилка исключена по названию команд: ' + name_rus + '\n'
-
-        if re.search('(\s|-|\(\.)stud', name.lower()):
-            fork_exclude_text = fork_exclude_text + 'Вилка исключена по названию команд: ' + name + '\n'
+        if team_type == 'team_stud':
+            fork_exclude_text = fork_exclude_text + 'Вилка исключена по названию команд: ' + team_names + '\n'
 
     if get_prop('team_res', 'выкл') == 'выкл':
-        if re.search('(\(р\)|\(рез\))', name_rus.lower()):
-            fork_exclude_text = fork_exclude_text + 'Вилка исключена по названию команд: ' + name_rus + '\n'
-
-        if re.search('(\(r\)|\(res\)|\(reserves\))', name.lower()):
-            fork_exclude_text = fork_exclude_text + 'Вилка исключена по названию команд: ' + name + '\n'
+        if team_type == 'team_res':
+            fork_exclude_text = fork_exclude_text + 'Вилка исключена по названию команд: ' + team_names + '\n'
 
     if not bet_type_is_work(key):
         fork_exclude_text = fork_exclude_text + 'Вилка исключена, т.к. я еще не умею работать с этой ставкой: ' + str(key) + ')\n'
@@ -625,6 +626,7 @@ export_block = False
 
 msg_str_old = ''
 msg_str = ''
+info_csv = {}
 
 # wag_fb:{'event': '12797479', 'factor': '921', 'param': '', 'score': '0:0', 'value': '2.35'}
 # wag_fb:{'apid': '1144260386:45874030:1:3:-9999:3:NULL:NULL:1', 'factor': '1.66', 'sport_id': 1, 'event': '45874030'}
@@ -923,21 +925,27 @@ if __name__ == '__main__':
                                         prnt('total_bet random: ' + str(total_bet), 'hide')
 
                                         recalc_bets()
+
+                                        team_type, team_names = get_team_type(name_rus, name)
+                                        # team_junior - юнош.команды
+                                        # team_female - жен.команды
+                                        # team_stud - студ.команды
+                                        # team_res - рез - екоманды
+
                                         # Проверим вилку на исключения
-                                        if check_fork(key, l, k1, k2, live_fork, live_fork_total, bk1_score, bk2_score, event_type, minute, time_break_fonbet, period, name, name_rus, deff_max, is_top,
-                                                      is_hot, info) \
-                                                or DEBUG:
+                                        if check_fork(
+                                                key, l, k1, k2, live_fork, live_fork_total, bk1_score, bk2_score, event_type, minute, time_break_fonbet, period, team_type, team_names, deff_max,
+                                                is_top, is_hot, info
+                                        ) or DEBUG:
                                             prnt(' ')
 
                                             now_timestamp = int(time.time())
                                             last_timestamp = temp_lock_fork.get(key, now_timestamp)
-                                            # prnt('now_timestamp: ' + str(now_timestamp) + ', last_timestamp:' + str(last_timestamp) + ', server_forks:' + str(len(server_forks)) + '\n' + str(server_forks))
 
                                             if 0 < (now_timestamp - last_timestamp) < 60 and len(server_forks) > 1:
                                                 prnt('Вилка ' + str(
                                                     key) + ' исключена, т.к. мы ее пытались проставить успешно/не успешно, но прошло менее 60 секунд и есть еще вилки, будем ставить другие, новые')
                                             else:
-                                                temp_lock_fork.update({key: now_timestamp})
                                                 temp_lock_fork.update({key: now_timestamp})
 
                                                 cur_proc = round((1 - l) * 100, 2)
@@ -955,6 +963,15 @@ if __name__ == '__main__':
                                                     prnt('Случайное число: ' + str(is_bet))
                                                 if fork_slice <= is_bet or cnt_act_acc <= 5 or fork_slice == 0:
                                                     prnt('Go bets: ' + key + ' ' + info)
+
+                                                    info_csv.update({
+                                                        'user_id': str(USER_ID),
+                                                        'group_limit_id': group_limit_id,
+                                                        'live_fork': live_fork,
+                                                        'team_type': team_type
+                                                    })
+                                                    prnt('info_csv: ' + str(info_csv))
+
                                                     fork_success = go_bets(
                                                         val_json.get('kof_olimp'), val_json.get('kof_fonbet'),
                                                         key, deff_max, vect1, vect2, sc1, sc2, created_fork, event_type,
