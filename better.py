@@ -981,16 +981,17 @@ if __name__ == '__main__':
                                                 temp_lock_fork.update({key: now_timestamp})
 
                                                 cur_proc = round((1 - l) * 100, 2)
-
-                                                cursor = db.execute_sql(
-                                                    cnt_acc_sql
-                                                        .replace(':cur_proc', str(cur_proc))
-                                                        .replace(':live_fork', str(live_fork))
-                                                        .replace(':team_type', str(team_type))
-                                                        .replace(':is_top', str(is_top))
-                                                        .replace(':acc_id', str(ACC_ID))
-                                                )
+                                                sql = cnt_acc_sql \
+                                                    .replace(':cur_proc', str(cur_proc)) \
+                                                    .replace(':live_fork', str(live_fork)) \
+                                                    .replace(':team_type', str(team_type)) \
+                                                    .replace(':is_top', str(is_top)) \
+                                                    .replace(':acc_id', str(ACC_ID))
+                                                prnt('SQL:\n')
+                                                prnt(sql)
+                                                cursor = db.execute_sql(sql)
                                                 cnt_act_acc = cursor.fetchone()[0]
+                                                prnt('RESULT: ' + str(cnt_act_acc))
 
                                                 fork_slice = int(get_prop('FORK_SLICE', 50))
                                                 prnt('% уникальности: ' + str(fork_slice))
