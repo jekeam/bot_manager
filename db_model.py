@@ -5,7 +5,7 @@ from json import dumps, loads
 from uuid import uuid1
 from playhouse.sqlite_ext import SqliteExtDatabase
 
-db = MySQLDatabase('test', user='root', password='131189_Ak', host='127.0.0.1', port=3306)
+db = MySQLDatabase('bot_manager', user='root', password='131189_Ak', host='127.0.0.1', port=3306)
 
 first_bet_in = ["created", "notcreator", "fonbet", "olimp", "parallel", "auto"]
 
