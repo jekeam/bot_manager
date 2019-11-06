@@ -980,6 +980,7 @@ if __name__ == '__main__':
                                             else:
                                                 temp_lock_fork.update({key: now_timestamp})
                                                 cnt_act_acc = 0
+                                                is_bet = 0
                                                 cur_proc = round((1 - l) * 100, 2)
                                                 fork_slice = int(get_prop('FORK_SLICE', 50))
                                                 
