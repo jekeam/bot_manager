@@ -979,26 +979,33 @@ if __name__ == '__main__':
                                                 )
                                             else:
                                                 temp_lock_fork.update({key: now_timestamp})
-
+                                                cnt_act_acc = 0
                                                 cur_proc = round((1 - l) * 100, 2)
-                                                sql = cnt_acc_sql \
-                                                    .replace(':cur_proc', str(cur_proc)) \
-                                                    .replace(':live_fork', str(live_fork)) \
-                                                    .replace(':team_type', str(team_type)) \
-                                                    .replace(':is_top', str(is_top)) \
-                                                    .replace(':acc_id', str(ACC_ID))
-                                                prnt('SQL:\n')
-                                                prnt(sql)
-                                                cursor = db.execute_sql(sql)
-                                                cnt_act_acc = cursor.fetchone()[0]
-                                                prnt('RESULT: ' + str(cnt_act_acc))
-
                                                 fork_slice = int(get_prop('FORK_SLICE', 50))
+                                                
                                                 prnt('% уникальности: ' + str(fork_slice))
-                                                is_bet = randint(1, 100)
+                                                
                                                 if fork_slice:
+                                                    sql = cnt_acc_sql \
+                                                        .replace(':cur_proc', str(cur_proc)) \
+                                                        .replace(':live_fork', str(live_fork)) \
+                                                        .replace(':team_type', str(team_type)) \
+                                                        .replace(':is_top', str(is_top)) \
+                                                        .replace(':acc_id', str(ACC_ID))
+
+                                                    prnt('SQL:\n', 'hide')
+                                                    prnt(sql, 'hide')
+                                                    
+                                                    cursor = db.execute_sql(sql)
+                                                    cnt_act_acc = cursor.fetchone()[0]
+                                                    
+                                                    prnt('cnt_act_acc: ' + str(cnt_act_acc))                                                    
+                                                    
+                                                    is_bet = randint(1, 100)
+                                                    
                                                     prnt('Активных аккаунтов на вилку: ' + str(cnt_act_acc))
                                                     prnt('Случайное число: ' + str(is_bet) + ', => ' + str(fork_slice))
+                                                    
                                                 if fork_slice <= is_bet or cnt_act_acc <= 5 or fork_slice == 0:
                                                     prnt('Go bets: ' + key + ' ' + info)
 
