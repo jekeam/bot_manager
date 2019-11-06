@@ -96,6 +96,8 @@ class OlimpBot:
             self.balance_in_play = float(self.login_info.get('cs'))
             prnt('BET_OLIMP.PY: balance: ' + str(self.balance))
         except Exception as e:
+            if 'str() takes at most 3 arguments (5 given)' in str(e):
+                raise ValueError('БК Олимп по адресу {} не отвечает, или у прокси нет доступа к сайту и его надо менять.'.format(req_url))
             prnt(e)
             raise ValueError(e)
 
