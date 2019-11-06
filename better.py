@@ -721,7 +721,7 @@ if __name__ == '__main__':
 
                 random_summ_proc = int(get_prop('random_summ_proc'))
                 if random_summ_proc > 30:
-                    err_msg = 'Отклонение от общей суммы ставки не должно привышать 30%'
+                    err_msg = 'Отклонение от общей суммы ставки не дол��но привышать 30%'
                     raise ValueError(err_msg)
                 else:
                     if not DEBUG and total_bet < 400:
@@ -798,7 +798,7 @@ if __name__ == '__main__':
                     msg_str = ''
 
                     if bk2.get_acc_info('bet').lower() != 'Нет'.lower():
-                        msg_err = msg_err + '\n' + 'обнаружена блокировка ставки в Фонбет, аккаунт остановлен!'
+                        msg_err = msg_err + '\n' + 'обнаружена блокировка ставки в Фонбет, аккаунт остановл��н!'
 
                     if bk2.get_acc_info('pay').lower() != 'Нет'.lower():
                         msg_err = msg_err + '\n' + 'обнаружена блокировка вывода, нужно пройти верификацию в Фонбет, аккаунт остановлен!'
@@ -997,8 +997,8 @@ if __name__ == '__main__':
                                                 prnt('% уникальности: ' + str(fork_slice))
                                                 is_bet = randint(1, 100)
                                                 if fork_slice:
-                                                    prnt('Активных аккаунтов на вилку: ' + str(MIN_PROC) + ', ' + str(cnt_act_acc))
-                                                    prnt('Случайное число: ' + str(is_bet))
+                                                    prnt('Активных аккаунтов на вилку: ' + str(cnt_act_acc))
+                                                    prnt('Случайное число: ' + str(is_bet) + ', => ' + str(fork_slice))
                                                 if fork_slice <= is_bet or cnt_act_acc <= 5 or fork_slice == 0:
                                                     prnt('Go bets: ' + key + ' ' + info)
 
