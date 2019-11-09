@@ -7,7 +7,7 @@ if __name__ == '__main__':
 
     CNT_DAYS = 30
     USER_ID = 693521723
-    COPY_PROP_ACC_ID = 99
+    COPY_PROP_ACC_ID = 5
 
     # PROXY
     # user name
@@ -15,17 +15,17 @@ if __name__ == '__main__':
     # password
     pswd = 'ZBCZxu'
     # ip
-    ip = '45.9.41.18'
+    ip = '45.9.41.81'
     # port
     port = '8000'
 
     # BK
     # fonbet
-    fbu = '7955340'
-    fbp = 'R075Bqmp'
+    fbu = '7952637'
+    fbp = 'DeNpe02y'
     # olimp
-    olu = '7251916'
-    olp = 'ariZonna33'
+    olu = '7075998'
+    olp = 'R210623M'
 
     proxy = user + ':' + pswd + '@' + ip + ':' + port
     proxies = '{`fonbet`:{`http`:`http://' + proxy + '`,`https`:`https://' + proxy + '`},`olimp`:{`http`:`http://' + proxy + '`,`https`:`https://' + proxy + '`}}'
