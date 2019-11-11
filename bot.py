@@ -363,6 +363,9 @@ def button(update, context):
         is_admin = True
 
     if query:
+        
+        acc_info = Account.select().where(Account.key == query.data)
+        
         if query.data == 'botlist':
             botlist(update, context, 'Edit')
         if query.data == 'pror_edit':
@@ -396,7 +399,6 @@ def button(update, context):
             acc_id_str = query.data.split(':')[1]
             query.message.reply_text(acc_id_str + ': ' + print_stat(acc_id_str, 'short'), reply_markup=markup, parse_mode=telegram.ParseMode.MARKDOWN)
 
-        acc_info = Account.select().where(Account.key == query.data)
         if acc_info:
             context.user_data['acc_id'] = acc_info.get().id
             if bot_prop.MSG_START_STOP in query.message.text:
