@@ -363,9 +363,6 @@ def button(update, context):
         is_admin = True
 
     if query:
-        
-        acc_info = Account.select().where(Account.key == query.data)
-        
         if query.data == 'botlist':
             botlist(update, context, 'Edit')
         if query.data == 'pror_edit':
@@ -375,18 +372,16 @@ def button(update, context):
             else:
                 prop_btn = []
                 
-                if not is_admin:
-                    if acc_info.get().role == 'junior':
-                        for key, val in prop_abr.items():
-                            if key in ('SUMM'):
-                                abr = val.get('abr')
-                                if abr:
-                                    prop_btn.append(abr)
-                else:
-                    for val in prop_abr.values():
+                is_junior =  (User.select().where(User.id == user_id).get().role == 'junior')
+                for key, val in prop_abr.items():
+                    if is_junior:
+                        if key in ('SUMM'):
+                            abr = val.get('abr')
+                    else:
                         abr = val.get('abr')
-                        if abr:
-                            prop_btn.append(abr)
+                    if abr:
+                        prop_btn.append(abr)
+                
                 reply_keyboard = build_menu(prop_btn, n_cols=2, header_buttons=[bot_prop.BTN_CLOSE])
                 markup = ReplyKeyboardMarkup(reply_keyboard)
                 query.message.reply_text(bot_prop.MSG_PROP_LIST, reply_markup=markup, )
@@ -399,6 +394,7 @@ def button(update, context):
             acc_id_str = query.data.split(':')[1]
             query.message.reply_text(acc_id_str + ': ' + print_stat(acc_id_str, 'short'), reply_markup=markup, parse_mode=telegram.ParseMode.MARKDOWN)
 
+        acc_info = Account.select().where(Account.key == query.data)
         if acc_info:
             context.user_data['acc_id'] = acc_info.get().id
             if bot_prop.MSG_START_STOP in query.message.text:
