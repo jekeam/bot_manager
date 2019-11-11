@@ -344,7 +344,6 @@ def button(update, context):
 
         keyboard.append([InlineKeyboardButton(text=start_stop, callback_data=query.data)])
         keyboard.append([InlineKeyboardButton(text=bot_prop.BTN_SETTINGS, callback_data='pror_edit')])
-        # if acc_info.get().user_id in bot_prop.ADMINS:
         keyboard.append([InlineKeyboardButton(text=bot_prop.BTN_GET_STAT, callback_data='get_stat')])
         keyboard.append([InlineKeyboardButton(text=bot_prop.BTN_BACK, callback_data='botlist')])
 
@@ -357,6 +356,11 @@ def button(update, context):
         )
 
     query = update.callback_query
+    
+    is_admin = False
+    user_id = update.callback_query.message.chat.id
+    if user_id in bot_prop.ADMINS:
+        is_admin = True
 
     if query:
         if query.data == 'botlist':
@@ -367,10 +371,19 @@ def button(update, context):
                 update.callback_query.answer(show_alert=True, text="Для настройки остановите аккаунт!")
             else:
                 prop_btn = []
-                for val in prop_abr.values():
-                    abr = val.get('abr')
-                    if abr:
-                        prop_btn.append(abr)
+                
+                if not is_admin:
+                    if acc_info.get().role == 'junior':
+                        for key, val in prop_abr.items():
+                            if key in ('SUMM'):
+                                abr = val.get('abr')
+                                if abr:
+                                    prop_btn.append(abr)
+                else:
+                    for val in prop_abr.values():
+                        abr = val.get('abr')
+                        if abr:
+                            prop_btn.append(abr)
                 reply_keyboard = build_menu(prop_btn, n_cols=2, header_buttons=[bot_prop.BTN_CLOSE])
                 markup = ReplyKeyboardMarkup(reply_keyboard)
                 query.message.reply_text(bot_prop.MSG_PROP_LIST, reply_markup=markup, )
