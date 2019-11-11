@@ -384,7 +384,7 @@ def button(update, context):
                         prop_btn.append(abr)
                 
                 reply_keyboard = build_menu(prop_btn, n_cols=2, header_buttons=[bot_prop.BTN_CLOSE])
-                markup = ReplyKeyboardMarkup(reply_keyboard)
+                markup = ReplyKeyboardMarkup(reply_keyboard, resize_keyboard=True)
                 query.message.reply_text(bot_prop.MSG_PROP_LIST, reply_markup=markup, )
         if query.data == 'get_stat':
             markup = ReplyKeyboardRemove()
