@@ -198,7 +198,7 @@ class FonbetBot:
     def get_urls(self):
         url = get_account_info('fonbet', 'mirror')
         if not url:
-            url = 'fonbet-cc19e.com'
+            url = 'fonbet-7b750.com'
         url = "https://" + url + "/urls.json?{}".format(random())
         prnt('BET_FONBET.PY: Fonbet, get_urls request: ' + str(url) + '\n' + str(browser_headers), 'hide')
         resp = requests_retry_session().get(
@@ -996,7 +996,7 @@ def get_new_bets_fonbet(match_id, proxies, time_out):
 if __name__ == '__main__':
     PROXIES = dict()
 
-    FONBET_USER = {"login": 5989155, "password": "6ya8y4eK", "mirror": "fonbet-cc19e.com"}
+    FONBET_USER = {"login": 5989155, "password": "6ya8y4eK", "mirror": "fonbet-7b750.com"}
 
     wager_fonbet = {}
     obj = {}
@@ -1006,7 +1006,7 @@ if __name__ == '__main__':
 
     fonbet = FonbetBot(FONBET_USER)
     fonbet.sign_in()
-    bet_info = fonbet.get_coupon_info(20196089803)
+    # bet_info = fonbet.get_coupon_info(20196089803)
     # fonbet.place_bet(obj)
     # time.sleep(3)
     # fonbet.sale_bet(15102409046)
