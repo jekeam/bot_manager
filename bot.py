@@ -374,6 +374,7 @@ def button(update, context):
                 
                 is_junior =  (User.select().where(User.id == user_id).get().role == 'junior')
                 for key, val in prop_abr.items():
+                    abr = None
                     if is_junior:
                         if key in ('SUMM'):
                             abr = val.get('abr')
