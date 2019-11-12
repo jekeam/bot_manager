@@ -183,14 +183,19 @@ def check_fork(key, L, k1, k2, live_fork, live_fork_total, bk1_score, bk2_score,
 
     # Вилка живет достаточно
     long_livers = int(get_prop('fork_life_time'))
+    long_livers_max = int(get_prop('fork_life_time_max'))
     if get_prop('fork_time_type', 'auto') in ('auto', 'текущее'):
         # if live_fork - deff_max < long_livers:
         if live_fork < long_livers:
             fork_exclude_text = fork_exclude_text + 'Вилка ' + str(round((1 - L) * 100, 2)) + '% исключена т.к. живет меньше ' + str(long_livers) + ' сек. \n'
+        if live_fork > long_livers_max:
+            fork_exclude_text = fork_exclude_text + 'Вилка ' + str(round((1 - L) * 100, 2)) + '% исключена т.к. живет больше ' + str(long_livers) + ' сек. \n'
     else:
         # if live_fork_total - deff_max < long_livers:
         if live_fork_total < long_livers:
             fork_exclude_text = fork_exclude_text + 'Вилка ' + str(round((1 - L) * 100, 2)) + '% исключена т.к. живет в общем меньше ' + str(long_livers) + ' сек. \n'
+        if live_fork_total > long_livers_max:
+            fork_exclude_text = fork_exclude_text + 'Вилка ' + str(round((1 - L) * 100, 2)) + '% исключена т.к. живет в общем больше ' + str(long_livers) + ' сек. \n'
 
     if get_prop('top', 'выкл') == 'вкл' and not is_top:
         fork_exclude_text = fork_exclude_text + 'Вилка исключена т.к. это не топовый матч: ' + name_rus + '\n'
@@ -480,8 +485,10 @@ def go_bets(wag_ol, wag_fb, key, deff_max, vect1, vect2, sc1, sc2, created, even
         fork_info[fork_id]['fonbet']['cnt_act_acc'] = cnt_act_acc
 
         fork_info[fork_id]['fonbet']['fork_time_type'] = get_prop('fork_time_type', 'auto')
-        fork_info[fork_id]['fonbet']['fork_life_time'] = get_prop('fork_life_time', '0')
-        fork_info[fork_id]['fonbet']['min_proc'] = get_prop('min_proc', '0')
+        fork_info[fork_id]['fonbet']['fork_life_time'] = get_prop('fork_life_time', 0)
+        fork_info[fork_id]['fonbet']['fork_life_time_max'] = get_prop('fork_life_time_max', 9999)
+        fork_info[fork_id]['fonbet']['min_proc'] = get_prop('min_proc', 0)
+        fork_info[fork_id]['fonbet']['max_proc'] = get_prop('max_proc', 999)
 
         fork_info[fork_id]['fonbet']['user_id'] = info_csv.get('user_id', '')
         fork_info[fork_id]['fonbet']['group_limit_id'] = info_csv.get('group_limit_id', '')
@@ -637,11 +644,11 @@ cnt_acc_sql = "select count(*)\n" + \
               "  select\n" + \
               "    id,\n" + \
               "    sum(case when prop = 'MIN_PROC' and val <= :cur_proc then 1 else 0 end) as min_proc,\n" + \
+              "    coalesce(sum(case when prop = 'MAX_PROC' and val >= :cur_proc then 1 else null end), 1) as max_proc,\n" + \
               "    sum(case when prop = 'FORK_LIFE_TIME' and val <= :live_fork then 1 else 0 end) as live_fork,\n" + \
+              "    coalesce(sum(case when prop = 'FORK_LIFE_TIME_MAX' and val >= :live_fork then 1 else null end), 1) as live_fork_max,\n" + \
               "    sum(case when (prop = upper(':team_type') and val = 'ВКЛ') or ':team_type' = '' then 1 else 0 end) as team,\n" + \
-              "    sum(case when (prop = 'TOP' and val = 'ВКЛ' and :is_top = 'True') or\n" + \
-              "				  (prop = 'TOP' and not exists(select 1 from properties n where upper(n.`key`) = 'TOP' and upper(n.val) = 'ВКЛ' and n.acc_id = x.id))\n" + \
-              "	    then 1 else 0 end) as top\n" + \
+              "    coalesce(sum(case when prop = 'TOP' and val = 'ВКЛ' and :is_top != 'True' then 0 else null end), 1) as top,\n" + \
               "  from (\n" + \
               "    select a.id, upper(p.`key`) as prop, upper(p.val) as val\n" + \
               "    from properties p\n" + \
@@ -654,7 +661,9 @@ cnt_acc_sql = "select count(*)\n" + \
               "  group by id\n" + \
               ") y\n" + \
               "where min_proc = 1\n" + \
+              "  and max_proc = 1\n" + \
               "  and live_fork = 1\n" + \
+              "  and live_fork_max = 1\n" + \
               "  and team >= 1\n" + \
               "  and top = 1;"
 
@@ -698,7 +707,18 @@ if __name__ == '__main__':
                 else:
                     server_ip = get_prop('server_ip_test')
 
-                MIN_PROC = float(get_prop('min_proc').replace(',', '.'))
+                MIN_PROC = float(get_prop('min_proc', 0).replace(',', '.'))
+                MAX_PROC = float(get_prop('max_proc', 999).replace(',', '.'))
+                if MIN_PROC >= MAX_PROC:
+                    err_msg = 'Минимальный процент вилки не должен быть больше или равен максимальному'
+                    raise ValueError(err_msg)
+
+                FORK_LIFE_TIME = float(get_prop('fork_life_time', 0).replace(',', '.'))
+                FORK_LIFE_TIME_MAX = float(get_prop('fork_life_time_max', 9999).replace(',', '.'))
+                if FORK_LIFE_TIME >= FORK_LIFE_TIME_MAX:
+                    err_msg = 'Минимальный период времени жизни вилки не должен быть больше или равен максимальному'
+                    raise ValueError(err_msg)
+
                 prnt(' ')
                 prnt('START_SLEEP: ' + str(START_SLEEP))
                 prnt('Current Time: ' + str(datetime.datetime.now()))
@@ -721,11 +741,11 @@ if __name__ == '__main__':
 
                 random_summ_proc = int(get_prop('random_summ_proc'))
                 if random_summ_proc > 30:
-                    err_msg = 'Отклонение от общей суммы ставки не дол��но привышать 30%'
+                    err_msg = 'Отклонение от общей суммы ставки не должно привышать 30%'
                     raise ValueError(err_msg)
                 else:
                     if not DEBUG and total_bet < 400:
-                        err_msg = 'Обшая сумма ставки, должна превышать 400 руб.'
+                        err_msg = 'Обшая сумма ставки должна превышать 400 руб.'
                         raise ValueError(err_msg)
                     else:
                         total_bet_min = int(total_bet - (total_bet * int(random_summ_proc) / 100))
@@ -798,7 +818,7 @@ if __name__ == '__main__':
                     msg_str = ''
 
                     if bk2.get_acc_info('bet').lower() != 'Нет'.lower():
-                        msg_err = msg_err + '\n' + 'обнаружена блокировка ставки в Фонбет, аккаунт остановл��н!'
+                        msg_err = msg_err + '\n' + 'обнаружена блокировка ставки в Фонбет, аккаунт остановлен!'
 
                     if bk2.get_acc_info('pay').lower() != 'Нет'.lower():
                         msg_err = msg_err + '\n' + 'обнаружена блокировка вывода, нужно пройти верификацию в Фонбет, аккаунт остановлен!'
