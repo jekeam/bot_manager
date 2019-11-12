@@ -1432,6 +1432,7 @@ class BetManager:
 
         result = res.get('result')
         msg_str = res.get('errorMessage')
+        msg_val = res.get('errorValue', 'None')
 
         err_code = res.get('coupon', {}).get('resultCode')
         err_msg = res.get('coupon', {}).get('errorMessageRus')
@@ -1553,6 +1554,13 @@ class BetManager:
             err_str = 'Get temporary unknown result: ' + str(msg_str)
             prnt(self.msg.format(sys._getframe().f_code.co_name, err_str))
             return self.check_result(shared)
+        elif result == 'error' and 'temporarily unavailable' in str(msg_str):
+            if 'check session request error' in msg_val.lower():
+                self.opposite_stat_get(shared)
+                err_str = self.msg_err.format(sys._getframe().f_code.co_name, res)
+                self.sign_in(shared)
+                return self.check_result(shared)
+                
         else:
             self.opposite_stat_get(shared)
             err_str = self.msg_err.format(sys._getframe().f_code.co_name, err_msg)
