@@ -14,8 +14,8 @@ bks = ["fonbet", "olimp", "auto"]
 prop_abr = {
     "FORK_SLICE": {"abr": "Уникальность ставок, %", "type": "int", "max": "90", "min": "0", "access_list": [], "error": ""},
 
-    "MIN_PROC": {"abr": "% Вилки от", "type": "float", "max": "10", "min": "0", "access_list": [], "error": ""},  # !
-    "MAX_PROC": {"abr": "% Вилки до", "type": "float", "max": "999", "min": "0.1", "access_list": [], "error": ""},  # !
+    "MIN_PROC": {"abr": "% Вилки ОТ", "type": "float", "max": "10", "min": "0", "access_list": [], "error": ""},  # !
+    "MAX_PROC": {"abr": "% Вилки ДО", "type": "float", "max": "999", "min": "0.1", "access_list": [], "error": ""},  # !
 
     "FORK_LIFE_TIME": {"abr": "Вилки ОТ сек.", "type": "int", "max": "998", "min": "0", "access_list": [], "error": ""},  # !
     "FORK_LIFE_TIME_MAX": {"abr": "Вилки ДО сек.", "type": "int", "max": "9999", "min": "1", "access_list": [], "error": ""},  # !
