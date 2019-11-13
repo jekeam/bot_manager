@@ -73,8 +73,6 @@ def check_l(L):
 
     l_exclude_text = ''
 
-    if L < 0.80:
-        l_exclude_text = l_exclude_text + 'Вилка ' + str(L) + ' (' + str(round((1 - L) * 100, 2)) + '%), вилка исключена т.к. доходноть высокая > 20%\n'
     if L > MIN_L:
         l_exclude_text = l_exclude_text + 'Вилка ' + str(L) + ' (' + str(round((1 - L) * 100, 3)) + '%), беру вилки только >= ' + str(round((1 - MIN_L) * 100, 3)) + '%\n'
     if L < MAX_L:
@@ -488,7 +486,7 @@ def go_bets(wag_ol, wag_fb, key, deff_max, vect1, vect2, sc1, sc2, created, even
         fork_info[fork_id]['fonbet']['fork_life_time'] = get_prop('fork_life_time', 0)
         fork_info[fork_id]['fonbet']['fork_life_time_max'] = get_prop('fork_life_time_max', 9999)
         fork_info[fork_id]['fonbet']['min_proc'] = get_prop('min_proc', 0)
-        fork_info[fork_id]['fonbet']['max_proc'] = get_prop('max_proc', 999)
+        fork_info[fork_id]['fonbet']['max_proc'] = get_prop('max_proc', 20)
 
         fork_info[fork_id]['fonbet']['user_id'] = info_csv.get('user_id', '')
         fork_info[fork_id]['fonbet']['group_limit_id'] = info_csv.get('group_limit_id', '')
@@ -708,7 +706,7 @@ if __name__ == '__main__':
                     server_ip = get_prop('server_ip_test')
 
                 MIN_PROC = float(get_prop('min_proc', '0.0').replace(',', '.'))
-                MAX_PROC = float(get_prop('max_proc', '999.0').replace(',', '.'))
+                MAX_PROC = float(get_prop('max_proc', '20.0').replace(',', '.'))
                 if MIN_PROC >= MAX_PROC:
                     err_msg = 'Минимальный процент вилки не должен быть больше или равен максимальному'
                     raise ValueError(err_msg)
