@@ -67,15 +67,18 @@ def bet_olimp_cl(obj):
 
 
 def check_l(L):
-    global MIN_PROC, ACC_ID
+    global MIN_PROC, MAX_PROC, ACC_ID
     MIN_L = 1 - (MIN_PROC / 100)
+    MAX_L = 1 - (MAX_PROC / 100)
 
     l_exclude_text = ''
 
-    # if L <= 0.90 and str(ACC_ID) != '3':
-    #         l_exclude_text = l_exclude_text + 'Вилка ' + str(L) + ' (' + str(round((1 - L) * 100, 2)) + '%), вилка исключена т.к. доходноть высокая >= 10%\n'
+    if L < 0.80:
+        l_exclude_text = l_exclude_text + 'Вилка ' + str(L) + ' (' + str(round((1 - L) * 100, 2)) + '%), вилка исключена т.к. доходноть высокая > 20%\n'
     if L > MIN_L:
         l_exclude_text = l_exclude_text + 'Вилка ' + str(L) + ' (' + str(round((1 - L) * 100, 3)) + '%), беру вилки только >= ' + str(round((1 - MIN_L) * 100, 3)) + '%\n'
+    if L < MAX_L:
+        l_exclude_text = l_exclude_text + 'Вилка ' + str(L) + ' (' + str(round((1 - L) * 100, 3)) + '%), беру вилки только <= ' + str(round((1 - MAX_L) * 100, 3)) + '%\n'
 
     if l_exclude_text != '':
         return l_exclude_text
@@ -116,9 +119,6 @@ def check_fork(key, L, k1, k2, live_fork, live_fork_total, bk1_score, bk2_score,
 
     fork_exclude_text = ''
     v = True
-
-    if L < 0.80:
-        fork_exclude_text = fork_exclude_text + 'Вилка ' + str(L) + ' (' + str(round((1 - L) * 100, 2)) + '%), вилка исключена т.к. доходноть высокая > 20%\n'
 
     if get_prop('team_junior', 'выкл') == 'выкл':
         if team_type == 'team_junior':
@@ -183,7 +183,7 @@ def check_fork(key, L, k1, k2, live_fork, live_fork_total, bk1_score, bk2_score,
 
     # Вилка живет достаточно
     long_livers = int(get_prop('fork_life_time'))
-    long_livers_max = int(get_prop('fork_life_time_max'))
+    long_livers_max = int(get_prop('fork_life_time_max', 9999))
     if get_prop('fork_time_type', 'auto') in ('auto', 'текущее'):
         # if live_fork - deff_max < long_livers:
         if live_fork < long_livers:
