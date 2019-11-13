@@ -707,14 +707,14 @@ if __name__ == '__main__':
                 else:
                     server_ip = get_prop('server_ip_test')
 
-                MIN_PROC = float(get_prop('min_proc', 0).replace(',', '.'))
-                MAX_PROC = float(get_prop('max_proc', 999).replace(',', '.'))
+                MIN_PROC = float(get_prop('min_proc', '0.0').replace(',', '.'))
+                MAX_PROC = float(get_prop('max_proc', '999.0').replace(',', '.'))
                 if MIN_PROC >= MAX_PROC:
                     err_msg = 'Минимальный процент вилки не должен быть больше или равен максимальному'
                     raise ValueError(err_msg)
 
-                FORK_LIFE_TIME = float(get_prop('fork_life_time', 0).replace(',', '.'))
-                FORK_LIFE_TIME_MAX = float(get_prop('fork_life_time_max', 9999).replace(',', '.'))
+                FORK_LIFE_TIME = float(get_prop('fork_life_time', '0.0').replace(',', '.'))
+                FORK_LIFE_TIME_MAX = float(get_prop('fork_life_time_max', '9999.0').replace(',', '.'))
                 if FORK_LIFE_TIME >= FORK_LIFE_TIME_MAX:
                     err_msg = 'Минимальный период времени жизни вилки не должен быть больше или равен максимальному'
                     raise ValueError(err_msg)
@@ -897,8 +897,8 @@ if __name__ == '__main__':
                             created_fork = val_json.get('created_fork', '')
                             event_type = val_json.get('event_type')
 
-                            deff_olimp = round(float(time.time() - float(val_json.get('time_req_olimp', 0))))
-                            deff_fonbet = round(float(time.time() - float(val_json.get('time_req_fonbet', 0))))
+                            deff_olimp = round(float(time.time() - float(val_json.get('time_req_olimp', 0.0))))
+                            deff_fonbet = round(float(time.time() - float(val_json.get('time_req_fonbet', 0.0))))
                             deff_max = max(0, deff_olimp, deff_fonbet)
 
                             bk1_bet_json = val_json.get('kof_olimp', {})
