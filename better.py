@@ -648,7 +648,7 @@ cnt_acc_sql = "select count(*)\n" + \
               "    sum(case when prop = 'FORK_LIFE_TIME' and val <= :live_fork then 1 else 0 end) as live_fork,\n" + \
               "    coalesce(sum(case when prop = 'FORK_LIFE_TIME_MAX' and val >= :live_fork then 1 else null end), 1) as live_fork_max,\n" + \
               "    sum(case when (prop = upper(':team_type') and val = 'ВКЛ') or ':team_type' = '' then 1 else 0 end) as team,\n" + \
-              "    coalesce(sum(case when prop = 'TOP' and val = 'ВКЛ' and :is_top != 'True' then 0 else null end), 1) as top,\n" + \
+              "    coalesce(sum(case when prop = 'TOP' and val = 'ВКЛ' and :is_top != 'True' then 0 else null end), 1) as top\n" + \
               "  from (\n" + \
               "    select a.id, upper(p.`key`) as prop, upper(p.val) as val\n" + \
               "    from properties p\n" + \
