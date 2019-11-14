@@ -485,6 +485,7 @@ def sender(context):
                         context.bot.send_message(msg.to_user, msg.text[0:4000], parse_mode=telegram.ParseMode.MARKDOWN)
                         Message.update(date_send=round(time.time())).where(Message.id == msg.id).execute()
                     except Exception as e:
+                        prntb(str(e))
                         Message.update(date_send=-1).where(Message.id == msg.id).execute()
                         for admin in bot_prop.ADMINS:
                             if str(e) == 'Chat not found':
@@ -494,6 +495,7 @@ def sender(context):
                                 except Exception as e:
                                     prntb(str(e))
             except Exception as e:
+                prntb(str(e))
                 Message.update(date_send=-1).where(Message.id == msg.id).execute()
                 for admin in bot_prop.ADMINS:
                     if str(e) == 'Chat not found':
