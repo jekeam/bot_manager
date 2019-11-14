@@ -578,6 +578,7 @@ def run_client():
         raise Shutdown(e)
     except Exception as e:
         msg_err = 'run_client: ' + str(e.__class__.__name__) + ' - ' + str(e)
+        prnt(str(e.__class__.__name__) + ' - ' + msg_err)
         server_forks = {}
         conn.close()
         
