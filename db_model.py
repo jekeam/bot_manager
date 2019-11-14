@@ -155,7 +155,7 @@ def get_prop_str(id: int) -> str:
 def send_message_bot(user_id: int, msg: str, admin_list = None):
     Message.insert({
         Message.to_user: user_id,
-        Message.text: msg,
+        Message.text: msg.strip(),
         Message.file_type: 'message'
     }).execute()
 
@@ -164,7 +164,7 @@ def send_message_bot(user_id: int, msg: str, admin_list = None):
             if user_id != admin_id:
                 Message.insert({
                     Message.to_user: admin_id,
-                    Message.text: msg,
+                    Message.text: msg.strip(),
                     Message.file_type: 'message'
                 }).execute()
     return True
