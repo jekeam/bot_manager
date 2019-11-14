@@ -538,14 +538,16 @@ def run_client():
     global server_forks
     global shutdown
     global server_ip
+    
     global ADMINS
     global ACC_ID
+    
     global time_out_cnt
     global send_time_out
     
 
-    long_pool_wait = randint(30, 60)
-    # long_pool_wait = 4
+    # long_pool_wait = randint(30, 60)
+    long_pool_wait = 4
     prnt('Long pool sec: ' + str(long_pool_wait))
 
     try:
@@ -581,6 +583,7 @@ def run_client():
     except Exception as e:
         msg_err = 'run_client: ' + str(e.__class__.__name__) + ' - ' + str(e)
         prnt(str(e.__class__.__name__) + ' - ' + msg_err)
+        prnt(time_out_cnt)
         server_forks = {}
         conn.close()
         
