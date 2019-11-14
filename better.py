@@ -583,8 +583,6 @@ def run_client():
     except Exception as e:
         msg_err = 'run_client: ' + str(e.__class__.__name__) + ' - ' + str(e)
         prnt(str(e.__class__.__name__) + ' - ' + msg_err)
-        prnt('time_out_cnt' + str(time_out_cnt))
-        prnt('send_time_out' + str(send_time_out))
         server_forks = {}
         conn.close()
         
@@ -592,10 +590,8 @@ def run_client():
             time_out_cnt = time_out_cnt + 1
             if time_out_cnt > 3:
                 for admin in ADMINS:
-                    prnt('admin'+ str(admin))
                     prnt(str(ACC_ID) + ': Возникла ошибка при запросе катировок со сканнера, просьба презапустить сканнер, ' + str(msg_err))
                     is_send = send_message_bot(admin, str(ACC_ID) + ': Возникла ошибка при запросе катировок со сканнера, просьба презапустить сканнер, ' + str(msg_err))
-                    print('is_send' + str(is_send))
                 send_time_out = True
         
         time.sleep(long_pool_wait)
