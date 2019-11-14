@@ -29,6 +29,13 @@ import json
 import ast
 from utils import build_menu
 
+
+def prntb(vstr, filename = 'bot.log'):
+    Outfile = open(filename, "a+", encoding='utf-8')
+    Outfile.write(vstr + '\n')
+    Outfile.close()
+
+
 logging.basicConfig(filename='bot.log', format='%(asctime)s - %(name)s - %(levelname)s - %(message)s', level=logging.ERROR)
 # logging.basicConfig(format='%(asctime)s - %(name)s - %(levelname)s - %(message)s', level=logging.INFO)
 logger = logging.getLogger(__name__)
@@ -157,7 +164,7 @@ def check_type(val: str, type_: str, min_: str, max_: str, access_list):
     try:
         err_limits = check_limits(val, type_, min_, max_, access_list)
     except TypeError as e:
-        print(e)
+        prntb(str(e))
 
     if err_limits:
         err_str = err_str + '\n' + err_limits
@@ -444,7 +451,7 @@ def error(update, context):
 #     # except Unauthorized:
 #     #     # remove update.message.chat_id from conversation list
 #     except BadRequest as e:
-#         print('BadRequest: ' + str(e))
+#         prntb('BadRequest: ' + str(e))
 #         # handle malformed requests - read more below!
 #     # except TimedOut:
 #     #     # handle slow connection problems
@@ -485,7 +492,7 @@ def sender(context):
                                     context.bot.send_message(
                                         admin, 'Возникла ошибка:{}, msg:{} - сообщение исключено'.format(str(e), 'msg_id: ' + str(msg.id) + ', user_id:' + str(msg.to_user)))
                                 except Exception as e:
-                                    print(e)
+                                    prntb(str(e))
             except Exception as e:
                 Message.update(date_send=-1).where(Message.id == msg.id).execute()
                 for admin in bot_prop.ADMINS:
@@ -494,7 +501,7 @@ def sender(context):
                             context.bot.send_message(
                                 admin, 'Возникла ошибка:{}, msg:{} - сообщение исключено'.format(str(e), 'msg_id: ' + str(msg.id) + ', user_id:' + str(msg.to_user)))
                         except Exception as e:
-                            print(e)
+                            prntb(str(e))
         time.sleep(1)
 
 
