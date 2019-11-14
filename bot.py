@@ -385,7 +385,7 @@ def button(update, context):
                 for key, val in prop_abr.items():
                     abr = None
                     if is_junior:
-                        if key in ('SUMM'):
+                        if key in ('SUMM', 'WORK_HOUR_END'):
                             abr = val.get('abr')
                     else:
                         abr = val.get('abr')
