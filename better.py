@@ -592,7 +592,7 @@ def run_client():
             time_out_cnt = time_out_cnt + 1
             if time_out_cnt > 3:
                 for admin in ADMINS:
-                    prnt('admin' str(admin))
+                    prnt('admin'+ str(admin))
                     prnt(str(ACC_ID) + ': Возникла ошибка при запросе катировок со сканнера, просьба презапустить сканнер, ' + str(msg_err))
                     is_send = send_message_bot(admin, str(ACC_ID) + ': Возникла ошибка при запросе катировок со сканнера, просьба презапустить сканнер, ' + str(msg_err))
                     print('is_send' + str(is_send))
