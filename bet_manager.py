@@ -361,7 +361,7 @@ class BetManager:
                 self.wait_sign_in_opp(shared)
 
                 if self.created_fork == '' and 'created' in self.first_bet_in:
-                    raise BetIsLost('Создалтель вилки не определен: ' + str(self.created_fork))
+                    raise BetIsLost('Создатель вилки не определен: ' + str(self.created_fork))
 
                 if self.first_bet_in == 'created':
                     if self.created_fork == self.bk_name:
@@ -854,7 +854,7 @@ class BetManager:
                 data_js = resp.json()
 
                 err_code = data_js.get('error', {}).get('err_code', 0)
-                if err_code == 404 and self.attempt_login <= 6:
+                if err_code == 404 and self.attempt_login <= 2:
                     sleep(2)
                     self.attempt_login += 1
                     return self.sign_in(shared)
@@ -934,10 +934,16 @@ class BetManager:
             shared['sign_in_' + self.bk_name] = str(e.__class__.__name__) + ': ' + str(e)
 
             exc_type, exc_value, exc_traceback = sys.exc_info()
-            err_msg = 'unknown err(' + str(e.__class__.__name__) + '): ' + str(e) + '. ' + \
-                      str(repr(traceback.format_exception(exc_type, exc_value, exc_traceback)))
+            err_msg = 'unknown err(' + str(e.__class__.__name__) + '): ' + str(e) + '. ' + str(repr(traceback.format_exception(exc_type, exc_value, exc_traceback)))
+            prnt(self.msg.format(sys._getframe().f_code.co_name, err_msg))
 
-            err_str = self.msg_err.format(sys._getframe().f_code.co_name, err_msg)
+            if 'Proxy Authentication Required' in str(e):
+                err_str = self.msg_err.format(
+                    sys._getframe().f_code.co_name,
+                    'Не возможно подключиться к прокси. Проверьте введенные данные или обратитесь к провайдеру прокси, возможно прокси истек'
+                )
+            else:
+                err_str = self.msg_err.format(sys._getframe().f_code.co_name, err_msg)
             raise ValueError(err_str)
 
     def bet_place(self, shared: dict):
