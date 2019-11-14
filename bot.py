@@ -164,7 +164,9 @@ def check_type(val: str, type_: str, min_: str, max_: str, access_list):
     try:
         err_limits = check_limits(val, type_, min_, max_, access_list)
     except TypeError as e:
-        prntb(str(e))
+        exc_type, exc_value, exc_traceback = sys.exc_info()
+        err_str = str(e) + ' ' + str(repr(traceback.format_exception(exc_type, exc_value, exc_traceback)))
+        prntb(str(err_str))
 
     if err_limits:
         err_str = err_str + '\n' + err_limits
@@ -485,21 +487,33 @@ def sender(context):
                         context.bot.send_message(msg.to_user, msg.text[0:4000], parse_mode=telegram.ParseMode.MARKDOWN)
                         Message.update(date_send=round(time.time())).where(Message.id == msg.id).execute()
                     except Exception as e:
-                        prntb(str(e))
+                        
+                        exc_type, exc_value, exc_traceback = sys.exc_info()
+                        err_str = str(e) + ' ' + str(repr(traceback.format_exception(exc_type, exc_value, exc_traceback)))
+                        prntb(str(err_str))
+                        
                         Message.update(date_send=-1).where(Message.id == msg.id).execute()
                         for admin in bot_prop.ADMINS:
                             try:
                                 context.bot.send_message(admin, 'Возникла ошибка:{}, msg:{} - сообщение исключено'.format(str(e), 'msg_id: ' + str(msg.id) + ', user_id:' + str(msg.to_user)))
                             except Exception as e:
-                                prntb(str(e))
+                                exc_type, exc_value, exc_traceback = sys.exc_info()
+                                err_str = str(e) + ' ' + str(repr(traceback.format_exception(exc_type, exc_value, exc_traceback)))
+                                prntb(str(err_str))
             except Exception as e:
-                prntb(str(e))
+                
+                exc_type, exc_value, exc_traceback = sys.exc_info()
+                err_str = str(e) + ' ' + str(repr(traceback.format_exception(exc_type, exc_value, exc_traceback)))
+                prntb(str(err_str))
+                
                 Message.update(date_send=-1).where(Message.id == msg.id).execute()
                 for admin in bot_prop.ADMINS:
                     try:
                         context.bot.send_message(admin, 'Возникла ошибка:{}, msg:{} - сообщение исключено'.format(str(e), 'msg_id: ' + str(msg.id) + ', user_id:' + str(msg.to_user)))
                     except Exception as e:
-                        prntb(str(e))
+                        exc_type, exc_value, exc_traceback = sys.exc_info()
+                        err_str = str(e) + ' ' + str(repr(traceback.format_exception(exc_type, exc_value, exc_traceback)))
+                        prntb(str(err_str))
         time.sleep(1)
 
 
