@@ -576,6 +576,7 @@ def run_client():
             # prnt('End /get_forks, len: ' + str(len(data_json)) + '\n' + str(data_json))
             
             time.sleep(1)
+            time_out_cnt = 0
     except Shutdown as e:
         prnt(str(e.__class__.__name__) + ' - ' + str(e))
         raise Shutdown(e)
