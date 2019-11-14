@@ -591,7 +591,7 @@ def run_client():
             if time_out_cnt > 3:
                 for admin in ADMINS:
                     prnt(str(ACC_ID) + ': Возникла ошибка при запросе катировок со сканнера, просьба презапустить сканнер, ' + str(msg_err))
-                    is_send = send_message_bot(admin, str(ACC_ID) + ': Возникла ошибка при запросе катировок со сканнера, просьба презапустить сканнер, ' + str(msg_err))
+                    is_send = send_message_bot(admin, str(ACC_ID) + ': Возникла ошибка при запросе катировок со сканнера, просьба презапустить сканнер, ' + str(msg_err).replace('_','\\_') )
                 send_time_out = True
         
         time.sleep(long_pool_wait)
