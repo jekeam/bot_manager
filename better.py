@@ -579,6 +579,9 @@ def run_client():
     except Exception as e:
         msg_err = 'run_client: ' + str(e.__class__.__name__) + ' - ' + str(e)
         prnt(str(e.__class__.__name__) + ' - ' + msg_err)
+        prnt(str(time_out_cnt))
+        prnt(str(ADMINS))
+        prnt(str(send_time_out))
         server_forks = {}
         conn.close()
         
