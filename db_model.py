@@ -153,21 +153,25 @@ def get_prop_str(id: int) -> str:
 
 
 def send_message_bot(user_id: int, msg: str, admin_list = None):
+    try:
+        Message.insert({
+            Message.to_user: user_id,
+            Message.text: msg,
+            Message.file_type: 'message'
+        }).execute()
     
-    Message.insert({
-        Message.to_user: user_id,
-        Message.text: msg,
-        Message.file_type: 'message'
-    }).execute()
-
-    if admin_list:
-        for admin_id in admin_list:
-            if user_id != admin_id:
-                Message.insert({
-                    Message.to_user: admin_id,
-                    Message.text: msg,
-                    Message.file_type: 'message'
-                }).execute()
+        if admin_list:
+            for admin_id in admin_list:
+                if user_id != admin_id:
+                    Message.insert({
+                        Message.to_user: admin_id,
+                        Message.text: msg,
+                        Message.file_type: 'message'
+                    }).execute()
+        return True
+    except Exception as e:
+        from utils import prnt
+        prnt(e)
 
 if __name__ == '__main__':
     pass
