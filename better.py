@@ -571,7 +571,7 @@ def run_client():
             # prnt('End /get_forks, len: ' + str(len(data_json)) + '\n' + str(data_json))
             
             time.sleep(1)
-            if str(ACC_ID) = '72':
+            if str(ACC_ID) == '72':
                 raise ValueError('timeout - timed out')
     except Shutdown as e:
         prnt(str(e.__class__.__name__) + ' - ' + str(e))
