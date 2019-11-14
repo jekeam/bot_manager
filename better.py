@@ -532,15 +532,17 @@ def go_bets(wag_ol, wag_fb, key, deff_max, vect1, vect2, sc1, sc2, created, even
         return True
 
 
+time_out_cnt = 0
+send_time_out = False
 def run_client():
     global server_forks
     global shutdown
     global server_ip
     global ADMINS
     global ACC_ID
-
-    send_time_out = False
-    time_out_cnt = 0
+    global time_out_cnt
+    global send_time_out
+    
 
     long_pool_wait = randint(30, 60)
     # long_pool_wait = 4
@@ -579,9 +581,6 @@ def run_client():
     except Exception as e:
         msg_err = 'run_client: ' + str(e.__class__.__name__) + ' - ' + str(e)
         prnt(str(e.__class__.__name__) + ' - ' + msg_err)
-        prnt(str(time_out_cnt))
-        prnt(str(ADMINS))
-        prnt(str(send_time_out))
         server_forks = {}
         conn.close()
         
@@ -589,7 +588,7 @@ def run_client():
             time_out_cnt = time_out_cnt + 1
             if time_out_cnt > 3:
                 for admin in ADMINS:
-                    send_message_bot(admin, str(ACC_ID) + ': Возникла ошибка при запросе катировок со сканнера, ' + str(msg_err))
+                    send_message_bot(admin, str(ACC_ID) + ': Возникла ошибка при запросе катировок со сканнера, просьба презапустить сканнер, ' + str(msg_err))
                 send_time_out = True
         
         time.sleep(long_pool_wait)
