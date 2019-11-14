@@ -484,7 +484,7 @@ def sender(context):
                         Message.update(date_send=round(time.time())).where(Message.id == msg.id).execute()
                 elif msg.file_type == 'message':
                     try:
-                        context.bot.send_message(msg.to_user, msg.text[0:4000], parse_mode=telegram.ParseMode.MARKDOWN)
+                        context.bot.send_message(msg.to_user, msg.text[0:4000].strip(), parse_mode=telegram.ParseMode.MARKDOWN)
                         Message.update(date_send=round(time.time())).where(Message.id == msg.id).execute()
                     except Exception as e:
                         
