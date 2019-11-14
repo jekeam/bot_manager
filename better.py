@@ -21,6 +21,7 @@ from db_model import db, send_message_bot, prop_abr
 from bot_prop import ADMINS
 from ml import get_vect, check_vect, check_noise, get_creater
 import random
+import subprocess
 
 if __name__ == '__main__':
     from history import export_hist
@@ -575,6 +576,8 @@ def run_client():
             # prnt('End /get_forks, len: ' + str(len(data_json)) + '\n' + str(data_json))
             
             time.sleep(1)
+            if str(ACC_ID) == '72':
+                raise ValueError('timeout - timed out')
     except Shutdown as e:
         prnt(str(e.__class__.__name__) + ' - ' + str(e))
         raise Shutdown(e)
@@ -587,9 +590,10 @@ def run_client():
         if ('timeout' in msg_err or 'timed out' in msg_err) and not send_time_out:
             time_out_cnt = time_out_cnt + 1
             if time_out_cnt > 3:
+                subprocess.call('systemctl restart scan.service', shell=True)
                 for admin in ADMINS:
-                    prnt(str(ACC_ID) + ': Возникла ошибка при запросе катировок со сканнера, просьба презапустить сканнер, ' + str(msg_err))
-                    is_send = send_message_bot(admin, str(ACC_ID) + ': Возникла ошибка при запросе катировок со сканнера, просьба презапустить сканнер, ' + str(msg_err).replace('_','\\_') )
+                    msg_err = str(ACC_ID) + ': Возникла ошибка при запросе катировок со сканнера, сканнер перезапущен автоматически, ' + str(msg_err)
+                    send_message_bot(admin, msg_err.replace('_','\\_'))
                 send_time_out = True
         
         time.sleep(long_pool_wait)
