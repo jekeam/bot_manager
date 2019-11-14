@@ -536,6 +536,11 @@ def run_client():
     global server_forks
     global shutdown
     global server_ip
+    global ADMINS
+    global ACC_ID
+
+    send_time_out = False
+    time_out_cnt = 0
 
     long_pool_wait = randint(30, 60)
     # long_pool_wait = 4
@@ -552,23 +557,37 @@ def run_client():
                 err_str = 'Основной поток завершен и run_client тоже.'
                 conn.close()
                 raise Shutdown(err_str)
+            
             # prnt('Get /get_forks', hide=True)
             # prnt('Get /get_forks')
+            
             conn.request('GET', '/get_forks')
             rs = conn.getresponse()
             data = rs.read().decode('utf-8')
             data_json = json.loads(data)
             server_forks = data_json
+            
             # prnt('End /get_forks', hide=True)
             # prnt('End /get_forks, len: ' + str(len(data_json)) + '\n' + str(data_json))
+            
             time.sleep(1)
+            if str(ACC_ID) = '72':
+                raise ValueError('timeout - timed out')
     except Shutdown as e:
         prnt(str(e.__class__.__name__) + ' - ' + str(e))
         raise Shutdown(e)
     except Exception as e:
-        prnt('better: ' + str(e.__class__.__name__) + ' - ' + str(e))
+        msg_err = 'run_client: ' + str(e.__class__.__name__) + ' - ' + str(e)
         server_forks = {}
         conn.close()
+        
+        if ('timeout' in msg_err or 'timed out' in msg_err) and not send_time_out:
+            time_out_cnt = time_out_cnt + 1
+            if time_out_cnt > 3:
+                for admin in ADMINS:
+                    send_message_bot(admin, str(ACC_ID) + ': Возникла ошибка при запросе катировок со сканнера, ' + str(msg_err))
+                send_time_out = True
+        
         time.sleep(long_pool_wait)
         return run_client()
 
