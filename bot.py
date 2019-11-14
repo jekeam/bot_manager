@@ -488,22 +488,18 @@ def sender(context):
                         prntb(str(e))
                         Message.update(date_send=-1).where(Message.id == msg.id).execute()
                         for admin in bot_prop.ADMINS:
-                            if str(e) == 'Chat not found':
-                                try:
-                                    context.bot.send_message(
-                                        admin, 'Возникла ошибка:{}, msg:{} - сообщение исключено'.format(str(e), 'msg_id: ' + str(msg.id) + ', user_id:' + str(msg.to_user)))
-                                except Exception as e:
-                                    prntb(str(e))
+                            try:
+                                context.bot.send_message(admin, 'Возникла ошибка:{}, msg:{} - сообщение исключено'.format(str(e), 'msg_id: ' + str(msg.id) + ', user_id:' + str(msg.to_user)))
+                            except Exception as e:
+                                prntb(str(e))
             except Exception as e:
                 prntb(str(e))
                 Message.update(date_send=-1).where(Message.id == msg.id).execute()
                 for admin in bot_prop.ADMINS:
-                    if str(e) == 'Chat not found':
-                        try:
-                            context.bot.send_message(
-                                admin, 'Возникла ошибка:{}, msg:{} - сообщение исключено'.format(str(e), 'msg_id: ' + str(msg.id) + ', user_id:' + str(msg.to_user)))
-                        except Exception as e:
-                            prntb(str(e))
+                    try:
+                        context.bot.send_message(admin, 'Возникла ошибка:{}, msg:{} - сообщение исключено'.format(str(e), 'msg_id: ' + str(msg.id) + ', user_id:' + str(msg.to_user)))
+                    except Exception as e:
+                        prntb(str(e))
         time.sleep(1)
 
 
