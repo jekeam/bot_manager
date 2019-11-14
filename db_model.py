@@ -152,31 +152,22 @@ def get_prop_str(id: int) -> str:
     return info_accs + res
 
 
-def send_message_bot(user_id: int, msg: str, admin_list: dict = None):
-    try:
-        send_stat = str(Properties.select().where((Properties.key == 'SEND_MESSAGE') & (Properties.acc_id == 2)).get().val)
-    except Exception:
-        send_stat = '0'
-
-    is_send_admin = False
-    if admin_list:
-        is_send_admin = user_id in admin_list
-
-    if send_stat != '0' and not is_send_admin:
-        Message.insert({
-            Message.to_user: user_id,
-            Message.text: msg,
-            Message.file_type: 'message'
-        }).execute()
+def send_message_bot(user_id: int, msg: str, admin_list = None):
+    
+    Message.insert({
+        Message.to_user: user_id,
+        Message.text: msg,
+        Message.file_type: 'message'
+    }).execute()
 
     if admin_list:
         for admin_id in admin_list:
-            Message.insert({
-                Message.to_user: admin_id,
-                Message.text: msg,
-                Message.file_type: 'message'
-            }).execute()
-
+            if user_id != admin_id:
+                Message.insert({
+                    Message.to_user: admin_id,
+                    Message.text: msg,
+                    Message.file_type: 'message'
+                }).execute()
 
 if __name__ == '__main__':
     pass
