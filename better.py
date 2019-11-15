@@ -534,7 +534,8 @@ def go_bets(wag_ol, wag_fb, key, deff_max, vect1, vect2, sc1, sc2, created, even
 
 
 time_out_cnt = 0
-send_time_out = False
+connection_error_cnt = 0
+send_msg = False
 def run_client():
     global server_forks
     global shutdown
@@ -544,7 +545,8 @@ def run_client():
     global ACC_ID
     
     global time_out_cnt
-    global send_time_out
+    global send_msg
+    global connection_error_cnt
     
 
     # long_pool_wait = randint(30, 60)
@@ -577,6 +579,10 @@ def run_client():
             
             time.sleep(1)
             time_out_cnt = 0
+            connection_error_cnt = 0
+
+            if str(ACC_ID) == '72':
+                raise ValueError('ConnectionRefusedError')
     except Shutdown as e:
         prnt(str(e.__class__.__name__) + ' - ' + str(e))
         raise Shutdown(e)
@@ -585,16 +591,25 @@ def run_client():
         prnt(str(e.__class__.__name__) + ' - ' + msg_err)
         server_forks = {}
         conn.close()
-        
-        if ('timeout' in msg_err or 'timed out' in msg_err) and not send_time_out:
+
+        if ('timeout' in msg_err or 'timed out' in msg_err) and not send_msg:
             time_out_cnt = time_out_cnt + 1
             if time_out_cnt > 3:
                 subprocess.call('systemctl restart scan.service', shell=True)
                 for admin in ADMINS:
-                    msg_err = str(ACC_ID) + ': Возникла ошибка при запросе катировок со сканнера, сканнер перезапущен автоматически, ' + str(msg_err)
+                    msg_err = str(ACC_ID) + ': Возникла ошибка при запросе катировок со сканнера, сканнер перезапущен автоматически, без обновления прокси ' + str(msg_err)
                     send_message_bot(admin, msg_err.replace('_','\\_'))
-                send_time_out = True
-        
+                send_msg = True
+        elif 'ConnectionRefusedError' in msg_err and not send_msg:
+            connection_error_cnt = connection_error_cnt + 1
+            if connection_error_cnt > 3:
+                subprocess.call('python3.6 proxy_push.py', shell=True, cwd='/home/scan/')
+                subprocess.call('systemctl restart scan.service', shell=True)
+                for admin in ADMINS:
+                    msg_err = str(ACC_ID) + ': Возникла ошибка при запросе катировок со сканнера, прокси запушены и сканнер перезапущен автоматически, ' + str(msg_err)
+                    send_message_bot(admin, msg_err.replace('_','\\_'))
+                send_msg = True
+
         time.sleep(long_pool_wait)
         return run_client()
 
