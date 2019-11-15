@@ -577,8 +577,8 @@ def run_client():
             # prnt('End /get_forks', hide=True)
             # prnt('End /get_forks, len: ' + str(len(data_json)) + '\n' + str(data_json))
             
-            if str(ACC_ID) == '72':
-                raise ValueError('ConnectionRefusedError')
+            # if str(ACC_ID) == '72':
+            #     raise ValueError('ConnectionRefusedError')
             
             time.sleep(1)
             time_out_cnt = 0
