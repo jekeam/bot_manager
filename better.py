@@ -577,12 +577,12 @@ def run_client():
             # prnt('End /get_forks', hide=True)
             # prnt('End /get_forks, len: ' + str(len(data_json)) + '\n' + str(data_json))
             
+            if str(ACC_ID) == '72':
+                raise ValueError('ConnectionRefusedError')
+            
             time.sleep(1)
             time_out_cnt = 0
             connection_error_cnt = 0
-
-            if str(ACC_ID) == '72':
-                raise ValueError('ConnectionRefusedError')
     except Shutdown as e:
         prnt(str(e.__class__.__name__) + ' - ' + str(e))
         raise Shutdown(e)
@@ -593,7 +593,7 @@ def run_client():
         server_forks = {}
         conn.close()
 
-        if ('timeout' in msg_err or 'timed out' in msg_err) and not send_msg:
+        if ('timeout'.lower() in msg_err.lower() or 'timed out'.lower() in msg_err.lower()) and not send_msg:
             time_out_cnt = time_out_cnt + 1
             if time_out_cnt > 3:
                 subprocess.call('systemctl restart scan.service', shell=True)
@@ -601,7 +601,7 @@ def run_client():
                     msg_err = str(ACC_ID) + ': Возникла ошибка при запросе катировок со сканнера, сканнер перезапущен автоматически, без обновления прокси ' + str(msg_err)
                     send_message_bot(admin, msg_err.replace('_','\\_'))
                 send_msg = True
-        elif 'ConnectionRefusedError' in msg_err and not send_msg:
+        elif 'ConnectionRefusedError'.lower() in msg_err.lower() and not send_msg:
             connection_error_cnt = connection_error_cnt + 1
             if connection_error_cnt > 3:
                 subprocess.call('python3.6 proxy_push.py', shell=True, cwd='/home/scan/')
