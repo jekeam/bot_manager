@@ -30,7 +30,7 @@ import ast
 from utils import build_menu
 
 
-def prntb(vstr, filename = 'bot.log'):
+def prntb(vstr, filename='bot.log'):
     Outfile = open(filename, "a+", encoding='utf-8')
     Outfile.write(vstr + '\n')
     Outfile.close()
@@ -256,14 +256,18 @@ def send_text(update, context, msg: str = 'Привет мой господин!
             context.bot.send_message(admin.id, msg)
         except:
             pass
-        
+
+
 def get_acc_list(update):
     acc_list = None
     user_id = update.message.chat.id
+
+    list_visibly = (Account.status == 'active') | (Account.status == 'inactive') | (Account.status == 'pause')
+
     if user_id in bot_prop.ADMINS:
-        acc_list = Account.select().where((Account.status == 'active') | (Account.status == 'inactive')).order_by(Account.id)
+        acc_list = Account.select().where(list_visibly).order_by(Account.id)
     else:
-        acc_list = Account.select().where((Account.user_id == user_id) & ((Account.status == 'active') | (Account.status == 'inactive'))).order_by(Account.id)
+        acc_list = Account.select().where((Account.user_id == user_id) & (list_visibly)).order_by(Account.id)
     return acc_list
 
 
@@ -287,6 +291,8 @@ def botlist(update, context, edit=False):
             # check for date
             if date_end < datetime.datetime.now():
                 work_stat_inactive = emojize(':x:', use_aliases=True) + ' Не активен' + ' ' + date_end_str
+            elif acc.status == 'pause':
+                work_stat_inactive = emojize(':double_vertical_bar:', use_aliases=True) + ' На паузе'
             elif acc.status == 'inactive':
                 work_stat_inactive = emojize(':x:', use_aliases=True) + ' Не активен' + ' ' + date_end_str
         else:
@@ -313,7 +319,7 @@ def botlist(update, context, edit=False):
         update.message.edit_text(text=bot_prop.MSG_CHANGE_ACC, reply_markup=reply_markup)
 
 
-def list_split(ls:list, col=2):
+def list_split(ls: list, col=2):
     main = []
     cur_col = 1
     buff = []
@@ -322,22 +328,23 @@ def list_split(ls:list, col=2):
         for n, val in enumerate(ls):
             buff.append(val)
             cur_col += 1
-            if cur_col == (col+1):
+            if cur_col == (col + 1):
                 main.append(buff)
                 cur_col = 1
                 buff = []
                 last_el = n
     else:
         main.append(ls)
-    if last_el+1 != len(ls) and len(ls) > col:
-        main.append(ls[last_el+1:len(ls)])
+    if last_el + 1 != len(ls) and len(ls) > col:
+        main.append(ls[last_el + 1:len(ls)])
     return main
+
 
 def botstat(update, context):
     keyboard = []
     acc_list = get_acc_list(update)
     for acc in acc_list:
-        keyboard.append(InlineKeyboardButton(text=str(acc.id), callback_data='get_stat_short:'+str((acc.id))))
+        keyboard.append(InlineKeyboardButton(text=str(acc.id), callback_data='get_stat_short:' + str((acc.id))))
     keyboard = list_split(keyboard, 7)
     reply_markup = InlineKeyboardMarkup(keyboard)
     update.message.reply_text(text=bot_prop.MSG_CHANGE_ACC, reply_markup=reply_markup)
@@ -359,13 +366,14 @@ def button(update, context):
         reply_markup = InlineKeyboardMarkup(keyboard)
 
         query.message.edit_text(
-            text=bot_prop.MSG_START_STOP + ' [ID: ' + str(acc_info.get().id) + '@' + str(acc_info.get().user_id) + '](tg://user?id=' + str(acc_info.get().user_id) + ')\n' + get_prop_str(acc_info.get().id),
+            text=bot_prop.MSG_START_STOP + ' [ID: ' + str(acc_info.get().id) + '@' + str(acc_info.get().user_id) + '](tg://user?id=' + str(acc_info.get().user_id) + ')\n' + get_prop_str(
+                acc_info.get().id),
             reply_markup=reply_markup,
             parse_mode=telegram.ParseMode.MARKDOWN
         )
 
     query = update.callback_query
-    
+
     is_admin = False
     user_id = update.callback_query.message.chat.id
     if user_id in bot_prop.ADMINS:
@@ -380,8 +388,8 @@ def button(update, context):
                 update.callback_query.answer(show_alert=True, text="Для настройки остановите аккаунт!")
             else:
                 prop_btn = []
-                
-                is_junior =  (User.select().where(User.id == user_id).get().role == 'junior')
+
+                is_junior = (User.select().where(User.id == user_id).get().role == 'junior')
                 for key, val in prop_abr.items():
                     abr = None
                     if is_junior:
@@ -391,7 +399,7 @@ def button(update, context):
                         abr = val.get('abr')
                     if abr:
                         prop_btn.append(abr)
-                
+
                 reply_keyboard = build_menu(prop_btn, n_cols=2, header_buttons=[bot_prop.BTN_CLOSE])
                 markup = ReplyKeyboardMarkup(reply_keyboard, resize_keyboard=True)
                 query.message.reply_text(bot_prop.MSG_PROP_LIST, reply_markup=markup, )
@@ -445,6 +453,8 @@ def help(update, context):
 def error(update, context):
     """Log Errors caused by Updates."""
     logger.warning('Update "%s" caused error "%s"', update, context.error)
+
+
 #
 #
 # def error_callback(bot, update, error):
@@ -487,11 +497,11 @@ def sender(context):
                         context.bot.send_message(msg.to_user, msg.text[0:4000].strip(), parse_mode=telegram.ParseMode.MARKDOWN)
                         Message.update(date_send=round(time.time())).where(Message.id == msg.id).execute()
                     except Exception as e:
-                        
+
                         exc_type, exc_value, exc_traceback = sys.exc_info()
                         err_str = str(e) + ' ' + str(repr(traceback.format_exception(exc_type, exc_value, exc_traceback)))
                         prntb(str(err_str))
-                        
+
                         Message.update(date_send=-1).where(Message.id == msg.id).execute()
                         for admin in bot_prop.ADMINS:
                             try:
@@ -501,11 +511,11 @@ def sender(context):
                                 err_str = str(e) + ' ' + str(repr(traceback.format_exception(exc_type, exc_value, exc_traceback)))
                                 prntb(str(err_str))
             except Exception as e:
-                
+
                 exc_type, exc_value, exc_traceback = sys.exc_info()
                 err_str = str(e) + ' ' + str(repr(traceback.format_exception(exc_type, exc_value, exc_traceback)))
                 prntb(str(err_str))
-                
+
                 Message.update(date_send=-1).where(Message.id == msg.id).execute()
                 for admin in bot_prop.ADMINS:
                     try:
