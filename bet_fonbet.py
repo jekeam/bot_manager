@@ -77,7 +77,12 @@ class FonbetBot:
         try:
             self.common_url = self.get_common_url()
         except Exception as e:
-            raise ValueError('БК Фонбет: сайт не отвечает или у прокси нет доступа к сайту, рекомендую поменять прокси: ' + str(e))
+            if 'Proxy Authentication Required'.lower() in str(e).lower():
+                raise ValueError('БК Фонбет: неверерный логин/пароль от прокси, проверьте настройки.')
+            elif 'Cannot connect to proxy'.lower() in str(e).lower():
+                raise ValueError('БК Фонбет: сайт не отвечает или у прокси нет доступа к сайту, рекомендую проверить/променять прокси')
+            else:
+                raise ValueError('БК Фонбет: неизвестная ошибка, при подключении: ' + str(e))
 
         self.base_payload = {
             "appVersion": "5.1.3b",
