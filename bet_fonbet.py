@@ -1,5 +1,5 @@
 # coding:utf-8
-from random import choice, random
+from random import choice, random, uniform
 import hmac
 from hashlib import sha512
 import urllib3
@@ -9,6 +9,7 @@ import time
 from retry_requests import requests_retry_session, requests_retry_session_post
 from exceptions import OlimpBetError
 import re
+import os
 
 urllib3.disable_warnings(urllib3.exceptions.InsecureRequestWarning)
 
@@ -270,6 +271,9 @@ class FonbetBot:
             prnt('BET_FONBET.PY: Fonbet, sign_in request: ' + str(resp.status_code))
 
             if res.get('result', '') == 'error':
+                if 'duplicate random value' in res.get('errorMessage'):
+                    time.sleep(uniform(1,3))
+                    prnt('current pid: ' + os.getpid())
                 raise LoadException('Fonbet: ' + res.get('errorMessage'))
 
             if "fsid" not in res:
