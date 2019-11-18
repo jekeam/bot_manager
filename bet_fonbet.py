@@ -83,7 +83,7 @@ class FonbetBot:
             elif 'Cannot connect to proxy'.lower() in e_str.lower():
                 raise ValueError('БК Фонбет: сайт не отвечает или у прокси нет доступа к сайту, рекомендую проверить/променять прокси')
             else:
-                raise ValueError('БК Фонбет: неизвестная ошибка, при подключении: ' + e_str)
+                raise ValueError('БК Фонбет: неизвестная ошибка, при подключении, проверьте, что прокси указан корректно и порт для HTTPS: ' + e_str)
 
         self.base_payload = {
             "appVersion": "5.1.3b",
