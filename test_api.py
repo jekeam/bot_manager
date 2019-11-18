@@ -1,6 +1,3 @@
-# 1090123559168-tj69836174nd7glarfbeapf3pnuirm6i.apps.googleusercontent.com
-# a2up4DXUVZ9FL7peuBTDctmR
-# https://console.developers.google.com/apis/dashboard?project=quickstart-1573736949673&authuser=0&pli=1
 from __future__ import print_function
 import pickle
 import os.path
@@ -33,7 +30,7 @@ def main():
         else:
             flow = InstalledAppFlow.from_client_secrets_file(
                 'credentials.json', SCOPES)
-            creds = flow.run_local_server(port=0)
+            creds = flow.run_local_server()
         # Save the credentials for the next run
         with open('token.pickle', 'wb') as token:
             pickle.dump(creds, token)

@@ -549,8 +549,7 @@ def run_client():
     global connection_error_cnt
     
 
-    # long_pool_wait = randint(30, 60)
-    long_pool_wait = 4
+    long_pool_wait = randint(30, 60)
     prnt('Long pool sec: ' + str(long_pool_wait))
 
     try:
@@ -604,6 +603,8 @@ def run_client():
         elif 'ConnectionRefusedError'.lower() in msg_err.lower() and not send_msg:
             connection_error_cnt = connection_error_cnt + 1
             if connection_error_cnt > 3:
+                subprocess.call('systemctl stop scan.service', shell=True)
+                time.sleep(60)
                 subprocess.call('python3.6 proxy_push.py', shell=True, cwd='/home/scan/')
                 subprocess.call('systemctl restart scan.service', shell=True)
                 for admin in ADMINS:
