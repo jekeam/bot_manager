@@ -175,12 +175,12 @@ def check_type(val: str, type_: str, min_: str, max_: str, access_list):
     if err_limits:
         err_str = err_str + '\n' + err_limits
         
-    if 'proxi' in type_:
+    if 'proxi' in str(type_):
         if val.count(':') == 1 or (val.count(':') == 2 and val.count('@') ==  1):
             pass
         else:
             err_str = 'Неверный формат прокси'
-    if 'account' in type_:
+    if 'account' in str(type_):
         if val.count('/') != 1:
             err_str = 'Неверный формат аккаунта'
         
