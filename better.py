@@ -855,25 +855,7 @@ if __name__ == '__main__':
                     one_proc = (bal1 + bal2) / 100
                     bal_small = (bal1 <= 400 or bal2 <= 400)
 
-                    msg_err = ''
                     msg_str = ''
-
-                    if bk2.get_acc_info('bet').lower() != 'Нет'.lower():
-                        msg_err = msg_err + '\n' + 'обнаружена блокировка ставки в Фонбет, аккаунт остановлен!'
-
-                    if bk2.get_acc_info('pay').lower() != 'Нет'.lower():
-                        msg_err = msg_err + '\n' + 'обнаружена блокировка вывода, нужно пройти верификацию в Фонбет, аккаунт остановлен!'
-
-                    if group_limit_id == '4' and not start_message_send:
-                        msg_str = msg_str + 'Обнаружена порезка до 4й группы\n'
-
-                    if bal_small:
-                        msg_err = msg_err + '\n' + 'аккаунт остановлен: денег в одной из БК не достаточно для работы, просьба выровнять балансы.\n' + bk1_name + ': ' + str(
-                            bal1) + '\n' + bk2_name + ': ' + str(bal2)
-
-                    if msg_err != '':
-                        prnt(msg_err.strip())
-                        raise Shutdown(msg_err.strip())
 
                     if not start_message_send:
                         cnt_fork_success_old = len(cnt_fork_success)
@@ -894,6 +876,23 @@ if __name__ == '__main__':
                         msg_str = msg_str + 'Проставлено вилок: {}'.format(len(cnt_fork_success)) + '\n'
                         msg_str = msg_str + 'Сделано минусовы выкупов: {}->{}'.format(cnt_fork_fail_old, cnt_fail) + '\n'
                         cnt_fork_fail_old = cnt_fail
+                        
+                    msg_err = ''
+                    if bk2.get_acc_info('bet').lower() != 'Нет'.lower():
+                        msg_err = msg_err + '\n' + 'обнаружена блокировка ставки в Фонбет, аккаунт остановлен!'
+
+                    if bk2.get_acc_info('pay').lower() != 'Нет'.lower():
+                        msg_err = msg_err + '\n' + 'обнаружена блокировка вывода, нужно пройти верификацию в Фонбет, аккаунт остановлен!'
+
+                    if group_limit_id == '4' and not start_message_send:
+                        msg_str = msg_str + 'Обнаружена порезка до 4й группы\n'
+
+                    if bal_small:
+                        msg_err = msg_err + '\n' + 'аккаунт остановлен: денег в одной из БК не достаточно для работы, просьба выровнять балансы.\n' + bk1_name + ': ' + str(bal1) + '\n' + bk2_name + ': ' + str(bal2)
+
+                    if msg_err != '':
+                        prnt(msg_err.strip())
+                        raise Shutdown(msg_err.strip())
 
                     if msg_str != msg_str_old:
                         msg_str_old = msg_str
