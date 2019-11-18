@@ -156,7 +156,8 @@ def get_prop_str(id: int) -> str:
         info_accs = info_accs + key.capitalize() + ': * ' + str(val.get('http').replace('http://', '')) + '*\n'
 
     for key, val in prop_abr.items():
-        res += '' + str(val.get('abr', '')) + ': *' + get_val_prop_id(id, key) + '*\n'
+        if key not in ('FONBET_U', 'FONBET_P', 'OLIMP_U', 'OLIMP_P'):
+            res += '' + str(val.get('abr', '')) + ': *' + get_val_prop_id(id, key) + '*\n'
     return info_accs + res
 
 
