@@ -193,8 +193,8 @@ def set_prop(update, context):
     # TODO
     if prop_name:
         for key, val in prop_abr.items():
+            type_ = val.get('type', 'str')
             if val.get('abr') == prop_name:
-                type_ = val.get('type')
                 err_msg = check_type(prop_val, type_, val.get('min'), val.get('max'), val.get('access_list'))
                 if err_msg != '':
                     update.message.reply_text(
