@@ -214,8 +214,8 @@ def set_prop(update, context):
                         if 'proxi' in type_:
                             bk_name = type_.split(':')[1]
                             proxy_json = json.loads(Account.select().where(Account.id == acc_id).get().proxies.replace('`','"'))
-                            proxy_json[bk_name]['https'] = prop_val
-                            proxy_json[bk_name]['http'] = prop_val
+                            proxy_json[bk_name]['https'] = 'https://' + prop_val
+                            proxy_json[bk_name]['http'] = 'http://' + prop_val
                             proxy_str = json.dumps(proxy_json).replace('"', '`')
                             Account.update(proxies=proxy_str).where((Account.id == acc_id)).execute()
                         elif 'account' in type_:
