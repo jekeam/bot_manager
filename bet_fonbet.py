@@ -8,6 +8,7 @@ from math import floor
 import time
 from retry_requests import requests_retry_session, requests_retry_session_post
 from exceptions import OlimpBetError
+import re
 
 urllib3.disable_warnings(urllib3.exceptions.InsecureRequestWarning)
 
@@ -77,7 +78,7 @@ class FonbetBot:
         try:
             self.common_url = self.get_common_url()
         except Exception as e:
-            e_str = str(e).replace("_", "").replace("*", "").replace("[", "").replace("`", "")
+            e_str = re.sub('[\\\\`\*\[\]\_]', '', str(e))
             if 'Proxy Authentication Required'.lower() in e_str.lower():
                 raise ValueError('БК Фонбет: неверерный логин/пароль от прокси, проверьте настройки.')
             elif 'Cannot connect to proxy'.lower() in e_str.lower():
