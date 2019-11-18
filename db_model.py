@@ -6,12 +6,20 @@ from uuid import uuid1
 from playhouse.sqlite_ext import SqliteExtDatabase
 
 db = MySQLDatabase('bot_manager', user='root', password='131189_Ak', host='127.0.0.1', port=3306)
+# db = MySQLDatabase('bot_manager', user='root', password='', host='127.0.0.1', port=3306)
 
 first_bet_in = ["created", "notcreator", "fonbet", "olimp", "parallel", "auto"]
 
 bks = ["fonbet", "olimp", "auto"]
 
 prop_abr = {
+    "FONBET_U": {"abr": "УЗ Фонбет", "type": "account:fonbet", "max": "", "min": "", "access_list": [], "error": ""},
+    "FONBET_P": {"abr": "Прокси Фонбет", "type": "proxi:fonbet", "max": "", "min": "", "access_list": [], "error": ""},
+    
+    "OLIMP_U": {"abr": "УЗ Олимп", "type": "account:olimp", "max": "", "min": "", "access_list": [], "error": ""},
+    "OLIMP_P": {"abr": "Прокси Олимп", "type": "proxi:olimp", "max": "", "min": "", "access_list": [], "error": ""},
+    
+    
     "FORK_SLICE": {"abr": "Уникальность ставок, %", "type": "int", "max": "90", "min": "0", "access_list": [], "error": ""},
 
     "MIN_PROC": {"abr": "% Вилки ОТ", "type": "float", "max": "10", "min": "0", "access_list": [], "error": ""},  # !

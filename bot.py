@@ -150,14 +150,18 @@ def check_type(val: str, type_: str, min_: str, max_: str, access_list):
     err_limits = ''
 
     try:
-        if type_ == 'int':
-            type_ = int
-        elif type_ == 'float':
-            type_ = float
-            val = val
+        if 'proxi' in type_ or 'account' in  type_:
+            pass
         else:
-            type_ = str
-        val = type_(val)
+            if type_ == 'int':
+                type_ = int
+            elif type_ == 'float':
+                type_ = float
+                val = val
+            else:
+                type_ = str
+                
+            val = type_(val)
     except Exception:
         err_str = 'Неверный тип значения, ожидается: {}'.format(str(type_))
 
@@ -170,7 +174,16 @@ def check_type(val: str, type_: str, min_: str, max_: str, access_list):
 
     if err_limits:
         err_str = err_str + '\n' + err_limits
-
+        
+    if 'proxi' in type_:
+        if val.count(':') == 1 or (val.count(':') == 2 and val.count('@') ==  1):
+            pass
+        else:
+            err_str = 'Неверный формат прокси'
+    if 'account' in type_:
+        if val.count('/') != 1:
+            err_str = 'Неверный формат аккаунта'
+        
     return err_str.strip()
 
 
@@ -181,7 +194,8 @@ def set_prop(update, context):
     if prop_name:
         for key, val in prop_abr.items():
             if val.get('abr') == prop_name:
-                err_msg = check_type(prop_val, val.get('type'), val.get('min'), val.get('max'), val.get('access_list'))
+                type_ = val.get('type')
+                err_msg = check_type(prop_val, type_, val.get('min'), val.get('max'), val.get('access_list'))
                 if err_msg != '':
                     update.message.reply_text(
                         text=err_msg + '\n\nДля провторной попытки, выберите аккаунт из /botlist и нажмите : ' + bot_prop.BTN_SETTINGS,
@@ -196,6 +210,23 @@ def set_prop(update, context):
                         else:
                             data = [(acc_id, key, prop_val), ]
                             Properties.insert_many(data, fields=[Properties.acc_id, Properties.key, Properties.val]).execute()
+                            
+                        if 'proxi' in type_:
+                            bk_name = type_.split(':')[1]
+                            proxy_json = json.loads(Account.select().where(Account.id == acc_id).get().proxies.replace('`','"'))
+                            proxy_json[bk_name]['https'] = prop_val
+                            proxy_json[bk_name]['http'] = prop_val
+                            proxy_str = json.dumps(proxy_json).replace('"', '`')
+                            Account.update(proxies=proxy_str).where((Account.id == acc_id)).execute()
+                        elif 'account' in type_:
+                            bk_name = type_.split(':')[1]
+                            account_json = json.loads(Account.select().where(Account.id == acc_id).get().accounts.replace('`','"'))
+                            account_json[bk_name]['login'] = prop_val.split('/')[0].strip()
+                            account_json[bk_name]['password'] = prop_val.split('/')[1].strip()
+                            account_str = json.dumps(account_json).replace('"', '`')
+                            Account.update(accounts=account_str).where((Account.id == acc_id)).execute()
+                            
+                        
                         update.message.reply_text(
                             text='Новое значение *' + prop_name +
                                  '*\nустановлено:' + Properties.select().where((Properties.acc_id == acc_id) & (Properties.key == key)).get().val + '\n\n' +
@@ -209,6 +240,8 @@ def choose_prop(update, context):
     markup = ReplyKeyboardRemove()
     text = update.message.text
     v_key = ''
+    proxy = ''
+    account = ''
     for key, val in prop_abr.items():
         if val.get('abr') == text:
             v_key = key
@@ -222,12 +255,28 @@ def choose_prop(update, context):
                 if dop_indo:
                     dop_indo + ', '
                 dop_indo = 'допустимые значения: ' + str(val.get('access_list')).replace("'", '')
+            elif 'proxi:' in val.get('type'):
+                proxy = val.get('type').split(':')[1]
+                dop_indo = 'только https прокси формата user:password@ip:port или ip:port'
+            elif 'account:' in val.get('type'):
+                account = val.get('type').split(':')[1]
+                dop_indo = 'логин и пароль через / (слеш) в формате: login/password'
     acc_id = context.user_data.get('acc_id')
     cur_val = 'auto'
     try:
-        cur_val = Properties.select().where((Properties.acc_id == acc_id) & (Properties.key == v_key)).get().val
-    except:
-        pass
+        if proxy == '':
+            cur_val = Properties.select().where((Properties.acc_id == acc_id) & (Properties.key == v_key)).get().val
+        elif proxy:
+            proxy_str = Account.select().where(Account.id == acc_id).get().proxies.replace('`','"').replace('https://', '')
+            prntb(proxy_str)
+            cur_val = json.loads(proxy_str).get(proxy, 'Proxy not found').get('https', 'HTTPS Proxy not found')
+        elif account:
+            account_srt = Account.select().where(Account.id == acc_id).get().accounts.replace('`','"').replace('https://', '')
+            prntb(account_srt)
+            account_json = json.loads(account_srt)
+            cur_val = account_json.get(account, 'BK not found').get('login', 'login not found') + '/' + account_json.get(account, 'BK not found').get('password', 'password not found')
+    except Exception as e:
+        prntb(str(e))
     update.message.reply_text(
         text='*' + text + '*: ' + cur_val +
              '\n\n''*Ограничения по настройке*:\n' + dop_indo + '\n\n' + bot_prop.MSG_PUT_VAL,
@@ -389,14 +438,18 @@ def button(update, context):
             else:
                 prop_btn = []
 
-                is_junior = (User.select().where(User.id == user_id).get().role == 'junior')
+                user_role = User.select().where(User.id == user_id).get().role
                 for key, val in prop_abr.items():
+                    
                     abr = None
-                    if is_junior:
+                    if user_role == 'admin':
+                            abr = val.get('abr')
+                    elif user_role == 'junior':
                         if key in ('SUMM', 'WORK_HOUR_END'):
                             abr = val.get('abr')
                     else:
-                        abr = val.get('abr')
+                        if key not in ('FONBET_U', 'FONBET_P', 'OLIMP_U', 'OLIMP_P'):
+                            abr = val.get('abr')
                     if abr:
                         prop_btn.append(abr)
 
