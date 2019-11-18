@@ -257,6 +257,7 @@ class FonbetBot:
             payload["sign"] = sign
             data = get_dumped_payload(payload)
             prnt('BET_FONBET.PY: Fonbet, sign_in request: ' + str(self.account['password'].encode()) + ' ' + str(data), 'hide')
+            req_time_start = round(time.time())
             resp = requests_retry_session_post(
                 self.common_url.format("login"),
                 headers=self.fonbet_headers,
@@ -273,7 +274,7 @@ class FonbetBot:
             if res.get('result', '') == 'error':
                 if 'duplicate random value' in res.get('errorMessage'):
                     time.sleep(uniform(1,3))
-                    prnt('current pid: ' + os.getpid())
+                    prnt('current pid: ' + str(os.getpid()) + ', sec: ' + str(round(time.time()) - req_time_start))
                 raise LoadException('Fonbet: ' + res.get('errorMessage'))
 
             if "fsid" not in res:
