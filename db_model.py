@@ -15,11 +15,10 @@ bks = ["fonbet", "olimp", "auto"]
 prop_abr = {
     "FONBET_U": {"abr": "УЗ Фонбет", "type": "account:fonbet", "max": "", "min": "", "access_list": [], "error": ""},
     "FONBET_P": {"abr": "Прокси Фонбет", "type": "proxi:fonbet", "max": "", "min": "", "access_list": [], "error": ""},
-    
+
     "OLIMP_U": {"abr": "УЗ Олимп", "type": "account:olimp", "max": "", "min": "", "access_list": [], "error": ""},
     "OLIMP_P": {"abr": "Прокси Олимп", "type": "proxi:olimp", "max": "", "min": "", "access_list": [], "error": ""},
-    
-    
+
     "FORK_SLICE": {"abr": "Уникальность ставок, %", "type": "int", "max": "90", "min": "0", "access_list": [], "error": ""},
 
     "MIN_PROC": {"abr": "% Вилки ОТ", "type": "float", "max": "10", "min": "0", "access_list": [], "error": ""},  # !
@@ -55,7 +54,11 @@ prop_abr = {
     "ML_NOISE": {"abr": "ML: исключить шум", "type": "str", "max": "", "min": "", "access_list": ["вкл", "выкл"], "error": ""},
     # "POUR_INTO": {"abr": "Перелить в", "type": "str", "max": "", "min": "", "access_list": bks, "error": ""},
     "DOUBLE_BET": {"abr": "Дубли ставок", "type": "str", "max": "", "min": "", "access_list": ["вкл", "выкл"], "error": ""},
-    "MAX_BET_FONBET": {"abr": "MAX BET в Fonbet", "type": "int", "max": "1000", "min": "0", "access_list": ["0", "100", "200", "300", "400", "500", "600", "700", "800", "900", "1000"], "error": ""},
+    "MAX_BET_FONBET":
+        {
+            "abr": "MAX BET в Fonbet", "type": "int", "max": "1000", "min": "0",
+            "access_list": ["0", "50", "90", "100", "200", "300", "400", "500", "600", "700", "800", "900", "1000"], "error": ""
+        },
     # "SERVER_OLIMP": {"abr": "Сервер Олимп", "type": "str", "max": "", "min": "", "access_list": [], "error": ""},
     "TEST_OTH_SPORT": {"abr": "Новые виды спорта", "type": "str", "max": "", "min": "", "access_list": ["вкл", "выкл"], "error": ""},
     "SALE_BET": {"abr": "НЕвыкуп при потере, %", "type": "int", "max": "100", "min": "0", "access_list": [], "error": ""},
@@ -161,7 +164,7 @@ def get_prop_str(id: int) -> str:
     return info_accs + res
 
 
-def send_message_bot(user_id: int, msg: str, admin_list = None):
+def send_message_bot(user_id: int, msg: str, admin_list=None):
     Message.insert({
         Message.to_user: user_id,
         Message.text: msg.strip(),
@@ -177,6 +180,7 @@ def send_message_bot(user_id: int, msg: str, admin_list = None):
                     Message.file_type: 'message'
                 }).execute()
     return True
+
 
 if __name__ == '__main__':
     pass
