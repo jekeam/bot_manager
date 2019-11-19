@@ -879,6 +879,9 @@ if __name__ == '__main__':
                         msg_str = msg_str + 'Сделано минусовы выкупов: {}->{}'.format(cnt_fork_fail_old, cnt_fail) + '\n'
                         cnt_fork_fail_old = cnt_fail
 
+                    if group_limit_id == '4' and not start_message_send:
+                        msg_str = msg_str + 'Обнаружена порезка до 4й группы\n'
+
                     msg_err = ''
                     if bk2.get_acc_info('bet').lower() != 'Нет'.lower():
                         msg_err = msg_err + '\n' + 'обнаружена блокировка ставки в Фонбет, аккаунт остановлен!'
@@ -886,21 +889,18 @@ if __name__ == '__main__':
                     if bk2.get_acc_info('pay').lower() != 'Нет'.lower():
                         msg_err = msg_err + '\n' + 'обнаружена блокировка вывода, нужно пройти верификацию в Фонбет, аккаунт остановлен!'
 
-                    if group_limit_id == '4' and not start_message_send:
-                        msg_str = msg_str + 'Обнаружена порезка до 4й группы\n'
-
                     if bal_small:
                         msg_err = msg_err + '\n' + 'аккаунт остановлен: денег в одной из БК не достаточно для работы, просьба выровнять балансы.\n' + bk1_name + ': ' + str(
                             bal1) + '\n' + bk2_name + ': ' + str(bal2)
-
-                    if msg_err != '':
-                        prnt(msg_err.strip())
-                        raise Shutdown(msg_err.strip())
 
                     if msg_str != msg_str_old:
                         msg_str_old = msg_str
                         if msg_str:
                             send_message_bot(USER_ID, str(ACC_ID) + ': ' + msg_str, ADMINS)
+
+                    if msg_err != '':
+                        prnt(msg_err.strip())
+                        raise Shutdown(msg_err.strip())
 
                     if server_forks:
                         for key, val_json in sorted(server_forks.items(), key=lambda x: random.random()):
