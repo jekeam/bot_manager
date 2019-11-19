@@ -999,9 +999,9 @@ if __name__ == '__main__':
                                 info = ''
 
                             if (
-                                (event_type in ('football', 'hockey') and test_oth_sport == 'выкл')
+                                (event_type in ('football', 'hockey'))
                                 or
-                                (event_type not in ('football', 'hockey') and test_oth_sport == 'вкл' and  base_line)
+                                (event_type not in ('football', 'hockey') and test_oth_sport == 'вкл' and base_line)
                             ):
                                 if vect1 and vect2:
                                     # if group_limit_id == '4' and vect2 == 'UP':
