@@ -273,7 +273,7 @@ class FonbetBot:
 
             if res.get('result', '') == 'error':
                 if 'duplicate random value' in res.get('errorMessage'):
-                    random_time = uniform(1,3)
+                    random_time = uniform(1, 3)
                     prnt('random_time: ' + str(random_time))
                     time.sleep(random_time)
                     prnt('current pid: ' + str(os.getpid()) + ', sec: ' + str(round(time.time()) - req_time_start))
