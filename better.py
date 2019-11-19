@@ -1000,7 +1000,7 @@ if __name__ == '__main__':
 
                                 info = ''
 
-                            if ((event_type in ('football', 'hockey') and test_oth_sport == 'выкл') or (event_type not in ('football', 'hockey') and test_oth_sport == 'вкл')):
+                            if (event_type in ('football', 'hockey') and test_oth_sport == 'выкл') or (event_type not in ('football', 'hockey') and test_oth_sport == 'вкл'):
                                 if vect1 and vect2:
                                     # if group_limit_id == '4' and vect2 == 'UP':
                                     #     prnt('Вилка исключена, т.к. акк порезан до 4й группы и вектор в фонбет UP', 'hide')
