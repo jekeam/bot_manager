@@ -293,6 +293,31 @@ def start(update, context):
         msg = 'Ваш ID в тегерамм: ' + str(update.message.chat.id)
     update.message.reply_text(msg, parse_mode=telegram.ParseMode.MARKDOWN)
 
+    
+def add_day(update, context):
+    if User.select().where(User.id == update.message.chat.id).get().role == 'admin':
+        comm = update.message.text
+        
+        c, acc_id, days = comm.split(' ')
+        
+        date_end = Account.select().where(Account.id == acc_id).get().date_end
+        
+        if date_end: 
+            date_end_str = datetime.datetime.fromtimestamp(date_end).strftime('%d.%m.%Y')
+        
+            date_plus = 60*60*24*int(days)
+            date_end_new = date_end + date_plus
+            
+            Account.update(date_end=date_end_new).where((Account.id == acc_id)).execute()
+            date_end_new_db = Account.select().where(Account.id == acc_id).get().date_end
+            date_end_new_db_str = datetime.datetime.fromtimestamp(date_end_new_db).strftime('%d.%m.%Y')
+            
+            admin_list = User.select().where(User.role == 'admin')
+            for admin in admin_list:
+                context.bot.send_message(admin.id, 'Аккаунт {} с датой окончания {}, продлен на {} дней, текущая дата окончания: {}'.format(acc_id, date_end_str, days, date_end_new_db_str))
+        else:
+            update.message.reply_text('Дата окончания у аккаунта №'+str(acc_id)+' не обнаружена')
+
 
 def get_time(update, context):
     update.message.reply_text('Time: ' + str(int(datetime.datetime.timestamp(datetime.datetime.now()))))
@@ -631,6 +656,7 @@ if __name__ == '__main__':
     updater.dispatcher.add_handler(CommandHandler('matches', matches))
     updater.dispatcher.add_handler(CommandHandler('time', get_time))
     updater.dispatcher.add_handler(CommandHandler('botstat', botstat))
+    updater.dispatcher.add_handler(CommandHandler('add_day', add_day))
     updater.dispatcher.add_handler(CallbackQueryHandler(button))
     updater.dispatcher.add_handler(RegexHandler(patterns, choose_prop))
     updater.dispatcher.add_handler(RegexHandler('^(' + bot_prop.BTN_CLOSE + ')$', close_prop))
