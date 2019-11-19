@@ -743,6 +743,8 @@ if __name__ == '__main__':
                 bal2 = bk2.get_balance()  # Баланс в БК2
                 total_bet = int(get_prop('summ'))
 
+                test_oth_sport = get_prop('test_oth_sport', 'выкл')
+
                 if not DEBUG:
                     server_ip = get_prop('server_ip')
                 else:
@@ -767,7 +769,6 @@ if __name__ == '__main__':
                 prnt('IP-адрес сервера: ' + server_ip + ':8888')
                 prnt('Баланс в БК Олимп: ' + str(bal1))
                 prnt('Баланс в БК Фонбет: ' + str(bal2))
-
                 prnt('Блокировка вывода: ' + str(bk2.get_acc_info('pay')))
                 prnt('Блокировка ставки: ' + str(bk2.get_acc_info('bet')))
                 group_limit_id = str(bk2.get_acc_info('group'))
@@ -997,14 +998,10 @@ if __name__ == '__main__':
 
                                 info = ''
 
-                            # check_acc = False
-                            # if str(ACC_ID) in ('44', '74', '18'):
-                            #     check_acc = True
-
                             if (
-                                    # ( event_type in ('football', 'hockey') and not check_acc ) or
-                                    (event_type in ('football', 'hockey'))  # or
-                                    # ( check_acc and event_type not in ('football', 'hockey') and base_line)
+                                (event_type in ('football', 'hockey') and test_oth_sport == 'выкл')
+                                or
+                                (event_type not in ('football', 'hockey') and test_oth_sport == 'вкл' and  base_line)
                             ):
                                 if vect1 and vect2:
                                     # if group_limit_id == '4' and vect2 == 'UP':
