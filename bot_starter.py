@@ -35,4 +35,4 @@ if __name__ == '__main__':
                     print('start_sleep: ', acc.id)  # acc.work_dir,
                     acc_start = Thread(target=start, args=(acc.id, 'start_sleep'))  # acc.work_dir,
                 acc_start.start()
-            time.sleep(2)
+            time.sleep(5)
