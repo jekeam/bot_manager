@@ -1002,9 +1002,9 @@ if __name__ == '__main__':
 
                             if (event_type in ('football', 'hockey') and test_oth_sport == 'выкл') or (event_type not in ('football', 'hockey') and test_oth_sport == 'вкл'):
                                 if vect1 and vect2:
-                                    # if group_limit_id == '4' and vect2 == 'UP':
-                                    #     prnt('Вилка исключена, т.к. акк порезан до 4й группы и вектор в фонбет UP', 'hide')
-                                    if deff_max < 3 and k1 > 0 < k2:
+                                    if event_type == 'tennis' and not base_line:
+                                        pass
+                                    elif deff_max < 3 and k1 > 0 < k2:
                                         round_bet = int(get_prop('round_fork'))
                                         total_bet = round(randint(total_bet_min, total_bet_max) / round_bet) * round_bet
                                         prnt('total_bet random: ' + str(total_bet), 'hide')
