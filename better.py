@@ -536,18 +536,19 @@ def go_bets(wag_ol, wag_fb, key, deff_max, vect1, vect2, sc1, sc2, created, even
 time_out_cnt = 0
 connection_error_cnt = 0
 send_msg = False
+
+
 def run_client():
     global server_forks
     global shutdown
     global server_ip
-    
+
     global ADMINS
     global ACC_ID
-    
+
     global time_out_cnt
     global send_msg
     global connection_error_cnt
-    
 
     long_pool_wait = randint(30, 60)
     prnt('Long pool sec: ' + str(long_pool_wait))
@@ -563,22 +564,22 @@ def run_client():
                 err_str = 'Основной поток завершен и run_client тоже.'
                 conn.close()
                 raise Shutdown(err_str)
-            
+
             # prnt('Get /get_forks', hide=True)
             # prnt('Get /get_forks')
-            
+
             conn.request('GET', '/get_forks')
             rs = conn.getresponse()
             data = rs.read().decode('utf-8')
             data_json = json.loads(data)
             server_forks = data_json
-            
+
             # prnt('End /get_forks', hide=True)
             # prnt('End /get_forks, len: ' + str(len(data_json)) + '\n' + str(data_json))
-            
+
             # if str(ACC_ID) == '72':
             #     raise ValueError('ConnectionRefusedError')
-            
+
             time.sleep(1)
             time_out_cnt = 0
             connection_error_cnt = 0
@@ -598,7 +599,7 @@ def run_client():
                 subprocess.call('systemctl restart scan.service', shell=True)
                 for admin in ADMINS:
                     msg_err = str(ACC_ID) + ': Возникла ошибка при запросе катировок со сканнера, сканнер перезапущен автоматически, без обновления прокси ' + str(msg_err)
-                    send_message_bot(admin, msg_err.replace('_','\\_'))
+                    send_message_bot(admin, msg_err.replace('_', '\\_'))
                 send_msg = True
         elif 'ConnectionRefusedError'.lower() in msg_err.lower() and not send_msg:
             connection_error_cnt = connection_error_cnt + 1
@@ -609,7 +610,7 @@ def run_client():
                 subprocess.call('systemctl restart scan.service', shell=True)
                 for admin in ADMINS:
                     msg_err = str(ACC_ID) + ': Возникла ошибка при запросе катировок со сканнера, прокси запушены и сканнер перезапущен автоматически, ' + str(msg_err)
-                    send_message_bot(admin, msg_err.replace('_','\\_'))
+                    send_message_bot(admin, msg_err.replace('_', '\\_'))
                 send_msg = True
 
         time.sleep(long_pool_wait)
@@ -877,7 +878,10 @@ if __name__ == '__main__':
                         msg_str = msg_str + 'Проставлено вилок: {}'.format(len(cnt_fork_success)) + '\n'
                         msg_str = msg_str + 'Сделано минусовы выкупов: {}->{}'.format(cnt_fork_fail_old, cnt_fail) + '\n'
                         cnt_fork_fail_old = cnt_fail
-                        
+
+                    if group_limit_id == '4' and not start_message_send:
+                        msg_str = msg_str + 'Обнаружена порезка до 4й группы\n'
+
                     msg_err = ''
                     if bk2.get_acc_info('bet').lower() != 'Нет'.lower():
                         msg_err = msg_err + '\n' + 'обнаружена блокировка ставки в Фонбет, аккаунт остановлен!'
@@ -885,20 +889,18 @@ if __name__ == '__main__':
                     if bk2.get_acc_info('pay').lower() != 'Нет'.lower():
                         msg_err = msg_err + '\n' + 'обнаружена блокировка вывода, нужно пройти верификацию в Фонбет, аккаунт остановлен!'
 
-                    if group_limit_id == '4' and not start_message_send:
-                        msg_str = msg_str + 'Обнаружена порезка до 4й группы\n'
-
                     if bal_small:
-                        msg_err = msg_err + '\n' + 'аккаунт остановлен: денег в одной из БК не достаточно для работы, просьба выровнять балансы.\n' + bk1_name + ': ' + str(bal1) + '\n' + bk2_name + ': ' + str(bal2)
-
-                    if msg_err != '':
-                        prnt(msg_err.strip())
-                        raise Shutdown(msg_err.strip())
+                        msg_err = msg_err + '\n' + 'аккаунт остановлен: денег в одной из БК не достаточно для работы, просьба выровнять балансы.\n' + bk1_name + ': ' + str(
+                            bal1) + '\n' + bk2_name + ': ' + str(bal2)
 
                     if msg_str != msg_str_old:
                         msg_str_old = msg_str
                         if msg_str:
                             send_message_bot(USER_ID, str(ACC_ID) + ': ' + msg_str, ADMINS)
+
+                    if msg_err != '':
+                        prnt(msg_err.strip())
+                        raise Shutdown(msg_err.strip())
 
                     if server_forks:
                         for key, val_json in sorted(server_forks.items(), key=lambda x: random.random()):
@@ -998,11 +1000,7 @@ if __name__ == '__main__':
 
                                 info = ''
 
-                            if (
-                                (event_type in ('football', 'hockey'))
-                                or
-                                (event_type not in ('football', 'hockey') and test_oth_sport == 'вкл' and base_line)
-                            ):
+                            if (event_type in ('football', 'hockey') and test_oth_sport == 'выкл') or (event_type not in ('football', 'hockey') and test_oth_sport == 'вкл'):
                                 if vect1 and vect2:
                                     # if group_limit_id == '4' and vect2 == 'UP':
                                     #     prnt('Вилка исключена, т.к. акк порезан до 4й группы и вектор в фонбет UP', 'hide')
@@ -1040,9 +1038,9 @@ if __name__ == '__main__':
                                                 is_bet = 0
                                                 cur_proc = round((1 - l) * 100, 2)
                                                 fork_slice = int(get_prop('FORK_SLICE', 50))
-                                                
+
                                                 prnt('% уникальности: ' + str(fork_slice))
-                                                
+
                                                 if fork_slice:
                                                     sql = cnt_acc_sql \
                                                         .replace(':cur_proc', str(cur_proc)) \
@@ -1053,17 +1051,17 @@ if __name__ == '__main__':
 
                                                     prnt('SQL:\n', 'hide')
                                                     prnt(sql, 'hide')
-                                                    
+
                                                     cursor = db.execute_sql(sql)
                                                     cnt_act_acc = cursor.fetchone()[0]
-                                                    
-                                                    prnt('cnt_act_acc: ' + str(cnt_act_acc))                                                    
-                                                    
+
+                                                    prnt('cnt_act_acc: ' + str(cnt_act_acc))
+
                                                     is_bet = randint(1, 100)
-                                                    
+
                                                     prnt('Активных аккаунтов на вилку: ' + str(cnt_act_acc))
                                                     prnt('Случайное число: ' + str(is_bet) + ', => ' + str(fork_slice))
-                                                    
+
                                                 if fork_slice <= is_bet or cnt_act_acc <= 5 or fork_slice == 0:
                                                     prnt('Go bets: ' + key + ' ' + info)
 

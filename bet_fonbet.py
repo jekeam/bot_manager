@@ -273,7 +273,7 @@ class FonbetBot:
 
             if res.get('result', '') == 'error':
                 if 'duplicate random value' in res.get('errorMessage'):
-                    random_time = uniform(1,3)
+                    random_time = uniform(1, 3)
                     prnt('random_time: ' + str(random_time))
                     time.sleep(random_time)
                     prnt('current pid: ' + str(os.getpid()) + ', sec: ' + str(round(time.time()) - req_time_start))
@@ -855,7 +855,7 @@ class FonbetBot:
         sign = hmac.new(key=self.account['password'].encode(), msg=msg.encode(), digestmod=sha512).hexdigest()
         payload["sign"] = sign
         data = get_dumped_payload(payload)
-        url = 'https://23.111.26.249/session/coupon/info?lang=en'
+        # url = 'https://23.111.238.130/session/coupon/info?lang=en'
         prnt('BET_FONBET.PY - get_coupon_info rq: ' + str(url) + ': ' + str(data), 'hide')
         resp = requests_retry_session().post(
             url,

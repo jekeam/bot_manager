@@ -150,7 +150,7 @@ def check_type(val: str, type_: str, min_: str, max_: str, access_list):
     err_limits = ''
 
     try:
-        if 'proxi' in type_ or 'account' in  type_:
+        if 'proxi' in type_ or 'account' in type_:
             pass
         else:
             if type_ == 'int':
@@ -160,7 +160,7 @@ def check_type(val: str, type_: str, min_: str, max_: str, access_list):
                 val = val
             else:
                 type_ = str
-                
+
             val = type_(val)
     except Exception:
         err_str = 'Неверный тип значения, ожидается: {}'.format(str(type_))
@@ -174,16 +174,16 @@ def check_type(val: str, type_: str, min_: str, max_: str, access_list):
 
     if err_limits:
         err_str = err_str + '\n' + err_limits
-        
+
     if 'proxi' in str(type_):
-        if val.count(':') == 1 or (val.count(':') == 2 and val.count('@') ==  1):
+        if val.count(':') == 1 or (val.count(':') == 2 and val.count('@') == 1):
             pass
         else:
             err_str = 'Неверный формат прокси'
     if 'account' in str(type_):
         if val.count('/') != 1:
             err_str = 'Неверный формат аккаунта'
-        
+
     return err_str.strip()
 
 
@@ -210,23 +210,22 @@ def set_prop(update, context):
                         else:
                             data = [(acc_id, key, prop_val), ]
                             Properties.insert_many(data, fields=[Properties.acc_id, Properties.key, Properties.val]).execute()
-                            
+
                         if 'proxi' in type_:
                             bk_name = type_.split(':')[1]
-                            proxy_json = json.loads(Account.select().where(Account.id == acc_id).get().proxies.replace('`','"'))
+                            proxy_json = json.loads(Account.select().where(Account.id == acc_id).get().proxies.replace('`', '"'))
                             proxy_json[bk_name]['https'] = 'https://' + prop_val
                             proxy_json[bk_name]['http'] = 'http://' + prop_val
                             proxy_str = json.dumps(proxy_json).replace('"', '`')
                             Account.update(proxies=proxy_str).where((Account.id == acc_id)).execute()
                         elif 'account' in type_:
                             bk_name = type_.split(':')[1]
-                            account_json = json.loads(Account.select().where(Account.id == acc_id).get().accounts.replace('`','"'))
+                            account_json = json.loads(Account.select().where(Account.id == acc_id).get().accounts.replace('`', '"'))
                             account_json[bk_name]['login'] = prop_val.split('/')[0].strip()
                             account_json[bk_name]['password'] = prop_val.split('/')[1].strip()
                             account_str = json.dumps(account_json).replace('"', '`')
                             Account.update(accounts=account_str).where((Account.id == acc_id)).execute()
-                            
-                        
+
                         update.message.reply_text(
                             text='Новое значение *' + prop_name +
                                  '*\nустановлено:' + Properties.select().where((Properties.acc_id == acc_id) & (Properties.key == key)).get().val + '\n\n' +
@@ -267,11 +266,11 @@ def choose_prop(update, context):
         if proxy == '':
             cur_val = Properties.select().where((Properties.acc_id == acc_id) & (Properties.key == v_key)).get().val
         elif proxy:
-            proxy_str = Account.select().where(Account.id == acc_id).get().proxies.replace('`','"').replace('https://', '')
+            proxy_str = Account.select().where(Account.id == acc_id).get().proxies.replace('`', '"').replace('https://', '')
             prntb(proxy_str)
             cur_val = json.loads(proxy_str).get(proxy, 'Proxy not found').get('https', 'HTTPS Proxy not found')
         elif account:
-            account_srt = Account.select().where(Account.id == acc_id).get().accounts.replace('`','"').replace('https://', '')
+            account_srt = Account.select().where(Account.id == acc_id).get().accounts.replace('`', '"').replace('https://', '')
             prntb(account_srt)
             account_json = json.loads(account_srt)
             cur_val = account_json.get(account, 'BK not found').get('login', 'login not found') + '/' + account_json.get(account, 'BK not found').get('password', 'password not found')
@@ -293,30 +292,30 @@ def start(update, context):
         msg = 'Ваш ID в тегерамм: ' + str(update.message.chat.id)
     update.message.reply_text(msg, parse_mode=telegram.ParseMode.MARKDOWN)
 
-    
+
 def add_day(update, context):
     if User.select().where(User.id == update.message.chat.id).get().role == 'admin':
         comm = update.message.text
-        
+
         c, acc_id, days = comm.split(' ')
-        
+
         date_end = Account.select().where(Account.id == acc_id).get().date_end
-        
-        if date_end: 
+
+        if date_end:
             date_end_str = datetime.datetime.fromtimestamp(date_end).strftime('%d.%m.%Y')
-        
-            date_plus = 60*60*24*int(days)
+
+            date_plus = 60 * 60 * 24 * int(days)
             date_end_new = date_end + date_plus
-            
+
             Account.update(date_end=date_end_new).where((Account.id == acc_id)).execute()
             date_end_new_db = Account.select().where(Account.id == acc_id).get().date_end
             date_end_new_db_str = datetime.datetime.fromtimestamp(date_end_new_db).strftime('%d.%m.%Y')
-            
+
             admin_list = User.select().where(User.role == 'admin')
             for admin in admin_list:
                 context.bot.send_message(admin.id, 'Аккаунт {} с датой окончания {}, продлен на {} дней, текущая дата окончания: {}'.format(acc_id, date_end_str, days, date_end_new_db_str))
         else:
-            update.message.reply_text('Дата окончания у аккаунта №'+str(acc_id)+' не обнаружена')
+            update.message.reply_text('Дата окончания у аккаунта №' + str(acc_id) + ' не обнаружена')
 
 
 def get_time(update, context):
@@ -440,7 +439,8 @@ def button(update, context):
         reply_markup = InlineKeyboardMarkup(keyboard)
 
         query.message.edit_text(
-            text=bot_prop.MSG_START_STOP + ' [ID: ' + str(acc_info.get().id) + '@' + str(acc_info.get().user_id) + '](tg://user?id=' + str(acc_info.get().user_id) + ')\n' + get_prop_str(acc_info.get().id),
+            text=bot_prop.MSG_START_STOP + ' [ID: ' + str(acc_info.get().id) + '@' + str(acc_info.get().user_id) + '](tg://user?id=' + str(acc_info.get().user_id) + ')\n' + get_prop_str(
+                acc_info.get().id),
             reply_markup=reply_markup,
             parse_mode=telegram.ParseMode.MARKDOWN
         )
@@ -464,10 +464,10 @@ def button(update, context):
 
                 user_role = User.select().where(User.id == user_id).get().role
                 for key, val in prop_abr.items():
-                    
+
                     abr = None
                     if user_role == 'admin':
-                            abr = val.get('abr')
+                        abr = val.get('abr')
                     elif user_role == 'junior':
                         if key in ('SUMM', 'WORK_HOUR_END'):
                             abr = val.get('abr')
