@@ -997,6 +997,8 @@ if __name__ == '__main__':
                                 prnt('name: ' + str(name))
                                 prnt('key: ' + str(key))
                                 prnt('val_json: ' + str(val_json))
+                                prnt('vect1: ' + str(vect1))
+                                prnt('vect2: ' + str(vect2))
 
                                 info = ''
 
