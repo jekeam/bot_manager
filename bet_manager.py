@@ -699,6 +699,8 @@ class BetManager:
                     self.timeout_left = round(float(60 * 2.5))
                     if DEBUG:
                         self.timeout_left = float(20)
+                else:
+                    self.timeout_left = round(float(60 * 2.5))
 
                 cur_time = round(int(time()))
                 self.time_left = (self.time_start + self.timeout_left) - cur_time
