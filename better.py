@@ -328,6 +328,7 @@ def go_bets(wag_ol, wag_fb, key, deff_max, vect1, vect2, sc1, sc2, created, even
                     'new_bet_kof': 0,
                     'sale_profit': 0,
                     'event_type': event_type,
+                    'key': key,
                     'err': 'ok'
                 },
             }

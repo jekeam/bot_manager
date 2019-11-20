@@ -12,7 +12,7 @@ import copy
 import re
 
 from retry_requests import requests_retry_session, requests_retry_session_post
-
+import requests
 from meta_ol import ol_url_api, ol_payload, ol_headers, get_xtoken_bet
 from meta_fb import fb_payload, fb_payload_bet, get_random_str, get_dumped_payload, get_urls, get_common_url
 from meta_fb import fb_headers, get_new_bets_fonbet, payload_req, payload_coupon_sum, payload_coupon_sell, fb_payload_max_bet
@@ -72,6 +72,7 @@ class BetManager:
         self.side_team = bk_container['side_team']
         self.bet_type = bk_container['bet_type']
         self.event_type = bk_container['event_type']
+        self.key = bk_container.get('key', '')
         self.dop_stat = dict()
         # dynamic params
         self.cur_sc = None
@@ -919,6 +920,7 @@ class BetManager:
                 self.session['session'] = res.get('fsid')
                 self.session['balance'] = float(res.get('saldo'))
                 self.session['currency'] = res.get('currency').get('currency')
+                self.session['group_limit_id'] = res.get('limitGroup', '0')
 
             if not self.session.get('session'):
                 raise SessionNotDefined(self.msg_err.format(sys._getframe().f_code.co_name, 'session_id not defined'))
@@ -1459,6 +1461,10 @@ class BetManager:
 
                 prnt(self.msg.format(sys._getframe().f_code.co_name, 'bet successful, reg_id: ' + str(self.reg_id)))
                 shared[self.bk_name + '_err'] = 'ok'
+
+                url_rq = 'http://' + get_prop('server_ip') + ':8888/set/fonbet_maxbet_fact/' + self.key + '/' + str(self.session.get('group_limit_id')) + '/' + str(self.sum_bet)
+                rs = requests.get(url_rq).text
+                prnt(self.msg.format(sys._getframe().f_code.co_name, 'save url_rq: {}, answer: {}'.format(url_rq, rs)))
 
             if err_code == 1:
 
