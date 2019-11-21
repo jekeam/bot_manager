@@ -221,7 +221,14 @@ def set_prop(update, context):
                         elif 'account' in type_:
                             bk_name = type_.split(':')[1]
                             account_json = json.loads(Account.select().where(Account.id == acc_id).get().accounts.replace('`', '"'))
-                            account_json[bk_name]['login'] = int(prop_val.split('/')[0].strip())
+
+                            login = prop_val.split('/')[0].strip()
+                            if re.match(r'^\d+$', login):
+                                login = int(login)
+                            else:
+                                login = str(login)
+
+                            account_json[bk_name]['login'] = login
                             account_json[bk_name]['password'] = prop_val.split('/')[1].strip()
                             account_str = json.dumps(account_json).replace('"', '`')
                             Account.update(accounts=account_str).where((Account.id == acc_id)).execute()
