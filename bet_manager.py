@@ -340,7 +340,8 @@ class BetManager:
                     self_opp.sale_bet(shared)
                     break
                 except (SaleError, CouponBlocked) as e:
-                    prnt(self.msg.format(sys._getframe().f_code.co_name, 'Ошибка: ' + e.__class__.__name__ + ' - ' + str(e) + '. Пробую проставить и пробую выкупить еще! (' + str(self.attempt_sale) + ')'))
+                    prnt(self.msg.format(sys._getframe().f_code.co_name,
+                                         'Ошибка: ' + e.__class__.__name__ + ' - ' + str(e) + '. Пробую проставить и пробую выкупить еще! (' + str(self.attempt_sale) + ')'))
                     sleep(15)
 
         def bet_done(shared):
@@ -912,23 +913,25 @@ class BetManager:
                         prnt(self.msg.format(sys._getframe().f_code.co_name, res.get('errorMessage', '')))
                         prnt(self.msg.format(sys._getframe().f_code.co_name, 'replay sign_in'))
                         return self.sign_in(shared)
+                    elif res.get('errorCode', -1) > 0:
+                        err_msg = self.msg.format(sys._getframe().f_code.co_name, res.get('errorMessage', '') + ': ' + res.get('errorValue'))
+                        prnt(err_msg)
+                        raise ValueError(err_msg)
                 except Exception as e:
                     exc_type, exc_value, exc_traceback = sys.exc_info()
                     err_msg_login = 'err(' + str(e.__class__.__name__) + '): ' + str(e) + '. ' + str(repr(traceback.format_exception(exc_type, exc_value, exc_traceback)))
                     prnt(self.msg_err.format(sys._getframe().f_code.co_name, err_msg_login))
 
-                self.session['session'] = res.get('fsid')
-                self.session['balance'] = float(res.get('saldo'))
-                self.session['currency'] = res.get('currency').get('currency')
+                self.session['session'] = res.get('fsid', '')
+                self.session['balance'] = float(res.get('saldo', 0.0))
+                self.session['currency'] = res.get('currency').get('currency', 'None')
                 self.session['group_limit_id'] = res.get('limitGroup', '0')
 
             if not self.session.get('session'):
                 raise SessionNotDefined(self.msg_err.format(sys._getframe().f_code.co_name, 'session_id not defined'))
 
             prnt(self.msg.format(sys._getframe().f_code.co_name, 'session: ' + str(self.session['session'])))
-            prnt(self.msg.format(sys._getframe().f_code.co_name, 'balance: ' +
-                                 str(self.session.get('balance')) + ' ' +
-                                 str(self.session.get('currency'))))
+            prnt(self.msg.format(sys._getframe().f_code.co_name, 'balance: ' + str(self.session.get('balance')) + ' ' + str(self.session.get('currency'))))
             # write_file(self.session_file, self.session['session'].strip())
 
             shared['sign_in_' + self.bk_name] = 'ok'
@@ -1576,7 +1579,7 @@ class BetManager:
                 err_str = self.msg_err.format(sys._getframe().f_code.co_name, res)
                 self.sign_in(shared)
                 return self.check_result(shared)
-                
+
         else:
             self.opposite_stat_get(shared)
             err_str = self.msg_err.format(sys._getframe().f_code.co_name, err_msg)
