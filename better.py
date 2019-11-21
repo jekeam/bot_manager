@@ -642,7 +642,7 @@ def recalc_bets(hide=True):
         total_bet = bet1 + bet2
 
 
-FONBET_USER = {'login': get_account_info('fonbet', 'login'), 'password': get_account_info('fonbet', 'password')}
+FONBET_USER = {'login': int(get_account_info('fonbet', 'login')), 'password': get_account_info('fonbet', 'password')}
 OLIMP_USER = {'login': get_account_info('olimp', 'login'), 'password': get_account_info('olimp', 'password')}
 
 bet1 = 0.  # Сумма ставки в БК1
