@@ -51,7 +51,7 @@ prop_abr = {
     # "FORK_TIME_TYPE": {"abr": "Тип времени вилки", "type": "str", "max": "", "min": "", "access_list": ["текущее", "общее"], "error": ""},
     "FIRST_BET_IN": {"abr": "Первая ставка в", "type": "str", "max": "", "min": "", "access_list": first_bet_in, "error": ""},
     "MAX_KOF": {"abr": "MAX коэф-т", "type": "float", "max": "1000", "min": "1.02", "access_list": [], "error": ""},
-    "ML_NOISE": {"abr": "ML: исключить шум", "type": "str", "max": "", "min": "", "access_list": ["вкл", "выкл"], "error": ""},
+    # "ML_NOISE": {"abr": "ML: исключить шум", "type": "str", "max": "", "min": "", "access_list": ["вкл", "выкл"], "error": ""},
     # "POUR_INTO": {"abr": "Перелить в", "type": "str", "max": "", "min": "", "access_list": bks, "error": ""},
     "DOUBLE_BET": {"abr": "Дубли ставок", "type": "str", "max": "", "min": "", "access_list": ["вкл", "выкл"], "error": ""},
     "MAX_BET_FONBET":
