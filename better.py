@@ -328,7 +328,6 @@ def go_bets(wag_ol, wag_fb, key, deff_max, vect1, vect2, sc1, sc2, created, even
                     'new_bet_kof': 0,
                     'sale_profit': 0,
                     'event_type': event_type,
-                    'key': key,
                     'err': 'ok'
                 },
             }
@@ -370,6 +369,7 @@ def go_bets(wag_ol, wag_fb, key, deff_max, vect1, vect2, sc1, sc2, created, even
             'side_team': '2',
             'max_bet': 0,
             'event_type': event_type,
+            'key': key,
         }
         if '(' in fonbet_bet_type:
             shared['olimp']['bet_total'] = float(re.findall(r'\((.*)\)', fonbet_bet_type)[0])
