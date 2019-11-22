@@ -15,7 +15,7 @@ from telegram.ext import Updater, CommandHandler, CallbackQueryHandler, MessageH
 from telegram.error import BadRequest
 from telegram.ext.callbackcontext import CallbackContext
 
-from db_model import Account, Message, User, Properties, get_user_str, send_message_bot, get_prop_str, prop_abr
+from db_model import Account, Message, User, Properties, get_user_str, send_message_bot, get_prop_str, prop_abr, get_trunc_sysdate
 import bot_prop
 from emoji import emojize
 
@@ -28,7 +28,9 @@ import re
 import json
 import ast
 from utils import build_menu
+from uuid import uuid1
 
+type_user = ('user', 'junior')
 
 def prntb(vstr, filename='bot.log'):
     Outfile = open(filename, "a+", encoding='utf-8')
@@ -344,11 +346,101 @@ def add_day(update, context):
             err_str = str(e) + ' ' + str(repr(traceback.format_exception(exc_type, exc_value, exc_traceback)))
             prntb(str(err_str))
             context.bot.send_message(user_sender, 'Для изменения дней аккаунта, нужно отправить команду в формате:\n*add_day acc_id days*,\nнапример *add_day 4 30*', parse_mode=telegram.ParseMode.MARKDOWN)
+
+
+def add(update, context):
+    global type_user
+    user_sender = update.message.chat.id
+    types = ('user', 'acc')
+    
+    if User.select().where(User.id == user_sender).get().role == 'admin':
+        try:  
+            comm = update.message.text
+            c, type_, id_, new_val = comm.split(' ')
+            admin_list = User.select().where(User.role == 'admin')
+            if type_ == 'user':
+                email, phone, role = new_val.split(';')
+                email = email.strip().lower()
+                phone = phone.strip().lower()
+                role = role.strip().lower()
+                if role not in type_user:
+                    raise ValueError('Role not found!')
+                try:
+                    user_info = User.select().where(User.id == id_).get()
+                    if user_info:
+                        for admin in admin_list:
+                            context.bot.send_message(admin.id, '[{}](tg://user?id={}): Пользователь уже в базе!'.format(id_, id_), parse_mode=telegram.ParseMode.MARKDOWN)
+                except Exception as e:
+                    if 'instance matching query does not exist' in str(e):
+                        User.create(id=id_, role=role, email=email, phone=phone)
+                        for admin in admin_list:
+                            context.bot.send_message(admin.id, '[{}](tg://user?id={}): Пользователь успешно добавлен!'.format(id_, id_), parse_mode=telegram.ParseMode.MARKDOWN)
+                    else:
+                        exc_type, exc_value, exc_traceback = sys.exc_info()
+                        err_str = str(e) + ' ' + str(repr(traceback.format_exception(exc_type, exc_value, exc_traceback)))
+                        prntb(str(err_str))
+            elif type_ == 'acc':
+                acc_copy, fbu, fbp, olu, olp, proxy = new_val.split(';')
+                if proxy.count(':') == 1 or (val.count(':') == 2 and val.count('@') == 1):
+                    pass
+                else:
+                    raise ValueError('Неверный формат прокси')
+                    
+                proxies = '{`fonbet`:{`http`:`http://' + proxy + '`,`https`:`https://' + proxy + '`},`olimp`:{`http`:`http://' + proxy + '`,`https`:`https://' + proxy + '`}}'
+                accounts = '{`olimp`:{`login`:`' + olu + '`,`password`:`' + olp + '`,`mirror`:`olimp.com`},`fonbet`:{`login`:' + fbu + ',`password`:`' + fbp + '`,`mirror`:`fonbet.com`}}'
+                try:
+                    user_info = User.select().where(User.id == id_).get()
+                    prop_new = Account.select().where(Account.id == acc_copy).get()
+                    if user_info:
+                        acc = Account.create(
+                            user=id_,
+                            key=uuid1(),
+                            date_end=get_trunc_sysdate(30),
+                            status='active',
+                            proxies=proxies,
+                            accounts=accounts
+                        )
+                    
+                        prop = (
+                            Properties.insert_from(
+                                Properties.select(acc.id, Properties.val, Properties.key).where(Properties.acc_id == acc_copy),
+                                fields=[Properties.acc_id, Properties.val, Properties.key]
+                            ).execute()
+                        )
+                        for admin in admin_list:
+                            context.bot.send_message(admin.id, '{}: Аккаунт успешно добавлен!'.format(acc))
+                except Exception as e:
+                    if 'instance matching query does not exist' in str(e):
+                        context.bot.send_message(user_sender, '{}: Пользователь не найден!'.format(id_))
+                    else:
+                        exc_type, exc_value, exc_traceback = sys.exc_info()
+                        err_str = str(e) + ' ' + str(repr(traceback.format_exception(exc_type, exc_value, exc_traceback)))
+                        prntb(str(err_str))
+            else:
+                raise ValueError('Type not found!')
+        except Exception as e:
+            exc_type, exc_value, exc_traceback = sys.exc_info()
+            err_str = str(e) + ' ' + str(repr(traceback.format_exception(exc_type, exc_value, exc_traceback)))
+            prntb(str(err_str))
+            context.bot.send_message(
+                user_sender, 
+                'Для добавления пользователя,\n' + \
+                'нужно прислать команду:\n' + \
+                '*add user id email;phone;role*:\n' + \
+                '\n' + \
+                'Для добавления аккаунта пользователю,\n' + \
+                'нужно прислать команду:\n' + \
+                '*add acc user_id copy_acc;fbu;fbp;olu;olp;proxy*:\n' + \
+                'proxy - указывать в формате login:pass@ip:port или ip:port\n'
+                '\n' + \
+                'Доступные значенения типов:\n' + ', '.join(map(str, types)),
+                parse_mode=telegram.ParseMode.MARKDOWN
+            )
             
 def change(update, context):
+    global type_user
     user_sender = update.message.chat.id
     types = ('user', 'acc', 'prop')
-    type_user = ('user', 'junior')
     type_acc = ('active', 'inactive', 'pause')
     
     if User.select().where(User.id == user_sender).get().role == 'admin':
@@ -445,6 +537,7 @@ def help(update, context):
             'Справка по команадам админа:\n\n' + \
             '/add_day номер_аккаунта колво_дней\n\n' + \
             '/change тип:аккаунт/юзер/настройки ИД новое_значение\n\n'
+            '/add acc ид_юзера копия_настроек;FB логин;FB пароль;O логин;O пароль;прокси\n\n'
         )
 
 
@@ -781,6 +874,7 @@ if __name__ == '__main__':
     updater.dispatcher.add_handler(CommandHandler('botstat', botstat))
     updater.dispatcher.add_handler(CommandHandler('add_day', add_day))
     updater.dispatcher.add_handler(CommandHandler('change', change))
+    updater.dispatcher.add_handler(CommandHandler('add', add))
     updater.dispatcher.add_handler(CallbackQueryHandler(button))
     updater.dispatcher.add_handler(RegexHandler(patterns, choose_prop))
     updater.dispatcher.add_handler(RegexHandler('^(' + bot_prop.BTN_CLOSE + ')$', close_prop))
