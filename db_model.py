@@ -6,7 +6,7 @@ from uuid import uuid1
 from playhouse.sqlite_ext import SqliteExtDatabase
 
 db = MySQLDatabase('bot_manager', user='root', password='131189_Ak', host='127.0.0.1', port=3306)
-# db = MySQLDatabase('bot_manager', user='root', password='', host='127.0.0.1', port=3306)
+# db = MySQLDatabase('bot_manager', user='phpmyadmin', password='some_pass', host='127.0.0.1', port=3306)
 
 first_bet_in = ["created", "notcreator", "fonbet", "olimp", "parallel", "auto"]
 
@@ -153,10 +153,10 @@ def get_prop_str(id: int) -> str:
 
     info_accs = ''
     for key, val in loads(Account.get_by_id(id).accounts.replace('`', '"')).items():
-        info_accs = info_accs + key.capitalize() + ': * ' + str(val.get('login')) + ' / ' + str(val.get('password')) + '*\n'
+        info_accs = info_accs + key.capitalize() + ': * ' + str(val.get('login', '')) + ' / ' + str(val.get('password')) + '*\n'
 
     for key, val in loads(Account.get_by_id(id).proxies.replace('`', '"')).items():
-        info_accs = info_accs + key.capitalize() + ': * ' + str(val.get('http').replace('http://', '')) + '*\n'
+        info_accs = info_accs + key.capitalize() + ': * ' + str(val.get('http', '').replace('http://', '')) + '*\n'
 
     for key, val in prop_abr.items():
         if key not in ('FONBET_U', 'FONBET_P', 'OLIMP_U', 'OLIMP_P'):
