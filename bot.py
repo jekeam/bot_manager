@@ -424,9 +424,14 @@ def change(update, context):
             prntb(str(err_str))
             context.bot.send_message(
                 user_sender, 
-                'Для изменения дней аккаунта, нужно отправить команду в формате:\n*change type id new_val*,\nнапример:\nchange user 5465456 junior или\nchange acc 1 inactive\n\n' +
-                'Доступные значенения типов:\n' + ', '.join(map(str, types)) + '\n'
-                'Доступные значенения для *user*:\n' + ', '.join(map(str, type_user)) + '\n'
+                'Для изменения дней аккаунта, нужно отправить команду в формате:\n' + \
+                '*change type id new_val*, например:\n' + \
+                'change user 5465456 junior или\n' + \
+                'change acc 1 inactive или\n' + \
+                'change prop 29 5 (копия с 5го на 29)\n' + \
+                '\n' + \
+                'Доступные значенения типов:\n' + ', '.join(map(str, types)) + '\n' + \
+                'Доступные значенения для *user*:\n' + ', '.join(map(str, type_user)) + '\n'  + \
                 'Доступные значенения для *acc*:\n' + ', '.join(map(str, type_acc)) + '\n', 
                 parse_mode=telegram.ParseMode.MARKDOWN
             )
