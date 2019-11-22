@@ -241,10 +241,12 @@ def set_prop(update, context):
                             account_str = json.dumps(account_json).replace('"', '`')
                             Account.update(accounts=account_str).where((Account.id == acc_id)).execute()
 
-                        msg_main = str(acc_id) + ': Новое значение *' + prop_name
-                        msg = msg_main + '*\nустановлено:' + Properties.select().where((Properties.acc_id == acc_id) & (Properties.key == key)).get().val + '\n\n' + \
-                        'Если хотите задать еще настройки, выберите аккаунт из /botlist и нажмите : ' + bot_prop.BTN_SETTINGS
-                        update.message.reply_text(text=msg, parse_mode=telegram.ParseMode.MARKDOWN)
+                        msg_main = str(acc_id) + ': Новое значение *' + prop_name + '*\nустановлено:' + Properties.select().where((Properties.acc_id == acc_id) & (Properties.key == key)).get().val
+
+                        keyboard = []
+                        keyboard.append([InlineKeyboardButton(text=bot_prop.BTN_SETTINGS, callback_data='pror_edit')])
+                        reply_markup = InlineKeyboardMarkup(keyboard)
+                        update.message.reply_text(msg_main + '\n\nЕсли хотите задать еще настройки, нажмите :', reply_markup=reply_markup, parse_mode=telegram.ParseMode.MARKDOWN)
                         
                         admin_list = User.select().where(User.role == 'admin')
                         for admin in admin_list:
@@ -381,6 +383,9 @@ def add(update, context):
                         prntb(str(err_str))
             elif type_ == 'acc':
                 acc_copy, fbu, fbp, olu, olp, proxy = new_val.split(';')
+
+                if not re.match(r'^\d+$', fbu):
+                    raise ValueError('Логин фонбет, пока только цифры')
                 if proxy.count(':') == 1 or (val.count(':') == 2 and val.count('@') == 1):
                     pass
                 else:
@@ -426,7 +431,7 @@ def add(update, context):
                 user_sender, 
                 'Для добавления пользователя,\n' + \
                 'нужно прислать команду:\n' + \
-                '*add user id email;phone;role*:\n' + \
+                '*add user telegtam_id email;phone;role*:\n' + \
                 '\n' + \
                 'Для добавления аккаунта пользователю,\n' + \
                 'нужно прислать команду:\n' + \
@@ -817,7 +822,8 @@ def sender(context):
 
 def close_prop(update, context):
     markup = ReplyKeyboardRemove()
-    update.message.reply_text(text='Настройка завершена.\n\nЕсли хотите задать еще настройки, выберите аккаунт из /botlist и нажмите : ' + bot_prop.BTN_SETTINGS, reply_markup=markup)
+
+    update.message.reply_text(text='Настройка завершена.', reply_markup=markup)
 
 
 def matches(update, context):
