@@ -452,15 +452,6 @@ def get_time(update, context):
     update.message.reply_text('Time: ' + str(int(datetime.datetime.timestamp(datetime.datetime.now()))))
 
 
-def send_text(update, context, msg: str = 'Привет мой господин!'):
-    acc_list = User.select().where(User.role == 'admin')
-    for admin in acc_list:
-        try:
-            context.bot.send_message(admin.id, msg)
-        except:
-            pass
-
-
 def get_acc_list(update):
     acc_list = None
     user_id = update.message.chat.id
@@ -784,7 +775,6 @@ if __name__ == '__main__':
     prc_sender.start()
 
     updater.dispatcher.add_handler(CommandHandler('start', start))
-    updater.dispatcher.add_handler(CommandHandler('hello', send_text))
     updater.dispatcher.add_handler(CommandHandler('botlist', botlist))
     updater.dispatcher.add_handler(CommandHandler('matches', matches))
     updater.dispatcher.add_handler(CommandHandler('time', get_time))
