@@ -245,6 +245,7 @@ def set_prop(update, context):
 
                         keyboard = []
                         keyboard.append([InlineKeyboardButton(text=bot_prop.BTN_SETTINGS, callback_data='pror_edit')])
+                        keyboard.append([InlineKeyboardButton(text=bot_prop.BTN_BACK, callback_data=context.user_data.get('key'))])
                         reply_markup = InlineKeyboardMarkup(keyboard)
                         update.message.reply_text(msg_main + '\n\nЕсли хотите задать еще настройки, нажмите :', reply_markup=reply_markup, parse_mode=telegram.ParseMode.MARKDOWN)
                         
@@ -712,8 +713,9 @@ def button(update, context):
         acc_info = Account.select().where(Account.key == query.data)
         if acc_info:
             context.user_data['acc_id'] = acc_info.get().id
+            context.user_data['key'] = acc_info.get().key
+            # print(query.message.text)
             if bot_prop.MSG_START_STOP in query.message.text:
-
                 if acc_info.get().work_stat == 'start':
                     Account.update(work_stat='stop').where(Account.key == query.data).execute()
                     update.callback_query.answer(text=bot_prop.MSG_ACC_STOP_WAIT)
@@ -741,6 +743,8 @@ def button(update, context):
                     prnt_acc_stat()
                 else:
                     update.callback_query.answer(show_alert=True, text="Аккаунт не активен")
+            else:
+                prnt_acc_stat()
 
 
 def error(update, context):
