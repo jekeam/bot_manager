@@ -557,7 +557,7 @@ def get_acc_list(update):
 
     list_visibly = (Account.status == 'active') | (Account.status == 'inactive') | (Account.status == 'pause')
 
-    if user_id in User.select().where(User.role == 'admin'):
+    if user_id in bot_prop.ADMINS:
         acc_list = Account.select().where(list_visibly).order_by(Account.id)
     else:
         acc_list = Account.select().where((Account.user_id == user_id) & (list_visibly)).order_by(Account.id)
@@ -670,7 +670,7 @@ def button(update, context):
 
     is_admin = False
     user_id = update.callback_query.message.chat.id
-    if user_id in User.select().where(User.role == 'admin'):
+    if user_id in bot_prop.ADMINS:
         is_admin = True
 
     if query:
@@ -800,7 +800,7 @@ def sender(context):
                         prntb(str(err_str))
 
                         Message.update(date_send=-1).where(Message.id == msg.id).execute()
-                        for admin in User.select().where(User.role == 'admin'):
+                        for admin in bot_prop.ADMINS:
                             try:
                                 context.bot.send_message(admin, 'Возникла ошибка:{}, msg:{} - сообщение исключено'.format(str(e), 'msg_id: ' + str(msg.id) + ', user_id:' + str(msg.to_user)))
                             except Exception as e:
@@ -814,7 +814,7 @@ def sender(context):
                 prntb(str(err_str))
 
                 Message.update(date_send=-1).where(Message.id == msg.id).execute()
-                for admin in User.select().where(User.role == 'admin'):
+                for admin in bot_prop.ADMINS:
                     try:
                         context.bot.send_message(admin, 'Возникла ошибка:{}, msg:{} - сообщение исключено'.format(str(e), 'msg_id: ' + str(msg.id) + ', user_id:' + str(msg.to_user)))
                     except Exception as e:
