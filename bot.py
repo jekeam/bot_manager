@@ -241,13 +241,13 @@ def set_prop(update, context):
                             account_str = json.dumps(account_json).replace('"', '`')
                             Account.update(accounts=account_str).where((Account.id == acc_id)).execute()
 
-                        msg_main = str(acc_id) + ': Новое значение *' + prop_name + '*\nустановлено:' + Properties.select().where((Properties.acc_id == acc_id) & (Properties.key == key)).get().val
+                        msg_main = str(acc_id) + ': Новое значение *' + prop_name + '*\nустановлено: ' + Properties.select().where((Properties.acc_id == acc_id) & (Properties.key == key)).get().val
 
                         keyboard = []
                         keyboard.append([InlineKeyboardButton(text=bot_prop.BTN_SETTINGS, callback_data='pror_edit')])
                         keyboard.append([InlineKeyboardButton(text=bot_prop.BTN_BACK, callback_data=context.user_data.get('key'))])
                         reply_markup = InlineKeyboardMarkup(keyboard)
-                        update.message.reply_text(msg_main + '\n\nЕсли хотите задать еще настройки, нажмите :', reply_markup=reply_markup, parse_mode=telegram.ParseMode.MARKDOWN)
+                        update.message.reply_text(msg_main + '\n\nЕсли хотите задать еще настройки, нажмите : ', reply_markup=reply_markup, parse_mode=telegram.ParseMode.MARKDOWN)
                         
                         admin_list = User.select().where(User.role == 'admin')
                         for admin in admin_list:
