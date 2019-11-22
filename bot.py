@@ -387,7 +387,7 @@ def add(update, context):
 
                 if not re.match(r'^\d+$', fbu):
                     raise ValueError('Логин фонбет, пока только цифры')
-                if proxy.count(':') == 1 or (val.count(':') == 2 and val.count('@') == 1):
+                if proxy.count(':') == 1 or (proxy.count(':') == 2 and proxy.count('@') == 1):
                     pass
                 else:
                     raise ValueError('Неверный формат прокси')
