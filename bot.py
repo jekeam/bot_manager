@@ -241,7 +241,7 @@ def set_prop(update, context):
                             account_str = json.dumps(account_json).replace('"', '`')
                             Account.update(accounts=account_str).where((Account.id == acc_id)).execute()
 
-                        msg_main = str(acc_id) + ': Новое значение *' + prop_name + '*\nустановлено:' + Properties.select().where((Properties.acc_id == acc_id) & (Properties.key == key)).get().val
+                        msg_main = str(acc_id) + ': Новое значение *' + prop_name + '*\nустановлено:\n' + Properties.select().where((Properties.acc_id == acc_id) & (Properties.key == key)).get().val
 
                         keyboard = []
                         keyboard.append([InlineKeyboardButton(text=bot_prop.BTN_SETTINGS, callback_data='pror_edit')])
@@ -689,12 +689,14 @@ def button(update, context):
                     abr = None
                     if user_role == 'admin':
                         abr = val.get('abr')
-                    elif user_role == 'junior':
-                        if key in ('SUMM', 'WORK_HOUR_END'):
+                    elif key not in ('TEST_OTH_SPORT'):
+                        elif user_role == 'junior':
+                            if key in ('SUMM', 'WORK_HOUR_END'):
+                                abr = val.get('abr')
+                        else:
+                            # if key not in ('FONBET_U', 'FONBET_P', 'OLIMP_U', 'OLIMP_P'):
                             abr = val.get('abr')
-                    else:
-                        # if key not in ('FONBET_U', 'FONBET_P', 'OLIMP_U', 'OLIMP_P'):
-                        abr = val.get('abr')
+
                     if abr:
                         prop_btn.append(abr)
 
