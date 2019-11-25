@@ -703,7 +703,7 @@ def button(update, context):
                 reply_keyboard = build_menu(prop_btn, n_cols=2, header_buttons=[bot_prop.BTN_CLOSE])
                 markup = ReplyKeyboardMarkup(reply_keyboard, resize_keyboard=True)
                 query.message.reply_text(bot_prop.MSG_PROP_LIST, reply_markup=markup, )
-        if quegit t_stat':
+        if query.data == 'get_stat':
             markup = ReplyKeyboardRemove()
             acc_id_str = str(context.user_data.get('acc_id'))
             query.message.reply_text(acc_id_str + ': ' + print_stat(acc_id_str), reply_markup=markup, parse_mode=telegram.ParseMode.MARKDOWN)
