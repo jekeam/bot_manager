@@ -22,6 +22,7 @@ from fork_recheck import get_olimp_info, get_fonbet_info
 
 from exceptions import SessionNotDefined, BkOppBetError, NoMoney, BetError, SessionExpired, SaleError, BetIsDrop
 from exceptions import CouponBlocked, BetIsLost
+from exceptions import Retry
 
 if get_prop('debug'):
     DEBUG = True
@@ -1019,8 +1020,8 @@ class BetManager:
             prnt(self.msg.format(sys._getframe().f_code.co_name, 'rs: ' + str(resp.status_code) + ' ' + str(resp.text.strip())), 'hide')
             res = resp.json()
 
-            err_code = res.get('error', {}).get('err_code')
-            err_msg = res.get('error', {}).get('err_desc')
+            err_code = res.get('error', {}).get('err_code', 0)
+            err_msg = res.get('error', {}).get('err_desc', '')
 
             if err_code == 404 and self.attempt_bet <= 6:
                 sleep(2)
@@ -1039,10 +1040,10 @@ class BetManager:
                 prnt(self.msg.format(sys._getframe().f_code.co_name, 'bet successful, reg_id: ' + str(self.reg_id)))
                 shared[self.bk_name + '_err'] = 'ok'
 
-            elif 'Такой исход не существует' in err_msg:
+            elif 'Такой исход не существует'.lower() in err_msg.lower():
                 raise BetIsLost(err_msg)
 
-            elif 'максимальная ставка' in err_msg:
+            elif 'максимальная ставка'.lower() in err_msg.lower():
                 raise BetIsLost(err_msg)
 
             elif res.get('data') is None:
@@ -1115,7 +1116,11 @@ class BetManager:
 
             result = res.get('result')
             msg_str = res.get('errorMessage')
-            self.check_responce(shared, msg_str)
+
+            try:
+                self.check_responce(shared, msg_str)
+            except Retry:
+                return self.bet_place(shared)
 
             if result == 'betDelay':
                 self.sleep_bet = (float(res.get('betDelay')) / 1000)
@@ -1325,7 +1330,10 @@ class BetManager:
     def check_responce(self, shared, err_msg):
 
         if err_msg:
-            if 'не вошли в систему'.lower() in err_msg.lower() or 'Not token access'.lower() in err_msg.lower() or 'invalid session id'.lower() in err_msg.lower():
+            if 'temporarily unavailable'.lower() in err_msg.lower():
+                msg_str = self.msg_err.format(sys._getframe().f_code.co_name, ' Retry: ' + err_msg)
+                raise Retry(msg_str)
+            elif 'не вошли в систему'.lower() in err_msg.lower() or 'Not token access'.lower() in err_msg.lower() or 'invalid session id'.lower() in err_msg.lower():
                 err_str = self.msg_err.format(sys._getframe().f_code.co_name, 'session expired: ' + self.session['session'])
                 raise SessionExpired(err_msg + ' ' + err_str)
 
