@@ -1462,7 +1462,10 @@ class BetManager:
         err_msg_eng = res.get('coupon', {}).get('errorMessageEng')
 
         self.opposite_stat_get(shared)
-        self.check_responce(shared, err_msg)
+        try:
+            self.check_responce(shared, msg_str)
+        except Retry:
+            return self.check_result(shared)
 
         if result == 'couponResult':
             if err_code == 0:
