@@ -247,7 +247,7 @@ def set_prop(update, context):
                         keyboard.append([InlineKeyboardButton(text=bot_prop.BTN_SETTINGS, callback_data='pror_edit')])
                         keyboard.append([InlineKeyboardButton(text=bot_prop.BTN_BACK, callback_data=context.user_data.get('key'))])
                         reply_markup = InlineKeyboardMarkup(keyboard)
-                        update.message.reply_text(msg_main + '\n\nЕсли хотите задать еще настройки, нажмите :', reply_markup=reply_markup, parse_mode=telegram.ParseMode.MARKDOWN)
+                        update.message.reply_text(msg_main + '\n\nЕсли хотите задать еще настройки, нажмите : ', reply_markup=reply_markup, parse_mode=telegram.ParseMode.MARKDOWN)
                         
                         admin_list = User.select().where(User.role == 'admin')
                         for admin in admin_list:
@@ -703,7 +703,7 @@ def button(update, context):
                 reply_keyboard = build_menu(prop_btn, n_cols=2, header_buttons=[bot_prop.BTN_CLOSE])
                 markup = ReplyKeyboardMarkup(reply_keyboard, resize_keyboard=True)
                 query.message.reply_text(bot_prop.MSG_PROP_LIST, reply_markup=markup, )
-        if query.data == 'get_stat':
+        if quegit t_stat':
             markup = ReplyKeyboardRemove()
             acc_id_str = str(context.user_data.get('acc_id'))
             query.message.reply_text(acc_id_str + ': ' + print_stat(acc_id_str), reply_markup=markup, parse_mode=telegram.ParseMode.MARKDOWN)
