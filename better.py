@@ -582,8 +582,10 @@ def run_client():
             #     raise ValueError('ConnectionRefusedError')
 
             time.sleep(1)
-            time_out_cnt = 0
-            connection_error_cnt = 0
+            if time_out_cnt > 0 or connection_error_cnt > 0:
+                prnt('run_client: ok ')
+                time_out_cnt = 0
+                connection_error_cnt = 0
     except Shutdown as e:
         prnt(str(e.__class__.__name__) + ' - ' + str(e))
         raise Shutdown(e)
