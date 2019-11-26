@@ -556,7 +556,6 @@ def get_acc_list(update, p_stat = ''):
     user_id = update.message.chat.id
 
     if p_stat != '':
-        print('asdf')
         list_visibly = ((Account.status == 'active') | (Account.status == 'inactive') | (Account.status == 'pause')) & (Account.work_stat == p_stat)
     else:
         list_visibly = (Account.status == 'active') | (Account.status == 'inactive') | (Account.status == 'pause')
@@ -643,11 +642,14 @@ def list_split(ls: list, col=2):
 def botstat(update, context):
     keyboard = []
     acc_list = get_acc_list(update, 'start')
-    for acc in acc_list:
-        keyboard.append(InlineKeyboardButton(text=str(acc.id), callback_data='get_stat_short:' + str((acc.id))))
-    keyboard = list_split(keyboard, 7)
-    reply_markup = InlineKeyboardMarkup(keyboard)
-    update.message.reply_text(text=bot_prop.MSG_CHANGE_ACC, reply_markup=reply_markup)
+    if acc_list:
+        for acc in acc_list:
+            keyboard.append(InlineKeyboardButton(text=str(acc.id), callback_data='get_stat_short:' + str((acc.id))))
+        keyboard = list_split(keyboard, 7)
+        reply_markup = InlineKeyboardMarkup(keyboard)
+        update.message.reply_text(text=bot_prop.MSG_CHANGE_ACC, reply_markup=reply_markup)
+    else:
+        update.message.reply_text(text=bot_prop.MSG_CHANGE_ACC_NONE)
 
 
 def button(update, context):
