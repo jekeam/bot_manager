@@ -85,18 +85,17 @@ def check_l(L):
         return ''
 
 
-def bet_type_is_work(key):
-    # if 'ТМ' in key or \
-    #   'ТБ' in key or \
-    #   \
-    #   'П1' in key or \
-    #   'П2' in key or \
-    #   \
-    #   'КЗ' in key or \
-    #   'КНЗ' in key or \
-    #   \
-    #   'ОЗД' == key or \
-    #   'ОЗН' == key:
+def bet_type_is_work(key, event_type):
+    if event_type == 'tennis':
+        try:
+            olimp_bet_type = str(key.split('@')[-2]).upper()
+            fonbet_bet_type = str(key.split('@')[-1]).upper()
+            if 'ТМ' in olimp_bet_type and 'ТБ' in fonbet_bet_type:
+                return True
+            else:
+                return False
+        except:
+            return False
     return True
 
 
@@ -135,7 +134,7 @@ def check_fork(key, L, k1, k2, live_fork, live_fork_total, bk1_score, bk2_score,
         if team_type == 'team_res':
             fork_exclude_text = fork_exclude_text + 'Вилка исключена по названию команд: ' + team_names + '\n'
 
-    if not bet_type_is_work(key):
+    if not bet_type_is_work(key, event_type):
         fork_exclude_text = fork_exclude_text + 'Вилка исключена, т.к. я еще не умею работать с этой ставкой: ' + str(key) + ')\n'
 
     deff_limit = 3
@@ -1031,9 +1030,7 @@ if __name__ == '__main__':
                             if (event_type in ('football', 'hockey') and test_oth_sport == 'выкл') or test_oth_sport == 'вкл':
                             # or ((event_type not in ('football', 'hockey') and test_oth_sport == 'вкл' and str(USER_ID) in list(map(str, ADMINS)))) \
                                 if vect1 and vect2:
-                                    if event_type == 'tennis' and not base_line:
-                                        pass
-                                    elif deff_max < 3 and k1 > 0 < k2:
+                                    if deff_max < 3 and k1 > 0 < k2:
                                         round_bet = int(get_prop('round_fork'))
                                         total_bet = round(randint(total_bet_min, total_bet_max) / round_bet) * round_bet
                                         prnt('total_bet random: ' + str(total_bet), 'hide')
