@@ -216,7 +216,7 @@ def check_fork(key, L, k1, k2, live_fork, live_fork_total, bk1_score, bk2_score,
     fork_exclude_text = fork_exclude_text + check_l(L)
 
     if fork_exclude_text != '':
-        prnt(info + '\n' + fork_exclude_text + '\n', 'hide')
+        prnt(vstr=info + '\n' + fork_exclude_text + '\n', hide='hide', to_cl=True)
         v = False
     return v
 
@@ -531,7 +531,7 @@ def go_bets(wag_ol, wag_fb, key, deff_max, vect1, vect2, sc1, sc2, created, even
             save_fork(fork_info)
             # WAITING AFTER BET
             sleep_post_work = int(get_prop('timeout_fork', 30))
-            prnt('Ожидание ' + str(sleep_post_work) + ' сек.')
+            prnt(vstr='Ожидание ' + str(sleep_post_work) + ' сек.', hide=None, to_cl=True)
             time.sleep(sleep_post_work)
             # GET NEW BALANCE
             bal1 = OlimpBot(OLIMP_USER).get_balance()  # Баланс в БК1
@@ -649,7 +649,7 @@ def recalc_bets(hide=True):
         if fonbet_maxbet_fact > 0:
             if bet2 > fonbet_maxbet_fact:
                 prnt('recalc bet (fonbet_maxbet_fact)', hide)
-                bet2, bet1 = get_new_sum_bets(k2, k1, fonbet_maxbet_fact, hide)
+                bet2, bet1 = get_new_sum_bets(k2, k1, max_bet_fonbet, hide)
                 total_bet = bet1 + bet2
         
     if bet2 > max_bet_fonbet > 0:
@@ -1067,8 +1067,9 @@ if __name__ == '__main__':
 
                                             if 0 < (now_timestamp - last_timestamp) < 60 and len(server_forks) > 1:
                                                 prnt(
-                                                    'Вилка ' + str(key) +
-                                                    ' исключена, т.к. мы ее пытались проставить успешно/не успешно, но прошло менее 60 секунд и есть еще вилки, будем ставить другие, новые'
+                                                    vstr = 'Вилка ' + str(key) + ' исключена, т.к. мы ее пытались проставить успешно/не успешно, но прошло менее 60 секунд и есть еще вилки, будем ставить другие, новые',
+                                                    hide = None, 
+                                                    to_cl = True
                                                 )
                                             else:
                                                 temp_lock_fork.update({key: now_timestamp})
@@ -1101,7 +1102,7 @@ if __name__ == '__main__':
                                                     prnt('Случайное число: ' + str(is_bet) + ', => ' + str(fork_slice))
 
                                                 if fork_slice <= is_bet or cnt_act_acc <= 5 or fork_slice == 0:
-                                                    prnt('Go bets: ' + key + ' ' + info)
+                                                    prnt(vstr='Делаю ставку: ' + key + ' ' + info, hide=None, to_cl=True)
 
                                                     info_csv.update({
                                                         'user_id': str(USER_ID),

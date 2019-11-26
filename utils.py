@@ -14,6 +14,7 @@ import sys
 DEBUG = False
 MINUTE_COMPLITE = 88
 VSTR_OLD = ''
+VSTR_OLD_CL = ''
 
 package_dir = os.path.dirname(__file__)
 dtOld = datetime.datetime.now()
@@ -99,7 +100,7 @@ if ACC_ID:
         USER_ID = acc_info.get().user_id
 
 
-def prnt(vstr=None, hide=None):
+def prnt(vstr=None, hide=None, to_cl=False):
     global VSTR_OLD
     if vstr != VSTR_OLD:
         VSTR_OLD = vstr
@@ -109,8 +110,7 @@ def prnt(vstr=None, hide=None):
 
             if not hide:
                 dtDeff = round((datetime.datetime.now() - dtOld).total_seconds())
-                strLog = datetime.datetime.now().strftime('%d %H:%M:%S.%f ') + \
-                         '[' + str(dtDeff).rjust(2, '0') + ']    ' + str(ACC_ID) + ': ' + str(vstr)
+                strLog = datetime.datetime.now().strftime('%d %H:%M:%S.%f ') + '[' + str(dtDeff).rjust(2, '0') + ']    ' + str(ACC_ID) + ': ' + str(vstr)
                 print(strLog)
                 dtOld = datetime.datetime.now()
                 Outfile = open(str(ACC_ID) + '_client.log', "a+", encoding='utf-8')
@@ -119,6 +119,12 @@ def prnt(vstr=None, hide=None):
             else:
                 strLog = datetime.datetime.now().strftime('%d %H:%M:%S.%f ') + '    ' + str(vstr)
                 Outfile = open(str(ACC_ID) + '_client_hide.log', "a+", encoding='utf-8')
+                Outfile.write(strLog + '\n\n')
+                Outfile.close()
+
+            if to_cl:
+                strLog = datetime.datetime.now().strftime('%d %H:%M:%S.%f ') + '    ' + str(vstr)
+                Outfile = open(str(ACC_ID) + '_to_cl.log', "a+", encoding='utf-8')
                 Outfile.write(strLog + '\n\n')
                 Outfile.close()
 

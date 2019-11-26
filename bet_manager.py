@@ -416,13 +416,6 @@ class BetManager:
                 if self.first_bet_in == 'parallel':
                     pass
 
-                # if self.bk_name == 'olimp':
-                #     if str(self.acc_id) == '18':
-                #         prnt('До ставки увеличиваем коф, чтоб получить 1ю ошибку')
-                #         prnt(self.wager['factor'])
-                #         self.wager['factor'] = self.cur_val_bet + 1
-                #         prnt(self.wager['factor'])
-
                 self.bet_place(shared)
                 bet_done(shared)
             except BetError as e:
@@ -833,7 +826,7 @@ class BetManager:
                 sleep(5)
 
     def sign_in(self, shared: dict):
-
+        prnt(vstr='Авторизация в ' + self.bk_name, hide='hide', to_cl=True)
         try:
             if self.bk_name == 'olimp':
                 # # sign_in
@@ -939,6 +932,7 @@ class BetManager:
             # write_file(self.session_file, self.session['session'].strip())
 
             shared['sign_in_' + self.bk_name] = 'ok'
+            prnt(vstr='Авторизация в ' + self.bk_name + ' успешна', hide='hide', to_cl=True)
 
         except SessionNotDefined as e:
             shared['sign_in_' + self.bk_name] = str(e.__class__.__name__) + ': ' + str(e)
@@ -961,9 +955,6 @@ class BetManager:
 
     def bet_place(self, shared: dict):
 
-        # # for test
-        # if self.bk_name == 'fonbet':
-        #     sleep(15)
         self.opposite_stat_get(shared)
 
         cur_bal = self.session.get('balance')
@@ -975,6 +966,7 @@ class BetManager:
                     self.bk_name + ' balance ({}) < sum_bet({})'.format(str(cur_bal), str(self.sum_bet)))
                 raise NoMoney(err_str)
 
+        prnt(vstr='Делаю ставку в ' + self.bk_name, hide='hide', to_cl=True)
         if self.bk_name == 'olimp':
 
             # # bet_place
@@ -1042,6 +1034,7 @@ class BetManager:
 
                 prnt(self.msg.format(sys._getframe().f_code.co_name, 'bet successful, reg_id: ' + str(self.reg_id)))
                 shared[self.bk_name + '_err'] = 'ok'
+                prnt(vstr='Ставка в ' + self.bk_name + ' успешно завершена', hide='hide', to_cl=True)
 
             elif 'Такой исход не существует'.lower() in err_msg.lower():
                 raise BetIsLost(err_msg)
@@ -1478,6 +1471,7 @@ class BetManager:
 
                 prnt(self.msg.format(sys._getframe().f_code.co_name, 'bet successful, reg_id: ' + str(self.reg_id)))
                 shared[self.bk_name + '_err'] = 'ok'
+                prnt(vstr='Ставка в ' + self.bk_name + ' успешно завершена', hide='hide', to_cl=True)
 
                 url_rq = 'http://' + get_prop('server_ip') + ':8888/set/fonbet_maxbet_fact/' + self.key + '/' + str(self.session.get('group_limit_id')) + '/' + str(self.sum_bet)
                 rs = requests.get(url_rq).text
