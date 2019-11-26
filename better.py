@@ -95,8 +95,6 @@ def bet_type_is_work(key, event_type):
                 return True
             else:
                 return False
-        except:
-            return False
     return True
 
 
