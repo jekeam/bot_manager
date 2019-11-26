@@ -30,7 +30,7 @@ import ast
 from utils import build_menu
 from uuid import uuid1
 
-type_user = ('user', 'junior')
+type_user = ('user', 'junior', 'investor')
 
 def prntb(vstr, filename='bot.log'):
     Outfile = open(filename, "a+", encoding='utf-8')
@@ -687,7 +687,7 @@ def button(update, context):
                 for key, val in prop_abr.items():
 
                     abr = None
-                    if user_role == 'admin':
+                    if user_role in ('admin', 'investor'):
                         abr = val.get('abr')
                     elif key not in ('TEST_OTH_SPORT'):
                         if user_role == 'junior':
