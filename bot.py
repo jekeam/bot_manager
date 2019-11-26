@@ -600,8 +600,8 @@ def botlist(update, context, edit=False):
             work_stat = work_stat_inactive
 
         ivest_list = User.select().where(User.role == 'investor')
-        for invet in ivest_list:
-            if str(acc.user_id) == str(ivest_list.id):
+        for invest in ivest_list:
+            if str(acc.user_id) == str(invest.id):
                 work_stat = work_stat + emojize(':dollar:', use_aliases=True)
 
         keyboard.append([InlineKeyboardButton(text=str(acc.id) + ': ' + work_stat, callback_data=acc.key)])
