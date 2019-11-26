@@ -964,6 +964,8 @@ if __name__ == '__main__':
                             created_fork = val_json.get('created_fork', '')
                             event_type = val_json.get('event_type')
 
+                            fonbet_maxbet_fact = val_json.get('fonbet_maxbet_fact', {}).get(group_limit_id)
+
                             deff_olimp = round(float(time.time() - float(val_json.get('time_req_olimp', 0.0))))
                             deff_fonbet = round(float(time.time() - float(val_json.get('time_req_fonbet', 0.0))))
                             deff_max = max(0, deff_olimp, deff_fonbet)
@@ -999,7 +1001,8 @@ if __name__ == '__main__':
                                        ', live_fork: ' + str(live_fork) + \
                                        ', live_fork_total: ' + str(live_fork_total) + \
                                        ', max deff: ' + str(deff_max) + \
-                                       ', event_type: ' + event_type
+                                       ', event_type: ' + event_type + \
+                                       ', fonbet_maxbet_fact: ' + str(fonbet_maxbet_fact)
                             except Exception as e:
                                 exc_type, exc_value, exc_traceback = sys.exc_info()
                                 err_str = str(e) + ' ' + str(repr(traceback.format_exception(exc_type, exc_value, exc_traceback)))
