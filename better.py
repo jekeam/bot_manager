@@ -1010,7 +1010,8 @@ if __name__ == '__main__':
 
                                 info = ''
 
-                            if (event_type in ('football', 'hockey') and test_oth_sport == 'выкл') or (event_type not in ('football', 'hockey') and test_oth_sport == 'вкл'):
+                            if (event_type in ('football', 'hockey') and test_oth_sport == 'выкл') or test_oth_sport == 'вкл':
+                            # or ((event_type not in ('football', 'hockey') and test_oth_sport == 'вкл' and str(USER_ID) in list(map(str, ADMINS)))) \
                                 if vect1 and vect2:
                                     if event_type == 'tennis' and not base_line:
                                         pass
