@@ -86,10 +86,11 @@ def check_l(L):
 
 
 def bet_type_is_work(key, event_type):
+    key = key.upper()
     if event_type == 'tennis':
-        try:
-            olimp_bet_type = str(key.split('@')[-2]).upper()
-            fonbet_bet_type = str(key.split('@')[-1]).upper()
+        if 'ТМ' in key:
+            olimp_bet_type = str(key.split('@')[-2])
+            fonbet_bet_type = str(key.split('@')[-1])
             if 'ТМ' in olimp_bet_type and 'ТБ' in fonbet_bet_type:
                 return True
             else:
