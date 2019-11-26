@@ -1095,7 +1095,7 @@ if __name__ == '__main__':
                                                         'user_id': str(USER_ID),
                                                         'group_limit_id': group_limit_id,
                                                         'live_fork': live_fork,
-                                                        'team_type': team_type
+                                                        'team_type': team_type,
                                                         'summ_min': summ_min_stat
                                                     })
                                                     prnt('info_csv: ' + str(info_csv))
