@@ -36,6 +36,7 @@ prop_abr = {
     "WORK_HOUR_END": {"abr": "Остановка в", "type": "int", "max": "23", "min": "0", "access_list": [], "error": ""},
     "ROUND_FORK": {"abr": "Округление", "type": "int", "max": "100", "min": "5", "access_list": ["5", "10", "50", "100"], "error": ""},
 
+    "MAXBET_FACT": {"abr": "Мaxbet по ведущему", "type": "str", "max": "", "min": "", "access_list": ["вкл", "выкл"], "error": ""},
     "CHECK_MAX_BET": {"abr": "Проверка maxbet", "type": "str", "max": "", "min": "", "access_list": ["вкл", "выкл"], "error": ""},
     "SUM_BY_MAX": {"abr": "Пересчет maxbet", "type": "str", "max": "", "min": "", "access_list": ["вкл", "выкл"], "error": ""},
     "PROC_BY_MAX": {"abr": "% от maxbet", "type": "int", "max": "100", "min": "10", "access_list": [], "error": ""},

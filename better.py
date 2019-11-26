@@ -112,10 +112,13 @@ def get_team_type(name_rus: str, name: str):
 
 
 def check_fork(key, L, k1, k2, live_fork, live_fork_total, bk1_score, bk2_score, event_type, minute, time_break_fonbet, period, team_type, team_names, deff_max, is_top, is_hot, info=''):
-    global bal1, bal2, bet1, bet2, cnt_fork_success, black_list_matches, matchs_success, summ_min
+    global bal1, bal2, bet1, bet2, cnt_fork_success, black_list_matches, matchs_success, summ_min, fonbet_maxbet_fact
 
     fork_exclude_text = ''
     v = True
+
+    if get_prop('maxbet_fact', 'выкл') == 'вкл' and fonbet_maxbet_fact == 0:
+        fork_exclude_text = fork_exclude_text + 'Вилка исключена т.к. нет значения fonbet_maxbet_fact\n'
 
     if get_prop('team_junior', 'выкл') == 'выкл':
         if team_type == 'team_junior':
@@ -964,7 +967,7 @@ if __name__ == '__main__':
                             created_fork = val_json.get('created_fork', '')
                             event_type = val_json.get('event_type')
 
-                            fonbet_maxbet_fact = val_json.get('fonbet_maxbet_fact', {}).get(group_limit_id)
+                            fonbet_maxbet_fact = val_json.get('fonbet_maxbet_fact', {}).get(str(group_limit_id), 0)
 
                             deff_olimp = round(float(time.time() - float(val_json.get('time_req_olimp', 0.0))))
                             deff_fonbet = round(float(time.time() - float(val_json.get('time_req_fonbet', 0.0))))
