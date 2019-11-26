@@ -628,7 +628,7 @@ def run_client():
 
 
 def recalc_bets(hide=True):
-    global k1, k2, total_bet, bal1, bal1, bet1, bet2, total_bet_min, total_bet_max, round_bet
+    global k1, k2, total_bet, bal1, bal1, bet1, bet2, total_bet_min, total_bet_max, round_bet, fonbet_maxbet_fact
     prnt('Get sum bets', hide)
     prnt('total_bet: {}, total_bet_min: {}, total_bet_max: {}, round_bet: {}, bal1:{}, bal2:{}, bet1:{},  bet2:{}'.format(
         total_bet, total_bet_min, total_bet_max, round_bet, bal1, bal2, bet1, bet2), hide
@@ -645,6 +645,13 @@ def recalc_bets(hide=True):
             total_bet = bet1 + bet2
 
     max_bet_fonbet = int(get_prop('max_bet_fonbet', '0'))
+    if get_prop('maxbet_fact', 'выкл') == 'вкл':
+        if fonbet_maxbet_fact > 0:
+            if bet2 > fonbet_maxbet_fact:
+                prnt('recalc bet (fonbet_maxbet_fact)', hide)
+                bet2, bet1 = get_new_sum_bets(k2, k1, fonbet_maxbet_fact, hide)
+                total_bet = bet1 + bet2
+        
     if bet2 > max_bet_fonbet > 0:
         prnt('recalc bet (max_bet_fonbet)', hide)
         bet2, bet1 = get_new_sum_bets(k2, k1, max_bet_fonbet, hide)
