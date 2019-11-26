@@ -717,6 +717,11 @@ cnt_acc_sql = "select count(*)\n" + \
 
 if __name__ == '__main__':
     try:
+        
+        prnt('current pid: ' + str(os.getpid()))
+        random_time = uniform(0, 1)
+        prnt('random_time: ' + str(random_time))
+        time.sleep(random_time)
 
         wait_before_start_sec = 0
         if START_SLEEP != '':
