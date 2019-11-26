@@ -697,7 +697,7 @@ def button(update, context):
                     abr = None
                     if user_role in ('admin', 'investor'):
                         abr = val.get('abr')
-                    elif key not in ('TEST_OTH_SPORT'):
+                    elif key not in ('TEST_OTH_SPORT', 'SUMM_MIN'):
                         if user_role == 'junior':
                             if key in ('SUMM', 'WORK_HOUR_END'):
                                 abr = val.get('abr')

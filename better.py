@@ -114,7 +114,7 @@ def get_team_type(name_rus: str, name: str):
 
 
 def check_fork(key, L, k1, k2, live_fork, live_fork_total, bk1_score, bk2_score, event_type, minute, time_break_fonbet, period, team_type, team_names, deff_max, is_top, is_hot, info=''):
-    global bal1, bal2, bet1, bet2, cnt_fork_success, black_list_matches, matchs_success
+    global bal1, bal2, bet1, bet2, cnt_fork_success, black_list_matches, matchs_success, summ_min
 
     fork_exclude_text = ''
     v = True
@@ -156,6 +156,9 @@ def check_fork(key, L, k1, k2, live_fork, live_fork_total, bk1_score, bk2_score,
     # Проверяем корректная ли сумма
     if bet1 < 30 or bet2 < 30:
         fork_exclude_text = fork_exclude_text + 'Сумма одной из ставок меньше 30р.\n'
+
+    if (bet1 + bet2) < summ_min:
+        fork_exclude_text = fork_exclude_text + 'Общая сумма ставки: {}, меньше нижнего предела: {}.\n'.format((bet1 + bet2), summ_min)
 
     # Проверяем хватить денег для ставки
     if (bal1 < bet1) or (bal2 < bet2):
@@ -279,7 +282,7 @@ def save_plt(folder, filename, plt):
 
 
 def go_bets(wag_ol, wag_fb, key, deff_max, vect1, vect2, sc1, sc2, created, event_type, l, l_fisrt, is_top, fork_slice, cnt_act_acc, info_csv):
-    global bal1, bal2, cnt_fail, cnt_fork_success, k1, k2, total_bet, bet1, bet2, OLIMP_USER, FONBET_USER, ACC_ID
+    global bal1, bal2, cnt_fail, cnt_fork_success, k1, k2, total_bet, bet1, bet2, OLIMP_USER, FONBET_USER, ACC_ID, summ_min
 
     olimp_bet_type = str(key.split('@')[-2])
     fonbet_bet_type = str(key.split('@')[-1])
@@ -354,6 +357,7 @@ def go_bets(wag_ol, wag_fb, key, deff_max, vect1, vect2, sc1, sc2, created, even
             'cur_total': sc1 + sc2,
             'side_team': '1',
             'event_type': event_type,
+            'summ_min': summ_min,
         }
         shared['fonbet'] = {
             'acc_id': ACC_ID,
@@ -370,6 +374,7 @@ def go_bets(wag_ol, wag_fb, key, deff_max, vect1, vect2, sc1, sc2, created, even
             'max_bet': 0,
             'event_type': event_type,
             'key': key,
+            'summ_min': summ_min,
         }
         if '(' in fonbet_bet_type:
             shared['olimp']['bet_total'] = float(re.findall(r'\((.*)\)', fonbet_bet_type)[0])
@@ -494,6 +499,7 @@ def go_bets(wag_ol, wag_fb, key, deff_max, vect1, vect2, sc1, sc2, created, even
         fork_info[fork_id]['fonbet']['group_limit_id'] = info_csv.get('group_limit_id', '')
         fork_info[fork_id]['fonbet']['live_fork'] = info_csv.get('live_fork', '')
         fork_info[fork_id]['fonbet']['team_type'] = info_csv.get('team_type', '')
+        fork_info[fork_id]['fonbet']['summ_min'] = info_csv.get('summ_min', '')
 
         fork_info[fork_id]['fonbet']['avg_change'] = str(x)
         fork_info[fork_id]['fonbet']['order_kof'] = str(y)
@@ -751,6 +757,11 @@ if __name__ == '__main__':
                 bal1 = bk1.get_balance()  # Баланс в БК1
                 bal2 = bk2.get_balance()  # Баланс в БК2
                 total_bet = int(get_prop('summ'))
+                summ_min = int(get_prop('summ_min', '0'))
+                summ_min_stat = int(get_prop('summ_min', '0'))
+                if summ_min >= total_bet:
+                    err_msg = 'Минимальная общая ставка не должена быть больше или равена максимальному'
+                    raise ValueError(err_msg)
 
                 test_oth_sport = get_prop('test_oth_sport', 'выкл')
 
@@ -790,18 +801,22 @@ if __name__ == '__main__':
                 else:
                     prnt('Округление вилки и суммы ставки до: ' + str(get_round_fork))
 
-                random_summ_proc = int(get_prop('random_summ_proc'))
-                if random_summ_proc > 30:
-                    err_msg = 'Отклонение от общей суммы ставки не должно привышать 30%'
-                    raise ValueError(err_msg)
-                else:
-                    if not DEBUG and total_bet < 400:
-                        err_msg = 'Обшая сумма ставки должна превышать 400 руб.'
+                random_summ_proc = int(get_prop('random_summ_proc', '0'))
+                if random_summ_proc:
+                    if random_summ_proc > 30:
+                        err_msg = 'Отклонение от общей суммы ставки не должно привышать 30%'
                         raise ValueError(err_msg)
                     else:
                         total_bet_min = int(total_bet - (total_bet * int(random_summ_proc) / 100))
                         total_bet_max = int(total_bet + (total_bet * int(random_summ_proc) / 100))
                         prnt('total_bet:{}, total_bet_min: {}, total_bet_max: {}'.format(total_bet, total_bet_min, total_bet_max))
+                        if summ_min > total_bet_min:
+                            total_bet_min = summ_min
+                            prnt('recalc total_bet:{}, total_bet_min: {}, total_bet_max: {}'.format(total_bet, total_bet_min, total_bet_max))
+
+                if not DEBUG and total_bet < 400:
+                    err_msg = 'Обшая сумма ставки должна превышать 400 руб.'
+                    raise ValueError(err_msg)
 
                 acc_info = Account.select().where(Account.key == KEY)
                 print(acc_info)
@@ -1081,6 +1096,7 @@ if __name__ == '__main__':
                                                         'group_limit_id': group_limit_id,
                                                         'live_fork': live_fork,
                                                         'team_type': team_type
+                                                        'summ_min': summ_min_stat
                                                     })
                                                     prnt('info_csv: ' + str(info_csv))
 

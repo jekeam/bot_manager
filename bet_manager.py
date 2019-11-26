@@ -74,6 +74,7 @@ class BetManager:
         self.bet_type = bk_container['bet_type']
         self.event_type = bk_container['event_type']
         self.key = bk_container.get('key', '')
+        self.summ_min = int(bk_container.get('summ_min', '0'))
         self.dop_stat = dict()
         # dynamic params
         self.cur_sc = None
@@ -259,6 +260,8 @@ class BetManager:
             raise BetIsLost('Сумма после пересчета меньше min_bet: {} < {}'.format(sum1, self.min_bet))
         elif sum1 < 30 or sum2 < 30:
             raise BetIsLost('Сумма одной из ставок после пересчета меньше 30 рублей, {}, {}'.format(sum1, sum2))
+        elif self.summ_min > (sum1 + sum2):
+            raise BetIsLost('Сумма общей ставки: {}, после пересчета меньше допустимой: {}'.format((sum1 + sum2), self.summ_min))
         else:
             self.sum_bet, self_opp_data.sum_bet = sum1, sum2
             self.sum_bet_stat, self_opp_data.sum_bet_stat = sum1, sum2
