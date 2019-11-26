@@ -556,6 +556,7 @@ def get_acc_list(update, p_stat = ''):
     user_id = update.message.chat.id
 
     if p_stat != '':
+        print('asdf')
         list_visibly = ((Account.status == 'active') | (Account.status == 'inactive') | (Account.status == 'pause')) & (Account.work_stat == p_stat)
     else:
         list_visibly = (Account.status == 'active') | (Account.status == 'inactive') | (Account.status == 'pause')
