@@ -551,11 +551,14 @@ def get_time(update, context):
     update.message.reply_text('Time: ' + str(int(datetime.datetime.timestamp(datetime.datetime.now()))))
 
 
-def get_acc_list(update):
+def get_acc_list(update, p_stat = ''):
     acc_list = None
     user_id = update.message.chat.id
 
-    list_visibly = (Account.status == 'active') | (Account.status == 'inactive') | (Account.status == 'pause')
+    if p_stat != '':
+        list_visibly = ((Account.status == 'active') | (Account.status == 'inactive') | (Account.status == 'pause')) & (Account.work_stat == p_stat)
+    else:
+        list_visibly = (Account.status == 'active') | (Account.status == 'inactive') | (Account.status == 'pause')
 
     if user_id in bot_prop.ADMINS:
         acc_list = Account.select().where(list_visibly).order_by(Account.id)
@@ -638,7 +641,7 @@ def list_split(ls: list, col=2):
 
 def botstat(update, context):
     keyboard = []
-    acc_list = get_acc_list(update)
+    acc_list = get_acc_list(update, 'start')
     for acc in acc_list:
         keyboard.append(InlineKeyboardButton(text=str(acc.id), callback_data='get_stat_short:' + str((acc.id))))
     keyboard = list_split(keyboard, 7)
