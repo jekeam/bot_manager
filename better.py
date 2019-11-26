@@ -813,6 +813,9 @@ if __name__ == '__main__':
                         if summ_min > total_bet_min:
                             total_bet_min = summ_min
                             prnt('recalc total_bet:{}, total_bet_min: {}, total_bet_max: {}'.format(total_bet, total_bet_min, total_bet_max))
+                else:
+                    total_bet_min = total_bet
+                    total_bet_max = total_bet
 
                 if not DEBUG and total_bet < 400:
                     err_msg = 'Обшая сумма ставки должна превышать 400 руб.'
