@@ -903,8 +903,9 @@ if __name__ == '__main__':
                             msg_str_t = msg_str_t + 'Проставлено вилок: {}\n'.format(len(cnt_fork_success))
                         if cnt_fork_fail_old != 0:
                             msg_str_t = msg_str_t + 'Сделано минусовы выкупов: {}\n'.format(cnt_fail)
-                        send_message_bot(USER_ID, msg_str_t, ADMINS)
-                        start_message_send = True
+                        if msg_str_t:
+                            send_message_bot(USER_ID, msg_str_t, ADMINS)
+                            start_message_send = True
 
                     elif len(cnt_fork_success) != cnt_fork_success_old:
                         msg_str = msg_str + 'Проставлено вилок: {}->{}'.format(cnt_fork_success_old, len(cnt_fork_success)) + '\n'
