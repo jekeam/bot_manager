@@ -94,7 +94,7 @@ def check_proxy_olimp(proxies_for_check, valid_proxies):
 
 
 def check_proxy_fonbet(proxies_for_check, valid_proxies):
-    from util_fonbet import url_fonbet_matchs as url_fonbet
+    from meta_fb import url_fonbet_matchs as url_fonbet
     global TIME_OUT
 
     for prx in proxies_for_check:

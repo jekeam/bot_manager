@@ -901,13 +901,13 @@ class FonbetBot:
 
 
 def get_new_bets_fonbet(match_id, proxies, time_out):
-    from util_fonbet import url_fonbet_match, fonbet_header, VICTS, TTO, TTU, TT1O, TT1U, TT2O, TT2U
+    from meta_fb import url_fonbet_match, fonbet_header2, VICTS, TTO, TTU, TT1O, TT1U, TT2O, TT2U
     key_id = str(match_id)
     bets_fonbet = {}
     try:
         resp = requests_retry_session().get(
             url_fonbet_match + str(match_id) + "&lang=en",
-            headers=fonbet_header,
+            headers=fonbet_header2,
             timeout=time_out,
             verify=False,
             proxies=proxies,
