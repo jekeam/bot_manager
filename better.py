@@ -218,7 +218,9 @@ def check_fork(key, L, k1, k2, live_fork, live_fork_total, bk1_score, bk2_score,
     fork_exclude_text = fork_exclude_text + check_l(L)
 
     if fork_exclude_text != '':
-        prnt(vstr=info + '\n' + fork_exclude_text + '\n', hide='hide', to_cl=True)
+        if fork_exclude_text_old != fork_exclude_text:
+            fork_exclude_text_old = fork_exclude_text
+            prnt(vstr=info + '\n' + fork_exclude_text + '\n', hide='hide', to_cl=True)
         v = False
     return v
 
