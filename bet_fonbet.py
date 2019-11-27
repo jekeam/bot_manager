@@ -228,10 +228,13 @@ class FonbetBot:
         }
 
     def get_urls(self):
-        url = get_account_info('fonbet', 'mirror')
-        if not url:
-            # url = self.not_url
-            url = 'fonbet.ru'
+
+        mirror = get_account_info('fonbet', 'mirror')
+        if not mirror:
+            url = self.not_url
+        else:
+            url = mirror
+
         url = "https://" + url + "/urls.json?{}".format(random())
         prnt('BET_FONBET.PY: Fonbet, get_urls request: ' + str(url) + '\n' + str(browser_headers), 'hide')
         resp = requests_retry_session().get(
@@ -271,7 +274,7 @@ class FonbetBot:
         try:
             self.base_payload["platform"] = "mobile_android"
 
-            self.base_payload["login"] = self.account['login']
+            self.base_payload["clientId"] = self.account['login']
 
             payload = self.base_payload
             payload["random"] = get_random_str()

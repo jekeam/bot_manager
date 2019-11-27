@@ -204,7 +204,9 @@ class BetManager:
         self.proxies = self.get_proxy()
         self.server_olimp = '08'
         self.server_fb = {}
-        self.mirror = self.account.get('mirror')
+        self.mirror = self.account.get('mirror', '')
+        if not self.mirror:
+            self.mirror = self.not_url
 
         self.session_file = 'session.' + self.bk_name
         self.session = {}
@@ -986,7 +988,7 @@ class BetManager:
 
                 resp = requests_retry_session_post(
                     url.format('loginById'),
-                    headers=fb_headers,
+                    headers=self.fonbet_headers,
                     data=data,
                     verify=False,
                     timeout=self.timeout,
