@@ -165,10 +165,7 @@ def check_fork(key, L, k1, k2, live_fork, live_fork_total, bk1_score, bk2_score,
 
     # Проверяем хватить денег для ставки
     if (bal1 < bet1) or (bal2 < bet2):
-        fork_exclude_text = fork_exclude_text + 'Для проставления вилки ' + key \
-                            + ' недостаточно средств, bal1=' \
-                            + str(bal1) + ', bet1=' + str(bet1) \
-                            + ', bal2=' + str(bal2) + ', bet2=' + str(bet2) + '\n'
+        fork_exclude_text = fork_exclude_text + 'Для проставления вилки ' + key + ' недостаточно средств, bal1=' + str(bal1) + ', bet1=' + str(bet1) + ', bal2=' + str(bal2) + ', bet2=' + str(bet2) + '\n'
 
     if get_prop('max_kof'):
         max_kof = float(get_prop('max_kof'))
