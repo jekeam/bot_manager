@@ -684,6 +684,7 @@ cnt_fail = 0
 black_list_matches = []
 cnt_fork_success = []
 matchs_success = []
+msg_excule_pushed = []
 printed = False
 last_fork_time = 0
 last_refresh_time = 0
@@ -1070,12 +1071,16 @@ if __name__ == '__main__':
                                             last_timestamp = temp_lock_fork.get(key, now_timestamp)
 
                                             if 0 < (now_timestamp - last_timestamp) < 60 and len(server_forks) > 1:
-                                                prnt(
-                                                    vstr = 'Вилка ' + str(key) + ' исключена, т.к. мы ее пытались проставить успешно/не успешно, но прошло менее 60 секунд и есть еще вилки, будем ставить другие, новые',
-                                                    hide = None, 
-                                                    to_cl = True
-                                                )
+                                                if key not in msg_excule_pushed:
+                                                    msg_excule_pushed.append(key)
+                                                    prnt(
+                                                        vstr = 'Вилка ' + str(key) + ' исключена, т.к. мы ее пытались проставить успешно/не успешно, но прошло менее 60 секунд и есть еще вилки, будем ставить другие, новые',
+                                                        hide = None, 
+                                                        to_cl = True
+                                                    )
                                             else:
+                                                if key in msg_excule_pushed:
+                                                    msg_excule_pushed.remove(key)
                                                 temp_lock_fork.update({key: now_timestamp})
                                                 cnt_act_acc = 0
                                                 is_bet = 0
