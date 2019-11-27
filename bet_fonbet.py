@@ -87,7 +87,7 @@ class FonbetBot:
                 raise ValueError('БК Фонбет: сайт не отвечает или у прокси нет доступа к сайту, рекомендую проверить/променять прокси')
             else:
                 raise ValueError('БК Фонбет: неизвестная ошибка, при подключении, проверьте, что прокси указан корректно и порт для HTTPS: ' + e_str)
-
+        prnt('self.bk_type:' + str(self.bk_type), True)
         if self.bk_type == 'com':
             self.app_ver = '5.1.3b'
             self.user_agent = 'Fonbet/5.1.3b (Android 21; Phone; com.bkfonbet)'
@@ -273,7 +273,6 @@ class FonbetBot:
     def sign_in(self):
         try:
             self.base_payload["platform"] = "mobile_android"
-            prnt('login' + str(self.account['login']), True)
             self.base_payload["clientId"] = self.account['login']
 
             payload = self.base_payload
