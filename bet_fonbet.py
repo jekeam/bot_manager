@@ -50,7 +50,6 @@ class FonbetBot:
         self.bk_name = 'Fonbet'
         self.attempt_login = 0
         self.account = account
-        prnt(self.account)
         self.balance = 0.0
         self.balance_in_play = 0.0
         # self.session = get_session_with_proxy('fonbet')
@@ -274,7 +273,7 @@ class FonbetBot:
     def sign_in(self):
         try:
             self.base_payload["platform"] = "mobile_android"
-
+            prnt(self.account['login'], True)
             self.base_payload["clientId"] = self.account['login']
 
             payload = self.base_payload
