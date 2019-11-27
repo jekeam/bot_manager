@@ -899,6 +899,7 @@ if __name__ == '__main__':
                     if not start_message_send:
                         cnt_fork_success_old = len(cnt_fork_success)
                         cnt_fork_fail_old = cnt_fail
+                        msg_str_t = ''
                         if one_proc:
                             msg_str_t = str(ACC_ID) + ': Распределение балансов:\n' + bk1_name + ': ' + str(round(bal1 / one_proc)) + '%\n' + bk2_name + ': ' + str(round(bal2 / one_proc)) + '%\n'
                         if cnt_fork_success_old != 0:
