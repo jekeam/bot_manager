@@ -46,6 +46,7 @@ class FonbetBot:
     """Use to place bets on fonbet site."""
 
     def __init__(self, account: dict = DEFAULT_ACCOUNT) -> None:
+        self.bk_type = get_prop('fonbet_s', 'com')
         self.bk_name = 'Fonbet'
         self.attempt_login = 0
         self.account = account
@@ -87,13 +88,36 @@ class FonbetBot:
             else:
                 raise ValueError('БК Фонбет: неизвестная ошибка, при подключении, проверьте, что прокси указан корректно и порт для HTTPS: ' + e_str)
 
-        self.base_payload = {
-            "appVersion": "5.1.3b",
-            "lang": "ru",
-            "rooted": False,
-            "sdkVersion": 21,
-            "sysId": 4
-        }
+        if self.bk_type == 'com':
+            self.app_ver = '5.1.3b'
+            self.user_agent = 'Fonbet/5.1.3b (Android 21; Phone; com.bkfonbet)'
+            self.not_url = 'fonbet.com'
+            self.url_api = 'clients-api'  # maybe 'common'?
+        elif self.bk_type == 'ru':
+            self.app_ver = '5.2.1r'
+            self.user_agent = 'Fonbet/5.2.1r (Android 21; Phone; ru.bkfon)'
+            self.not_url = 'fonbet.ru'
+            self.url_api = 'common'
+
+        if self.bk_type == 'com':
+            self.base_payload = {
+                "appVersion": self.app_ver,
+                "lang": "ru",
+                "rooted": False,
+                "sdkVersion": 21,
+                "sysId": 4
+            }
+        elif self.bk_type == 'ru':
+            self.base_payload = {
+                "appVersion": self.app_ver,
+                "carrier": "MegaFon",
+                "deviceManufacturer": "LENOVO",
+                "deviceModel": "Lenovo ",
+                "lang": "ru",
+                "rooted": False,
+                "sdkVersion": 21,
+                "sysId": 4
+            }
 
         self.payload_bet = {
             "coupon":
@@ -114,7 +138,7 @@ class FonbetBot:
                     "amount": 0.0,
                     "system": 0
                 },
-            "appVersion": "5.1.3b",
+            "appVersion": self.app_ver,
             "carrier": "",
             "deviceManufacturer": "LENOVO",
             "deviceModel": "Lenovo " + LENOVO_MODEL,
@@ -129,7 +153,7 @@ class FonbetBot:
 
         self.payload_req = {
             "client": {"id": 0},
-            "appVersion": "5.1.3b",
+            "appVersion": self.app_ver,
             "carrier": "",
             "deviceManufacturer": "LENOVO",
             "deviceModel": "Lenovo " + LENOVO_MODEL,
@@ -143,7 +167,7 @@ class FonbetBot:
         }
 
         self.fonbet_headers = {
-            "User-Agent": "Fonbet/5.1.3b (Android 21; Phone; com.bkfonbet)",
+            "User-Agent": self.user_agent,
             "Content-Type": "application/json; charset=UTF-8",
             "Connection": "Keep-Alive",
             "Accept-Encoding": "gzip"
@@ -188,7 +212,7 @@ class FonbetBot:
 
         self.coupon_info = {
             "regId": 0,
-            "appVersion": "5.1.3b",
+            "appVersion": self.app_ver,
             "carrier": "MegaFon",
             "deviceManufacturer": "LENOVO",
             "deviceModel": "Lenovo " + LENOVO_MODEL,
@@ -206,7 +230,7 @@ class FonbetBot:
     def get_urls(self):
         url = get_account_info('fonbet', 'mirror')
         if not url:
-            url = 'fonbet-b50f8.com'
+            url = self.not_url
         url = "https://" + url + "/urls.json?{}".format(random())
         prnt('BET_FONBET.PY: Fonbet, get_urls request: ' + str(url) + '\n' + str(browser_headers), 'hide')
         resp = requests_retry_session().get(
