@@ -886,7 +886,7 @@ class BetManager:
                 payload['sign'] = 'secret password'
 
                 msg = get_dumped_payload(payload)
-                sign = hmac.new(key=self.account['password'].encode(), msg=msg.encode(), digestmod=sha512).hexdigest()
+                sign = hmac.new(key=sha512(self.account['password'].encode()).hexdigest().encode(), msg=msg.encode(), digestmod=sha512).hexdigest()
                 payload['sign'] = sign
                 data = get_dumped_payload(payload)
 
@@ -896,7 +896,7 @@ class BetManager:
                 prnt(self.msg.format(sys._getframe().f_code.co_name, 'rq: ' + str(data)), 'hide')
 
                 resp = requests_retry_session_post(
-                    url.format('login'),
+                    url.format('loginById'),
                     headers=fb_headers,
                     data=data,
                     verify=False,

@@ -253,13 +253,13 @@ class FonbetBot:
             payload["sign"] = "secret password"
 
             msg = get_dumped_payload(payload)
-            sign = hmac.new(key=self.account['password'].encode(), msg=msg.encode(), digestmod=sha512).hexdigest()
+            sign = hmac.new(key=sha512(self.account['password'].encode()).hexdigest().encode(), msg=msg.encode(), digestmod=sha512).hexdigest()
             payload["sign"] = sign
             data = get_dumped_payload(payload)
             prnt('BET_FONBET.PY: Fonbet, sign_in request: ' + str(self.account['password'].encode()) + ' ' + str(data), 'hide')
             req_time_start = round(time.time())
             resp = requests_retry_session_post(
-                self.common_url.format("login"),
+                self.common_url.format("loginById"),
                 headers=self.fonbet_headers,
                 data=data,
                 verify=False,
@@ -852,7 +852,7 @@ class FonbetBot:
         payload['fsid'] = self.payload['fsid']
 
         msg = get_dumped_payload(payload)
-        sign = hmac.new(key=self.account['password'].encode(), msg=msg.encode(), digestmod=sha512).hexdigest()
+        sign = hmac.new(key=sha512(self.account['password'].encode()).hexdigest().encode(), msg=msg.encode(), digestmod=sha512).hexdigest()
         payload["sign"] = sign
         data = get_dumped_payload(payload)
         # url = 'https://23.111.238.130/session/coupon/info?lang=en'
