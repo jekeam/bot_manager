@@ -92,12 +92,12 @@ class FonbetBot:
             self.app_ver = '5.1.3b'
             self.user_agent = 'Fonbet/5.1.3b (Android 21; Phone; com.bkfonbet)'
             self.not_url = 'fonbet.com'
-            self.url_api = 'clients-api'  # maybe 'common'?
+            # self.url_api = 'clients-api'  # maybe 'common'?
         elif self.bk_type == 'ru':
             self.app_ver = '5.2.1r'
             self.user_agent = 'Fonbet/5.2.1r (Android 21; Phone; ru.bkfon)'
             self.not_url = 'fonbet.ru'
-            self.url_api = 'common'
+            # self.url_api = 'common'
 
         if self.bk_type == 'com':
             self.base_payload = {
@@ -247,7 +247,7 @@ class FonbetBot:
 
     def get_common_url(self):
         urls = self.get_urls()
-        client_url = urls[self.url_api][0]
+        client_url = urls['clients-api'][0]
         self.timeout = 4  # urls["timeout"] / 100
         prnt('BET_FONBET.PY: set timeout: ' + str(self.timeout))
 
