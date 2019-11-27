@@ -14,10 +14,10 @@ import re
 from retry_requests import requests_retry_session, requests_retry_session_post
 import requests
 from meta_ol import ol_url_api, ol_payload, ol_headers, get_xtoken_bet
-from meta_fb import fb_payload, fb_payload_bet, get_random_str, get_dumped_payload, get_urls, get_common_url
-from meta_fb import fb_headers, get_new_bets_fonbet, payload_req, payload_coupon_sum, payload_coupon_sell, fb_payload_max_bet
+from meta_fb import get_random_str, get_dumped_payload, get_urls, get_common_url
+from meta_fb import get_new_bets_fonbet, payload_coupon_sum, payload_coupon_sell, fb_payload_max_bet
 from meta_fb import payload_sell_check_result
-from utils import prnt, write_file, read_file, get_account_info, get_proxies, get_prop, get_new_sum_bets, get_sum_bets
+from utils import prnt, read_file, get_account_info, get_proxies, get_prop, get_new_sum_bets, get_sum_bets
 from fork_recheck import get_olimp_info, get_fonbet_info
 
 from exceptions import SessionNotDefined, BkOppBetError, NoMoney, BetError, SessionExpired, SaleError, BetIsDrop
@@ -34,6 +34,7 @@ else:
 urllib3.disable_warnings(urllib3.exceptions.InsecureRequestWarning)
 
 package_dir = path.dirname(path.abspath(__file__))
+LENOVO_MODEL = ''
 
 
 def run_bets(shared: dict):
@@ -102,8 +103,96 @@ class BetManager:
         self.sum_sell = None
 
         self.sum_sell_divider = 1
+
+        self.bk_type = 'com'
         if self.bk_name == 'fonbet':
             self.sum_sell_divider = 100
+            self.bk_type = self.bk_type = get_prop('fonbet_s', 'com')
+
+            if self.bk_type == 'com':
+                self.app_ver = '5.1.3b'
+                self.user_agent = 'Fonbet/5.1.3b (Android 21; Phone; com.bkfonbet)'
+                self.not_url = 'fonbet.com'
+                self.url_api = 'clients-api'  # maybe 'common'?
+            elif self.bk_type == 'ru':
+                self.app_ver = '5.2.1r'
+                self.user_agent = 'Fonbet/5.2.1r (Android 21; Phone; ru.bkfon)'
+                self.not_url = 'fonbet.ru'
+                self.url_api = 'common'
+
+            if self.bk_type == 'com':
+                self.base_payload = {
+                    "appVersion": self.app_ver,
+                    "lang": "ru",
+                    "rooted": False,
+                    "sdkVersion": 21,
+                    "sysId": 4
+                }
+            elif self.bk_type == 'ru':
+                self.base_payload = {
+                    "appVersion": self.app_ver,
+                    "carrier": "MegaFon",
+                    "deviceManufacturer": "LENOVO",
+                    "deviceModel": "Lenovo ",
+                    "lang": "ru",
+                    "rooted": False,
+                    "sdkVersion": 21,
+                    "sysId": 4
+                }
+
+            self.fonbet_headers = {
+                "User-Agent": self.user_agent,
+                "Content-Type": "application/json; charset=UTF-8",
+                "Connection": "Keep-Alive",
+                "Accept-Encoding": "gzip"
+            }
+
+            self.payload_bet = {
+                "coupon":
+                    {
+                        "flexBet": "any",  # Изменения коэф-в, any - все, up - вверх
+                        "flexParam": False,  # Изменения фор и тоталов, True - принимать, False - не принимать
+                        "bets":
+                            [
+                                {
+                                    "lineType": "LIVE",
+                                    "score": "",
+                                    "value": 0,
+                                    "event": 0,
+                                    "factor": 0,
+                                    "num": 0
+                                },
+                            ],
+                        "amount": 0.0,
+                        "system": 0
+                    },
+                "appVersion": self.app_ver,
+                "carrier": "",
+                "deviceManufacturer": "LENOVO",
+                "deviceModel": "Lenovo " + LENOVO_MODEL,
+                "fsid": "",
+                "lang": "ru",
+                "platform": "mobile_android",
+                "rooted": False,
+                "sdkVersion": 21,
+                "sysId": 4,
+                "clientId": 0
+            }
+
+            self.payload_req = {
+                "client": {"id": 0},
+                "appVersion": self.app_ver,
+                "carrier": "",
+                "deviceManufacturer": "LENOVO",
+                "deviceModel": "Lenovo " + LENOVO_MODEL,
+                "fsid": "",
+                "lang": "ru",
+                "platform": "mobile_android",
+                "rooted": False,
+                "sdkVersion": 21,
+                "sysId": 4,
+                "clientId": 0
+            }
 
         self.cashout_allowed = None
         self.attempt_login = 1
@@ -878,10 +967,10 @@ class BetManager:
                 #     #raise SessionNotDefined(e)
                 #     raise ValueError(e)
 
-                fb_payload['platform'] = 'mobile_android'
-                fb_payload['clientId'] = self.account['login']
+                self.base_payload['platform'] = 'mobile_android'
+                self.base_payload['clientId'] = self.account['login']
 
-                payload = copy.deepcopy(fb_payload)
+                payload = copy.deepcopy(self.base_payload)
                 payload['random'] = get_random_str()
                 payload['sign'] = 'secret password'
 
@@ -1061,8 +1150,8 @@ class BetManager:
 
             url, self.timeout = get_common_url(self.server_fb)
 
-            payload = copy.deepcopy(fb_payload_bet)
-            headers = copy.deepcopy(fb_headers)
+            payload = copy.deepcopy(self.payload_bet)
+            headers = copy.deepcopy(self.fonbet_headers)
 
             payload['client'] = {'id': self.account['login']}
             payload['coupon']['amount'] = self.sum_bet
@@ -1148,7 +1237,7 @@ class BetManager:
                 url = url.replace('session/', '')
 
             payload = copy.deepcopy(payload_coupon_sum)
-            headers = copy.deepcopy(fb_headers)
+            headers = copy.deepcopy(self.fonbet_headers)
 
             payload['clientId'] = self.account['login']
             payload['fsid'] = self.session['session']
@@ -1270,7 +1359,7 @@ class BetManager:
 
                 # step2 get rqid for sell coupn
                 payload = copy.deepcopy(payload_coupon_sum)
-                headers = copy.deepcopy(fb_headers)
+                headers = copy.deepcopy(self.fonbet_headers)
 
                 payload['clientId'] = self.account['login']
                 payload['fsid'] = self.session['session']
@@ -1294,7 +1383,7 @@ class BetManager:
 
                 # step3 sell
                 payload = copy.deepcopy(payload_coupon_sell)
-                headers = copy.deepcopy(fb_headers)
+                headers = copy.deepcopy(self.fonbet_headers)
 
                 payload['regId'] = int(self.reg_id)
                 payload['requestId'] = int(self.reqIdSale)
@@ -1350,7 +1439,7 @@ class BetManager:
         self.opposite_stat_get(shared)
 
         payload = copy.deepcopy(fb_payload_max_bet)
-        headers = copy.deepcopy(fb_headers)
+        headers = copy.deepcopy(self.fonbet_headers)
 
         if not self.server_fb:
             self.server_fb = get_urls(self.mirror, self.proxies)
@@ -1437,7 +1526,7 @@ class BetManager:
         except:
             pass
 
-        headers = copy.deepcopy(fb_headers)
+        headers = copy.deepcopy(self.fonbet_headers)
 
         prnt(self.msg.format(sys._getframe().f_code.co_name, 'rs: ' + str(payload)), 'hide')
         resp = requests_retry_session_post(
@@ -1605,9 +1694,9 @@ class BetManager:
 
         url, self.timeout = get_common_url(self.server_fb)
 
-        headers = copy.deepcopy(fb_headers)
+        headers = copy.deepcopy(self.fonbet_headers)
 
-        payload = copy.deepcopy(payload_req)
+        payload = copy.deepcopy(self.payload_req)
         payload['fsid'] = self.payload['fsid']
         payload['clientId'] = self.account['login']
         payload['client']['id'] = self.account['login']
@@ -1642,7 +1731,7 @@ class BetManager:
         url = url.replace('session/', '')
 
         payload = copy.deepcopy(payload_sell_check_result)
-        headers = copy.deepcopy(fb_headers)
+        headers = copy.deepcopy(self.fonbet_headers)
 
         payload['requestId'] = self.reqIdSale
         payload['clientId'] = self.account['login']
