@@ -982,7 +982,7 @@ class BetManager:
                 data = get_dumped_payload(payload)
 
                 self.server_fb = get_urls(self.mirror, self.proxies)
-                url, self.timeout = get_common_url(self.server_fb)
+                url, self.timeout = get_common_url(self.server_fb, self.url_api)
 
                 prnt(self.msg.format(sys._getframe().f_code.co_name, 'rq: ' + str(data)), 'hide')
 

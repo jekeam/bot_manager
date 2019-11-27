@@ -22,7 +22,7 @@ TT2U = [['ТМ2({})', 1871], ['ТМ2({})', 1874], ['ТМ2({})', 1881]]
 
 LENOVO_MODEL = ''
 
-url_fonbet  = 'https://line-01.ccf4ab51771cacd46d.com'
+url_fonbet = 'https://line-01.ccf4ab51771cacd46d.com'
 
 url_fonbet_matchs = url_fonbet + "/live/currentLine/en/?2lzf1earo8wjksbh22s"
 url_fonbet_match = url_fonbet + "/line/eventView?eventId="
@@ -192,8 +192,11 @@ def get_urls(mirror, proxies):
     return resp.json()
 
 
-def get_common_url(data_urls):
-    client_url = data_urls["clients-api"][0]
+def get_common_url(data_urls, url_api=None):
+    if not url_api:
+        client_url = data_urls["clients-api"][0]
+    else:
+        client_url = data_urls[url_api][0]
     timeout = 4  # data_urls["timeout"] / 100
     return "https:{url}/session/".format(url=client_url) + "{}", timeout
 
