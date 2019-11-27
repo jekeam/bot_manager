@@ -271,7 +271,7 @@ class FonbetBot:
         try:
             self.base_payload["platform"] = "mobile_android"
 
-            self.base_payload["clientId"] = self.account['login']
+            self.base_payload["login"] = self.account['login']
 
             payload = self.base_payload
             payload["random"] = get_random_str()
