@@ -111,10 +111,10 @@ def get_team_type(name_rus: str, name: str):
         return '', 'rus: ' + str(name_rus) + ', en: ' + str(name)
 
 
-fork_exclude_text_old = ''
+fork_exclude_list = []
 def check_fork(key, L, k1, k2, live_fork, live_fork_total, bk1_score, bk2_score, event_type, minute, time_break_fonbet, period, team_type, team_names, deff_max, is_top, is_hot, info=''):
     global bal1, bal2, bet1, bet2, cnt_fork_success, black_list_matches, matchs_success, summ_min, fonbet_maxbet_fact
-    global fork_exclude_text_old
+    global fork_exclude_list
 
     fork_exclude_text = ''
     v = True
@@ -166,25 +166,25 @@ def check_fork(key, L, k1, k2, live_fork, live_fork_total, bk1_score, bk2_score,
     # Проверяем хватить денег для ставки
     if (bal1 < bet1) or (bal2 < bet2):
         fork_exclude_text = fork_exclude_text + 'Для проставления вилки ' + key \
-                            + '% недостаточно средств, bal1=' \
+                            + ' недостаточно средств, bal1=' \
                             + str(bal1) + ', bet1=' + str(bet1) \
                             + ', bal2=' + str(bal2) + ', bet2=' + str(bet2) + '\n'
 
     if get_prop('max_kof'):
         max_kof = float(get_prop('max_kof'))
         if k1 > max_kof or k2 > max_kof:
-            fork_exclude_text = fork_exclude_text + 'Вилка ' + key + '% исключена т.к. коэф-большой: ({}/{}) > {})\n'.format(k1, k2, max_kof)
+            fork_exclude_text = fork_exclude_text + 'Вилка ' + key + ' исключена т.к. коэф-большой: ({}/{}) > {})\n'.format(k1, k2, max_kof)
 
     if bk1_score != bk2_score:
-        fork_exclude_text = fork_exclude_text + 'Вилка ' + key + '% исключена т.к. счет не совпадает: olimp(' + bk1_score + ') fonbet(' + bk2_score + ')\n'
+        fork_exclude_text = fork_exclude_text + 'Вилка ' + key + ' исключена т.к. счет не совпадает: olimp(' + bk1_score + ') fonbet(' + bk2_score + ')\n'
 
     if event_type == 'football':
         # Больше 43 минуты и не идет перерыв и это 1 период
         if 43.0 < float(minute) and not time_break_fonbet and period == 1:
-            fork_exclude_text = fork_exclude_text + 'Вилка ' + key + '% исключена т.к. идет ' + str(minute) + ' минута матча и это не перерыв / не 2-й период \n'
+            fork_exclude_text = fork_exclude_text + 'Вилка ' + key + ' исключена т.к. идет ' + str(minute) + ' минута матча и это не перерыв / не 2-й период \n'
 
         if float(minute) > 88.0:
-            fork_exclude_text = fork_exclude_text + 'Вилка ' + key + '% исключена т.к. идет ' + str(minute) + ' минута матча \n'
+            fork_exclude_text = fork_exclude_text + 'Вилка ' + key + ' исключена т.к. идет ' + str(minute) + ' минута матча \n'
 
     # Вилка живет достаточно
     long_livers = int(get_prop('fork_life_time'))
@@ -192,15 +192,15 @@ def check_fork(key, L, k1, k2, live_fork, live_fork_total, bk1_score, bk2_score,
     if get_prop('fork_time_type', 'auto') in ('auto', 'текущее'):
         # if live_fork - deff_max < long_livers:
         if live_fork < long_livers:
-            fork_exclude_text = fork_exclude_text + 'Вилка ' + key + '% исключена т.к. живет меньше ' + str(long_livers) + ' сек. \n'
+            fork_exclude_text = fork_exclude_text + 'Вилка ' + key + ' исключена т.к. живет меньше ' + str(long_livers) + ' сек. \n'
         if live_fork > long_livers_max:
-            fork_exclude_text = fork_exclude_text + 'Вилка ' + key + '% исключена т.к. живет больше ' + str(long_livers) + ' сек. \n'
+            fork_exclude_text = fork_exclude_text + 'Вилка ' + key + ' исключена т.к. живет больше ' + str(long_livers) + ' сек. \n'
     else:
         # if live_fork_total - deff_max < long_livers:
         if live_fork_total < long_livers:
-            fork_exclude_text = fork_exclude_text + 'Вилка ' + key + '% исключена т.к. живет в общем меньше ' + str(long_livers) + ' сек. \n'
+            fork_exclude_text = fork_exclude_text + 'Вилка ' + key + ' исключена т.к. живет в общем меньше ' + str(long_livers) + ' сек. \n'
         if live_fork_total > long_livers_max:
-            fork_exclude_text = fork_exclude_text + 'Вилка ' + key + '% исключена т.к. живет в общем больше ' + str(long_livers) + ' сек. \n'
+            fork_exclude_text = fork_exclude_text + 'Вилка ' + key + ' исключена т.к. живет в общем больше ' + str(long_livers) + ' сек. \n'
 
     if get_prop('top', 'выкл') == 'вкл' and not is_top:
         fork_exclude_text = fork_exclude_text + 'Вилка исключена т.к. это не топовый матч: ' + name_rus + '\n'
@@ -218,10 +218,10 @@ def check_fork(key, L, k1, k2, live_fork, live_fork_total, bk1_score, bk2_score,
     fork_exclude_text = fork_exclude_text + check_l(L)
 
     if fork_exclude_text != '':
-        if fork_exclude_text_old != fork_exclude_text:
-            fork_exclude_text_old = fork_exclude_text
-            prnt(vstr=info + '\n' + fork_exclude_text + '\n', hide='hide', to_cl=True)
         v = False
+        if key not in fork_exclude_list:
+            fork_exclude_list.append(key)
+            prnt(vstr=info + '\n' + fork_exclude_text + '\n', hide='hide', to_cl=True)
     return v
 
 
