@@ -111,8 +111,10 @@ def get_team_type(name_rus: str, name: str):
         return '', 'rus: ' + str(name_rus) + ', en: ' + str(name)
 
 
+fork_exclude_text_old = ''
 def check_fork(key, L, k1, k2, live_fork, live_fork_total, bk1_score, bk2_score, event_type, minute, time_break_fonbet, period, team_type, team_names, deff_max, is_top, is_hot, info=''):
     global bal1, bal2, bet1, bet2, cnt_fork_success, black_list_matches, matchs_success, summ_min, fonbet_maxbet_fact
+    global fork_exclude_text_old
 
     fork_exclude_text = ''
     v = True
