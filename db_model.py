@@ -19,7 +19,7 @@ prop_abr = {
     "OLIMP_U": {"abr": "УЗ Олимп", "type": "account:olimp", "max": "", "min": "", "access_list": [], "error": ""},
     "OLIMP_P": {"abr": "Прокси Олимп", "type": "proxi:olimp", "max": "", "min": "", "access_list": [], "error": ""},
 
-    "FONBET_S": {"abr": "Сервер фонбета", "type": "str", "max": "", "min": "", "access_list": ["ru", "com"], "error": ""},
+    "FONBET_S": {"abr": "Сервер Фонбета", "type": "str", "max": "", "min": "", "access_list": ["ru", "com"], "error": ""},
 
     "FORK_SLICE": {"abr": "Уникальность ставок, %", "type": "int", "max": "90", "min": "0", "access_list": [], "error": ""},
 
