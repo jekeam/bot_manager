@@ -273,7 +273,7 @@ class FonbetBot:
     def sign_in(self):
         try:
             self.base_payload["platform"] = "mobile_android"
-            prnt(self.account['login'], True)
+            prnt('login' + str(self.account['login']), True)
             self.base_payload["clientId"] = self.account['login']
 
             payload = self.base_payload
