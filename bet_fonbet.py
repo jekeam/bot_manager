@@ -230,7 +230,8 @@ class FonbetBot:
     def get_urls(self):
         url = get_account_info('fonbet', 'mirror')
         if not url:
-            url = self.not_url
+            # url = self.not_url
+            url = 'fonbet.ru'
         url = "https://" + url + "/urls.json?{}".format(random())
         prnt('BET_FONBET.PY: Fonbet, get_urls request: ' + str(url) + '\n' + str(browser_headers), 'hide')
         resp = requests_retry_session().get(
@@ -246,7 +247,7 @@ class FonbetBot:
 
     def get_common_url(self):
         urls = self.get_urls()
-        client_url = urls["clients-api"][0]
+        client_url = urls[self.url_api][0]
         self.timeout = 4  # urls["timeout"] / 100
         prnt('BET_FONBET.PY: set timeout: ' + str(self.timeout))
 
