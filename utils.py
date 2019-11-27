@@ -125,7 +125,7 @@ def prnt(vstr=None, hide=None, to_cl=False):
             if to_cl:
                 strLog = datetime.datetime.now().strftime('%d %H:%M:%S.%f ') + '    ' + str(vstr)
                 Outfile = open(str(ACC_ID) + '_to_cl.log', "a+", encoding='utf-8')
-                Outfile.write(strLog + '\n\n')
+                Outfile.write(strLog + '\n')
                 Outfile.close()
 
 
