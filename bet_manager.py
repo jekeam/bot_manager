@@ -803,7 +803,7 @@ class BetManager:
                         ))
                         sleep(5)
                         self.attempt_sale = self.attempt_sale + 1
-                    if (self.total_stock is not None and self.total_stock <= 0) or self.attempt_sale > 75:
+                    if (self.total_stock is not None and self.total_stock <= 0) or self.attempt_sale > 40:
                         self.attempt_sale = 1
                         raise BetIsLost(err_msg)
 
