@@ -339,9 +339,8 @@ def go_bets(wag_ol, wag_fb, key, deff_max, vect1, vect2, sc1, sc2, created, even
         }
 
         if DEBUG:
-            pass
-            # bet1 = 30
-            # bet2 = 30
+            bet1 = 30
+            bet2 = 30
         # return False
 
         shared = dict()
@@ -1179,7 +1178,7 @@ if __name__ == '__main__':
         err_str = str(ACC_ID) + ': Возникла ошибка! ' + str(e.__class__.__name__) + ' - ' + str(err_str)
         prnt(err_str)
 
-        send_message_bot(USER_ID, str(ACC_ID) + ': Возникла ошибка, ' + str(e), ADMINS)
+        send_message_bot(USER_ID, str(ACC_ID) + ': Во��никла ошибка, ' + str(e), ADMINS)
 
     finally:
         shutdown = True
