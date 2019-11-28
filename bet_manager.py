@@ -982,12 +982,6 @@ class BetManager:
                 data = get_dumped_payload(payload)
 
                 self.server_fb = get_urls(self.mirror, self.proxies)
-
-                # TEMPLOG
-                prnt('self.server_fb: ' + str(self.server_fb))
-                prnt('self.mirror: ' + str(self.mirror))
-                prnt('self.url_api: ' + str(self.url_api))
-                
                 url, self.timeout = get_common_url(self.server_fb, self.url_api)
 
                 prnt(self.msg.format(sys._getframe().f_code.co_name, 'rq: ' + str(data)), 'hide')
@@ -1155,8 +1149,7 @@ class BetManager:
 
             if not self.server_fb:
                 self.server_fb = get_urls(self.mirror, self.proxies)
-
-            url, self.timeout = get_common_url(self.server_fb)
+            url, self.timeout = get_common_url(self.server_fb, self.url_api)
 
             payload = copy.deepcopy(self.payload_bet)
             headers = copy.deepcopy(self.fonbet_headers)
@@ -1241,7 +1234,7 @@ class BetManager:
                 self.server_fb = get_urls(self.mirror, self.proxies)
 
             if not url:
-                url, self.timeout = get_common_url(self.server_fb)
+                url, self.timeout =get_common_url(self.server_fb, self.url_api)
                 url = url.replace('session/', '')
 
             payload = copy.deepcopy(payload_coupon_sum)
@@ -1359,7 +1352,7 @@ class BetManager:
                 # step1 get from version and sell sum
                 if not self.server_fb:
                     self.server_fb = get_urls(self.mirror, self.proxies)
-                url, self.timeout = get_common_url(self.server_fb)
+                url, self.timeout = get_common_url(self.server_fb, self.url_api)
                 url = url.replace('session/', '')
 
                 self.get_sum_sell(shared, url)
@@ -1451,7 +1444,7 @@ class BetManager:
 
         if not self.server_fb:
             self.server_fb = get_urls(self.mirror, self.proxies)
-        url, self.timeout = get_common_url(self.server_fb)
+        url, self.timeout = get_common_url(self.server_fb, self.url_api)
 
         if self.wager.get('param'):
             payload['coupon']['bets'][0]['param'] = int(self.wager['param'])
@@ -1527,7 +1520,7 @@ class BetManager:
 
         payload = copy.deepcopy(self.payload)
 
-        url, timeout = get_common_url(self.server_fb)
+        url, timeout = get_common_url(self.server_fb, self.url_api)
 
         try:
             del payload['coupon']
@@ -1700,7 +1693,7 @@ class BetManager:
         if not self.server_fb:
             self.server_fb = get_urls(self.mirror, self.proxies)
 
-        url, self.timeout = get_common_url(self.server_fb)
+        url, self.timeout = get_common_url(self.server_fb, self.url_api)
 
         headers = copy.deepcopy(self.fonbet_headers)
 
@@ -1735,7 +1728,7 @@ class BetManager:
         if not self.server_fb:
             self.server_fb = get_urls(self.mirror, self.proxies)
 
-        url, self.timeout = get_common_url(self.server_fb)
+        url, self.timeout = get_common_url(self.server_fb, self.url_api)
         url = url.replace('session/', '')
 
         payload = copy.deepcopy(payload_sell_check_result)
