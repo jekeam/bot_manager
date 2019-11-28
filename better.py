@@ -928,7 +928,7 @@ if __name__ == '__main__':
                     if bk2.get_acc_info('pay').lower() != 'Нет'.lower():
                         msg_err = msg_err + '\n' + 'обнаружена блокировка вывода, нужно пройти верификацию в Фонбет, аккаунт остановлен!'
 
-                    if bal_small:
+                    if bal_small and not DEBUG:
                         msg_err = msg_err + '\n' + 'аккаунт остановлен: денег в одной из БК не достаточно для работы, просьба выровнять балансы.\n' + bk1_name + ': ' + str(
                             bal1) + '\n' + bk2_name + ': ' + str(bal2)
 
