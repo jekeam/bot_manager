@@ -985,8 +985,9 @@ class BetManager:
 
                 # TEMPLOG
                 prnt('self.server_fb: ' + str(self.server_fb))
+                prnt('self.mirror: ' + str(self.mirror))
                 prnt('self.url_api: ' + str(self.url_api))
-
+                
                 url, self.timeout = get_common_url(self.server_fb, self.url_api)
 
                 prnt(self.msg.format(sys._getframe().f_code.co_name, 'rq: ' + str(data)), 'hide')
