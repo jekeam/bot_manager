@@ -1154,6 +1154,8 @@ if __name__ == '__main__':
             last_fork_time_diff = int(time.time()) - last_fork_time
             wait_before_exp = max(60 * 60 * 2 - last_fork_time_diff, 0)
             prnt(str(last_fork_time_diff) + ' секунд прошло с момента последней ставки')
+            if DEBUG:
+                wait_before_exp = 0
             if wait_before_exp:
                 msg_str = str(ACC_ID) + ': Ожидание ' + str(round(wait_before_exp / 60)) + ' минут, до выгрузки'
                 prnt(msg_str)
