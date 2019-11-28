@@ -498,6 +498,7 @@ def go_bets(wag_ol, wag_fb, key, deff_max, vect1, vect2, sc1, sc2, created, even
         fork_info[fork_id]['fonbet']['max_proc'] = get_prop('max_proc', 20)
 
         fork_info[fork_id]['fonbet']['user_id'] = info_csv.get('user_id', '')
+        fork_info[fork_id]['fonbet']['fb_bk_type'] = info_csv.get('fb_bk_type', 'com')
         fork_info[fork_id]['fonbet']['group_limit_id'] = info_csv.get('group_limit_id', '')
         fork_info[fork_id]['fonbet']['live_fork'] = info_csv.get('live_fork', '')
         fork_info[fork_id]['fonbet']['team_type'] = info_csv.get('team_type', '')
@@ -803,6 +804,7 @@ if __name__ == '__main__':
                 prnt('Блокировка ставки: ' + str(bk2.get_acc_info('bet')))
                 group_limit_id = str(bk2.get_acc_info('group'))
                 prnt('Группа лимита: ' + group_limit_id)
+                prnt('Тип БК: ' + get_prop('fonbet_s', 'com'))
 
                 get_round_fork = int(get_prop('round_fork'))
                 if get_round_fork not in (1, 5, 10, 50, 100, 1000):
@@ -1120,6 +1122,7 @@ if __name__ == '__main__':
                                                         'team_type': team_type,
                                                         'summ_min': summ_min_stat,
                                                         'fonbet_maxbet_fact': fonbet_maxbet_fact,
+                                                        'fb_bk_type': get_prop('fonbet_s', 'com'),
                                                     })
                                                     prnt('info_csv: ' + str(info_csv))
 
