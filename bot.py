@@ -219,11 +219,6 @@ def set_prop(update, context):
                 else:
                     acc_id = context.user_data.get('acc_id')
                     if acc_id:
-                        if Properties.select().where((Properties.acc_id == acc_id) & (Properties.key == key)).count() > 0:
-                            Properties.update(val=prop_val).where((Properties.acc_id == acc_id) & (Properties.key == key)).execute()
-                        else:
-                            data = [(acc_id, key, prop_val), ]
-                            Properties.insert_many(data, fields=[Properties.acc_id, Properties.key, Properties.val]).execute()
 
                         if 'proxi' in type_:
                             bk_name = type_.split(':')[1]
@@ -243,17 +238,25 @@ def set_prop(update, context):
                                 login = str(login)
 
                             account_json[bk_name]['login'] = login
-                            account_json[bk_name]['password'] = prop_val.split('/')[1].strip()
+                            prop_val = prop_val.split('/')[1].strip()
+                            account_json[bk_name]['password'] =
                             account_str = json.dumps(account_json).replace('"', '`')
                             Account.update(accounts=account_str).where((Account.id == acc_id)).execute()
                         elif 'mirror' in type_:
                             bk_name = type_.split(':')[1]
                             account_json = json.loads(Account.select().where(Account.id == acc_id).get().accounts.replace('`', '"'))
 
+                            prop_val = prop_val.strip().lower().replace('http://', '').replace('https://', '')
                             mirror = prop_val.strip().lower().replace('http://', '').replace('https://', '')
                             account_json[bk_name]['mirror'] = mirror
                             account_str = json.dumps(account_json).replace('"', '`')
                             Account.update(accounts=account_str).where((Account.id == acc_id)).execute()
+
+                        if Properties.select().where((Properties.acc_id == acc_id) & (Properties.key == key)).count() > 0:
+                            Properties.update(val=prop_val).where((Properties.acc_id == acc_id) & (Properties.key == key)).execute()
+                        else:
+                            data = [(acc_id, key, prop_val), ]
+                            Properties.insert_many(data, fields=[Properties.acc_id, Properties.key, Properties.val]).execute()
 
                         msg_main = str(acc_id) + ': Новое значение *' + prop_name + '*\nустановлено:\n' + Properties.select().where((Properties.acc_id == acc_id) & (Properties.key == key)).get().val
 
