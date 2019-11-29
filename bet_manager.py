@@ -331,7 +331,7 @@ class BetManager:
         if sum_bet_by_max_bet < max_bet_fonbet or max_bet_fonbet == 0:
             prnt(self.msg.format(sys._getframe().f_code.co_name, 'RECALC_SUM_BY_MAXBET: sum_bet_by_max_bet:{}({}%)->{}'.format(self.max_bet, get_prop('proc_by_max', '90'), sum_bet_by_max_bet)))
             prnt(self.msg.format(sys._getframe().f_code.co_name, 'RECALC_SUM_BY_MAXBET: bal1:{}, bal2:{}, k1:{}, k2:{}, sum_bet_by_max_bet:{}'.format(bal1, bal2, k1, k2, sum_bet_by_max_bet)))
-            sum1, sum2 = get_new_sum_bets(k1, k2, sum_bet_by_max_bet)
+            sum1, sum2 = get_new_sum_bets(k1, k2, sum_bet_by_max_bet, bal1)
 
         if (sum1 + sum2) >= int(get_prop('summ')):
             prnt(self.msg.format(sys._getframe().f_code.co_name, 'Сумма после пересчета по максбету, больше общей ставки, уменьшаем ее: {}->{}'.format((sum1 + sum2), int(get_prop('summ')))))
@@ -339,11 +339,11 @@ class BetManager:
 
         if sum1 >= bal1:
             prnt(self.msg.format(sys._getframe().f_code.co_name, 'Сумма ставки 1й бк после пересчета по максбету, больше баланса 1й бк, уменьшаем ее: {}->{}'.format(sum1, bal1)))
-            sum1, sum2 = get_new_sum_bets(k1, k2, bal1)
+            sum1, sum2 = get_new_sum_bets(k1, k2, bal1, bal2)
 
         if sum2 >= bal2:
             prnt(self.msg.format(sys._getframe().f_code.co_name, 'Сумма ставки 2й бк после пересчета по максбету, больше баланса 2й бк, уменьшаем ее: {}->{}'.format(sum2, bal2)))
-            sum2, sum1 = get_new_sum_bets(k2, k1, bal2)
+            sum2, sum1 = get_new_sum_bets(k2, k1, bal2, bal1, bal2)
 
         if sum1 > bal1 or sum2 > bal2:
             raise BetIsLost('Одна из ставок больше баланса: {}>{}, {}>{}' + str(sum1, bal1, sum2, bal2))
@@ -1234,7 +1234,7 @@ class BetManager:
                 self.server_fb = get_urls(self.mirror, self.proxies)
 
             if not url:
-                url, self.timeout =get_common_url(self.server_fb, self.url_api)
+                url, self.timeout = get_common_url(self.server_fb, self.url_api)
                 url = url.replace('session/', '')
 
             payload = copy.deepcopy(payload_coupon_sum)

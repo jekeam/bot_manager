@@ -112,6 +112,8 @@ def get_team_type(name_rus: str, name: str):
 
 
 fork_exclude_list = []
+
+
 def check_fork(key, L, k1, k2, live_fork, live_fork_total, bk1_score, bk2_score, event_type, minute, time_break_fonbet, period, team_type, team_names, deff_max, is_top, is_hot, info=''):
     global bal1, bal2, bet1, bet2, cnt_fork_success, black_list_matches, matchs_success, summ_min, fonbet_maxbet_fact
     global fork_exclude_list
@@ -607,7 +609,7 @@ def run_client():
 
         if ('timeout'.lower() in msg_err.lower() or 'timed out'.lower() in msg_err.lower()) and not send_msg:
             time_out_cnt = time_out_cnt + 1
-            if time_out_cnt > 3:
+            if time_out_cnt > 10:
                 subprocess.call('systemctl restart scan.service', shell=True)
                 for admin in ADMINS:
                     msg_err = str(ACC_ID) + ': Возникла ошибка при запросе катировок со сканнера, сканнер перезапущен автоматически, без обновления прокси ' + str(msg_err)
@@ -615,7 +617,7 @@ def run_client():
                 send_msg = True
         elif 'ConnectionRefusedError'.lower() in msg_err.lower() and not send_msg:
             connection_error_cnt = connection_error_cnt + 1
-            if connection_error_cnt > 3:
+            if connection_error_cnt > 10:
                 subprocess.call('systemctl stop scan.service', shell=True)
                 time.sleep(60)
                 subprocess.call('python3.6 proxy_push.py', shell=True, cwd='/home/scan/')
@@ -639,11 +641,11 @@ def recalc_bets(hide=True):
     if bet1 > bal1 or bet2 > bal2:
         if bal1 < bal2:
             prnt('recalc bet (bal1 < bal2)', hide)
-            bet1, bet2 = get_new_sum_bets(k1, k2, bal1, hide)
+            bet1, bet2 = get_new_sum_bets(k1, k2, bal1, bal2, hide)
             total_bet = bet1 + bet2
         else:
             prnt('recalc bet (bal1 > bal2)', hide)
-            bet2, bet1 = get_new_sum_bets(k2, k1, bal2, hide)
+            bet2, bet1 = get_new_sum_bets(k2, k1, bal2, bal1, hide)
             total_bet = bet1 + bet2
 
     max_bet_fonbet = int(get_prop('max_bet_fonbet', '0'))
@@ -651,12 +653,12 @@ def recalc_bets(hide=True):
         if fonbet_maxbet_fact > 0:
             if bet2 > fonbet_maxbet_fact:
                 prnt('recalc bet (fonbet_maxbet_fact)', hide)
-                bet2, bet1 = get_new_sum_bets(k2, k1, max_bet_fonbet, hide)
+                bet2, bet1 = get_new_sum_bets(k2, k1, max_bet_fonbet, bal1, hide)
                 total_bet = bet1 + bet2
-        
+
     if bet2 > max_bet_fonbet > 0:
         prnt('recalc bet (max_bet_fonbet)', hide)
-        bet2, bet1 = get_new_sum_bets(k2, k1, max_bet_fonbet, hide)
+        bet2, bet1 = get_new_sum_bets(k2, k1, max_bet_fonbet, bal1, hide)
         total_bet = bet1 + bet2
 
 
@@ -734,7 +736,7 @@ cnt_acc_sql = "select count(*)\n" + \
 
 if __name__ == '__main__':
     try:
-        
+
         random_time = uniform(0, 1)
         prnt('random_time: ' + str(random_time))
         time.sleep(random_time)
@@ -1047,7 +1049,7 @@ if __name__ == '__main__':
                                 info = ''
 
                             if (event_type in ('football', 'hockey') and test_oth_sport == 'выкл') or test_oth_sport == 'вкл':
-                            # or ((event_type not in ('football', 'hockey') and test_oth_sport == 'вкл' and str(USER_ID) in list(map(str, ADMINS)))) \
+                                # or ((event_type not in ('football', 'hockey') and test_oth_sport == 'вкл' and str(USER_ID) in list(map(str, ADMINS)))) \
                                 if vect1 and vect2:
                                     if deff_max < 3 and k1 > 0 < k2:
                                         round_bet = int(get_prop('round_fork'))
@@ -1076,9 +1078,9 @@ if __name__ == '__main__':
                                                 if key not in msg_excule_pushed:
                                                     msg_excule_pushed.append(key)
                                                     prnt(
-                                                        vstr = 'Вилка ' + str(key) + ' исключена, т.к. мы ее пытались проставить успешно/не успешно, но прошло менее 60 секунд и есть еще вилки, будем ставить другие, новые',
-                                                        hide = None, 
-                                                        to_cl = True
+                                                        vstr='Вилка ' + str(key) + ' исключена, т.к. мы ее пытались проставить успешно/не успешно, но прошло менее 60 секунд и есть еще вилки, будем ставить другие, новые',
+                                                        hide=None,
+                                                        to_cl=True
                                                     )
                                             else:
                                                 if key in msg_excule_pushed:
