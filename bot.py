@@ -250,7 +250,7 @@ def set_prop(update, context):
                             bk_name = type_.split(':')[1]
                             account_json = json.loads(Account.select().where(Account.id == acc_id).get().accounts.replace('`', '"'))
 
-                            mirror = prop_val.strip().lowwer().replace('http://', '').replace('https://', '')
+                            mirror = prop_val.strip().lower().replace('http://', '').replace('https://', '')
                             account_json[bk_name]['mirror'] = mirror
                             account_str = json.dumps(account_json).replace('"', '`')
                             Account.update(accounts=account_str).where((Account.id == acc_id)).execute()
