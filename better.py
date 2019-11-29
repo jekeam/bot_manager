@@ -1183,7 +1183,7 @@ if __name__ == '__main__':
         err_str = str(ACC_ID) + ': Возникла ошибка! ' + str(e.__class__.__name__) + ' - ' + str(err_str)
         prnt(err_str)
 
-        send_message_bot(USER_ID, str(ACC_ID) + ': Во��никла ошибка, ' + str(e), ADMINS)
+        send_message_bot(USER_ID, str(ACC_ID) + ': Возникла ошибка, ' + str(e), ADMINS)
 
     finally:
         shutdown = True
