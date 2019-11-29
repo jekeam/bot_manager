@@ -346,7 +346,7 @@ class BetManager:
             sum2, sum1 = get_new_sum_bets(k2, k1, bal2, bal1, bal2)
 
         if sum1 > bal1 or sum2 > bal2:
-            raise BetIsLost('Одна из ставок больше баланса: {}>{}, {}>{}' + str(sum1, bal1, sum2, bal2))
+            raise BetIsLost('Одна из ставок больше баланса: {}>{}, {}>{}'.format(sum1, bal1, sum2, bal2))
         elif sum1 < self.min_bet:
             raise BetIsLost('Сумма после пересчета меньше min_bet: {} < {}'.format(sum1, self.min_bet))
         elif sum1 < 30 or sum2 < 30:
