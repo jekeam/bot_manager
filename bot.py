@@ -32,6 +32,7 @@ from uuid import uuid1
 
 type_user = ('user', 'junior', 'investor')
 
+
 def prntb(vstr, filename='bot.log'):
     Outfile = open(filename, "a+", encoding='utf-8')
     Outfile.write(vstr + '\n')
@@ -154,8 +155,10 @@ def check_type(val: str, type_: str, min_: str, max_: str, access_list):
     err_str = ''
     err_limits = ''
 
+    type_exclude = ['mirror', 'proxi', 'account']
+
     try:
-        if 'proxi' in type_ or 'account' in type_:
+        if type_ in type_exclude:
             pass
         else:
             if type_ == 'int':
@@ -191,6 +194,9 @@ def check_type(val: str, type_: str, min_: str, max_: str, access_list):
     if 'account' in str(type_):
         if val.count('/') != 1:
             err_str = 'Неверный формат аккаунта'
+    if 'mirror' in str(type_):
+        if val.count('.') != 1:
+            err_str = 'Неверный формат зеркала'
 
     return err_str.strip()
 
@@ -240,6 +246,14 @@ def set_prop(update, context):
                             account_json[bk_name]['password'] = prop_val.split('/')[1].strip()
                             account_str = json.dumps(account_json).replace('"', '`')
                             Account.update(accounts=account_str).where((Account.id == acc_id)).execute()
+                        elif 'mirror' in type_:
+                            bk_name = type_.split(':')[1]
+                            account_json = json.loads(Account.select().where(Account.id == acc_id).get().accounts.replace('`', '"'))
+
+                            mirror = prop_val.strip()
+                            account_json[bk_name]['mirror'] = mirror
+                            account_str = json.dumps(account_json).replace('"', '`')
+                            Account.update(accounts=account_str).where((Account.id == acc_id)).execute()
 
                         msg_main = str(acc_id) + ': Новое значение *' + prop_name + '*\nустановлено:\n' + Properties.select().where((Properties.acc_id == acc_id) & (Properties.key == key)).get().val
 
@@ -248,7 +262,7 @@ def set_prop(update, context):
                         keyboard.append([InlineKeyboardButton(text=bot_prop.BTN_BACK, callback_data=context.user_data.get('key'))])
                         reply_markup = InlineKeyboardMarkup(keyboard)
                         update.message.reply_text(msg_main + '\n\nЕсли хотите задать еще настройки, нажмите : ', reply_markup=reply_markup, parse_mode=telegram.ParseMode.MARKDOWN)
-                        
+
                         admin_list = User.select().where(User.role == 'admin')
                         for admin in admin_list:
                             if admin.id != update.message.chat.id:
@@ -321,23 +335,23 @@ def add_day(update, context):
     if User.select().where(User.id == user_sender).get().role == 'admin':
         try:
             comm = update.message.text
-    
+
             c, acc_id, days = comm.split(' ')
-    
+
             acc_info = Account.select().where(Account.id == acc_id).get()
             date_end = acc_info.date_end
             owner_user_id = acc_info.user_id
-    
+
             if date_end:
                 date_end_str = datetime.datetime.fromtimestamp(date_end).strftime('%d.%m.%Y')
-    
+
                 date_plus = 60 * 60 * 24 * int(days)
                 date_end_new = date_end + date_plus
-    
+
                 Account.update(date_end=date_end_new).where((Account.id == acc_id)).execute()
                 date_end_new_db = Account.select().where(Account.id == acc_id).get().date_end
                 date_end_new_db_str = datetime.datetime.fromtimestamp(date_end_new_db).strftime('%d.%m.%Y')
-    
+
                 admin_list = User.select().where(User.role == 'admin')
                 for admin in admin_list:
                     context.bot.send_message(admin.id, '{}: Аккаунт с датой окончания {}, изменен на {} дней, текущая дата окончания: {}'.format(acc_id, date_end_str, days, date_end_new_db_str))
@@ -348,16 +362,20 @@ def add_day(update, context):
             exc_type, exc_value, exc_traceback = sys.exc_info()
             err_str = str(e) + ' ' + str(repr(traceback.format_exception(exc_type, exc_value, exc_traceback)))
             prntb(str(err_str))
-            context.bot.send_message(user_sender, 'Для изменения дней аккаунта, нужно отправить команду в формате:\n*add_day acc_id days*,\nнапример *add_day 4 30*', parse_mode=telegram.ParseMode.MARKDOWN)
+            context.bot.send_message(
+                user_sender,
+                'Для изменения дней аккаунта, нужно отправить команду в формате:\n*add_day acc_id days*,\nнапример *add_day 4 30*',
+                parse_mode=telegram.ParseMode.MARKDOWN
+            )
 
 
 def add(update, context):
     global type_user
     user_sender = update.message.chat.id
     types = ('user', 'acc')
-    
+
     if User.select().where(User.id == user_sender).get().role == 'admin':
-        try:  
+        try:
             comm = update.message.text
             c, type_, id_, new_val = comm.split(' ')
             admin_list = User.select().where(User.role == 'admin')
@@ -391,7 +409,7 @@ def add(update, context):
                     pass
                 else:
                     raise ValueError('Неверный формат прокси')
-                    
+
                 proxies = '{`fonbet`:{`http`:`http://' + proxy + '`,`https`:`https://' + proxy + '`},`olimp`:{`http`:`http://' + proxy + '`,`https`:`https://' + proxy + '`}}'
                 accounts = '{`olimp`:{`login`:`' + olu + '`,`password`:`' + olp + '`,`mirror`:`olimp.com`},`fonbet`:{`login`:' + fbu + ',`password`:`' + fbp + '`,`mirror`:``}}'
                 try:
@@ -406,7 +424,7 @@ def add(update, context):
                             proxies=proxies,
                             accounts=accounts
                         )
-                    
+
                         prop = (
                             Properties.insert_from(
                                 Properties.select(acc.id, Properties.val, Properties.key).where(Properties.acc_id == acc_copy),
@@ -429,7 +447,7 @@ def add(update, context):
             err_str = str(e) + ' ' + str(repr(traceback.format_exception(exc_type, exc_value, exc_traceback)))
             prntb(str(err_str))
             context.bot.send_message(
-                user_sender, 
+                user_sender,
                 'Для добавления пользователя,\n' + \
                 'нужно прислать команду:\n' + \
                 '*add user telegtam_id email;phone;role*:\n' + \
@@ -442,18 +460,19 @@ def add(update, context):
                 'Доступные значенения типов:\n' + ', '.join(map(str, types)),
                 parse_mode=telegram.ParseMode.MARKDOWN
             )
-            
+
+
 def change(update, context):
     global type_user
     user_sender = update.message.chat.id
     types = ('user', 'acc', 'prop')
     type_acc = ('active', 'inactive', 'pause')
-    
+
     if User.select().where(User.id == user_sender).get().role == 'admin':
         try:
             comm = update.message.text
             c, type_, id_, new_val = comm.split(' ')
-            
+
             admin_list = User.select().where(User.role == 'admin')
             if type_ == 'user':
                 try:
@@ -462,19 +481,20 @@ def change(update, context):
                         old_val = user_info.role
                         if new_val in type_user:
                             User.update(role=new_val).where((User.id == id_)).execute()
-                            
+
                             msg = '{}: Тип юзера сменен с {} на {}'.format(id_, old_val, new_val)
                             for admin in admin_list:
                                 context.bot.send_message(admin.id, msg, parse_mode=telegram.ParseMode.MARKDOWN)
                         else:
-                            context.bot.send_message(user_sender, '{}: Вы пытаетесь сменить тип аккаунта, но значение {} - запрещено, доступно только: {}'.format(id_, type_, ', '.join(map(str, type_user))))
+                            context.bot.send_message(user_sender,
+                                                     '{}: Вы пытаетесь сменить тип аккаунта, но значение {} - запрещено, доступно только: {}'.format(id_, type_, ', '.join(map(str, type_user))))
                 except Exception as e:
                     if 'instance matching query does not exist' in str(e):
                         context.bot.send_message(user_sender, '{}: Пользователь не найден!'.format(id_))
                     else:
                         exc_type, exc_value, exc_traceback = sys.exc_info()
                         err_str = str(e) + ' ' + str(repr(traceback.format_exception(exc_type, exc_value, exc_traceback)))
-                        prntb(str(err_str))                        
+                        prntb(str(err_str))
             elif type_ == 'acc':
                 try:
                     acc_info = Account.select().where(Account.id == id_).get()
@@ -482,12 +502,13 @@ def change(update, context):
                         old_val = acc_info.status
                         if new_val in type_acc:
                             Account.update(status=new_val).where((Account.id == id_)).execute()
-                            
+
                             msg = '{}: Тип аккаунта сменен с {} на {}'.format(id_, old_val, new_val)
                             for admin in admin_list:
                                 context.bot.send_message(admin.id, msg, parse_mode=telegram.ParseMode.MARKDOWN)
                         else:
-                            context.bot.send_message(user_sender, '{}: Вы пытаетесь сменить тип аккаунта, но значение {} - запрещено, доступно только: {}'.format(id_, type_, ', '.join(map(str, type_acc))))
+                            context.bot.send_message(user_sender,
+                                                     '{}: Вы пытаетесь сменить тип аккаунта, но значение {} - запрещено, доступно только: {}'.format(id_, type_, ', '.join(map(str, type_acc))))
                 except Exception as e:
                     if 'instance matching query does not exist' in str(e):
                         context.bot.send_message(user_sender, '{}: Аккаунт не найден!'.format(id_))
@@ -503,7 +524,7 @@ def change(update, context):
                         Properties.delete().where((Properties.acc_id == id_)).execute()
                         source = (Properties.select(id_, Properties.key, Properties.val).where(Properties.acc_id == new_val))
                         Properties.insert_from(source, [Properties.acc_id, Properties.key, Properties.val]).execute()
-                        
+
                         msg = '{}: Настройки аккаунта скопированы с {}'.format(id_, new_val)
                         for admin in admin_list:
                             context.bot.send_message(admin.id, msg, parse_mode=telegram.ParseMode.MARKDOWN)
@@ -521,7 +542,7 @@ def change(update, context):
             err_str = str(e) + ' ' + str(repr(traceback.format_exception(exc_type, exc_value, exc_traceback)))
             prntb(str(err_str))
             context.bot.send_message(
-                user_sender, 
+                user_sender,
                 'Для изменения дней аккаунта, нужно отправить команду в формате:\n' + \
                 '*change type id new_val*, например:\n' + \
                 'change user 5465456 junior или\n' + \
@@ -529,17 +550,17 @@ def change(update, context):
                 'change prop 29 5 (копия с 5го на 29)\n' + \
                 '\n' + \
                 'Доступные значенения типов:\n' + ', '.join(map(str, types)) + '\n' + \
-                'Доступные значенения для *user*:\n' + ', '.join(map(str, type_user)) + '\n'  + \
-                'Доступные значенения для *acc*:\n' + ', '.join(map(str, type_acc)) + '\n', 
+                'Доступные значенения для *user*:\n' + ', '.join(map(str, type_user)) + '\n' + \
+                'Доступные значенения для *acc*:\n' + ', '.join(map(str, type_acc)) + '\n',
                 parse_mode=telegram.ParseMode.MARKDOWN
             )
-                
-                
+
+
 def help(update, context):
     user_sender = update.message.chat.id
     if User.select().where(User.id == user_sender).get().role == 'admin':
         context.bot.send_message(
-            user_sender, 
+            user_sender,
             'Справка по команадам админа:\n\n' + \
             '/add_day номер_аккаунта колво_дней\n\n' + \
             '/change тип:аккаунт/юзер/настройки ИД новое_значение\n\n'
@@ -551,7 +572,7 @@ def get_time(update, context):
     update.message.reply_text('Time: ' + str(int(datetime.datetime.timestamp(datetime.datetime.now()))))
 
 
-def get_acc_list(update, p_stat = ''):
+def get_acc_list(update, p_stat=''):
     acc_list = None
     user_id = update.message.chat.id
 
@@ -609,7 +630,7 @@ def botlist(update, context, edit=False):
 
         keyboard.append([InlineKeyboardButton(text=str(acc.id) + ': ' + work_stat, callback_data=acc.key)])
 
-    keyboard.append([InlineKeyboardButton(text= emojize(':ambulance:', use_aliases=True) + ' Написать в тех. поддержку', url="t.me/autobro_sup")])
+    keyboard.append([InlineKeyboardButton(text=emojize(':ambulance:', use_aliases=True) + ' Написать в тех. поддержку', url="t.me/autobro_sup")])
     reply_markup = InlineKeyboardMarkup(keyboard)
 
     if not edit:
