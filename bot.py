@@ -239,7 +239,7 @@ def set_prop(update, context):
 
                             account_json[bk_name]['login'] = login
                             prop_val = prop_val.split('/')[1].strip()
-                            account_json[bk_name]['password'] =
+                            account_json[bk_name]['password'] = prop_val
                             account_str = json.dumps(account_json).replace('"', '`')
                             Account.update(accounts=account_str).where((Account.id == acc_id)).execute()
                         elif 'mirror' in type_:
@@ -247,7 +247,7 @@ def set_prop(update, context):
                             account_json = json.loads(Account.select().where(Account.id == acc_id).get().accounts.replace('`', '"'))
 
                             prop_val = prop_val.strip().lower().replace('http://', '').replace('https://', '')
-                            mirror = prop_val.strip().lower().replace('http://', '').replace('https://', '')
+                            mirror = prop_val
                             account_json[bk_name]['mirror'] = mirror
                             account_str = json.dumps(account_json).replace('"', '`')
                             Account.update(accounts=account_str).where((Account.id == acc_id)).execute()
