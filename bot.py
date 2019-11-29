@@ -730,6 +730,7 @@ def button(update, context):
                     Account.update(work_stat='stop').where(Account.key == query.data).execute()
                     update.callback_query.answer(text=bot_prop.MSG_ACC_STOP_WAIT)
                     send_message_bot(acc_info.get().user_id, str(acc_info.get().id) + ': ' + bot_prop.MSG_ACC_STOP_WAIT_EXT)
+                    time.sleep(1)
                 else:
                     if acc_info.get().date_end:
                         if datetime.datetime.fromtimestamp(acc_info.get().date_end) < datetime.datetime.now():
