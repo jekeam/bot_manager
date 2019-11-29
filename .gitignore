@@ -27,3 +27,4 @@ rq_fb_calc_balance
 *.png
 *.db
 test2.py
+test_recal_sum.py
