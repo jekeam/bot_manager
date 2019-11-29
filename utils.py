@@ -178,7 +178,7 @@ def get_new_sum_bets(bk1, bk2, max_bet, bal2, hide=False, round_fork=5):
     total_bet_max = (max_bet + bal2)
     if total_bet > total_bet_max:
         total_bet = total_bet_max
-        prnt('Error, total_bet > total_bet_max, {}>{}, sum_bk1: {}, max_bet: {}'.format(total_bet, total_bet_max), hide)
+        prnt('Error, total_bet > total_bet_max, {}>{}'.format(total_bet, total_bet_max), hide)
     sum_bk1, sum_bk2 = get_sum_bets(bk1, bk2, total_bet, round_fork, hide)
     if sum_bk2 > bal2:
         prnt('Error, sum_bk2 > bal2, {}>{}, sum_bk1: {}, max_bet: {}'.format(sum_bk2, bal2, sum_bk1, max_bet), hide)
