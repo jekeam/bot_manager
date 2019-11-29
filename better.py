@@ -744,7 +744,7 @@ if __name__ == '__main__':
 
         wait_before_start_sec = 0
         if START_SLEEP != '':
-            wait_before_start_sec = float(randint(1, 600))
+            wait_before_start_sec = float(randint(1, 1200))
             Account.update(work_stat='start').where(Account.key == KEY).execute()
         send_message_bot(USER_ID, str(ACC_ID) + ': ' + 'Аккаунт запущен', ADMINS)
         prnt('начну работу через ' + str(round(wait_before_start_sec)) + ' сек...')
@@ -933,8 +933,7 @@ if __name__ == '__main__':
                         msg_err = msg_err + '\n' + 'обнаружена блокировка вывода, нужно пройти верификацию в Фонбет, аккаунт остановлен!'
 
                     if bal_small and not DEBUG:
-                        msg_err = msg_err + '\n' + 'аккаунт остановлен: денег в одной из БК не достаточно для работы, просьба выровнять балансы.\n' + bk1_name + ': ' + str(
-                            bal1) + '\n' + bk2_name + ': ' + str(bal2)
+                        msg_err = msg_err + '\n' + 'аккаунт остановлен: денег в одной из БК не достаточно для работы, просьба выровнять балансы.\n' + bk1_name + ': ' + str(bal1) + '\n' + bk2_name + ': ' + str(bal2)
 
                     if msg_str != msg_str_old:
                         msg_str_old = msg_str
