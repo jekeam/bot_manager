@@ -110,7 +110,9 @@ def prnt(vstr=None, hide=None, to_cl=False):
 
             if not hide:
                 dtDeff = round((datetime.datetime.now() - dtOld).total_seconds())
-                strLog = datetime.datetime.now().strftime('%d %H:%M:%S.%f ') + '[' + str(dtDeff).rjust(2, '0') + ']    ' + str(ACC_ID) + ': ' + str(vstr)
+                strLog = datetime.datetime.now().strftime('%d %H:%M:%S.%f ') + '[' + str(dtDeff).rjust(2,
+                                                                                                       '0') + ']    ' + str(
+                    ACC_ID) + ': ' + str(vstr)
                 print(strLog)
                 dtOld = datetime.datetime.now()
                 Outfile = open(str(ACC_ID) + '_client.log', "a+", encoding='utf-8')
@@ -167,7 +169,7 @@ def get_sum_bets(k1, k2, total_bet, round_fork=5, hide=False):
     return bet_1, bet_2
 
 
-def get_new_sum_bets(bk1, bk2, max_bet, hide=False, round_fork = 5):
+def get_new_sum_bets(bk1, bk2, max_bet, hide=False, round_fork=5):
     if get_prop('round_fork'):
         round_fork = int(get_prop('round_fork'))
     l = 1 / bk1 + 1 / bk2
