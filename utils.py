@@ -167,8 +167,7 @@ def get_sum_bets(k1, k2, total_bet, round_fork=5, hide=False):
     return bet_1, bet_2
 
 
-def get_new_sum_bets(bk1, bk2, max_bet, hide=False):
-    round_fork = 5
+def get_new_sum_bets(bk1, bk2, max_bet, hide=False, round_fork = 5):
     if get_prop('round_fork'):
         round_fork = int(get_prop('round_fork'))
     l = 1 / bk1 + 1 / bk2
