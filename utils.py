@@ -7,6 +7,7 @@ import requests
 import datetime
 import statistics
 import copy
+from math import floor
 
 from db_model import Account, Properties
 import sys
@@ -160,7 +161,7 @@ def get_sum_bets(k1, k2, total_bet, round_fork=5, hide=False):
     l = (1 / k1) + (1 / k2)
 
     # Округление проставления в БК1 происходит по правилам математики
-    bet_1 = round(total_bet / (k1 * l) / round_fork) * round_fork
+    bet_1 = floor(total_bet / (k1 * l) / round_fork) * round_fork
     bet_2 = total_bet - bet_1
 
     prnt('L: ' + str(round((1 - l) * 100, 2)) + '% (' + str(l) + ') ', hide)
