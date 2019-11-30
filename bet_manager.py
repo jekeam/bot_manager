@@ -1005,7 +1005,7 @@ class BetManager:
                         prnt(self.msg.format(sys._getframe().f_code.co_name, 'replay sign_in'))
                         return self.sign_in(shared)
                     elif res.get('errorCode', -1) == 3 and 'duplicate random value' in res.get('errorMessage', ''):
-                        
+
                         random_time = uniform(1, 3)
                         prnt('random_time: ' + str(random_time))
                         time.sleep(random_time)
@@ -1767,7 +1767,9 @@ class BetManager:
         self.check_responce(shared, msg_str)
 
         if result == 'error' and 'temporary unknown result' in msg_str:
-            raise CouponBlocked('Get temporary unknown result: ' + str(msg_str))
+            err_str = 'Get temporary unknown result: ' + str(msg_str)
+            prnt(self.msg.format(sys._getframe().f_code.co_name, err_str))
+            return self.check_result(shared)
 
         elif result == 'sellDelay':
             sell_delay_sec = (float(res.get('sellDelay')) / 1000)
