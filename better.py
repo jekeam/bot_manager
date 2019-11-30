@@ -486,6 +486,7 @@ def go_bets(wag_ol, wag_fb, key, deff_max, vect1, vect2, sc1, sc2, created, even
         fork_info[fork_id]['fonbet']['err'] = str(shared.get('fonbet_err', 'ok'))
 
         fork_info[fork_id]['fonbet']['max_bet'] = shared['fonbet'].get('max_bet')
+        fork_info[fork_id]['fonbet']['maxbet_fact'] = info_csv.get('maxbet_fact')
         fork_info[fork_id]['fonbet']['fonbet_maxbet_fact'] = info_csv.get('fonbet_maxbet_fact', '')
 
         fork_info[fork_id]['fonbet']['is_top'] = is_top
@@ -1122,6 +1123,7 @@ if __name__ == '__main__':
                                                         'live_fork': live_fork,
                                                         'team_type': team_type,
                                                         'summ_min': summ_min_stat,
+                                                        'maxbet_fact': get_prop('maxbet_fact', 'выкл'),
                                                         'fonbet_maxbet_fact': fonbet_maxbet_fact,
                                                         'fb_bk_type': get_prop('fonbet_s', 'com'),
                                                     })
