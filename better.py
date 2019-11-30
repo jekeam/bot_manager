@@ -1052,7 +1052,7 @@ if __name__ == '__main__':
                             if (event_type in ('football', 'hockey') and test_oth_sport == 'выкл') or test_oth_sport == 'вкл':
                                 # or ((event_type not in ('football', 'hockey') and test_oth_sport == 'вкл' and str(USER_ID) in list(map(str, ADMINS)))) \
                                 if vect1 and vect2:
-                                    if deff_max < 3 and k1 > 0 < k2:
+                                    if deff_max <= 3 and k1 > 0 < k2:
                                         round_bet = int(get_prop('round_fork'))
                                         total_bet = round(randint(total_bet_min, total_bet_max) / round_bet) * round_bet
                                         prnt('total_bet random: ' + str(total_bet), 'hide')
@@ -1135,10 +1135,10 @@ if __name__ == '__main__':
                                                         key, deff_max, vect1, vect2, sc1, sc2, created_fork, event_type,
                                                         l, l_fisrt, is_top, str(fork_slice), str(cnt_act_acc), info_csv
                                                     )
-                                    elif deff_max >= 3:
+                                    elif deff_max > 3:
                                         if key not in sleeping_forks:
                                             sleeping_forks.append(key)
-                                            prnt('Sleeping forks: ' + str(deff_max) + ' sec, ' + str(key) + ': ' + str(val_json))
+                                            prnt('Sleeping forks: ' + str(deff_max) + ' sec (' + str(time.time()) + '), ' + str(key) + ': ' + str(val_json))
                                 else:
                                     # prnt('Вектор направления коф-та не определен: VECT1=' + str(vect1) + ', VECT2=' + str(vect2))
                                     pass
