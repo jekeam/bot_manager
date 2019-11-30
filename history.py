@@ -281,7 +281,7 @@ def export_hist(OLIMP_USER, FONBET_USER):
             prnt(e)
     if os.path.isfile(str(ACC_ID) + '_to_cl.log'):
         try:
-            os.rename(str(ACC_ID) + '_to_cl.log', cur_date_str + '_' + str(ACC_ID) + '_' + '_to_cl.log')
+            os.rename(str(ACC_ID) + '_to_cl.log', cur_date_str + '_' + str(ACC_ID) + '_to_cl.log')
         except Exception as e:
             prnt(e)
     if os.path.isfile(file_name):
