@@ -24,6 +24,9 @@ from exceptions import SessionNotDefined, BkOppBetError, NoMoney, BetError, Sess
 from exceptions import CouponBlocked, BetIsLost
 from exceptions import Retry
 
+from random import uniform
+import os
+
 if get_prop('debug'):
     DEBUG = True
 else:
@@ -1001,8 +1004,19 @@ class BetManager:
                         prnt(self.msg.format(sys._getframe().f_code.co_name, res.get('errorMessage', '')))
                         prnt(self.msg.format(sys._getframe().f_code.co_name, 'replay sign_in'))
                         return self.sign_in(shared)
+                    elif res.get('errorCode', -1) == 3 and 'duplicate random value' in res.get('errorMessage', ''):
+                        
+                        random_time = uniform(1, 3)
+                        prnt('random_time: ' + str(random_time))
+                        time.sleep(random_time)
+                        prnt('current pid: ' + str(os.getpid()))
+
+                        err_msg = self.msg.format(sys._getframe().f_code.co_name, res.get('errorMessage', '') + ': ' + res.get('errorValue', ''))
+                        prnt(err_msg)
+                        raise ValueError(err_msg)
+
                     elif res.get('errorCode', -1) > 0:
-                        err_msg = self.msg.format(sys._getframe().f_code.co_name, res.get('errorMessage', '') + ': ' + res.get('errorValue'))
+                        err_msg = self.msg.format(sys._getframe().f_code.co_name, res.get('errorMessage', '') + ': ' + res.get('errorValue', ''))
                         prnt(err_msg)
                         raise ValueError(err_msg)
                 except Exception as e:
