@@ -1138,7 +1138,7 @@ if __name__ == '__main__':
                                     elif deff_max >= 3:
                                         if key not in sleeping_forks:
                                             sleeping_forks.append(key)
-                                            prnt('Sleeping forks: ' + str(key) + ': ' + str(val_json))
+                                            prnt('Sleeping forks: ' + str(deff_max) + ' sec, ' + str(key) + ': ' + str(val_json))
                                 else:
                                     # prnt('Вектор направления коф-та не определен: VECT1=' + str(vect1) + ', VECT2=' + str(vect2))
                                     pass
