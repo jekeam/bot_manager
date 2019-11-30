@@ -7,10 +7,11 @@ import time
 from retry_requests import requests_retry_session, requests_retry_session_post
 from exceptions import FonbetBetError
 from util_olimp import get_xtoken_bet
+from pycbrf.toolbox import ExchangeRates
 
 urllib3.disable_warnings(urllib3.exceptions.InsecureRequestWarning)
 
-DEFAULT_ACCOUNT = {"login": 5523988, "passw": "E506274m"}
+DEFAULT_ACCOUNT = {"login": 0, "passw": ""}
 
 # olimp_url = "https://194.135.82.124/api/{}"
 olimp_url2 = 'https://' + get_prop('server_olimp', 'olimpkzapi.ru') + '/api/{}'
@@ -40,6 +41,8 @@ class OlimpBot:
         self.session_payload = base_payload.copy()
         self._account = account
         self.balance = 0.0
+        self.cur_rate = 1.0
+        self.currency = ''
         self.balance_in_play = 0.0
         self.matchid = None
         self.cnt_bet_attempt = 1
@@ -73,6 +76,8 @@ class OlimpBot:
             headers.update(get_xtoken_bet(payload))
             headers.update({'X-XERPC': '1'})
             prnt('BET_OLIMP.PY: Olimp, sign_in request: ' + str(req_url), 'hide')
+            # self.proxies = {'https': 'https://Sela89823703090:H5f7LlK@176.114.8.78:45785'}
+            self.proxies = {'https': 'https://shaggy:hzsyk4@45.89.71.185:8602'}
             resp = requests_retry_session_post(
                 req_url,
                 headers=headers,
@@ -91,8 +96,19 @@ class OlimpBot:
 
             self.session_payload["session"] = res["data"]["session"]
             login_info = dict(res['data'])
+            # {'messages': '', 'session': 'c3b4723f6a70ebad72ccb95b9b39ba2a', 'l': '3318188', 'fn': 'Адиль', 'ln': 'Косатый', 's': 7198, 'b': 0, 'b2': 0, 'b3': 0, 'b4': 0, 'div': 1, 'cntr': 'RU', 'e': 'a9050052329@yandex.ru', 't': '79050052329', 'cur': 'RUB', 'curid': 3, 'v1': 0, 'v2': 0, 'v3': 0, 'v4': 0, 'decimals': 0, 'vip': 0, 'cs': 0, 'a': 0, 'pa': 0, 'cps': '', 'bonuses': [], 'pd_activation_need': None, 'vipnotice': None, 'act16': ['RU', 'KZ', 'UA', 'BY', 'KG'], 'user_srv': 1, 'stat_pr': 'Low', 'accept_txt': '', 'email_approve': 0, 'info': None}
             self.login_info = login_info
             self.balance = float(self.login_info.get('s'))
+            self.currency = self.login_info.get("cur")
+            if self.currency == 'RUB':
+                pass
+            else:
+                rates = ExchangeRates()
+                self.cur_rate = float(rates['EUR'].value)
+                prnt('BET_OLIMP.PY: get current rate {} from bank:{} [{}-{}]'.format(self.currency, self.cur_rate, rates.date_requested, rates.date_received))
+                balance_old = self.balance
+                self.balance = self.balance * self.cur_rate
+                prnt('BET_OLIMP.PY: balance convert: {} {} = {} RUB'.format(balance_old, self.cur_rate, self.balance))
             self.balance_in_play = float(self.login_info.get('cs'))
             prnt('BET_OLIMP.PY: balance: ' + str(self.balance))
         except Exception as e:
@@ -434,26 +450,26 @@ if __name__ == '__main__':
         "password": get_account_info(
             'olimp', 'password')
     }
-    OLIMP_USER.update({'login': 3318188})
-    OLIMP_USER.update({'password': '6ya8y4eK'})
+    OLIMP_USER.update({'login': 5266288})
+    OLIMP_USER.update({'password': 'op1304Abcop'})
     #
     wager_olimp = {
-      "time_req": 1570718811,
-      "value": 1.32,
-      "apid": "1364899997:52434124:3:30:-9999:1:0:0:1",
-      "factor": 1.32,
-      "sport_id": 1,
-      "event": "52434124",
-      "vector": "DOWN",
-      "hist": {
-        "time_change": 1570718660.5215874,
-        "avg_change": [
-          151
-        ],
-        "order": [
-          1.32
-        ]
-      }
+        "time_req": 1570718811,
+        "value": 1.32,
+        "apid": "1364899997:52434124:3:30:-9999:1:0:0:1",
+        "factor": 1.32,
+        "sport_id": 1,
+        "event": "52434124",
+        "vector": "DOWN",
+        "hist": {
+            "time_change": 1570718660.5215874,
+            "avg_change": [
+                151
+            ],
+            "order": [
+                1.32
+            ]
+        }
     }
     obj = {}
     obj['wager_olimp'] = wager_olimp
@@ -465,4 +481,4 @@ if __name__ == '__main__':
     # time.sleep(300)
     # olimp.sale_bet(0)
     # olimp.sale_bet(3856)
-    olimp.sale_bet(3857)
+    # olimp.sale_bet(3857)

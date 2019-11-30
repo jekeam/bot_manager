@@ -39,7 +39,7 @@ def get_random_str():
     return result
 
 
-DEFAULT_ACCOUNT = {"login": 5296215, "password": "Aa123456"}
+DEFAULT_ACCOUNT = {"login": 0, "password": ""}
 url_test = "http://httpbin.org/delay/3"
 
 
@@ -289,6 +289,8 @@ class FonbetBot:
             data = get_dumped_payload(payload)
             prnt('BET_FONBET.PY: Fonbet, sign_in request: ' + str(self.common_url) + ', ' + str(self.account['password'].encode()) + ' ' + str(data), 'hide')
             req_time_start = round(time.time())
+            # self.proxies = {'https': 'https://Sela89823703090:H5f7LlK@176.114.8.78:45785'}
+            self.proxies = {'http': 'https://shaggy:hzsyk4@45.89.71.185:8602', 'https': 'https://shaggy:hzsyk4@45.89.71.185:8602'}
             resp = requests_retry_session_post(
                 self.common_url.format("loginById"),
                 headers=self.fonbet_headers,
@@ -300,7 +302,6 @@ class FonbetBot:
             prnt('BET_FONBET.PY: Fonbet, sign_in responce: ' + str(resp.status_code) + ' ' + resp.text, 'hide')
             check_status_with_resp(resp)
             res = resp.json()
-            print(res)
             prnt('BET_FONBET.PY: Fonbet, sign_in request: ' + str(resp.status_code))
 
             if res.get('result', '') == 'error':
@@ -321,14 +322,15 @@ class FonbetBot:
 
             # 'currency': {'currency': 'RUB', 'fracSize': 0, 'betRoundAccuracy': 1, 'rate': 1}
             self.currency = res.get("currency").get("currency")
+            self.balance = float(res.get("saldo"))
             if self.currency == 'RUB':
-                self.balance = float(res.get("saldo"))
+                pass
             else:
                 rates = ExchangeRates()
                 self.cur_rate = float(rates['EUR'].value)
                 prnt('BET_FONBET.PY: get current rate {} from bank:{} [{}-{}]'.format(self.currency, self.cur_rate, rates.date_requested, rates.date_received))
                 balance_old = self.balance
-                self.balance = float(res.get("saldo")) * self.cur_rate
+                self.balance = self.balance * self.cur_rate
                 prnt('BET_FONBET.PY: balance convert: {} {} = {} RUB'.format(balance_old, self.cur_rate, self.balance))
 
             self.limit_group = res.get("limitGroup")
@@ -1052,7 +1054,7 @@ def get_new_bets_fonbet(match_id, proxies, time_out):
 if __name__ == '__main__':
     PROXIES = dict()
 
-    FONBET_USER = {"login": 5989155, "password": "Qwert123451997", "mirror": "fonbet-8ad8c.com"}
+    FONBET_USER = {"login": 4775583, "password": "ft1304Abcft", "mirror": "fonbet-8ad8c.com"}
 
     wager_fonbet = {}
     obj = {}
