@@ -7,7 +7,6 @@ import time
 from retry_requests import requests_retry_session, requests_retry_session_post
 from exceptions import FonbetBetError
 from util_olimp import get_xtoken_bet
-from pycbrf.toolbox import ExchangeRates
 
 urllib3.disable_warnings(urllib3.exceptions.InsecureRequestWarning)
 
@@ -103,6 +102,7 @@ class OlimpBot:
             if self.currency == 'RUB':
                 pass
             else:
+                from pycbrf.toolbox import ExchangeRates
                 rates = ExchangeRates()
                 self.cur_rate = float(rates['EUR'].value)
                 prnt('BET_OLIMP.PY: get current rate {} from bank:{} [{}-{}]'.format(self.currency, self.cur_rate, rates.date_requested, rates.date_received))
