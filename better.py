@@ -703,7 +703,7 @@ export_block = False
 msg_str_old = ''
 msg_str = ''
 info_csv = {}
-sleeping_forks = []
+# sleeping_forks = []
 
 cnt_acc_sql = "select count(*)\n" + \
               "from(\n" + \
@@ -1136,9 +1136,10 @@ if __name__ == '__main__':
                                                         l, l_fisrt, is_top, str(fork_slice), str(cnt_act_acc), info_csv
                                                     )
                                     elif deff_max > 3:
-                                        if key not in sleeping_forks:
-                                            sleeping_forks.append(key)
-                                            prnt('Sleeping forks: ' + str(deff_max) + ' sec (' + str(time.time()) + '), ' + str(key) + ': ' + str(val_json))
+                                        pass
+                                        # if key not in sleeping_forks:
+                                        #     sleeping_forks.append(key)
+                                        #     prnt('Sleeping forks: ' + str(deff_max) + ' sec (' + str(time.time()) + '), ' + str(key) + ': ' + str(val_json))
                                 else:
                                     # prnt('Вектор направления коф-та не определен: VECT1=' + str(vect1) + ', VECT2=' + str(vect2))
                                     pass
