@@ -170,6 +170,10 @@ def get_sum_bets(k1, k2, total_bet, round_fork=5, hide=False):
     return bet_1, bet_2
 
 
+def floor_to_2(num: float):
+    return floor(num / 100) * 100.
+
+
 def get_new_sum_bets(bk1, bk2, max_bet, bal2, hide=False, round_fork=5):
     if get_prop('round_fork'):
         round_fork = int(get_prop('round_fork'))

@@ -4,7 +4,6 @@ import hmac
 from hashlib import sha512
 import urllib3
 from utils import *
-from math import floor
 import time
 from retry_requests import requests_retry_session, requests_retry_session_post
 from exceptions import OlimpBetError
@@ -59,6 +58,7 @@ class FonbetBot:
         self.wager = None
         self.cnt_bet_attempt = 1
         self.amount = None
+        self.amount_rub = None
         self.fsid = None
         self.operations = None
         self.sell_sum = None
@@ -78,7 +78,7 @@ class FonbetBot:
         if self.bk_type == 'com':
             self.app_ver = '5.1.3b'
             self.user_agent = 'Fonbet/5.1.3b (Android 21; Phone; com.bkfonbet)'
-            self.not_url = 'bk-fonbet.com'
+            self.not_url = 'fonbet-1507e.com'
             self.url_api = 'clients-api'  # maybe 'common'?
         elif self.bk_type == 'ru':
             self.app_ver = '5.2.1r'
@@ -330,7 +330,7 @@ class FonbetBot:
                 self.cur_rate = float(rates['EUR'].value)
                 prnt('BET_FONBET.PY: get current rate {} from bank:{} [{}-{}]'.format(self.currency, self.cur_rate, rates.date_requested, rates.date_received))
                 balance_old = self.balance
-                self.balance = self.balance * self.cur_rate
+                self.balance = round(self.balance * self.cur_rate, 2)
                 prnt('BET_FONBET.PY: balance convert: {} {} = {} RUB'.format(balance_old, self.cur_rate, self.balance))
 
             self.limit_group = res.get("limitGroup")
@@ -369,7 +369,7 @@ class FonbetBot:
     def get_balance(self):
         if self.balance == 0.0:
             self.sign_in()
-            return floor(self.balance / 100) * 100
+            return round(self.balance)
         else:
             return self.balance
 
@@ -381,7 +381,7 @@ class FonbetBot:
         elif param == 'group':
             return self.limit_group
 
-    def _check_in_bounds(self, wager: dict, amount: int) -> None:
+    def _check_in_bounds(self, wager: dict) -> None:
         """Check if amount is in allowed bounds"""
         url = self.common_url.format("coupon/getMinMax")
 
@@ -409,16 +409,17 @@ class FonbetBot:
         )
         check_status_with_resp(resp)
         res = resp.json()
-        prnt('BET_FONBET.PY: Fonbet, check in bound request:' + str(resp.status_code))
+        prnt('BET_FONBET.PY: Fonbet, check in bound request:' + str(resp.status_code) + ', res: ' + str(res), 'hide')
         if "min" not in res:
             err_str = 'BET_FONBET.PY: error (min): ' + str(res)
             prnt(err_str)
             raise LoadException(err_str)
 
-        min_amount, max_amount = res["min"] // 100, res["max"] // 100
-        if not (min_amount <= amount <= self.balance) or not (min_amount <= amount <= max_amount):
+        min_amount, max_amount = round(res["min"] * self.cur_rate // 100, 2), round(res["max"] * self.cur_rate // 100, 2)
+
+        if not (min_amount <= self.amount_rub <= self.balance) or not (min_amount <= self.amount_rub <= max_amount):
             prnt('BET_FONBET.PY: balance:' + str(self.balance))
-            err_str = 'BET_FONBET.PY: error (min_amount <= amount <= max_amount|' + str(self.balance) + '): ' + str(res)
+            err_str = 'BET_FONBET.PY: error (min_amount: {} <= amount: {} <= max_amount: {}| balance: {}'.format(min_amount, self.amount_rub, max_amount, self.balance)
             prnt(err_str)
             raise LoadException(err_str)
         prnt('BET_FONBET.PY: Min_amount=' + str(min_amount) + ' Max_amount=' + str(max_amount))
@@ -463,6 +464,9 @@ class FonbetBot:
         if self.amount is None and amount:
             self.amount = amount
 
+        self.amount = round(self.amount / self.cur_rate, 2)
+        self.amount_rub = round(self.amount * self.cur_rate, 2)
+
         fonbet_bet_type = obj['fonbet_bet_type']
         if self.fonbet_bet_type is None and fonbet_bet_type:
             self.fonbet_bet_type = fonbet_bet_type
@@ -483,12 +487,11 @@ class FonbetBot:
         payload["coupon"]["bets"][0]["value"] = float(self.wager['value'])
         payload["coupon"]["bets"][0]["event"] = int(self.wager['event'])
         payload["coupon"]["bets"][0]["factor"] = int(self.wager['factor'])
-
+        payload["coupon"]["amount"] = self.amount
         payload['fsid'] = self.payload['fsid']
         payload['clientId'] = self.base_payload["clientId"]
 
-        self._check_in_bounds(self.wager, self.amount)
-        payload["coupon"]["amount"] = self.amount
+        self._check_in_bounds(self.wager)
 
         prnt('BET_FONBET.PY: send bet to bk fonbet, time: ' + str(datetime.datetime.now()))
         try:
@@ -1054,19 +1057,18 @@ def get_new_bets_fonbet(match_id, proxies, time_out):
 if __name__ == '__main__':
     PROXIES = dict()
 
-    FONBET_USER = {"login": 4775583, "password": "ft1304Abcft", "mirror": "bk-fonbet.com"}
+    FONBET_USER = {"login": 4775583, "password": "ft1304Abcft", "mirror": "fonbet-1507e.com"}
 
-    wager_fonbet = {}
+    wager_fonbet = {'event': 18117498, 'factor': 1816, 'value': 1.7, 'param': 350, 'paramText': '3.5', 'paramTextRus': '3.5', 'paramTextEng': '3.5', 'score': '2:1'}
     obj = {}
     obj['wager_fonbet'] = wager_fonbet
-    obj['amount_fonbet'] = 110
+    obj['amount_fonbet'] = 45
     obj['fonbet_bet_type'] = None  # 'ТМ(2.5)'
 
     fonbet = FonbetBot(FONBET_USER)
     fonbet.sign_in()
-    # bet_info = fonbet.get_coupon_info(20196089803)
     # fonbet.place_bet(obj)
     # time.sleep(3)
-    # fonbet.sale_bet(15102409046)
+    fonbet.sale_bet(20995498860)
     # fonbet_reg_id = fonbet.place_bet(amount_fonbet, wager_fonbet)
     # {'e': 12264423, 'f': 931, 'v': 1.4, 'p': 250, 'pt': '2.5', 'isLive': True}
