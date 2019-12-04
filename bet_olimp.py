@@ -75,8 +75,6 @@ class OlimpBot:
             headers.update(get_xtoken_bet(payload))
             headers.update({'X-XERPC': '1'})
             prnt('BET_OLIMP.PY: Olimp, sign_in request: ' + str(req_url), 'hide')
-            # self.proxies = {'https': 'https://Sela89823703090:H5f7LlK@176.114.8.78:45785'}
-            # self.proxies = {'https': 'https://shaggy:hzsyk4@45.89.71.185:8602'}
             resp = requests_retry_session_post(
                 req_url,
                 headers=headers,

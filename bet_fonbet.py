@@ -288,8 +288,6 @@ class FonbetBot:
             data = get_dumped_payload(payload)
             prnt('BET_FONBET.PY: Fonbet, sign_in request: ' + str(self.common_url) + ', ' + str(self.account['password'].encode()) + ' ' + str(data), 'hide')
             req_time_start = round(time.time())
-            # self.proxies = {'https': 'https://Sela89823703090:H5f7LlK@176.114.8.78:45785'}
-            # self.proxies = {'http': 'https://shaggy:hzsyk4@45.89.71.185:8602', 'https': 'https://shaggy:hzsyk4@45.89.71.185:8602'}
             resp = requests_retry_session_post(
                 self.common_url.format("loginById"),
                 headers=self.fonbet_headers,
