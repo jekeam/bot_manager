@@ -220,7 +220,7 @@ def check_fork(key, L, k1, k2, live_fork, live_fork_total, bk1_score, bk2_score,
         v = False
         if key not in fork_exclude_list:
             fork_exclude_list.append(key)
-            prnt(vstr=info + '\n' + fork_exclude_text + '\n', hide='hide', to_cl=True)
+            prnt(vstr=info + '\n' + fork_exclude_text, hide='hide', to_cl=True)
     return v
 
 
