@@ -1139,7 +1139,7 @@ class BetManager:
 
                 prnt(self.msg.format(sys._getframe().f_code.co_name, 'bet successful, reg_id: ' + str(self.reg_id)))
                 shared[self.bk_name + '_err'] = 'ok'
-                prnt(vstr='Ставка в ' + self.bk_name + ' успешно завершена', hide='hide', to_cl=True)
+                prnt(vstr='Ставка в ' + self.bk_name + ' успешно завершена, id = ' + str(self.reg_id), hide='hide', to_cl=True)
 
             elif 'Такой исход не существует'.lower() in err_msg.lower():
                 raise BetIsLost(err_msg)
@@ -1575,7 +1575,7 @@ class BetManager:
 
                 prnt(self.msg.format(sys._getframe().f_code.co_name, 'bet successful, reg_id: ' + str(self.reg_id)))
                 shared[self.bk_name + '_err'] = 'ok'
-                prnt(vstr='Ставка в ' + self.bk_name + ' успешно завершена', hide='hide', to_cl=True)
+                prnt(vstr='Ставка в ' + self.bk_name + ' успешно завершена, id = ' + str(self.reg_id), hide='hide', to_cl=True)
 
                 url_rq = 'http://' + get_prop('server_ip') + ':8888/set/fonbet_maxbet_fact/' + self.key + '/' + str(self.session.get('group_limit_id')) + '/' + str(self.sum_bet)
                 rs = requests.get(url_rq).text
