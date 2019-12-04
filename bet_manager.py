@@ -520,6 +520,8 @@ class BetManager:
                 self.opposite_stat_get(shared)
 
                 prnt(self.msg.format(sys._getframe().f_code.co_name, 'Ошибка при проставлении ставки в ' + self.bk_name + ', передаю его завершающему'))
+
+                prnt(vstr='Ошибка при проставлении ставки в ' + self.bk_name + ': ' + shared.get(self.bk_name + '_err', ''), hide='hide', to_cl=True)
                 self.bet_safe(shared)
 
             except BkOppBetError as e:
