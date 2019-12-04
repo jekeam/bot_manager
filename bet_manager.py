@@ -545,6 +545,7 @@ class BetManager:
             # В обоих БК ошибки, выкидываем вилку
             shared[self.bk_name + '_err'] = str(e.__class__.__name__) + ': ' + str(e)
             shared[self.bk_name_opposite + '_err'] = str(e.__class__.__name__) + ': ' + str(e)
+            prnt(vstr='Ошибка при проставлении ставки в ' + self.bk_name_opposite + ': ' + shared.get(self.bk_name_opposite + '_err'), hide='hide', to_cl=True)
         except Exception as e:
             exc_type, exc_value, exc_traceback = sys.exc_info()
             err_msg = 'Неизвестная ошибка: ' + str(e.__class__.__name__) + ' - ' + str(e) + '. ' + str(repr(traceback.format_exception(exc_type, exc_value, exc_traceback)))
