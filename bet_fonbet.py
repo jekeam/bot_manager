@@ -78,7 +78,7 @@ class FonbetBot:
         if self.bk_type == 'com':
             self.app_ver = '5.1.3b'
             self.user_agent = 'Fonbet/5.1.3b (Android 21; Phone; com.bkfonbet)'
-            self.not_url = 'fonbet-8ad8c.com'
+            self.not_url = 'bk-fonbet.com'
             self.url_api = 'clients-api'  # maybe 'common'?
         elif self.bk_type == 'ru':
             self.app_ver = '5.2.1r'
@@ -289,7 +289,7 @@ class FonbetBot:
             prnt('BET_FONBET.PY: Fonbet, sign_in request: ' + str(self.common_url) + ', ' + str(self.account['password'].encode()) + ' ' + str(data), 'hide')
             req_time_start = round(time.time())
             # self.proxies = {'https': 'https://Sela89823703090:H5f7LlK@176.114.8.78:45785'}
-            self.proxies = {'http': 'https://shaggy:hzsyk4@45.89.71.185:8602', 'https': 'https://shaggy:hzsyk4@45.89.71.185:8602'}
+            # self.proxies = {'http': 'https://shaggy:hzsyk4@45.89.71.185:8602', 'https': 'https://shaggy:hzsyk4@45.89.71.185:8602'}
             resp = requests_retry_session_post(
                 self.common_url.format("loginById"),
                 headers=self.fonbet_headers,
@@ -1054,7 +1054,7 @@ def get_new_bets_fonbet(match_id, proxies, time_out):
 if __name__ == '__main__':
     PROXIES = dict()
 
-    FONBET_USER = {"login": 4775583, "password": "ft1304Abcft", "mirror": "fonbet-8ad8c.com"}
+    FONBET_USER = {"login": 4775583, "password": "ft1304Abcft", "mirror": "bk-fonbet.com"}
 
     wager_fonbet = {}
     obj = {}
