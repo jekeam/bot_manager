@@ -377,9 +377,9 @@ def get_bets_olimp(bets_olimp, match_id, proxies_olimp, proxy, time_out, pair_ma
                                 or 'никто не забьет: '.lower() \
                                 in d.get('n', '').lower() \
                                 or 'победа '.lower() \
-                                in d.get('n', '') \
-                                or d.get('n', '').endswith(' бол') \
-                                or d.get('n', '').endswith(' мен') \
+                                in d.get('n', '').lower() \
+                                or d.get('n', '').lower().endswith(' бол') \
+                                or d.get('n', '').lower().endswith(' мен') \
                                 or 'первая не проиграет'.lower() \
                                 in d.get('n', '').lower() \
                                 or 'вторая не проиграет'.lower() \
