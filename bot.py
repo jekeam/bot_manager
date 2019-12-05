@@ -677,7 +677,7 @@ def botstat(update, context):
 
 
 def button(update, context):
-    def prnt_acc_stat():
+    def prnt_acc_stat(user_role='junior'):
         keyboard = []
         if acc_info.get().work_stat == 'stop':
             start_stop = emojize(":arrow_forward:", use_aliases=True) + ' Запустить'
@@ -686,6 +686,8 @@ def button(update, context):
 
         keyboard.append([InlineKeyboardButton(text=start_stop, callback_data=query.data)])
         keyboard.append([InlineKeyboardButton(text=bot_prop.BTN_SETTINGS, callback_data='pror_edit')])
+        if user_role in ('admin', 'investor'):
+            keyboard.append([InlineKeyboardButton(text=bot_prop.BTN_GET_LOG, callback_data='get_log')])
         keyboard.append([InlineKeyboardButton(text=bot_prop.BTN_GET_STAT, callback_data='get_stat')])
         keyboard.append([InlineKeyboardButton(text=bot_prop.BTN_BACK, callback_data='botlist')])
 
@@ -704,6 +706,7 @@ def button(update, context):
     user_id = update.callback_query.message.chat.id
     if user_id in bot_prop.ADMINS:
         is_admin = True
+    user_role = User.select().where(User.id == user_id).get().role
 
     if query:
         if query.data == 'botlist':
@@ -715,7 +718,6 @@ def button(update, context):
             else:
                 prop_btn = []
 
-                user_role = User.select().where(User.id == user_id).get().role
                 for key, val in prop_abr.items():
 
                     abr = None
@@ -739,6 +741,20 @@ def button(update, context):
             markup = ReplyKeyboardRemove()
             acc_id_str = str(context.user_data.get('acc_id'))
             query.message.reply_text(acc_id_str + ': ' + print_stat(acc_id_str), reply_markup=markup, parse_mode=telegram.ParseMode.MARKDOWN)
+        elif 'get_log' in query.data:
+            acc_id_str = str(context.user_data.get('acc_id'))
+            file_stat_name = acc_id_str + '_to_cl.log'
+            if os.path.isfile(file_stat_name):
+                # send to tg
+                with open(file_stat_name, 'r', encoding='utf-8') as f:
+                    Message.insert({
+                        Message.to_user: user_id,
+                        Message.blob: f.read(),
+                        Message.file_name: file_stat_name,
+                        Message.file_type: 'document'
+                    }).execute()
+            else:
+                query.message.reply_text(acc_id_str + ': Файл логов не найден', parse_mode=telegram.ParseMode.MARKDOWN)
         elif 'get_stat_short' in query.data:
             markup = ReplyKeyboardRemove()
             acc_id_str = query.data.split(':')[1]
@@ -765,21 +781,21 @@ def button(update, context):
                     else:
                         Account.update(work_stat='start').where(Account.key == query.data).execute()
                         update.callback_query.answer(text=bot_prop.MSG_ACC_START_WAIT)
-                prnt_acc_stat()
+                prnt_acc_stat(user_role)
             elif query.message.text == bot_prop.MSG_CHANGE_ACC:
                 if acc_info.get().date_end:
                     if datetime.datetime.fromtimestamp(acc_info.get().date_end) < datetime.datetime.now():
                         update.callback_query.answer(show_alert=True, text="Аккаунт не активен")
                     elif acc_info.get().status == 'active':
-                        prnt_acc_stat()
+                        prnt_acc_stat(user_role)
                     else:
                         update.callback_query.answer(show_alert=True, text="Аккаунт не активен")
                 elif acc_info.get().status == 'active':
-                    prnt_acc_stat()
+                    prnt_acc_stat(user_role)
                 else:
                     update.callback_query.answer(show_alert=True, text="Аккаунт не активен")
             else:
-                prnt_acc_stat()
+                prnt_acc_stat(user_role)
 
 
 def error(update, context):
