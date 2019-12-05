@@ -105,6 +105,10 @@ class BetManager:
         self.sum_bet_stat = self.sum_bet
         self.sum_sell = None
 
+        self.balance = 0.0
+        self.cur_rate = 1.0
+        self.currency = ''
+
         self.sum_sell_divider = 1
 
         self.bk_type = 'com'
