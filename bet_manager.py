@@ -1347,7 +1347,7 @@ class BetManager:
                 if res.get('data') and res.get('data').get('status', 'err') == 'ok':
                     prnt(self.msg.format(sys._getframe().f_code.co_name, 'code: ' + str(err_code) + ', ' + res.get('data', {}).get('msg')))
                     #  Ставка #1377 продана за 306
-                    prnt(vstr=self.bk_name + ' ' + res.get('data', {}).get('msg'), hide='hide', to_cl=True)
+                    prnt(vstr=self.bk_name + ' ' + res.get('data', {}).get('msg') + ' т.к. в ' + self.bk_name_opposite + ' была ошибка: ' + shared.get(self.bk_name_opposite + '_err'), hide='hide', to_cl=True)
                 elif err_code == 403 and 'code:20' in err_msg and self.attempt_sale_lost < 20:
                     self.attempt_sale_lost = self.attempt_sale_lost + 1
                     prnt(self.msg.format(sys._getframe().f_code.co_name, 'Error code: ' + str(err_code) + ', Error msg: ' + err_msg + ', Att: ' + str(self.attempt_sale_lost)))
@@ -1795,7 +1795,12 @@ class BetManager:
 
         elif result == 'couponCompletelySold':
             prnt(self.msg.format(sys._getframe().f_code.co_name, 'sell successful, sum sold: ' + str(res.get('soldSum') / 100)))
-            prnt(vstr='Ставка в ' + self.bk_name + ', успешно продана: ' + str(self.reg_id) + ' за ' + str(res.get('soldSum') / 100), hide='hide', to_cl=True)
+            prnt(
+                vstr='Ставка в ' + self.bk_name + ', успешно продана: ' + str(self.reg_id) + ' за ' + str(res.get('soldSum') / 100) +
+                ' т.к. в ' + self.bk_name_opposite + ' была ошибка: ' + shared.get(self.bk_name_opposite + '_err'),
+                hide='hide',
+                to_cl=True
+            )
         else:
             raise BetIsLost
 
