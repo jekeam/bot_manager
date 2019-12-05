@@ -967,7 +967,7 @@ class BetManager:
 
                 self.session['session'] = data.get('session')
                 self.session['balance'] = float(dict(data).get('s'))
-                self.session['currency'] = dict(data).get('cur')
+                self.currency = dict(data).get('cur', 'RUB')
 
             elif self.bk_name == 'fonbet':
 
@@ -1015,7 +1015,7 @@ class BetManager:
 
                         random_time = uniform(1, 3)
                         prnt('random_time: ' + str(random_time))
-                        time.sleep(random_time)
+                        sleep(random_time)
                         prnt('current pid: ' + str(os.getpid()))
 
                         err_msg = self.msg.format(sys._getframe().f_code.co_name, res.get('errorMessage', '') + ': ' + res.get('errorValue', ''))
@@ -1033,11 +1033,22 @@ class BetManager:
 
                 self.session['session'] = res.get('fsid', '')
                 self.session['balance'] = float(res.get('saldo', 0.0))
-                self.session['currency'] = res.get('currency').get('currency', 'None')
                 self.session['group_limit_id'] = res.get('limitGroup', '0')
+                self.currency = res.get('currency').get('currency', 'RUB')
 
             if not self.session.get('session'):
                 raise SessionNotDefined(self.msg_err.format(sys._getframe().f_code.co_name, 'session_id not defined'))
+
+            if self.currency == 'RUB':
+                self.balance = self.balance//100*100
+            else:
+                from pycbrf.toolbox import ExchangeRates
+                rates = ExchangeRates()
+                self.cur_rate = float(rates['EUR'].value)
+                prnt(self.msg.format(sys._getframe().f_code.co_name, 'get current rate {} from bank:{} [{}-{}]'.format(self.currency, self.cur_rate, rates.date_requested, rates.date_received)))
+                balance_old = self.balance
+                self.balance = self.balance*self.cur_rate//100*100
+                prnt(self.msg.format(sys._getframe().f_code.co_name, 'balance convert: {} {} = {} RUB'.format(balance_old, self.cur_rate, self.balance)))
 
             prnt(self.msg.format(sys._getframe().f_code.co_name, 'session: ' + str(self.session['session'])))
             prnt(self.msg.format(sys._getframe().f_code.co_name, 'balance: ' + str(self.session.get('balance')) + ' ' + str(self.session.get('currency'))))
