@@ -115,11 +115,14 @@ fork_exclude_list = []
 
 
 def check_fork(key, L, k1, k2, live_fork, live_fork_total, bk1_score, bk2_score, event_type, minute, time_break_fonbet, period, team_type, team_names, deff_max, is_top, is_hot, info=''):
-    global bal1, bal2, bet1, bet2, cnt_fork_success, black_list_matches, matchs_success, summ_min, fonbet_maxbet_fact
+    global bal1, bal2, bet1, bet2, cnt_fork_success, black_list_matches, matchs_success, summ_min, fonbet_maxbet_fact, vect1, vect2
     global fork_exclude_list
 
     fork_exclude_text = ''
     v = True
+
+    if vect1 == vect2 or not vect1 or not vect2:
+        fork_exclude_text = fork_exclude_text + 'Вилка исключена т.к. вектор движения не определен или сонаправлен, vect1:{}, vect2:{}\n'.format(vect1, vect2)
 
     if get_prop('maxbet_fact', 'выкл') == 'вкл' and fonbet_maxbet_fact == 0:
         fork_exclude_text = fork_exclude_text + 'Вилка исключена т.к. нет значения fonbet_maxbet_fact\n'
@@ -838,7 +841,6 @@ if __name__ == '__main__':
                     raise ValueError(err_msg)
 
                 acc_info = Account.select().where(Account.key == KEY)
-                print(acc_info)
                 for prop in acc_info.get().properties:
                     k = prop_abr.get(prop.key)
                     if k:
