@@ -49,6 +49,7 @@ class OlimpBot:
         self.reg_id = None
         self.wager = None
         self.amount = None
+        self.amount_rub = None
         self.sleep = 11
         self.timeout = 20
 
@@ -98,14 +99,14 @@ class OlimpBot:
             self.balance = float(self.login_info.get('s'))
             self.currency = self.login_info.get("cur")
             if self.currency == 'RUB':
-                pass
+                self.balance = self.balance*self.cur_rate//100*100
             else:
                 from pycbrf.toolbox import ExchangeRates
                 rates = ExchangeRates()
                 self.cur_rate = float(rates['EUR'].value)
                 prnt('BET_OLIMP.PY: get current rate {} from bank:{} [{}-{}]'.format(self.currency, self.cur_rate, rates.date_requested, rates.date_received))
                 balance_old = self.balance
-                self.balance = self.balance * self.cur_rate
+                self.balance = self.balance*self.cur_rate//100*100
                 prnt('BET_OLIMP.PY: balance convert: {} {} = {} RUB'.format(balance_old, self.cur_rate, self.balance))
             self.balance_in_play = float(self.login_info.get('cs'))
             prnt('BET_OLIMP.PY: balance: ' + str(self.balance))
@@ -137,6 +138,9 @@ class OlimpBot:
         if self.amount is None and amount:
             self.amount = amount
 
+        self.amount = round(self.amount / self.cur_rate, 2)
+        self.amount_rub = round(self.amount * self.cur_rate, 2)
+
         if obj.get('fonbet_err', 'ok') != 'ok':
             err_str = 'BET_OLIMP.PY: Олимп получил ошибку от Фонбета: ' + str(obj.get('fonbet_err'))
             prnt(err_str)
@@ -164,7 +168,7 @@ class OlimpBot:
         headers = base_headers.copy()
         headers.update(get_xtoken_bet(payload))
 
-        if not self.amount <= self.balance:
+        if not self.amount_rub <= self.balance:
             err_str = 'BET_OLIMP.PY: error amount > balance, balance:' + str(self.balance)
             prnt(err_str)
             raise LoadException(err_str)
@@ -215,20 +219,17 @@ class OlimpBot:
             prnt('BET_OLIMP.PY: bet successful, reg_id: ' + str(self.reg_id))
         elif err_code in (400, 417):
             if err_code == 417 and 'Такой исход не существует' in err_msg:
-                err_str = 'BET_OLIMP.PY: error place bet: ' + \
-                          str(res.get("error", {}).get('err_desc'))
+                err_str = 'BET_OLIMP.PY: error place bet: ' + str(res.get("error", {}).get('err_desc'))
                 prnt(err_str)
                 raise LoadException(err_str)
             # MaxBet
             elif 'максимальная ставка' in err_msg:
-                err_str = 'BET_OLIMP.PY: error max bet: ' + \
-                          str(res.get("error", {}).get('err_desc'))
+                err_str = 'BET_OLIMP.PY: error max bet: ' + str(res.get("error", {}).get('err_desc'))
                 prnt(err_str)
                 raise LoadException(err_str)
             else:
                 if self.cnt_bet_attempt > (60 * 0.4) / self.sleep:
-                    err_str = 'BET_OLIMP.PY: error place bet: ' + \
-                              str(res.get("error", {}).get('err_desc'))
+                    err_str = 'BET_OLIMP.PY: error place bet: ' + str(res.get("error", {}).get('err_desc'))
                     prnt(err_str)
                     raise LoadException(err_str)
 
@@ -451,24 +452,7 @@ if __name__ == '__main__':
     OLIMP_USER.update({'login': 5266288})
     OLIMP_USER.update({'password': 'op1304Abcop'})
     #
-    wager_olimp = {
-        "time_req": 1570718811,
-        "value": 1.32,
-        "apid": "1364899997:52434124:3:30:-9999:1:0:0:1",
-        "factor": 1.32,
-        "sport_id": 1,
-        "event": "52434124",
-        "vector": "DOWN",
-        "hist": {
-            "time_change": 1570718660.5215874,
-            "avg_change": [
-                151
-            ],
-            "order": [
-                1.32
-            ]
-        }
-    }
+    wager_olimp = { "value": 3.45, "apid": "1407443491:53761583:3:5:20.5:1:0:0:3", "factor": 3.45, "sport_id": 3, "event": "53761583",}
     obj = {}
     obj['wager_olimp'] = wager_olimp
     obj['amount_olimp'] = 30
@@ -477,6 +461,6 @@ if __name__ == '__main__':
     olimp.sign_in()
     # olimp.place_bet(obj)
     # time.sleep(300)
-    # olimp.sale_bet(0)
+    olimp.sale_bet(1)
     # olimp.sale_bet(3856)
     # olimp.sale_bet(3857)

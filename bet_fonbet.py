@@ -78,7 +78,7 @@ class FonbetBot:
         if self.bk_type == 'com':
             self.app_ver = '5.1.3b'
             self.user_agent = 'Fonbet/5.1.3b (Android 21; Phone; com.bkfonbet)'
-            self.not_url = 'fonbet-1507e.com'
+            self.not_url = 'fonbet-dc485.com'
             self.url_api = 'clients-api'  # maybe 'common'?
         elif self.bk_type == 'ru':
             self.app_ver = '5.2.1r'
@@ -321,14 +321,14 @@ class FonbetBot:
             self.currency = res.get("currency").get("currency")
             self.balance = float(res.get("saldo"))
             if self.currency == 'RUB':
-                pass
+                self.balance = self.balance//100*100
             else:
                 from pycbrf.toolbox import ExchangeRates
                 rates = ExchangeRates()
                 self.cur_rate = float(rates['EUR'].value)
                 prnt('BET_FONBET.PY: get current rate {} from bank:{} [{}-{}]'.format(self.currency, self.cur_rate, rates.date_requested, rates.date_received))
                 balance_old = self.balance
-                self.balance = round(self.balance * self.cur_rate, 2)
+                self.balance = self.balance*self.cur_rate//100*100
                 prnt('BET_FONBET.PY: balance convert: {} {} = {} RUB'.format(balance_old, self.cur_rate, self.balance))
 
             self.limit_group = res.get("limitGroup")
@@ -367,9 +367,7 @@ class FonbetBot:
     def get_balance(self):
         if self.balance == 0.0:
             self.sign_in()
-            return round(self.balance)
-        else:
-            return self.balance
+        return (self.balance//100)*100
 
     def get_acc_info(self, param):
         if param == 'bet':
@@ -1055,7 +1053,7 @@ def get_new_bets_fonbet(match_id, proxies, time_out):
 if __name__ == '__main__':
     PROXIES = dict()
 
-    FONBET_USER = {"login": 4775583, "password": "ft1304Abcft", "mirror": "fonbet-1507e.com"}
+    FONBET_USER = {"login": 4775583, "password": "ft1304Abcft", "mirror": "fonbet-dc485.com"}
 
     wager_fonbet = {'event': 18117498, 'factor': 1816, 'value': 1.7, 'param': 350, 'paramText': '3.5', 'paramTextRus': '3.5', 'paramTextEng': '3.5', 'score': '2:1'}
     obj = {}
@@ -1067,6 +1065,6 @@ if __name__ == '__main__':
     fonbet.sign_in()
     # fonbet.place_bet(obj)
     # time.sleep(3)
-    fonbet.sale_bet(20995498860)
+    # fonbet.sale_bet(20995498860)
     # fonbet_reg_id = fonbet.place_bet(amount_fonbet, wager_fonbet)
     # {'e': 12264423, 'f': 931, 'v': 1.4, 'p': 250, 'pt': '2.5', 'isLive': True}
