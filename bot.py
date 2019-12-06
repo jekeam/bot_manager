@@ -469,7 +469,7 @@ def change(update, context):
     global type_user
     user_sender = update.message.chat.id
     types = ('user', 'acc', 'prop')
-    type_acc = ('active', 'inactive', 'pause')
+    type_acc = ('active', 'inactive', 'pause', 'deleted')
 
     if User.select().where(User.id == user_sender).get().role == 'admin':
         try:
