@@ -95,6 +95,8 @@ def bet_type_is_work(key, event_type):
                 return True
             else:
                 return False
+    elif event_type == 'esports':
+        return False
     return True
 
 
