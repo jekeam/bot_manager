@@ -746,6 +746,7 @@ class BetManager:
                     if sale_prof_minus >= sale_bet_proc:
                         err_str = 'Выкуп ставки отключен, плече брошено согласно настройке'
                         prnt(self.msg.format(sys._getframe().f_code.co_name, err_str))
+                        prnt(vstr=self.bk_name + ': ' + err_str, hide='hide', to_cl=True)
                         raise BetIsDrop(err_str)
 
             self.recalc_sum_bet(shared)
