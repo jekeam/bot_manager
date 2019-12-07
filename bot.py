@@ -725,7 +725,7 @@ def button(update, context):
                         abr = val.get('abr')
                     elif key not in ('TEST_OTH_SPORT', 'MAXBET_FACT'):
                         if user_role == 'junior':
-                            if key in ('SUMM', 'WORK_HOUR_END'):
+                            if key in ('SUMM', 'WORK_HOUR_END', 'FONBET_MIRROR', 'FONBET_S', 'WORK_HOUR_END', 'SUMM', 'MAX_FORK'):
                                 abr = val.get('abr')
                         else:
                             # if key not in ('FONBET_U', 'FONBET_P', 'OLIMP_U', 'OLIMP_P'):
