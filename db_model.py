@@ -12,6 +12,7 @@ db = MySQLDatabase('bot_manager', user='root', password='131189_Ak', host='127.0
 first_bet_in = ["created", "notcreator", "fonbet", "olimp", "parallel", "auto"]
 
 bks = ["fonbet", "olimp", "auto"]
+on_off = ["вкл", "выкл"]
 
 prop_abr = {
     "FONBET_U": {"abr": "УЗ Фонбет", "type": "account:fonbet", "max": "", "min": "", "access_list": [], "error": ""},
@@ -40,35 +41,36 @@ prop_abr = {
     "WORK_HOUR_END": {"abr": "Остановка в", "type": "int", "max": "23", "min": "0", "access_list": [], "error": ""},
     "ROUND_FORK": {"abr": "Округление", "type": "int", "max": "", "min": "", "access_list": ["1", "5", "10", "50", "100"], "error": ""},
 
-    "MAXBET_FACT": {"abr": "Мaxbet по ведущему", "type": "str", "max": "", "min": "", "access_list": ["вкл", "выкл"], "error": ""},
-    "CHECK_MAX_BET": {"abr": "Проверка maxbet", "type": "str", "max": "", "min": "", "access_list": ["вкл", "выкл"], "error": ""},
-    "SUM_BY_MAX": {"abr": "Пересчет maxbet", "type": "str", "max": "", "min": "", "access_list": ["вкл", "выкл"], "error": ""},
+    "MAXBET_FACT": {"abr": "Мaxbet по ведущему", "type": "str", "max": "", "min": "", "access_list": on_off, "error": ""},
+    "CHECK_MAX_BET": {"abr": "Проверка maxbet", "type": "str", "max": "", "min": "", "access_list": on_off, "error": ""},
+    "SUM_BY_MAX": {"abr": "Пересчет maxbet", "type": "str", "max": "", "min": "", "access_list": on_off, "error": ""},
     "PROC_BY_MAX": {"abr": "% от maxbet", "type": "int", "max": "100", "min": "10", "access_list": [], "error": ""},
 
     "TIMEOUT_FORK": {"abr": "Ждать после ставки", "type": "int", "max": "5400", "min": "60", "access_list": [], "error": ""},
 
-    "TEAM_RES": {"abr": "Рез-е команды", "type": "str", "max": "", "min": "", "access_list": ["вкл", "выкл"], "error": ""},
-    "TEAM_STUD": {"abr": "Студ. команды", "type": "str", "max": "", "min": "", "access_list": ["вкл", "выкл"], "error": ""},
-    "TEAM_FEMALE": {"abr": "Жен. команды", "type": "str", "max": "", "min": "", "access_list": ["вкл", "выкл"], "error": ""},
-    "TEAM_JUNIOR": {"abr": "Юнош. команды", "type": "str", "max": "", "min": "", "access_list": ["вкл", "выкл"], "error": ""},
+    "TEAM_RES": {"abr": "Рез-е команды", "type": "str", "max": "", "min": "", "access_list": on_off, "error": ""},
+    "TEAM_STUD": {"abr": "Студ. команды", "type": "str", "max": "", "min": "", "access_list": on_off, "error": ""},
+    "TEAM_FEMALE": {"abr": "Жен. команды", "type": "str", "max": "", "min": "", "access_list": on_off, "error": ""},
+    "TEAM_JUNIOR": {"abr": "Юнош. команды", "type": "str", "max": "", "min": "", "access_list": on_off, "error": ""},
 
-    "TOP": {"abr": "Только TOP матчи", "type": "str", "max": "", "min": "", "access_list": ["вкл", "выкл"], "error": ""},
-    "HOT": {"abr": "Только TOP катировки", "type": "str", "max": "", "min": "", "access_list": ["вкл", "выкл"], "error": ""},
-    "ONE_BET": {"abr": "1 ставка на матч", "type": "str", "max": "", "min": "", "access_list": ["вкл", "выкл"], "error": ""},
+    "TOP": {"abr": "Только TOP матчи", "type": "str", "max": "", "min": "", "access_list": on_off, "error": ""},
+    "HOT": {"abr": "Только TOP катировки", "type": "str", "max": "", "min": "", "access_list": on_off, "error": ""},
+    "ONE_BET": {"abr": "1 ставка на матч", "type": "str", "max": "", "min": "", "access_list": on_off, "error": ""},
     "RANDOM_SUMM_PROC": {"abr": "% Разброс ставки", "type": "int", "max": "30", "min": "0", "access_list": [], "error": ""},
     # "FORK_TIME_TYPE": {"abr": "Тип времени вилки", "type": "str", "max": "", "min": "", "access_list": ["текущее", "общее"], "error": ""},
     "FIRST_BET_IN": {"abr": "Первая ставка в", "type": "str", "max": "", "min": "", "access_list": first_bet_in, "error": ""},
+    "INVERSION_BET": {"abr": "Инверсия ставки", "type": "str", "max": "", "min": "", "access_list": first_bet_in, "error": ""},
     "MAX_KOF": {"abr": "MAX коэф-т", "type": "float", "max": "1000", "min": "1.02", "access_list": [], "error": ""},
-    # "ML_NOISE": {"abr": "ML: исключить шум", "type": "str", "max": "", "min": "", "access_list": ["вкл", "выкл"], "error": ""},
+    # "ML_NOISE": {"abr": "ML: исключить шум", "type": "str", "max": "", "min": "", "access_list": on_off, "error": ""},
     # "POUR_INTO": {"abr": "Перелить в", "type": "str", "max": "", "min": "", "access_list": bks, "error": ""},
-    "DOUBLE_BET": {"abr": "Дубли ставок", "type": "str", "max": "", "min": "", "access_list": ["вкл", "выкл"], "error": ""},
+    "DOUBLE_BET": {"abr": "Дубли ставок", "type": "str", "max": "", "min": "", "access_list": on_off, "error": ""},
     "MAX_BET_FONBET":
         {
             "abr": "MAX BET в Fonbet", "type": "int", "max": "1000", "min": "0",
             "access_list": ["0", "50", "90", "100", "200", "300", "400", "500", "600", "700", "800", "900", "1000"], "error": ""
         },
     # "SERVER_OLIMP": {"abr": "Сервер Олимп", "type": "str", "max": "", "min": "", "access_list": [], "error": ""},
-    "TEST_OTH_SPORT": {"abr": "Новые виды спорта", "type": "str", "max": "", "min": "", "access_list": ["вкл", "выкл"], "error": ""},
+    "TEST_OTH_SPORT": {"abr": "Новые виды спорта", "type": "str", "max": "", "min": "", "access_list": on_off, "error": ""},
     "SALE_BET": {"abr": "НЕвыкуп при потере, %", "type": "int", "max": "100", "min": "0", "access_list": [], "error": ""},
 
     # "SERVER_IP_TEST": {"abr": "IP-адрес тест. сервера", "type": "", "max": "", "min": "", "access_list": [], "error": ""},

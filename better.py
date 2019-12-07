@@ -708,7 +708,17 @@ export_block = False
 msg_str_old = ''
 msg_str = ''
 info_csv = {}
+
+
 # sleeping_forks = []
+
+def invetsion_vect(vect: str):
+    vect = vect.upper()
+    if vect == 'UP':
+        return 'DOWN'
+    elif vect == 'DOWN':
+        return 'UP'
+
 
 cnt_acc_sql = "select count(*)\n" + \
               "from(\n" + \
@@ -1014,6 +1024,13 @@ if __name__ == '__main__':
 
                             vect1 = bk1_bet_json.get('vector')
                             vect2 = bk2_bet_json.get('vector')
+
+                            if get_prop('inversion_bet', 'выкл') == 'вкл':
+                                vect1_old = vect1
+                                vect2_old = vect2
+                                vect1 = invetsion_vect(vect1)
+                                vect2 = invetsion_vect(vect2)
+                                prnt('Inverdion bet: vect1: {}->{}, vect2: {}->{}'.format(vect1_old, vect1, vect2_old, vect2))
 
                             try:
                                 info = key + ': ' + name + ', ' + \

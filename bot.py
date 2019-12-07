@@ -720,15 +720,20 @@ def button(update, context):
 
                 for key, val in prop_abr.items():
 
+                    exclude_all = ('INVERSION_BET')
+                    exclude_user = ('TEST_OTH_SPORT', 'MAXBET_FACT')
+
                     abr = None
-                    if user_role in ('admin', 'investor'):
+                    if user_role == 'admin':
                         abr = val.get('abr')
-                    elif key not in ('TEST_OTH_SPORT', 'MAXBET_FACT'):
+                    elif user_role == 'investor':
+                        if key not in exclude_all:
+                            abr = val.get('abr')
+                    elif key not in exclude_all and key not in exclude_user:
                         if user_role == 'junior':
                             if key in ('SUMM', 'WORK_HOUR_END', 'FONBET_MIRROR', 'FONBET_S', 'WORK_HOUR_END', 'SUMM', 'MAX_FORK', 'FONBET_P', 'OLIMP_P'):
                                 abr = val.get('abr')
                         else:
-                            # if key not in ('FONBET_U', 'FONBET_P', 'OLIMP_U', 'OLIMP_P'):
                             abr = val.get('abr')
 
                     if abr:
