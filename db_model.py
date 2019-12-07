@@ -59,7 +59,7 @@ prop_abr = {
     "RANDOM_SUMM_PROC": {"abr": "% Разброс ставки", "type": "int", "max": "30", "min": "0", "access_list": [], "error": ""},
     # "FORK_TIME_TYPE": {"abr": "Тип времени вилки", "type": "str", "max": "", "min": "", "access_list": ["текущее", "общее"], "error": ""},
     "FIRST_BET_IN": {"abr": "Первая ставка в", "type": "str", "max": "", "min": "", "access_list": first_bet_in, "error": ""},
-    "INVERSION_BET": {"abr": "Инверсия ставки", "type": "str", "max": "", "min": "", "access_list": first_bet_in, "error": ""},
+    "INVERSION_BET": {"abr": "Инверсия ставки", "type": "str", "max": "", "min": "", "access_list": on_off, "error": ""},
     "MAX_KOF": {"abr": "MAX коэф-т", "type": "float", "max": "1000", "min": "1.02", "access_list": [], "error": ""},
     # "ML_NOISE": {"abr": "ML: исключить шум", "type": "str", "max": "", "min": "", "access_list": on_off, "error": ""},
     # "POUR_INTO": {"abr": "Перелить в", "type": "str", "max": "", "min": "", "access_list": bks, "error": ""},
