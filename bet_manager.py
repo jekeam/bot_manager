@@ -1055,6 +1055,7 @@ class BetManager:
                 prnt(self.msg.format(sys._getframe().f_code.co_name, 'get current rate {} from bank:{} [{}-{}]'.format(self.currency, self.cur_rate, rates.date_requested, rates.date_received)))
                 balance_old = self.balance
                 self.balance = self.balance*self.cur_rate//100*100
+                self.session['balance'] = self.balance
                 prnt(self.msg.format(sys._getframe().f_code.co_name, 'balance convert: {} {} = {} RUB'.format(balance_old, self.cur_rate, self.balance)))
 
             prnt(self.msg.format(sys._getframe().f_code.co_name, 'session: ' + str(self.session['session'])))
@@ -1117,7 +1118,7 @@ class BetManager:
             payload.update({
                 'coefs_ids': '[["{apid}",{factor},1]]'.format(apid=self.wager.get('apid'), factor=self.wager.get('factor')),
                 'sport_id': self.wager.get('sport_id'),
-                'sum': self.sum_bet,
+                'sum': round(self.sum_bet / self.cur_rate, 2),
                 'save_any': save_any,
                 'fast': 1,
                 'any_handicap': 1,
@@ -1194,7 +1195,7 @@ class BetManager:
             headers = copy.deepcopy(self.fonbet_headers)
 
             payload['client'] = {'id': self.account['login']}
-            payload['coupon']['amount'] = self.sum_bet
+            payload['coupon']['amount'] = round(self.sum_bet / self.cur_rate, 2)
 
             if self.wager.get('param'):
                 payload['coupon']['bets'][0]['param'] = int(self.wager['param'])
@@ -1263,7 +1264,7 @@ class BetManager:
             coupon = self.get_cur_max_bet_id(shared)
 
             self.cashout_allowed = coupon.get('cashout_allowed', False)
-            self.sum_sell = coupon.get('cashout_amount', 0)
+            self.sum_sell = coupon.get('cashout_amount', 0) * self.cur_rate
 
             prnt(self.msg.format(sys._getframe().f_code.co_name, 'coupon cashout allowed: ' + str(self.cashout_allowed)))
             prnt(self.msg.format(sys._getframe().f_code.co_name, 'coupon sum sell: ' + str(self.sum_sell)))
@@ -1310,7 +1311,7 @@ class BetManager:
                         prnt(self.msg.format(sys._getframe().f_code.co_name, 'tempBlock: ' + str(coupon.get('tempBlock', False))), 'hide')
 
                         if coupon.get('canSell', True) and not coupon.get('tempBlock', False):
-                            self.sum_sell = float(coupon.get('completeSellSum'))
+                            self.sum_sell = float(coupon.get('completeSellSum')) * self.cur_rate
                             prnt(self.msg.format(sys._getframe().f_code.co_name, 'coupon sum sell: ' + str(self.sum_sell / self.sum_sell_divider)))
                         else:
                             err_str = self.msg_err.format(sys._getframe().f_code.co_name, 'coupon is lock, time sleep ' + str(timer_update) + ' sec.')
@@ -1506,7 +1507,6 @@ class BetManager:
 
         prnt(self.msg.format(sys._getframe().f_code.co_name, 'rq: ' + str(payload) + ' ' + str(headers)), 'hide')
         resp = requests_retry_session_post(
-            # url.format('coupon/getMinMax'), Not working, why?
             url.format('coupon/getMinMax'),
             headers=headers,
             data=data,
@@ -1524,7 +1524,7 @@ class BetManager:
             err_str = self.msg_err.format(sys._getframe().f_code.co_name, 'min sum not found')
             raise BetIsLost(err_str)
 
-        min_amount, max_amount = res['min'] // 100, res['max'] // 100
+        min_amount, max_amount = round(res['min'] * self.cur_rate // 100, 2), round(res['max'] * self.cur_rate // 100, 2)
 
         shared[self.bk_name]['max_bet'] = max_amount
         self.min_bet = min_amount
@@ -1605,7 +1605,7 @@ class BetManager:
                 prnt(vstr='Ставка в ' + self.bk_name + ' успешно завершена, id = ' + str(self.reg_id), hide='hide', to_cl=True)
 
                 try:
-                    url_rq = 'http://' + get_prop('server_ip') + ':8888/set/fonbet_maxbet_fact/' + self.key + '/' + str(self.session.get('group_limit_id')) + '/' + str(self.sum_bet)
+                    url_rq = 'http://' + get_prop('server_ip') + ':8888/set/fonbet_maxbet_fact/' + self.key + '/' + str(self.session.get('group_limit_id')) + '/' + str(self.sum_bet * self.cur_rate)
                     rs = requests.get(url=url_rq, timeout=1).text
                     prnt(self.msg.format(sys._getframe().f_code.co_name, 'save url_rq: {}, answer: {}'.format(url_rq, rs)))
                 except Exception as e:
