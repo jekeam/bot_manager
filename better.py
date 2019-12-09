@@ -1023,7 +1023,7 @@ if __name__ == '__main__':
                                 vect1_old = vect1
                                 vect2_old = vect2
                                 vect1, vect2 = normalized_vector(vect1, k1, vect2, k2)
-                                prnt('Нормализация векторов: vect1: {}->{}, vect2: {}->{}'.format(vect1_old, vect1, vect2_old, vect2))
+                                prnt('Нормализация векторов: vect1: {}->{}, vect2: {}->{}'.format(vect1_old, vect1, vect2_old, vect2), 'hide')
 
                             try:
                                 info = key + ': ' + name + ', ' + \
