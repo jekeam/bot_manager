@@ -494,7 +494,7 @@ def go_bets(wag_ol, wag_fb, key, deff_max, vect1, vect2, sc1, sc2, created, even
         fork_info[fork_id]['fonbet']['maxbet_fact'] = info_csv.get('maxbet_fact')
         fork_info[fork_id]['fonbet']['fonbet_maxbet_fact'] = info_csv.get('fonbet_maxbet_fact', '')
         fork_info[fork_id]['fonbet']['first_bet_in'] = info_csv.get('first_bet_in', '')
-        fork_info[fork_id]['fonbet']['inversion_bet'] = info_csv.get('inversion_bet', '')
+        fork_info[fork_id]['fonbet']['total_first'] = info_csv.get('total_first', '')
 
         fork_info[fork_id]['fonbet']['is_top'] = is_top
         fork_info[fork_id]['fonbet']['is_hot'] = wag_fb.get('is_hot')
@@ -713,14 +713,6 @@ info_csv = {}
 
 
 # sleeping_forks = []
-
-def invetsion_vect(vect: str):
-    vect = vect.upper()
-    if vect == 'UP':
-        return 'DOWN'
-    elif vect == 'DOWN':
-        return 'UP'
-
 
 cnt_acc_sql = "select count(*)\n" + \
               "from(\n" + \
@@ -1027,13 +1019,6 @@ if __name__ == '__main__':
                             vect1 = bk1_bet_json.get('vector')
                             vect2 = bk2_bet_json.get('vector')
 
-                            if get_prop('inversion_bet', 'выкл') == 'вкл':
-                                vect1_old = vect1
-                                vect2_old = vect2
-                                vect1 = invetsion_vect(vect1)
-                                vect2 = invetsion_vect(vect2)
-                                prnt('Inverdion bet: vect1: {}->{}, vect2: {}->{}'.format(vect1_old, vect1, vect2_old, vect2))
-
                             try:
                                 info = key + ': ' + name + ', ' + \
                                        'created: ' + created_fork + ', ' + \
@@ -1151,7 +1136,7 @@ if __name__ == '__main__':
                                                         'fonbet_maxbet_fact': fonbet_maxbet_fact,
                                                         'fb_bk_type': get_prop('fonbet_s', 'com'),
                                                         'first_bet_in': get_prop('first_bet_in', 'auto'),
-                                                        'inversion_bet': get_prop('inversion_bet', 'выкл'),
+                                                        'total_first': get_prop('total_first', 'auto'),
                                                     })
                                                     prnt('info_csv: ' + str(info_csv))
 

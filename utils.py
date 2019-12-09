@@ -257,6 +257,14 @@ def get_vector(bet_type, sc1=None, sc2=None):
     raise ValueError('Error: vector not defined!')
 
 
+def invetsion_vect(vect: str):
+    vect = vect.upper()
+    if vect == 'UP':
+        return 'DOWN'
+    elif vect == 'DOWN':
+        return 'UP'
+
+
 def find_max_mode(list1):
     list_table = statistics._counts(list1)
     len_table = len(list_table)
