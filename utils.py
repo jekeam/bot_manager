@@ -274,6 +274,19 @@ def invetsion_vect(vect: str):
     elif vect == 'DOWN':
         return 'UP'
 
+def normalized_vector(vect1: str, k1:float, vect2: str, k2:float):
+    vect1 = vect1.upper()
+    vect2 = vect2.upper()
+    if (vect1 == vect2) or (vect1 == '' and vect2 == ''):
+        if k1 > k2:
+            return 'DOWN', 'UP'
+        elif k2 > k1:
+            return 'UP', 'DOWN'
+        else:
+            return vect1, vect2
+    else:
+        return vect1, vect2
+
 
 def find_max_mode(list1):
     list_table = statistics._counts(list1)

@@ -4,7 +4,7 @@ from bet_olimp import *
 import datetime
 import time
 from fork_recheck import get_kof_olimp, get_kof_fonbet
-from utils import prnt, get_account_info, get_prop, get_sum_bets, get_new_sum_bets, get_proxies
+from utils import prnt, get_account_info, get_prop, get_sum_bets, get_new_sum_bets, get_proxies, normalized_vector
 import threading
 from multiprocessing import Manager, Process
 import time
@@ -1018,6 +1018,12 @@ if __name__ == '__main__':
 
                             vect1 = bk1_bet_json.get('vector')
                             vect2 = bk2_bet_json.get('vector')
+                            
+                            if vect1 == vect2:
+                                vect1_old = vect1
+                                vect2_old = vect2
+                                vect1, vect2 = normalized_vector(vect1, k1, vect2, k2)
+                                prnt('Нормализация векторов: vect1: {}->{}, vect2: {}->{}'.format(vect1_old, vect1, vect2_old, vect2))
 
                             try:
                                 info = key + ': ' + name + ', ' + \
