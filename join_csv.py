@@ -19,6 +19,7 @@ def join_csv(cur_date_str):
             li.append(df)
     if li:
         frame = pd.concat(li, axis=0, ignore_index=True)
+        csv_head.insert(0, 'ACC_ID')
         frame = frame[csv_head]
         frame_name_f = cur_date_str + '_join_statistics.csv'
         frame.to_csv(frame_name_f, encoding='utf-8', sep=';', index=False)
