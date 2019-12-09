@@ -493,6 +493,7 @@ def go_bets(wag_ol, wag_fb, key, deff_max, vect1, vect2, sc1, sc2, created, even
         fork_info[fork_id]['fonbet']['max_bet'] = shared['fonbet'].get('max_bet')
         fork_info[fork_id]['fonbet']['maxbet_fact'] = info_csv.get('maxbet_fact')
         fork_info[fork_id]['fonbet']['fonbet_maxbet_fact'] = info_csv.get('fonbet_maxbet_fact', '')
+        fork_info[fork_id]['fonbet']['first_bet_in'] = info_csv.get('first_bet_in', '')
         fork_info[fork_id]['fonbet']['inversion_bet'] = info_csv.get('inversion_bet', '')
 
         fork_info[fork_id]['fonbet']['is_top'] = is_top
@@ -1149,6 +1150,7 @@ if __name__ == '__main__':
                                                         'maxbet_fact': get_prop('maxbet_fact', 'выкл'),
                                                         'fonbet_maxbet_fact': fonbet_maxbet_fact,
                                                         'fb_bk_type': get_prop('fonbet_s', 'com'),
+                                                        'first_bet_in': get_prop('first_bet_in', 'auto'),
                                                         'inversion_bet': get_prop('inversion_bet', 'выкл'),
                                                     })
                                                     prnt('info_csv: ' + str(info_csv))
