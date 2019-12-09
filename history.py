@@ -6,7 +6,7 @@ from datetime import datetime
 import random
 import json
 import os
-from utils import prnt, int_to_str
+from utils import prnt, int_to_str, csv_head
 import db_model
 from bot_prop import ADMINS
 import pandas as pd
@@ -259,14 +259,13 @@ def export_hist(OLIMP_USER, FONBET_USER):
  \
                           str(info['fonbet'].get('err', '')) + ';' + \
                           str(info['olimp'].get('err', '')) + ';' + '\n'
-
-                header = 'ID;time;event_type;pre_fb_kof;pre_o_kof;pre_fb_sum;pre_o_sum;' \
-                         'fb_id;o_id;fb_time;o_time;fb_kof;o_kof;fb_sum_bet;o_sum_bet;' \
-                         'fb_profit;o_profit;fb_result;o_result;fb_name;o_name;fb_status;' \
-                         'o_sum_sale;f_kof_type;o_kof_type;fb_vector;ol_vector;first_bet_in;total_first;fb_time_bet;ol_time_bet;' \
-                         'fb_new_bet_sum;ol_new_bet_sum;fb_bal;ol_bal;fb_max_bet;maxbet_fact;fb_max_bet_fact;fb_bet_delay;fb_is_top;fb_is_hot;fork_slice;cnt_act_acc;time_type;fork_time;fork_time_max;min_proc;max_proc;' \
-                         'user_id;fb_bk_type;group_limit_id;live_fork;team_type;summ_min;' \
-                         'cur_proc;fisrt_proc;fb_err;ol_err;\n'
+                header_str = ''
+                for cl in csv_head:
+                    if header_str == '':
+                        header_str = cl
+                    else:
+                        header_str = header_str + ';' + cl
+                header = header_str + ';\n'
 
             with open(csv_name, 'w', encoding='utf-8') as f:
                 f.write(header + out)
