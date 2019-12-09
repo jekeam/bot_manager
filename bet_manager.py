@@ -512,10 +512,13 @@ class BetManager:
                 self.recheck(shared)
 
                 total_first = get_prop('total_first', 'auto').upper()
-                if (total_first == 'ТБ' and 'ТМ' in self.bet_type.upper()) or (total_first == 'ТМ' and 'ТБ' in self.bet_type.upper()):
-                    prnt(self.msg.format(sys._getframe().f_code.co_name, 'Total Under - wait, curr: vect: {}, bet_type: {}'.format(self.vector, self.bet_type)))
-                    self.opposite_stat_wait(shared)
-                    self.opposite_stat_get(shared)
+                if total_first != 'auto':
+                    if (total_first == 'ТБ' and 'ТМ' in self.bet_type.upper()) or (total_first == 'ТМ' and 'ТБ' in self.bet_type.upper()):
+                        prnt(self.msg.format(sys._getframe().f_code.co_name, 'Total Under - wait, curr: vect: {}, bet_type: {}'.format(self.vector, self.bet_type)))
+                        self.opposite_stat_wait(shared)
+                        self.opposite_stat_get(shared)
+                    else:
+                        prnt(self.msg.format(sys._getframe().f_code.co_name, 'Total Over - go, curr: vect: {}, bet_type: {}'.format(self.vector, self.bet_type)))
                 elif (self.first_bet_in == 'auto' and self.vector == 'UP') or self.bk_name_opposite == self.first_bet_in:
                     self.opposite_stat_wait(shared)
                     self.opposite_stat_get(shared)
