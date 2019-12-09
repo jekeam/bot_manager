@@ -509,7 +509,8 @@ class BetManager:
 
                 self.recheck(shared)
 
-                if get_prop('total_first', 'auto').upper() == 'ТБ' and 'ТМ' in self.bet_type.upper():
+                total_first = get_prop('total_first', 'auto').upper()
+                if (total_first == 'ТБ' and 'ТМ' in self.bet_type.upper()) or (total_first == 'ТМ' and 'ТБ' in self.bet_type.upper()):
                     prnt(self.msg.format(sys._getframe().f_code.co_name, 'Total Under - wait, curr: vect: {}, bet_type: {}'.format(self.vector, self.bet_type)))
                     self.opposite_stat_wait(shared)
                     self.opposite_stat_get(shared)
