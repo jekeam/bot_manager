@@ -1046,6 +1046,7 @@ class BetManager:
             if not self.session.get('session'):
                 raise SessionNotDefined(self.msg_err.format(sys._getframe().f_code.co_name, 'session_id not defined'))
 
+            self.balance = self.session['balance']
             if self.currency == 'RUB':
                 self.balance = self.balance//100*100
             else:
