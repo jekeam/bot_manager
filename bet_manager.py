@@ -1343,7 +1343,7 @@ class BetManager:
             if self.cashout_allowed and self.sum_sell > 0:
                 payload = {}
                 payload['bet_id'] = self.reg_id
-                payload['amount'] = self.sum_sell
+                payload['amount'] = self.sum_sell * self.cur_rate
                 payload['session'] = self.session['session']
                 payload.update(copy.deepcopy(ol_payload))
                 payload.pop('time_shift')
@@ -1431,7 +1431,7 @@ class BetManager:
 
                 payload['regId'] = int(self.reg_id)
                 payload['requestId'] = int(self.reqIdSale)
-                payload['sellSum'] = self.sum_sell
+                payload['sellSum'] = self.sum_sell * self.cur_rate
                 payload['clientId'] = self.account['login']
                 payload['fsid'] = self.session['session']
 
@@ -1814,12 +1814,12 @@ class BetManager:
             elif res.get('reason') == 3:
                 raise CouponBlocked('coupon ' + str(self.reg_id) + ' blocked')
             else:
-                raise CouponBlocked(self.msg.format(sys._getframe().f_code.co_name, 'new actualSellSum: ' + str(res.get('actualSellSum') / 100)))
+                raise CouponBlocked(self.msg.format(sys._getframe().f_code.co_name, 'new actualSellSum: ' + str(res.get('actualSellSum') / 100 * self.cur_rate)))
 
         elif result == 'couponCompletelySold':
-            prnt(self.msg.format(sys._getframe().f_code.co_name, 'sell successful, sum sold: ' + str(res.get('soldSum') / 100)))
+            prnt(self.msg.format(sys._getframe().f_code.co_name, 'sell successful, sum sold: ' + str(res.get('soldSum') / 100 * self.cur_rate)))
             prnt(
-                vstr='Ставка в ' + self.bk_name + ', успешно продана: ' + str(self.reg_id) + ' за ' + str(res.get('soldSum') / 100) +
+                vstr='Ставка в ' + self.bk_name + ', успешно продана: ' + str(self.reg_id) + ' за ' + str(res.get('soldSum') / 100 * self.cur_rate) +
                 ' т.к. в ' + self.bk_name_opposite + ' была ошибка: ' + shared.get(self.bk_name_opposite + '_err'),
                 hide='hide',
                 to_cl=True
