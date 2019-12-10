@@ -687,7 +687,8 @@ def button(update, context):
         keyboard.append([InlineKeyboardButton(text=start_stop, callback_data=query.data)])
         keyboard.append([InlineKeyboardButton(text=bot_prop.BTN_SETTINGS, callback_data='pror_edit')])
         if user_role in ('admin', 'investor'):
-            keyboard.append([InlineKeyboardButton(text=bot_prop.BTN_GET_LOG, callback_data='get_log')])
+            keyboard.append([InlineKeyboardButton(text=bot_prop.BTN_GET_LOG_BET, callback_data='get_log_bet')])
+            keyboard.append([InlineKeyboardButton(text=bot_prop.BTN_GET_LOG_FORK, callback_data='get_log_fork')])
         keyboard.append([InlineKeyboardButton(text=bot_prop.BTN_GET_STAT, callback_data='get_stat')])
         keyboard.append([InlineKeyboardButton(text=bot_prop.BTN_BACK, callback_data='botlist')])
 
@@ -747,8 +748,14 @@ def button(update, context):
             acc_id_str = str(context.user_data.get('acc_id'))
             query.message.reply_text(acc_id_str + ': ' + print_stat(acc_id_str), reply_markup=markup, parse_mode=telegram.ParseMode.MARKDOWN)
         elif 'get_log' in query.data:
+            if '_bet' in query.data:
+                als = 'bet'
+                file_name_cl = '_to_cl_' + als
+            elif '_fork' in query.data:
+                als = 'fork'
+                file_name_cl = '_to_cl_' + als
             acc_id_str = str(context.user_data.get('acc_id'))
-            file_stat_name = acc_id_str + '_to_cl.log'
+            file_stat_name = acc_id_str + file_name_cl + '.log'
             if os.path.isfile(file_stat_name):
                 # send to tg
                 with open(file_stat_name, 'r', encoding='utf-8') as f:
