@@ -236,7 +236,7 @@ def check_fork(key, L, k1, k2, live_fork, live_fork_total, bk1_score, bk2_score,
         v = False
         if key not in fork_exclude_list:
             fork_exclude_list.append(key)
-            prnt(vstr=info + '\n' + fork_exclude_text, hide='hide', to_cl=True, 'fork')
+            prnt(vstr=info + '\n' + fork_exclude_text, hide='hide', to_cl=True, type_='fork')
     return v
 
 
@@ -1107,7 +1107,7 @@ if __name__ == '__main__':
                                                         vstr='Вилка ' + str(key) + ' исключена, т.к. мы ее пытались проставить успешно/не успешно, но прошло менее 60 секунд и есть еще вилки, будем ставить другие, новые',
                                                         hide=None,
                                                         to_cl=True,
-                                                        'fork'
+                                                        type_='fork'
                                                     )
                                             else:
                                                 if key in msg_excule_pushed:
