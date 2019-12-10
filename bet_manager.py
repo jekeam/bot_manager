@@ -1667,77 +1667,95 @@ class BetManager:
                     err_str = self.msg_err.format(sys._getframe().f_code.co_name, err_str)
                     raise BetError(err_str)
             elif err_code == 100:
-                raise BetIsLost('current bet is lost: ' + str(err_msg))
-                # {
-                #   "result": "couponResult",
-                #   "coupon": {
-                #     "resultCode": 100,
-                #     "errorMessage": "\"Классиста Брадеско U19 (ж) - Гуарульос U19 (ж)\" прием закончен",
-                #     "errorMessageRus": "\"Классиста Брадеско U19 (ж) - Гуарульос U19 (ж)\" прием закончен",
-                #     "errorMessageEng": "\"Classista Bradesco U19 (w) - Guarulhos U19 (w)\" event or bet not found",
-                #     "amountMin": 30,
-                #     "amountMax": 100,
-                #     "amount": 30,
-                #     "bets": [
-                #       {
-                #         "event": 18277048,
-                #         "factor": 922
-                #       }
-                #     ]
-                #   }
-                # }
+                if 'event or bet not found' in err_msg_eng:
+                    # {
+                    #   "result": "couponResult",
+                    #   "coupon": {
+                    #     "resultCode": 100,
+                    #     "errorMessage": "\"Классиста Брадеско U19 (ж) - Гуарульос U19 (ж)\" прием закончен",
+                    #     "errorMessageRus": "\"Классиста Брадеско U19 (ж) - Гуарульос U19 (ж)\" прием закончен",
+                    #     "errorMessageEng": "\"Classista Bradesco U19 (w) - Guarulhos U19 (w)\" event or bet not found",
+                    #     "amountMin": 30,
+                    #     "amountMax": 100,
+                    #     "amount": 30,
+                    #     "bets": [
+                    #       {
+                    #         "event": 18277048,
+                    #         "factor": 922
+                    #       }
+                    #     ]
+                    #   }
+                    # }
+                    raise BetIsLost('current bet is lost: ' + str(err_msg))
+                elif 'is temporary suspended' in err_msg_eng:
+                    # {
+                    #     "result": "couponResult",
+                    #     "coupon": {
+                    #         "resultCode": 100,
+                    #         "errorMessage": "Ставки на событие \"Франка - Сан-Паулу\" временно не принимаются",
+                    #         "errorMessageRus": "Ставки на событие \"Франка - Сан-Паулу\" временно не принимаются",
+                    #         "errorMessageEng": "The betting on event \"Franca - Sao Paulo\" is temporary suspended",
+                    #         "amountMin": 30,
+                    #         "amountMax": 500,
+                    #         "amount": 30,
+                    #         "bets": [
+                    #             {
+                    #                 "event": 18268910,
+                    #                 "factor": 921,
+                    #                 "value": 1.78,
+                    #                 "score": "20:23"
+                    #             }
+                    #         ]
+                    #     }
+                    # }
+                    raise BetError('current bet is lock: ' + str(err_msg))
             elif err_code == 2:
-                # Изменился ИД: {
-                #   "result": "couponResult",
-                #   "coupon": {
-                #     "resultCode": 2,
-                #     "errorMessage": "Изменена котировка на событие \"LIVE 0:0 Грузия U17 - Словакия U17 < 0.5\"",
-                #     "errorMessageRus": "Изменена котировка на событие \"LIVE 0:0 Грузия U17 - Словакия U17 < 0.5\"",
-                #     "errorMessageEng": "Odds changed \"LIVE 0:0 Georgia U17 - Slovakia U17 < 0.5\"",
-                #     "amountMin": 30,
-                #     "amountMax": 81100,
-                #     "amount": 100,
-                #     "bets": [
-                #       {
-                #         "event": 13013805,
-                #         "factor": 1697,
-                #         "value": 1.37,
-                #         "param": 150,
-                #         "paramText": "1.5",
-                #         "paramTextRus": "1.5",
-                #         "paramTextEng": "1.5",
-                #         "score": "0:0"
-                #       }
-                #     ]
-                #   }
-                # }
-
-                # Вообще ушла:  {
-                #   "result": "couponResult",
-                #   "coupon": {
-                #     "resultCode": 2,
-                #     "errorMessage": "Изменена котировка на событие \"LIVE 1:0 Берое - Ботев Галабово Поб 1\"",
-                #     "errorMessageRus": "Изменена котировка на событие \"LIVE 1:0 Берое - Ботев Галабово Поб 1\"",
-                #     "errorMessageEng": "Odds changed \"LIVE 1:0 Beroe - Botev Galabovo 1\"",
-                #     "amountMin": 30,
-                #     "amountMax": 3000,
-                #     "amount": 30,
-                #     "bets": [
-                #       {
-                #         "event": 13197928,
-                #         "factor": 921,
-                #         "value": 0,
-                #         "score": "0:0"
-                #       }
-                #     ]
-                #   }
-                # }
                 self.opposite_stat_get(shared)
-                # Котировка вообще ушла
-                if res.get('coupon', {}).get('bets')[0].get('value') == 0:
-                    raise CouponBlocked('current bet is block: ' + str(err_msg))
+                # Котировка вообще ушла, но в системе еще есть, хотя на сайте не видна
+                # {
+                #     "result": "couponResult",
+                #     "coupon": {
+                #         "resultCode": 2,
+                #         "errorMessage": "Изменена котировка на событие \"LIVE 30:40 САНИ Нью Полтц (студ) - Сент Джозеф Бруклин (студ) Поб 1\"",
+                #         "errorMessageRus": "Изменена котировка на событие \"LIVE 30:40 САНИ Нью Полтц (студ) - Сент Джозеф Бруклин (студ) Поб 1\"",
+                #         "errorMessageEng": "Odds changed \"LIVE 30:40 SUNY New Poltz (stud) - St Josephs Brooklyn (stud) 1\"",
+                #         "amountMin": 30,
+                #         "amountMax": 200,
+                #         "amount": 30,
+                #         "bets": [
+                #             {
+                #                 "event": 18295333,
+                #                 "factor": 921,
+                #                 "value": 0,
+                #                 "score": "56:45"
+                #             }
+                #         ]
+                #     }
+                # }
+                if res.get('coupon', {}).get('bets')[0].get('value', 0) == 0:
+                    raise BetIsLost('current bet is block: ' + str(err_msg))
                 # Изменился ИД тотола или значение катировки
                 else:
+                    # {
+                    #     "result": "couponResult",
+                    #     "coupon": {
+                    #         "resultCode": 2,
+                    #         "errorMessage": "Изменена котировка на событие \"LIVE 30:40 Веракрус Кампинас (ж) - Санту-Андре/Семаса (ж) Поб 1\"",
+                    #         "errorMessageRus": "Изменена котировка на событие \"LIVE 30:40 Веракрус Кампинас (ж) - Санту-Андре/Семаса (ж) Поб 1\"",
+                    #         "errorMessageEng": "Odds changed \"LIVE 30:40 Veracruz Campinas (w) - Santo-Andre/Semasa (w) 1\"",
+                    #         "amountMin": 30,
+                    #         "amountMax": 100,
+                    #         "amount": 30,
+                    #         "bets": [
+                    #             {
+                    #                 "event": 18285127,
+                    #                 "factor": 921,
+                    #                 "value": 3.7,
+                    #                 "score": "30:40"
+                    #             }
+                    #         ]
+                    #     }
+                    # }
                     new_wager = res.get('coupon').get('bets')[0]
                     if str(new_wager.get('param', '')) == str(self.wager.get('param', '')) and int(self.wager.get('factor', 0)) != int(new_wager.get('factor', 0)):
                         err_str = self.msg.format(sys._getframe().f_code.co_name, 'Изменилась ставка: old: ' + str(self.wager) + ', new: ' + str(new_wager))
@@ -1768,12 +1786,10 @@ class BetManager:
                             raise BetIsLost(err_str)
                     # Изменилась катировка
                     elif 'Odds changed'.lower() in err_msg_eng.lower():
-                        if self.order_bet == 1:
-                            err_str = self.msg_err.format(sys._getframe().f_code.co_name, err_msg)
-                            raise BetIsLost(err_str)
-                        else:
-                            err_str = self.msg_err.format(sys._getframe().f_code.co_name, err_msg)
-                            raise BetError(err_str)
+                        # Тут может меняться значение катировки, надо понять как действовать
+                        # self.wager.update(new_wager)
+                        err_str = self.msg_err.format(sys._getframe().f_code.co_name, err_msg)
+                        raise BetError(err_str)
                     else:
                         err_str = self.msg_err.format(sys._getframe().f_code.co_name, 'неизвестная ошибка: ' + str(err_msg) + ', new_wager: ' + str(new_wager) + ', old_wager: ' + str(self.wager))
                         raise BetIsLost(err_str)

@@ -78,7 +78,7 @@ class FonbetBot:
         if self.bk_type == 'com':
             self.app_ver = '5.1.3b'
             self.user_agent = 'Fonbet/5.1.3b (Android 21; Phone; com.bkfonbet)'
-            self.not_url = 'fonbet-dc485.com'
+            self.not_url = 'fonbet-da707.com'
             self.url_api = 'clients-api'  # maybe 'common'?
         elif self.bk_type == 'ru':
             self.app_ver = '5.2.1r'
@@ -321,14 +321,14 @@ class FonbetBot:
             self.currency = res.get("currency").get("currency")
             self.balance = float(res.get("saldo"))
             if self.currency == 'RUB':
-                self.balance = self.balance//100*100
+                self.balance = self.balance // 100 * 100
             else:
                 from pycbrf.toolbox import ExchangeRates
                 rates = ExchangeRates()
                 self.cur_rate = float(rates['EUR'].value)
                 prnt('BET_FONBET.PY: get current rate {} from bank:{} [{}-{}]'.format(self.currency, self.cur_rate, rates.date_requested, rates.date_received))
                 balance_old = self.balance
-                self.balance = self.balance*self.cur_rate//100*100
+                self.balance = self.balance * self.cur_rate // 100 * 100
                 prnt('BET_FONBET.PY: balance convert: {} {} = {} RUB'.format(balance_old, self.cur_rate, self.balance))
 
             self.limit_group = res.get("limitGroup")
@@ -367,7 +367,7 @@ class FonbetBot:
     def get_balance(self):
         if self.balance == 0.0:
             self.sign_in()
-        return (self.balance//100)*100
+        return (self.balance // 100) * 100
 
     def get_acc_info(self, param):
         if param == 'bet':
@@ -486,6 +486,7 @@ class FonbetBot:
         payload["coupon"]["amount"] = self.amount
         payload['fsid'] = self.payload['fsid']
         payload['clientId'] = self.base_payload["clientId"]
+        # payload['coupon']['flexBet'] = 'up'
 
         self._check_in_bounds(self.wager)
 
@@ -575,6 +576,26 @@ class FonbetBot:
                 prnt('BET_FONBET.PY: Fonbet bet successful, regId: ' + str(regId))
                 self.reg_id = regId
             elif err_code == 100:
+                # {
+                #     "result": "couponResult",
+                #     "coupon": {
+                #         "resultCode": 100,
+                #         "errorMessage": "Ставки на событие \"Веракрус Кампинас (ж) - Санту-Андре/Семаса (ж)\" временно не принимаются",
+                #         "errorMessageRus": "Ставки на событие \"Веракрус Кампинас (ж) - Санту-Андре/Семаса (ж)\" временно не принимаются",
+                #         "errorMessageEng": "The betting on event \"Veracruz Campinas (w) - Santo-Andre/Semasa (w)\" is temporary suspended",
+                #         "amountMin": 30,
+                #         "amountMax": 200,
+                #         "amount": 30,
+                #         "bets": [
+                #             {
+                #                 "event": 18285127,
+                #                 "factor": 921,
+                #                 "value": 3.15,
+                #                 "score": "32:40"
+                #             }
+                #         ]
+                #     }
+                # }
                 if 'Слишком частые ставки на событие' in res.get('coupon').get('errorMessageRus'):
                     err_str = "BET_FONBET.PY error:" + str(res)
                     prnt(err_str)
@@ -1053,17 +1074,18 @@ def get_new_bets_fonbet(match_id, proxies, time_out):
 if __name__ == '__main__':
     PROXIES = dict()
 
-    FONBET_USER = {"login": 4775583, "password": "ft1304Abcft", "mirror": "fonbet-dc485.com"}
+    FONBET_USER = {"login": 7836658, "password": "VQ1YPcV9", "mirror": "fonbet-da707.com"}
 
-    wager_fonbet = {'event': 18117498, 'factor': 1816, 'value': 1.7, 'param': 350, 'paramText': '3.5', 'paramTextRus': '3.5', 'paramTextEng': '3.5', 'score': '2:1'}
+    wager_fonbet = {"num": 1, "event": 18268910, "factor": 921, "value": 3.7, "score": "30:40"}
+#https://www.fonbhttps://www.fonbet.com/#!/live/basketball/18586/18268910
     obj = {}
     obj['wager_fonbet'] = wager_fonbet
-    obj['amount_fonbet'] = 45
+    obj['amount_fonbet'] = 30
     obj['fonbet_bet_type'] = None  # 'ТМ(2.5)'
 
     fonbet = FonbetBot(FONBET_USER)
     fonbet.sign_in()
-    # fonbet.place_bet(obj)
+    fonbet.place_bet(obj)
     # time.sleep(3)
     # fonbet.sale_bet(20995498860)
     # fonbet_reg_id = fonbet.place_bet(amount_fonbet, wager_fonbet)
