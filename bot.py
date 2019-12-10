@@ -749,11 +749,9 @@ def button(update, context):
             query.message.reply_text(acc_id_str + ': ' + print_stat(acc_id_str), reply_markup=markup, parse_mode=telegram.ParseMode.MARKDOWN)
         elif 'get_log' in query.data:
             if '_bet' in query.data:
-                als = 'bet'
-                file_name_cl = '_to_cl_' + als
+                file_name_cl = '_to_cl_bet'
             elif '_fork' in query.data:
-                als = 'fork'
-                file_name_cl = '_to_cl_' + als
+                file_name_cl = '_to_cl_fork'
             acc_id_str = str(context.user_data.get('acc_id'))
             file_stat_name = acc_id_str + file_name_cl + '.log'
             if os.path.isfile(file_stat_name):
