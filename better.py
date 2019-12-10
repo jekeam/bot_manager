@@ -85,18 +85,25 @@ def check_l(L):
         return ''
 
 
-def bet_type_is_work(key, event_type):
+def bet_type_is_work(key, event_type, group_limit_id=None):
     key = key.upper()
+    olimp_bet_type = str(key.split('@')[-2])
+    fonbet_bet_type = str(key.split('@')[-1])
+
+    if group_limit_id == '4' and 'ТМ' in key:
+        if 'ТБ' in fonbet_bet_type:
+            return True
+        else:
+            return False
+
     if event_type == 'tennis':
-        if 'ТМ' in key:
-            olimp_bet_type = str(key.split('@')[-2])
-            fonbet_bet_type = str(key.split('@')[-1])
-            if 'ТМ' in olimp_bet_type and 'ТБ' in fonbet_bet_type:
-                return True
-            else:
-                return False
+        if 'ТМ' in olimp_bet_type and 'ТБ' in fonbet_bet_type:
+            return True
+        else:
+            return False
     elif event_type == 'esports':
         return False
+
     return True
 
 
@@ -117,7 +124,7 @@ fork_exclude_list = []
 
 
 def check_fork(key, L, k1, k2, live_fork, live_fork_total, bk1_score, bk2_score, event_type, minute, time_break_fonbet, period, team_type, team_names, deff_max, is_top, is_hot, info=''):
-    global bal1, bal2, bet1, bet2, cnt_fork_success, black_list_matches, matchs_success, summ_min, fonbet_maxbet_fact, vect1, vect2
+    global bal1, bal2, bet1, bet2, cnt_fork_success, black_list_matches, matchs_success, summ_min, fonbet_maxbet_fact, vect1, vect2, group_limit_id
     global fork_exclude_list
 
     fork_exclude_text = ''
@@ -145,8 +152,8 @@ def check_fork(key, L, k1, k2, live_fork, live_fork_total, bk1_score, bk2_score,
         if team_type == 'team_res':
             fork_exclude_text = fork_exclude_text + 'Вилка исключена по названию команд: ' + team_names + '\n'
 
-    if not bet_type_is_work(key, event_type):
-        fork_exclude_text = fork_exclude_text + 'Вилка исключена, т.к. я еще не умею работать с этой ставкой: ' + str(key) + ')\n'
+    if not bet_type_is_work(key, event_type, group_limit_id):
+        fork_exclude_text = fork_exclude_text + 'Вилка исключена, т.к. я еще не умею работать с этой ставкой: ' + str(key) + ', event_type: ' + str(event_type) + ', group_limit_id: ' + str(group_limit_id) + '\n'
 
     deff_limit = 3
     if deff_max > deff_limit:
