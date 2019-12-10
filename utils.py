@@ -139,7 +139,7 @@ def prnt(vstr=None, hide=None, to_cl=False, type_='bet'):
 
                 if to_cl:
                     strLog = datetime.datetime.now().strftime('%d %H:%M:%S.%f ') + '    ' + str(vstr)
-                    Outfile = open(str(ACC_ID) + '_to_cl' + type_ + '.log', "a+", encoding='utf-8')
+                    Outfile = open(str(ACC_ID) + '_to_cl_' + type_ + '.log', "a+", encoding='utf-8')
                     Outfile.write(strLog + '\n')
                     Outfile.close()
 
