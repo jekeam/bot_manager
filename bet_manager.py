@@ -425,7 +425,6 @@ class BetManager:
         prnt(self.msg.format(sys._getframe().f_code.co_name, 'RECALC SUM'))
         self.recalc_sum_bet(shared)
 
-
     def set_order_bet(self, shared, order_bet):
         self.order_bet = order_bet
         shared['order_bet'] = str(order_bet)
@@ -525,7 +524,7 @@ class BetManager:
                         self.opposite_stat_wait(shared)
                         self.opposite_stat_get(shared)
                     else:
-                        prnt(self.msg.format(sys._getframe().f_code.co_name, 'Total Over - go, curr: vect: {}, bet_type: {}'.format(self.vector, self.bet_type)))
+                        prnt(self.msg.format(sys._getframe().f_code.co_name, 'Total Over - go, curr: vect: {}, bet_type: {}, total_first: {}'.format(self.vector, self.bet_type, total_first)))
                         self.set_order_bet(shared, 1)
                 elif (self.first_bet_in == 'auto' and self.vector == 'UP') or self.bk_name_opposite == self.first_bet_in:
                     self.set_order_bet(shared, 2)
@@ -1065,14 +1064,14 @@ class BetManager:
 
             self.balance = self.session['balance']
             if self.currency == 'RUB':
-                self.balance = self.balance//100*100
+                self.balance = self.balance // 100 * 100
             else:
                 from pycbrf.toolbox import ExchangeRates
                 rates = ExchangeRates()
                 self.cur_rate = float(rates['EUR'].value)
                 prnt(self.msg.format(sys._getframe().f_code.co_name, 'get current rate {} from bank:{} [{}-{}]'.format(self.currency, self.cur_rate, rates.date_requested, rates.date_received)))
                 balance_old = self.balance
-                self.balance = self.balance*self.cur_rate//100*100
+                self.balance = self.balance * self.cur_rate // 100 * 100
                 self.session['balance'] = self.balance
                 prnt(self.msg.format(sys._getframe().f_code.co_name, 'balance convert: {} {} = {} RUB'.format(balance_old, self.cur_rate, self.balance)))
 
@@ -1837,7 +1836,7 @@ class BetManager:
             prnt(self.msg.format(sys._getframe().f_code.co_name, 'sell successful, sum sold: ' + str(res.get('soldSum') / 100 * self.cur_rate)))
             prnt(
                 vstr='Ставка в ' + self.bk_name + ', успешно продана: ' + str(self.reg_id) + ' за ' + str(res.get('soldSum') / 100 * self.cur_rate) +
-                ' т.к. в ' + self.bk_name_opposite + ' была ошибка: ' + shared.get(self.bk_name_opposite + '_err'),
+                     ' т.к. в ' + self.bk_name_opposite + ' была ошибка: ' + shared.get(self.bk_name_opposite + '_err'),
                 hide='hide',
                 to_cl=True
             )
