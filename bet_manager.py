@@ -570,7 +570,7 @@ class BetManager:
             shared[self.bk_name + '_err'] = str(e.__class__.__name__) + ': ' + str(e)
             shared[self.bk_name_opposite + '_err'] = str(e.__class__.__name__) + ': ' + str(e)
             if 'беру вилки только >=' in shared.get(self.bk_name_opposite + '_err'):
-                prnt(vstr='Ошибка при проставлении ставки в ' + self.bk_name_opposite + ': ' + shared.get(self.bk_name_opposite + '_err'), hide='hide', to_cl=True, 'fork')
+                prnt(vstr='Ошибка при проставлении ставки в ' + self.bk_name_opposite + ': ' + shared.get(self.bk_name_opposite + '_err'), hide='hide', to_cl=True, type_='fork')
             else:
                 prnt(vstr='Ошибка при проставлении ставки в ' + self.bk_name_opposite + ': ' + shared.get(self.bk_name_opposite + '_err'), hide='hide', to_cl=True)
         except Exception as e:
