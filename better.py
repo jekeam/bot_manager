@@ -91,16 +91,20 @@ def bet_type_is_work(key, event_type, group_limit_id=None):
     fonbet_bet_type = str(key.split('@')[-1])
 
     if group_limit_id == '4':
-        if 'ТБ' in fonbet_bet_type:
-            return True
-        else:
-            return False
+        # Чтобы брать другие исходы, например П1
+        if 'ТБ' in key:
+            if 'ТБ' in fonbet_bet_type:
+                return True
+            else:
+                return False
 
     if event_type == 'tennis':
-        if 'ТМ' in olimp_bet_type and 'ТБ' in fonbet_bet_type:
-            return True
-        else:
-            return False
+        # Чтобы брать другие исходы, например П1
+        if 'ТБ' in key:
+            if 'ТМ' in olimp_bet_type and 'ТБ' in fonbet_bet_type:
+                return True
+            else:
+                return False
     elif event_type == 'esports':
         return False
 
