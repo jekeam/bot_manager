@@ -425,6 +425,11 @@ class BetManager:
         prnt(self.msg.format(sys._getframe().f_code.co_name, 'RECALC SUM'))
         self.recalc_sum_bet(shared)
 
+
+    def set_order_bet(self, shared, order_bet):
+        self.order_bet = order_bet
+        shared['order_bet'] = str(order_bet)
+
     def bet_simple(self, shared: dict):
 
         def sale_opp(e, shared):
@@ -515,19 +520,19 @@ class BetManager:
                 total_first = get_prop('total_first', 'auto').upper()
                 if total_first != 'auto':
                     if (total_first == 'ТБ' and 'ТМ' in self.bet_type.upper()) or (total_first == 'ТМ' and 'ТБ' in self.bet_type.upper()):
-                        self.order_bet = 2
+                        self.set_order_bet(shared, 2)
                         prnt(self.msg.format(sys._getframe().f_code.co_name, 'Total Under - wait, curr: vect: {}, bet_type: {}'.format(self.vector, self.bet_type)))
                         self.opposite_stat_wait(shared)
                         self.opposite_stat_get(shared)
                     else:
                         prnt(self.msg.format(sys._getframe().f_code.co_name, 'Total Over - go, curr: vect: {}, bet_type: {}'.format(self.vector, self.bet_type)))
-                        self.order_bet = 1
+                        self.set_order_bet(shared, 1)
                 elif (self.first_bet_in == 'auto' and self.vector == 'UP') or self.bk_name_opposite == self.first_bet_in:
-                    self.order_bet = 2
+                    self.set_order_bet(shared, 2)
                     self.opposite_stat_wait(shared)
                     self.opposite_stat_get(shared)
                 elif self.first_bet_in == 'parallel':
-                    self.order_bet = 1
+                    self.set_order_bet(shared, 1)
 
                 self.bet_place(shared)
                 bet_done(shared)
