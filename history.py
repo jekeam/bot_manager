@@ -218,6 +218,7 @@ def export_hist(OLIMP_USER, FONBET_USER):
                           str(info['fonbet'].get('bet_type', '')) + ';' + \
                           str(info['olimp'].get('bet_type', '')) + ';' + \
  \
+                          str(info['fonbet'].get('order_bet', '')) + ';' + \
                           str(info['fonbet'].get('vector', '')) + ';' + \
                           str(info['olimp'].get('vector', '')) + ';' + \
                           str(info['fonbet'].get('first_bet_in', '')) + ';' + \
