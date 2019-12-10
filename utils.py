@@ -111,35 +111,37 @@ if ACC_ID:
         USER_ID = acc_info.get().user_id
 
 
-def prnt(vstr=None, hide=None, to_cl=False):
+def prnt(vstr=None, hide=None, to_cl=False, type_='bet'):
     global VSTR_OLD
-    if vstr != VSTR_OLD:
-        VSTR_OLD = vstr
-        if vstr:
-            global dtOld
-            global ACC_ID
 
-            if not hide:
-                dtDeff = round((datetime.datetime.now() - dtOld).total_seconds())
-                strLog = datetime.datetime.now().strftime('%d %H:%M:%S.%f ') + '[' + str(dtDeff).rjust(2,
-                                                                                                       '0') + ']    ' + str(
-                    ACC_ID) + ': ' + str(vstr)
-                print(strLog)
-                dtOld = datetime.datetime.now()
-                Outfile = open(str(ACC_ID) + '_client.log', "a+", encoding='utf-8')
-                Outfile.write(strLog + '\n')
-                Outfile.close()
-            else:
-                strLog = datetime.datetime.now().strftime('%d %H:%M:%S.%f ') + '    ' + str(vstr)
-                Outfile = open(str(ACC_ID) + '_client_hide.log', "a+", encoding='utf-8')
-                Outfile.write(strLog + '\n\n')
-                Outfile.close()
+    if type_ in ('bet', 'fork'):
+        if vstr != VSTR_OLD:
+            VSTR_OLD = vstr
+            if vstr:
+                global dtOld
+                global ACC_ID
 
-            if to_cl:
-                strLog = datetime.datetime.now().strftime('%d %H:%M:%S.%f ') + '    ' + str(vstr)
-                Outfile = open(str(ACC_ID) + '_to_cl.log', "a+", encoding='utf-8')
-                Outfile.write(strLog + '\n')
-                Outfile.close()
+                if not hide:
+                    dtDeff = round((datetime.datetime.now() - dtOld).total_seconds())
+                    strLog = datetime.datetime.now().strftime('%d %H:%M:%S.%f ') + '[' + str(dtDeff).rjust(2,
+                                                                                                           '0') + ']    ' + str(
+                        ACC_ID) + ': ' + str(vstr)
+                    print(strLog)
+                    dtOld = datetime.datetime.now()
+                    Outfile = open(str(ACC_ID) + '_client.log', "a+", encoding='utf-8')
+                    Outfile.write(strLog + '\n')
+                    Outfile.close()
+                else:
+                    strLog = datetime.datetime.now().strftime('%d %H:%M:%S.%f ') + '    ' + str(vstr)
+                    Outfile = open(str(ACC_ID) + '_client_hide.log', "a+", encoding='utf-8')
+                    Outfile.write(strLog + '\n\n')
+                    Outfile.close()
+
+                if to_cl:
+                    strLog = datetime.datetime.now().strftime('%d %H:%M:%S.%f ') + '    ' + str(vstr)
+                    Outfile = open(str(ACC_ID) + '_to_cl' + type_ + '.log', "a+", encoding='utf-8')
+                    Outfile.write(strLog + '\n')
+                    Outfile.close()
 
 
 prnt('KEY: ' + str(KEY))
