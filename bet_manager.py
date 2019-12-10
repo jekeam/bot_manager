@@ -62,6 +62,7 @@ class BetManager:
         self.created_fork = bk_container.get('created', '')
         self.bk_name_opposite = bk_container['opposite']
         self.vector = bk_container.get('wager', {})['vector']
+        self.order_bet = None
 
         # if self.vector == 'DOWN':
         #     self.flex_bet = False
@@ -514,16 +515,19 @@ class BetManager:
                 total_first = get_prop('total_first', 'auto').upper()
                 if total_first != 'auto':
                     if (total_first == 'ТБ' and 'ТМ' in self.bet_type.upper()) or (total_first == 'ТМ' and 'ТБ' in self.bet_type.upper()):
+                        self.order_bet = 2
                         prnt(self.msg.format(sys._getframe().f_code.co_name, 'Total Under - wait, curr: vect: {}, bet_type: {}'.format(self.vector, self.bet_type)))
                         self.opposite_stat_wait(shared)
                         self.opposite_stat_get(shared)
                     else:
                         prnt(self.msg.format(sys._getframe().f_code.co_name, 'Total Over - go, curr: vect: {}, bet_type: {}'.format(self.vector, self.bet_type)))
+                        self.order_bet = 1
                 elif (self.first_bet_in == 'auto' and self.vector == 'UP') or self.bk_name_opposite == self.first_bet_in:
+                    self.order_bet = 2
                     self.opposite_stat_wait(shared)
                     self.opposite_stat_get(shared)
                 elif self.first_bet_in == 'parallel':
-                    pass
+                    self.order_bet = 1
 
                 self.bet_place(shared)
                 bet_done(shared)
@@ -1555,7 +1559,7 @@ class BetManager:
                 sys._getframe().f_code.co_name,
                 'max_bet:{}, first_bet_in:{}, vector:{}, bk_name:{}, n:{}, attempt_bet:{}'.format(self.max_bet, self.first_bet_in, self.vector, self.bk_name, n, self.attempt_bet)
             ))
-            if self.max_bet and ((self.first_bet_in == 'auto' and self.vector == 'DOWN') or self.bk_name == self.first_bet_in):
+            if self.max_bet and self.order_bet == 1:
                 wait_bet = self.sleep_bet * 2
                 prnt(self.msg.format(sys._getframe().f_code.co_name, 'Получен неявный максбет #' + n + ': ' + str(self.max_bet) + ', wait: ' + str(wait_bet)))
                 self.recalc_sum_by_maxbet(shared)
