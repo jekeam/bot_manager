@@ -90,7 +90,7 @@ def bet_type_is_work(key, event_type, group_limit_id=None):
     olimp_bet_type = str(key.split('@')[-2])
     fonbet_bet_type = str(key.split('@')[-1])
 
-    if group_limit_id == '4' and 'ТМ' in key:
+    if group_limit_id == '4':
         if 'ТБ' in fonbet_bet_type:
             return True
         else:
