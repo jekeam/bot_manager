@@ -517,6 +517,10 @@ class BetManager:
                 self.recheck(shared)
 
                 total_first = get_prop('total_first', 'auto').upper()
+                prnt(self.msg.format(
+                    sys._getframe().f_code.co_name,
+                    'total_first:{}, first_bet_in:{}, vector:{} , bk_name_opposite:{}, bet_type:{}'.format(total_first, self.first_bet_in, self.vector, self.bk_name_opposite, self.bet_type)
+                ))
                 if (total_first.upper() == 'ТБ' and 'ТМ' in self.bet_type.upper()) or (total_first.upper() == 'ТМ' and 'ТБ' in self.bet_type.upper()):
                     self.set_order_bet(shared, 2)
                     prnt(self.msg.format(sys._getframe().f_code.co_name, 'Total Under - wait, curr: vect: {}, bet_type: {}, total_first:{}'.format(self.vector, self.bet_type, total_first)))
