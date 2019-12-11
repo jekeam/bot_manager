@@ -518,22 +518,24 @@ class BetManager:
 
                 self.recheck(shared)
 
-                total_first = get_prop('total_first', 'auto').upper()
+                total_first = get_prop('total_first', 'auto')
                 prnt(self.msg.format(
                     sys._getframe().f_code.co_name,
-                    'total_first:{}, first_bet_in:{}, vector:{} , bk_name_opposite:{}, bet_type:{}'.format(total_first, self.first_bet_in, self.vector, self.bk_name_opposite, self.bet_type)
+                    'total_first:{}, first_bet_in:{}, vector:{} , bk_name_opposite:{}, bet_type:{}, order_bet:{}'.format(total_first, self.first_bet_in, self.vector, self.bk_name_opposite, self.bet_type, self.order_bet)
                 ))
                 if (total_first.upper() == 'ТБ' and 'ТМ' in self.bet_type.upper()) or (total_first.upper() == 'ТМ' and 'ТБ' in self.bet_type.upper()):
                     self.set_order_bet(shared, 2)
                     prnt(self.msg.format(sys._getframe().f_code.co_name, 'Total Under - wait, curr: vect: {}, bet_type: {}, total_first:{}'.format(self.vector, self.bet_type, total_first)))
                     self.opposite_stat_wait(shared)
                     self.opposite_stat_get(shared)
-                elif (self.first_bet_in == 'auto' and self.vector == 'UP') or (self.bk_name_opposite == self.first_bet_in):
+                elif (self.first_bet_in.lower() == 'auto' and self.vector.upper() == 'UP') or (self.bk_name_opposite.lower() == self.first_bet_in.lower()):
                     self.set_order_bet(shared, 2)
                     self.opposite_stat_wait(shared)
                     self.opposite_stat_get(shared)
-                elif self.first_bet_in == 'parallel':
+                elif self.first_bet_in.lower() == 'parallel':
                     self.set_order_bet(shared, 1)
+                else:
+                    raise BetIsLost('Порядок ставки не определен')
 
                 self.bet_place(shared)
                 bet_done(shared)
