@@ -533,14 +533,15 @@ class BetManager:
                     else:
                         pass
                 if self.order_bet == 0:
-                    if self.first_bet_in.lower() == 'auto':
-                        if (self.first_bet_in.lower() == 'auto' and self.vector.upper() == 'UP') or (self.bk_name_opposite.lower() == self.first_bet_in.lower()):
-                            self.set_order_bet(shared, 2)
-                            self.opposite_stat_wait(shared)
-                            self.opposite_stat_get(shared)
-                        else:
-                            self.set_order_bet(shared, 1)
-                    elif self.first_bet_in.lower() == 'parallel':
+                    #if self.first_bet_in.lower() == 'auto':
+                    if (self.first_bet_in.lower() == 'auto' and self.vector.upper() == 'UP') or (self.bk_name_opposite.lower() == self.first_bet_in.lower()):
+                        self.set_order_bet(shared, 2)
+                        self.opposite_stat_wait(shared)
+                        self.opposite_stat_get(shared)
+                    else:
+                        self.set_order_bet(shared, 1)
+                if self.order_bet == 0:
+                    if self.first_bet_in.lower() == 'parallel':
                         self.set_order_bet(shared, 1)
                     else:
                         raise BetIsLost('Порядок ставки не определен')
