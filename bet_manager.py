@@ -1559,6 +1559,7 @@ class BetManager:
             err_str = self.msg_err.format(sys._getframe().f_code.co_name, 'mo money')
             raise NoMoney(err_str)
 
+
     def check_result(self, shared: dict):
 
         def replay_bet(n: str):
@@ -1614,22 +1615,17 @@ class BetManager:
         if result == 'couponResult':
             if err_code == 0:
                 self.reg_id = res.get('coupon').get('regId')
-
                 shared[self.bk_name]['reg_id'] = self.reg_id
-
                 prnt(self.msg.format(sys._getframe().f_code.co_name, 'bet successful, reg_id: ' + str(self.reg_id)))
                 shared[self.bk_name + '_err'] = 'ok'
                 prnt(vstr='Ставка в ' + self.bk_name + ' успешно завершена, id = ' + str(self.reg_id), hide='hide', to_cl=True)
-
                 try:
                     url_rq = 'http://' + get_prop('server_ip') + ':8888/set/fonbet_maxbet_fact/' + self.key + '/' + str(self.session.get('group_limit_id')) + '/' + str(self.sum_bet * self.cur_rate)
                     rs = requests.get(url=url_rq, timeout=1).text
                     prnt(self.msg.format(sys._getframe().f_code.co_name, 'save url_rq: {}, answer: {}'.format(url_rq, rs)))
                 except Exception as e:
                     prnt(self.msg.format(sys._getframe().f_code.co_name, 'save url_rq error: ' + str(e)))
-
             if err_code == 1:
-
                 self.opposite_stat_get(shared)
                 if 'Допустимая сумма ставки' in err_msg:
                     try:
@@ -1641,13 +1637,11 @@ class BetManager:
                     except AttributeError as e:
                         prnt(self.msg.format(sys._getframe().f_code.co_name, str(e) + ': ' + err_msg))
                         self.max_bet = 0
-
                     if self.max_bet == 0:
                         raise BetIsLost(err_msg)
                 else:
                     err_str = self.msg.format(sys._getframe().f_code.co_name, err_msg)
                     raise BetIsLost(err_str)
-
             elif err_code == 100:
                 self.opposite_stat_get(shared)
                 if 'Превышена cуммарная ставка для события' in err_msg:
@@ -1658,15 +1652,8 @@ class BetManager:
                     except AttributeError as e:
                         prnt(self.msg.format(sys._getframe().f_code.co_name, str(e) + ': ' + err_msg))
                         self.max_bet = 0
-
                     if self.max_bet == 0:
                         raise BetIsLost(err_msg)
-                else:
-                    err_str = err_msg + ', новая котировка:' + str(res.get('coupon', {}).get('bets')[0].get('value', 0))
-                    sleep(self.sleep_bet)
-                    err_str = self.msg_err.format(sys._getframe().f_code.co_name, err_str)
-                    raise BetError(err_str)
-            elif err_code == 100:
                 if 'event or bet not found' in err_msg_eng:
                     # {
                     #   "result": "couponResult",
@@ -1686,7 +1673,9 @@ class BetManager:
                     #     ]
                     #   }
                     # }
-                    raise BetIsLost('current bet is lost: ' + str(err_msg))
+                    err_str = self.msg.format(sys._getframe().f_code.co_name, 'Прием ставок закончен: ' + str(err_msg))
+                    prnt(err_str)
+                    raise BetIsLost(err_msg)
                 elif 'is temporary suspended' in err_msg_eng:
                     # {
                     #     "result": "couponResult",
@@ -1708,7 +1697,14 @@ class BetManager:
                     #         ]
                     #     }
                     # }
-                    raise BetError('current bet is lock: ' + str(err_msg))
+                    err_str = self.msg.format(sys._getframe().f_code.co_name, 'Ставки временно не принимаются: ' + str(err_msg))
+                    prnt(err_str)
+                    raise BetError(err_msg)
+                else:
+                    err_str = err_msg + ', неизвестная ошибка с кодом 100, bets: ' + str(res.get('coupon', {}).get('bets')[0])
+                    sleep(self.sleep_bet)
+                    err_str = self.msg_err.format(sys._getframe().f_code.co_name, err_str)
+                    raise BetError(err_str)
             elif err_code == 2:
                 self.opposite_stat_get(shared)
                 # Котировка вообще ушла, но в системе еще есть, хотя на сайте не видна
@@ -1733,7 +1729,9 @@ class BetManager:
                 #     }
                 # }
                 if res.get('coupon', {}).get('bets')[0].get('value', 0) == 0:
-                    raise BetIsLost('current bet is block: ' + str(err_msg))
+                    err_str = self.msg.format(sys._getframe().f_code.co_name, 'Текущая катировка не найдена: ' + str(err_msg) + ', bets: ' + str(res.get('coupon').get('bets')))
+                    prnt(err_str)
+                    raise BetIsLost(err_str)
                 # Изменился ИД тотола или значение катировки
                 else:
                     # {
@@ -1758,12 +1756,13 @@ class BetManager:
                     # }
                     new_wager = res.get('coupon').get('bets')[0]
                     if str(new_wager.get('param', '')) == str(self.wager.get('param', '')) and int(self.wager.get('factor', 0)) != int(new_wager.get('factor', 0)):
-                        err_str = self.msg.format(sys._getframe().f_code.co_name, 'Изменилась ставка: old: ' + str(self.wager) + ', new: ' + str(new_wager))
+                        err_str = self.msg.format(sys._getframe().f_code.co_name, 'Изменилась ID катировки: old: ' + str(self.wager) + ', new: ' + str(new_wager))
                         prnt(err_str)
                         self.wager.update(new_wager)
                         return self.bet_place(shared)
                     elif str(new_wager.get('param', '')) != str(self.wager.get('param', '')) and int(self.wager.get('factor', 0)) == int(new_wager.get('factor', 0)):
-                        prnt(self.msg_err.format(sys._getframe().f_code.co_name, 'Изменилась тотал ставки, param не совпадает: ' + 'new_wager: ' + str(new_wager) + ', old_wager: ' + str(self.wager)))
+                        err_str = 'Изменилась тотал ставки, param не совпадает: new_wager: ' + str(new_wager) + ', old_wager: ' + str(self.wager)
+                        prnt(self.msg_err.format(sys._getframe().f_code.co_name, err_str))
                         if self.bk_container.get('bet_type'):
                             prnt(self.msg.format(sys._getframe().f_code.co_name, 'поиск нового id тотала: ' + self.bk_container.get('bet_type')))
                             match_id = self.wager.get('event')
@@ -1781,17 +1780,21 @@ class BetManager:
                         else:
                             err_str = self.msg_err.format(
                                 sys._getframe().f_code.co_name,
-                                'Тип ставки, например 1ТМ(2.5) - не задан, выдаю ошибку: bet_type:' +
-                                self.bk_container.get('bet_type') + ', bk_container:' + str(self.bk_container))
+                                'Тип ставки, например 1ТМ(2.5) - не задан, выдаю ошибку: bet_type:' + self.bk_container.get('bet_type') + ', bk_container:' + str(self.bk_container)
+                            )
+                            prnt(err_str)
                             raise BetIsLost(err_str)
                     # Изменилась катировка
                     elif 'Odds changed'.lower() in err_msg_eng.lower():
                         # Тут может меняться значение катировки, надо понять как действовать
-                        # self.wager.update(new_wager)
+                        err_str = 'Изменилась значение катировки: old: ' + str(self.wager) + ', new: ' + str(new_wager)
+                        prnt(self.msg.format(sys._getframe().f_code.co_name, err_str))
+                        self.wager.update(new_wager)
                         err_str = self.msg_err.format(sys._getframe().f_code.co_name, err_msg)
                         raise BetError(err_str)
                     else:
                         err_str = self.msg_err.format(sys._getframe().f_code.co_name, 'неизвестная ошибка: ' + str(err_msg) + ', new_wager: ' + str(new_wager) + ', old_wager: ' + str(self.wager))
+                        prnt(self.msg.format(sys._getframe().f_code.co_name, err_str))
                         raise BetIsLost(err_str)
         elif result == 'error' and 'temporary unknown result' in msg_str:
             err_str = 'Get temporary unknown result: ' + str(msg_str)
@@ -1803,16 +1806,16 @@ class BetManager:
                 err_str = self.msg_err.format(sys._getframe().f_code.co_name, res)
                 self.sign_in(shared)
                 return self.check_result(shared)
-
         else:
             self.opposite_stat_get(shared)
             err_str = self.msg_err.format(sys._getframe().f_code.co_name, err_msg)
             raise BetError(err_str)
 
-    def set_session_state(self):
 
+    def set_session_state(self):
         if not self.session.get('session'):
             self.session['session'] = read_file(self.session_file)
+
 
     def get_request_id(self, shared):
 
