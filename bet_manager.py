@@ -61,7 +61,7 @@ class BetManager:
         self.wager = bk_container['wager']
         self.created_fork = bk_container.get('created', '')
         self.bk_name_opposite = bk_container['opposite']
-        self.vector = bk_container.get('wager', {})['vector']
+        self.vector = bk_container['vector']
         self.order_bet = 0
 
         # if self.vector == 'DOWN':
@@ -373,7 +373,7 @@ class BetManager:
         match_id = self.bk_container.get('wager', {})['event']
         param = self.bk_container.get('wager', {}).get('param')
         bet_id = int(self.bk_container.get('wager', {}).get('factor'))
-        
+
         get_kof_from_serv(self.bk_name, self.match_id, self.bet_type, get_prop('server_ip'))
 
         if self.bk_name == 'fonbet':
@@ -519,20 +519,21 @@ class BetManager:
 
                 self.recheck(shared)
 
-                total_first = get_prop('total_first', 'auto')
-                prnt(self.msg.format(
-                    sys._getframe().f_code.co_name,
-                    'total_first:{}, first_bet_in:{}, vector:{} , bk_name_opposite:{}, bet_type:{}'.format(total_first, self.first_bet_in, self.vector, self.bk_name_opposite, self.bet_type)
-                ))
-                
-                if (self.first_bet_in == 'auto' and self.vector == 'UP') or self.bk_name_opposite == self.first_bet_in:
+                # total_first = get_prop('total_first', 'auto')
+                # prnt(self.msg.format(
+                #     sys._getframe().f_code.co_name,
+                #     'total_first:{}, first_bet_in:{}, vector:{} , bk_name_opposite:{}, bet_type:{}'.format(total_first, self.first_bet_in, self.vector, self.bk_name_opposite, self.bet_type)
+                # ))
+
+                if self.vector == 'UP':
                     self.set_order_bet(shared, 2)
                     self.opposite_stat_wait(shared)
                     self.opposite_stat_get(shared)
-                else:
+                elif self.vector == 'DOWN':
                     self.set_order_bet(shared, 1)
-                if self.first_bet_in == 'parallel':
-                    self.set_order_bet(shared, 1)
+
+                # if self.first_bet_in == 'parallel':
+                #     self.set_order_bet(shared, 1)
 
                 if self.order_bet == 0:
                     raise BetIsLost('Порядок ставки не определен')
@@ -655,7 +656,7 @@ class BetManager:
             match_id = self.bk_container.get('wager', {})['event']
             param = self.bk_container.get('wager', {}).get('param')
             bet_id = int(self.bk_container.get('wager', {}).get('factor'))
-            
+
             get_kof_from_serv(self.bk_name, self.match_id, self.bet_type, get_prop('server_ip'))
 
             if self.bk_name == 'fonbet' or self.bk_name_opposite == 'fonbet':
@@ -1181,11 +1182,8 @@ class BetManager:
 
             if err_code == 0:
                 self.match_id = self.wager['event']
-
                 self.get_cur_max_bet_id(shared)
-
                 shared[self.bk_name]['reg_id'] = self.reg_id
-
                 prnt(self.msg.format(sys._getframe().f_code.co_name, 'bet successful, reg_id: ' + str(self.reg_id)))
                 shared[self.bk_name + '_err'] = 'ok'
                 prnt(vstr='Ставка в ' + self.bk_name + ' успешно завершена, id = ' + str(self.reg_id), hide='hide', to_cl=True)
@@ -1565,7 +1563,6 @@ class BetManager:
             err_str = self.msg_err.format(sys._getframe().f_code.co_name, 'mo money')
             raise NoMoney(err_str)
 
-
     def check_result(self, shared: dict):
 
         def replay_bet(n: str):
@@ -1819,11 +1816,9 @@ class BetManager:
             err_str = self.msg_err.format(sys._getframe().f_code.co_name, err_msg)
             raise BetError(err_str)
 
-
     def set_session_state(self):
         if not self.session.get('session'):
             self.session['session'] = read_file(self.session_file)
-
 
     def get_request_id(self, shared):
 

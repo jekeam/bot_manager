@@ -723,7 +723,6 @@ msg_str_old = ''
 msg_str = ''
 info_csv = {}
 
-
 # sleeping_forks = []
 
 cnt_acc_sql = "select count(*)\n" + \
@@ -1030,13 +1029,6 @@ if __name__ == '__main__':
 
                             vect1 = bk1_bet_json.get('vector')
                             vect2 = bk2_bet_json.get('vector')
-                            
-                            if vect1 == vect2:
-                                vect1_old = vect1
-                                vect2_old = vect2
-                                vect1, vect2 = normalized_vector(vect1, k1, vect2, k2)
-                                prnt('Нормализация векторов: vect1: {}->{}, vect2: {}->{}'.format(vect1_old, vect1, vect2_old, vect2), 'hide')
-
                             try:
                                 info = key + ': ' + name + ', ' + \
                                        'created: ' + created_fork + ', ' + \
@@ -1079,6 +1071,12 @@ if __name__ == '__main__':
                                 # or ((event_type not in ('football', 'hockey') and test_oth_sport == 'вкл' and str(USER_ID) in list(map(str, ADMINS)))) \
                                 if vect1 and vect2:
                                     if deff_max <= 3 and k1 > 0 < k2:
+                                        if vect1 == vect2:
+                                            vect1_old = vect1
+                                            vect2_old = vect2
+                                            vect1, vect2 = normalized_vector(vect1, k1, vect2, k2)
+                                            prnt('Нормализация векторов, {}: vect1: {}->{}, vect2: {}->{}'.format(key, vect1_old, vect1, vect2_old, vect2))
+
                                         round_bet = int(get_prop('round_fork'))
                                         total_bet = round(randint(total_bet_min, total_bet_max) / round_bet) * round_bet
                                         prnt('total_bet random: ' + str(total_bet), 'hide')
