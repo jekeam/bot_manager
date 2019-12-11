@@ -401,7 +401,7 @@ def go_bets(wag_ol, wag_fb, key, deff_max, vect1, vect2, sc1, sc2, created, even
 
         for bk_name, val in shared.items():
             prnt('BK ' + str(bk_name) +
-                 ': bet_total:{}, cur_total:{}, sc1:{}, sc2:{}, v:{} ({})'.format(
+                 ': bet_total:{}, cur_total:{}, sc1:{}, sc2:{}, vect:{} ({})'.format(
                      val.get('bet_total', ''), val.get('cur_total', ''),
                      val.get('sc1', ''), val.get('sc2', ''),
                      val.get('vect', ''), val.get('wager', '')))

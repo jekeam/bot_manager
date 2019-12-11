@@ -61,7 +61,7 @@ class BetManager:
         self.wager = bk_container['wager']
         self.created_fork = bk_container.get('created', '')
         self.bk_name_opposite = bk_container['opposite']
-        self.vector = bk_container['vector']
+        self.vector = bk_container['vect']
         self.order_bet = 0
 
         # if self.vector == 'DOWN':
