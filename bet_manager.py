@@ -1674,6 +1674,26 @@ class BetManager:
                     err_str = self.msg.format(sys._getframe().f_code.co_name, 'Ставки временно не принимаются: ' + str(err_msg))
                     prnt(err_str)
                     raise BetError(err_msg)
+                # TODO {
+                #                     "result": "couponResult",
+                #                     "coupon": {
+                #                         "resultCode": 100,
+                #                         "errorMessage": "Превышен лимит на возможный выигрыш",
+                #                         "errorMessageRus": "Превышен лимит на возможный выигрыш",
+                #                         "errorMessageEng": "Win limit exceeded",
+                #                         "amountMin": 30,
+                #                         "amountMax": 30,
+                #                         "amount": 30,
+                #                         "bets": [
+                #                             {
+                #                                 "event": 18267496,
+                #                                 "factor": 923,
+                #                                 "value": 50,
+                #                                 "score": "1:0"
+                #                             }
+                #                         ]
+                #                     }
+                #                 }
                 else:
                     err_str = err_msg + ', неизвестная ошибка с кодом 100, bets: ' + str(res.get('coupon', {}).get('bets')[0])
                     sleep(self.sleep_bet)

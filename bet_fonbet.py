@@ -78,7 +78,7 @@ class FonbetBot:
         if self.bk_type == 'com':
             self.app_ver = '5.1.3b'
             self.user_agent = 'Fonbet/5.1.3b (Android 21; Phone; com.bkfonbet)'
-            self.not_url = 'fonbet-da707.com'
+            self.not_url = 'fonbet-4d153.com'
             self.url_api = 'clients-api'  # maybe 'common'?
         elif self.bk_type == 'ru':
             self.app_ver = '5.2.1r'
@@ -1074,10 +1074,10 @@ def get_new_bets_fonbet(match_id, proxies, time_out):
 if __name__ == '__main__':
     PROXIES = dict()
 
-    FONBET_USER = {"login": 7836658, "password": "VQ1YPcV9", "mirror": "fonbet-da707.com"}
+    FONBET_USER = {"login": 7836658, "password": "VQ1YPcV9", "mirror": "fonbet-4d153.com"}
 
-    wager_fonbet = {"num": 1, "event": 18268910, "factor": 921, "value": 3.7, "score": "30:40"}
-    # https://www.fonbhttps://www.fonbet.com/#!/live/basketball/18586/18268910
+    wager_fonbet = {"num": 1, "event": 18267496, "factor": 923, "value": 3.7, "score": "30:40"}
+    # [{num: 1, event: 18267496, factor: 923, value: 50, score: "1:0"}]https://www.fonbet-4d153.com/#!/live/football/13942/18267496
     obj = {}
     obj['wager_fonbet'] = wager_fonbet
     obj['amount_fonbet'] = 30
