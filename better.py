@@ -1109,10 +1109,10 @@ if __name__ == '__main__':
                                         v_first_bet_in = get_prop('first_bet_in', 'auto')
                                         if v_first_bet_in != 'auto':
                                             if v_first_bet_in == 'fonbet':
-                                                vact2 = 'DOWN'
+                                                vect2 = 'DOWN'
                                                 vect1 = 'UP'
                                             elif v_first_bet_in == 'olimp':
-                                                vact1 = 'DOWN'
+                                                vect1 = 'DOWN'
                                                 vect2 = 'UP'
                                             prnt('{} - Задана первая ставка в {}: vect1: {}->{}, vect2: {}->{}'.format(key, v_first_bet_in, vect1_old, vect1, vect2_old, vect2))
 
