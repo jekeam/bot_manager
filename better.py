@@ -1075,7 +1075,7 @@ if __name__ == '__main__':
                                         vect2_old = vect2
                                         if vect1 == vect2:
                                             vect1, vect2 = normalized_vector(vect1, k1, vect2, k2)
-                                            prnt('{} - Нормализация векторов: vect1: {}->{}, vect2: {}->{}'.format(key, vect1_old, vect1, vect2_old, vect2))
+                                            prnt('{} - Нормализация векторов: vect1: {}->{}, vect2: {}->{}'.format(key, vect1_old, vect1, vect2_old, vect2), 'hide')
 
                                         # if self.created_fork == '' and 'created' in self.first_bet_in:
                                         #     raise BetIsLost('Создатель вилки не определен: ' + str(self.created_fork))
@@ -1114,7 +1114,7 @@ if __name__ == '__main__':
                                             elif v_first_bet_in == 'olimp':
                                                 vect1 = 'DOWN'
                                                 vect2 = 'UP'
-                                            prnt('{} - Задана первая ставка в {}: vect1: {}->{}, vect2: {}->{}'.format(key, v_first_bet_in, vect1_old, vect1, vect2_old, vect2))
+                                            prnt('{} - Задана первая ставка в {}: vect1: {}->{}, vect2: {}->{}'.format(key, v_first_bet_in, vect1_old, vect1, vect2_old, vect2), 'hide')
 
                                         round_bet = int(get_prop('round_fork'))
                                         total_bet = round(randint(total_bet_min, total_bet_max) / round_bet) * round_bet
