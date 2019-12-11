@@ -99,14 +99,14 @@ class OlimpBot:
             self.balance = float(self.login_info.get('s'))
             self.currency = self.login_info.get("cur")
             if self.currency == 'RUB':
-                self.balance = self.balance*self.cur_rate//100*100
+                self.balance = self.balance * self.cur_rate // 100 * 100
             else:
                 from pycbrf.toolbox import ExchangeRates
                 rates = ExchangeRates()
                 self.cur_rate = float(rates['EUR'].value)
                 prnt('BET_OLIMP.PY: get current rate {} from bank:{} [{}-{}]'.format(self.currency, self.cur_rate, rates.date_requested, rates.date_received))
                 balance_old = self.balance
-                self.balance = self.balance*self.cur_rate//100*100
+                self.balance = self.balance * self.cur_rate // 100 * 100
                 prnt('BET_OLIMP.PY: balance convert: {} {} = {} RUB'.format(balance_old, self.cur_rate, self.balance))
             self.balance_in_play = float(self.login_info.get('cs'))
             prnt('BET_OLIMP.PY: balance: ' + str(self.balance))
@@ -119,7 +119,7 @@ class OlimpBot:
     def get_balance(self):
         if self.balance == 0.0:
             self.sign_in()
-            return floor(self.balance / 100) * 100
+            return round(self.balance)
         else:
             return self.balance
 
@@ -452,7 +452,7 @@ if __name__ == '__main__':
     OLIMP_USER.update({'login': 5266288})
     OLIMP_USER.update({'password': 'op1304Abcop'})
     #
-    wager_olimp = { "value": 3.45, "apid": "1407443491:53761583:3:5:20.5:1:0:0:3", "factor": 3.45, "sport_id": 3, "event": "53761583",}
+    wager_olimp = {"value": 3.45, "apid": "1407443491:53761583:3:5:20.5:1:0:0:3", "factor": 3.45, "sport_id": 3, "event": "53761583", }
     obj = {}
     obj['wager_olimp'] = wager_olimp
     obj['amount_olimp'] = 30

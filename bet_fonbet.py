@@ -367,7 +367,7 @@ class FonbetBot:
     def get_balance(self):
         if self.balance == 0.0:
             self.sign_in()
-        return (self.balance // 100) * 100
+        return round(self.balance)
 
     def get_acc_info(self, param):
         if param == 'bet':
@@ -1077,7 +1077,7 @@ if __name__ == '__main__':
     FONBET_USER = {"login": 7836658, "password": "VQ1YPcV9", "mirror": "fonbet-da707.com"}
 
     wager_fonbet = {"num": 1, "event": 18268910, "factor": 921, "value": 3.7, "score": "30:40"}
-#https://www.fonbhttps://www.fonbet.com/#!/live/basketball/18586/18268910
+    # https://www.fonbhttps://www.fonbet.com/#!/live/basketball/18586/18268910
     obj = {}
     obj['wager_fonbet'] = wager_fonbet
     obj['amount_fonbet'] = 30
