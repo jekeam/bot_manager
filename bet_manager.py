@@ -430,6 +430,7 @@ class BetManager:
     def set_order_bet(self, shared, order_bet):
         self.order_bet = order_bet
         shared['order_bet'] = str(order_bet)
+        prnt(self.msg.format(sys._getframe().f_code.co_name, 'order_bet: ' + str(order_bet)))
 
     def bet_simple(self, shared: dict):
 
@@ -521,7 +522,7 @@ class BetManager:
                 total_first = get_prop('total_first', 'auto')
                 prnt(self.msg.format(
                     sys._getframe().f_code.co_name,
-                    'total_first:{}, first_bet_in:{}, vector:{} , bk_name_opposite:{}, bet_type:{}, order_bet:{}'.format(total_first, self.first_bet_in, self.vector, self.bk_name_opposite, self.bet_type, self.order_bet)
+                    'total_first:{}, first_bet_in:{}, vector:{} , bk_name_opposite:{}, bet_type:{}'.format(total_first, self.first_bet_in, self.vector, self.bk_name_opposite, self.bet_type)
                 ))
                 if (total_first.upper() == 'ТБ' and 'ТМ' in self.bet_type.upper()) or (total_first.upper() == 'ТМ' and 'ТБ' in self.bet_type.upper()):
                     self.set_order_bet(shared, 2)
