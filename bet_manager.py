@@ -524,15 +524,21 @@ class BetManager:
                     sys._getframe().f_code.co_name,
                     'total_first:{}, first_bet_in:{}, vector:{} , bk_name_opposite:{}, bet_type:{}'.format(total_first, self.first_bet_in, self.vector, self.bk_name_opposite, self.bet_type)
                 ))
-                if (total_first.upper() == 'ТБ' and 'ТМ' in self.bet_type.upper()) or (total_first.upper() == 'ТМ' and 'ТБ' in self.bet_type.upper()):
-                    self.set_order_bet(shared, 2)
-                    prnt(self.msg.format(sys._getframe().f_code.co_name, 'Total Under - wait, curr: vect: {}, bet_type: {}, total_first:{}'.format(self.vector, self.bet_type, total_first)))
-                    self.opposite_stat_wait(shared)
-                    self.opposite_stat_get(shared)
-                elif (self.first_bet_in.lower() == 'auto' and self.vector.upper() == 'UP') or (self.bk_name_opposite.lower() == self.first_bet_in.lower()):
-                    self.set_order_bet(shared, 2)
-                    self.opposite_stat_wait(shared)
-                    self.opposite_stat_get(shared)
+                if total_first.lower() != 'auto':
+                    prnt(self.msg.format(sys._getframe().f_code.co_name, 'curr: vect: {}, bet_type: {}, total_first:{}'.format(self.vector, self.bet_type, total_first)))
+                    if (total_first.upper() == 'ТБ' and 'ТМ' in self.bet_type.upper()) or (total_first.upper() == 'ТМ' and 'ТБ' in self.bet_type.upper()):
+                        self.set_order_bet(shared, 2)
+                        self.opposite_stat_wait(shared)
+                        self.opposite_stat_get(shared)
+                    else:
+                        self.set_order_bet(shared, 1)
+                elif self.first_bet_in.lower() == 'auto':
+                    if (self.first_bet_in.lower() == 'auto' and self.vector.upper() == 'UP') or (self.bk_name_opposite.lower() == self.first_bet_in.lower()):
+                        self.set_order_bet(shared, 2)
+                        self.opposite_stat_wait(shared)
+                        self.opposite_stat_get(shared)
+                    else:
+                        self.set_order_bet(shared, 1)
                 elif self.first_bet_in.lower() == 'parallel':
                     self.set_order_bet(shared, 1)
                 else:

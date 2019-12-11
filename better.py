@@ -1096,7 +1096,6 @@ if __name__ == '__main__':
                                                 key, l, k1, k2, live_fork, live_fork_total, bk1_score, bk2_score, event_type, minute, time_break_fonbet, period, team_type, team_names, deff_max,
                                                 is_top, is_hot, info
                                         ) or DEBUG:
-                                            prnt(' ')
 
                                             now_timestamp = int(time.time())
                                             last_timestamp = temp_lock_fork.get(key, now_timestamp)
