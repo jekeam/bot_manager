@@ -164,6 +164,22 @@ def build_menu(buttons,
     return menu
 
 
+def get_kof_from_serv(bk_name, match_id, kof, server_ip=''):
+    if server_ip == '':
+        server_ip = get_prop('server_ip', '')
+        if server_ip == '':
+            server_ip = '80.87.193.55'
+    url_get_kof = 'http://' + server_ip + ':8888/' + bk_name + '/' + str(match_id) + '/' + kof
+    answer = ''
+    try:
+        res = requests.get(url=url_get_kof, verify=False, timeout=1)
+        answer = res.text
+    except Exception as e:
+        answer = str(e)
+    prnt('url_get_kof: ' + str(url_get_kof) + ', answer: ' + str(answer))
+    return answer
+
+
 def get_sum_bets(k1, k2, total_bet, round_fork=5, hide=False):
     if get_prop('round_fork'):
         round_fork = int(get_prop('round_fork'))

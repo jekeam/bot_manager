@@ -17,7 +17,7 @@ from meta_ol import ol_url_api, ol_payload, ol_headers, get_xtoken_bet
 from meta_fb import get_random_str, get_dumped_payload, get_urls, get_common_url
 from meta_fb import get_new_bets_fonbet, payload_coupon_sum, payload_coupon_sell, fb_payload_max_bet
 from meta_fb import payload_sell_check_result
-from utils import prnt, read_file, get_account_info, get_proxies, get_prop, get_new_sum_bets, get_sum_bets
+from utils import prnt, read_file, get_account_info, get_proxies, get_prop, get_new_sum_bets, get_sum_bets, get_kof_from_serv
 from fork_recheck import get_olimp_info, get_fonbet_info
 
 from exceptions import SessionNotDefined, BkOppBetError, NoMoney, BetError, SessionExpired, SaleError, BetIsDrop
@@ -88,6 +88,7 @@ class BetManager:
         self.cur_total_new = None
         self.cur_half = None
         self.cur_val_bet = bk_container.get('wager', {}).get('value')
+        self.match_id = bk_container.get('wager', {}).get('event', 0)
         self.val_bet_stat = self.cur_val_bet
         self.val_bet_old = self.cur_val_bet
         self.cur_minute = None
@@ -97,7 +98,6 @@ class BetManager:
 
         self.account = get_account_info(self.bk_name)
         self.timeout = 20
-        self.match_id = None
         self.reg_id = None
         self.reqId = None
         self.reqIdSale = None
@@ -373,6 +373,8 @@ class BetManager:
         match_id = self.bk_container.get('wager', {})['event']
         param = self.bk_container.get('wager', {}).get('param')
         bet_id = int(self.bk_container.get('wager', {}).get('factor'))
+        
+        get_kof_from_serv(self.bk_name, self.match_id, self.bet_type, get_prop('server_ip'))
 
         if self.bk_name == 'fonbet':
             try:
@@ -651,6 +653,8 @@ class BetManager:
             match_id = self.bk_container.get('wager', {})['event']
             param = self.bk_container.get('wager', {}).get('param')
             bet_id = int(self.bk_container.get('wager', {}).get('factor'))
+            
+            get_kof_from_serv(self.bk_name, self.match_id, self.bet_type, get_prop('server_ip'))
 
             if self.bk_name == 'fonbet' or self.bk_name_opposite == 'fonbet':
                 try:
@@ -1625,6 +1629,8 @@ class BetManager:
                     prnt(self.msg.format(sys._getframe().f_code.co_name, 'save url_rq: {}, answer: {}'.format(url_rq, rs)))
                 except Exception as e:
                     prnt(self.msg.format(sys._getframe().f_code.co_name, 'save url_rq error: ' + str(e)))
+        else:
+            get_kof_from_serv(self.bk_name, self.match_id, self.bet_type, get_prop('server_ip'))
             if err_code == 1:
                 self.opposite_stat_get(shared)
                 if 'Допустимая сумма ставки' in err_msg:
@@ -1796,20 +1802,20 @@ class BetManager:
                         err_str = self.msg_err.format(sys._getframe().f_code.co_name, 'неизвестная ошибка: ' + str(err_msg) + ', new_wager: ' + str(new_wager) + ', old_wager: ' + str(self.wager))
                         prnt(self.msg.format(sys._getframe().f_code.co_name, err_str))
                         raise BetIsLost(err_str)
-        elif result == 'error' and 'temporary unknown result' in msg_str:
-            err_str = 'Get temporary unknown result: ' + str(msg_str)
-            prnt(self.msg.format(sys._getframe().f_code.co_name, err_str))
-            return self.check_result(shared)
-        elif result == 'error' and 'temporarily unavailable' in str(msg_str):
-            if 'check session request error' in msg_val.lower():
-                self.opposite_stat_get(shared)
-                err_str = self.msg_err.format(sys._getframe().f_code.co_name, res)
-                self.sign_in(shared)
+            elif result == 'error' and 'temporary unknown result' in msg_str:
+                err_str = 'Get temporary unknown result: ' + str(msg_str)
+                prnt(self.msg.format(sys._getframe().f_code.co_name, err_str))
                 return self.check_result(shared)
-        else:
-            self.opposite_stat_get(shared)
-            err_str = self.msg_err.format(sys._getframe().f_code.co_name, err_msg)
-            raise BetError(err_str)
+            elif result == 'error' and 'temporarily unavailable' in str(msg_str):
+                if 'check session request error' in msg_val.lower():
+                    self.opposite_stat_get(shared)
+                    err_str = self.msg_err.format(sys._getframe().f_code.co_name, res)
+                    self.sign_in(shared)
+                    return self.check_result(shared)
+            else:
+                self.opposite_stat_get(shared)
+                err_str = self.msg_err.format(sys._getframe().f_code.co_name, err_msg)
+                raise BetError(err_str)
 
 
     def set_session_state(self):
