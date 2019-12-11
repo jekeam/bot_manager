@@ -9,7 +9,8 @@ db = MySQLDatabase('bot_manager', user='root', password='131189_Ak', host='127.0
 # db = MySQLDatabase('bot_manager', user='phpmyadmin', password='some_pass', host='127.0.0.1', port=3306)
 
 
-first_bet_in = ["created", "notcreator", "fonbet", "olimp", "parallel", "auto"]
+# first_bet_in = ["created", "notcreator", "fonbet", "olimp", "parallel", "auto"]
+first_bet_in = ["fonbet", "olimp", "auto"]
 
 bks = ["fonbet", "olimp", "auto"]
 on_off = ["вкл", "выкл"]

@@ -476,29 +476,7 @@ class BetManager:
                 self.sign_in(shared)
                 self.wait_sign_in_opp(shared)
 
-                if self.created_fork == '' and 'created' in self.first_bet_in:
-                    raise BetIsLost('Создатель вилки не определен: ' + str(self.created_fork))
-
-                if self.first_bet_in == 'created':
-                    if self.created_fork == self.bk_name:
-                        self.first_bet_in = self.bk_name
-                    else:
-                        self.first_bet_in = self.bk_name_opposite
-
-                if self.first_bet_in == 'notcreator':
-                    if self.created_fork == self.bk_name:
-                        self.first_bet_in = self.bk_name_opposite
-                    else:
-                        self.first_bet_in = self.bk_name
-
-                prnt(self.msg.format(
-                    sys._getframe().f_code.co_name,
-                    'FIRST BET IN: {}, prop:{}, bk_name:{}, bk_opp_name:{}'.format(self.first_bet_in, get_prop('first_bet_in', 'auto'), self.bk_name, self.bk_name_opposite)
-                ))
-
-                # if self.bk_name == 'fonbet':
                 recalc_sum_if_maxbet = get_prop('sum_by_max', 'выкл')
-
                 if get_prop('check_max_bet', 'выкл') == 'вкл' or recalc_sum_if_maxbet == 'вкл':
                     if self.bk_name == 'fonbet':
                         prnt(' ')
@@ -519,21 +497,12 @@ class BetManager:
 
                 self.recheck(shared)
 
-                # total_first = get_prop('total_first', 'auto')
-                # prnt(self.msg.format(
-                #     sys._getframe().f_code.co_name,
-                #     'total_first:{}, first_bet_in:{}, vector:{} , bk_name_opposite:{}, bet_type:{}'.format(total_first, self.first_bet_in, self.vector, self.bk_name_opposite, self.bet_type)
-                # ))
-
                 if self.vector == 'UP':
                     self.set_order_bet(shared, 2)
                     self.opposite_stat_wait(shared)
                     self.opposite_stat_get(shared)
                 elif self.vector == 'DOWN':
                     self.set_order_bet(shared, 1)
-
-                # if self.first_bet_in == 'parallel':
-                #     self.set_order_bet(shared, 1)
 
                 if self.order_bet == 0:
                     raise BetIsLost('Порядок ставки не определен')

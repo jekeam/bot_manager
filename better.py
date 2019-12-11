@@ -1071,11 +1071,50 @@ if __name__ == '__main__':
                                 # or ((event_type not in ('football', 'hockey') and test_oth_sport == 'вкл' and str(USER_ID) in list(map(str, ADMINS)))) \
                                 if vect1 and vect2:
                                     if deff_max <= 3 and k1 > 0 < k2:
+                                        vect1_old = vect1
+                                        vect2_old = vect2
                                         if vect1 == vect2:
-                                            vect1_old = vect1
-                                            vect2_old = vect2
                                             vect1, vect2 = normalized_vector(vect1, k1, vect2, k2)
-                                            prnt('Нормализация векторов, {}: vect1: {}->{}, vect2: {}->{}'.format(key, vect1_old, vect1, vect2_old, vect2))
+                                            prnt('{} - Нормализация векторов: vect1: {}->{}, vect2: {}->{}'.format(key, vect1_old, vect1, vect2_old, vect2))
+
+                                        # if self.created_fork == '' and 'created' in self.first_bet_in:
+                                        #     raise BetIsLost('Создатель вилки не определен: ' + str(self.created_fork))
+                                        #
+                                        # if self.first_bet_in == 'created':
+                                        #     if self.created_fork == self.bk_name:
+                                        #         self.first_bet_in = self.bk_name
+                                        #     else:
+                                        #         self.first_bet_in = self.bk_name_opposite
+                                        #
+                                        # if self.first_bet_in == 'notcreator':
+                                        #     if self.created_fork == self.bk_name:
+                                        #         self.first_bet_in = self.bk_name_opposite
+                                        #     else:
+                                        #         self.first_bet_in = self.bk_name
+                                        #
+                                        # prnt(self.msg.format(
+                                        #     sys._getframe().f_code.co_name,
+                                        #     'FIRST BET IN: {}, prop:{}, bk_name:{}, bk_opp_name:{}'.format(self.first_bet_in, get_prop('first_bet_in', 'auto'), self.bk_name, self.bk_name_opposite)
+                                        # ))
+                                        # total_first = get_prop('total_first', 'auto')
+                                        # prnt(self.msg.format(
+                                        #     sys._getframe().f_code.co_name,
+                                        #     'total_first:{}, first_bet_in:{}, vector:{} , bk_name_opposite:{}, bet_type:{}'.format(total_first, self.first_bet_in, self.vector, self.bk_name_opposite, self.bet_type)
+                                        # ))
+
+                                        # if self.first_bet_in == 'parallel':
+                                        #     self.set_order_bet(shared, 1)
+
+                                        # TODO: binding for BK_NAME from kofs an not left/rigth side
+                                        v_first_bet_in = get_prop('first_bet_in', 'auto')
+                                        if v_first_bet_in != 'auto':
+                                            if v_first_bet_in == 'fonbet':
+                                                vact2 = 'DOWN'
+                                                vect1 = 'UP'
+                                            elif v_first_bet_in == 'olimp':
+                                                vact1 = 'DOWN'
+                                                vect2 = 'UP'
+                                            prnt('{} - Задана первая ставка в {}: vect1: {}->{}, vect2: {}->{}'.format(key, v_first_bet_in, vect1_old, vect1, vect2_old, vect2))
 
                                         round_bet = int(get_prop('round_fork'))
                                         total_bet = round(randint(total_bet_min, total_bet_max) / round_bet) * round_bet
