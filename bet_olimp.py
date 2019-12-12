@@ -99,14 +99,14 @@ class OlimpBot:
             self.balance = float(self.login_info.get('s'))
             self.currency = self.login_info.get("cur")
             if self.currency == 'RUB':
-                self.balance = self.balance * self.cur_rate // 100 * 100
+                self.balance = self.balance * self.cur_rate // 1
             else:
                 from pycbrf.toolbox import ExchangeRates
                 rates = ExchangeRates()
                 self.cur_rate = float(rates['EUR'].value)
                 prnt('BET_OLIMP.PY: get current rate {} from bank:{} [{}-{}]'.format(self.currency, self.cur_rate, rates.date_requested, rates.date_received))
                 balance_old = self.balance
-                self.balance = self.balance * self.cur_rate // 100 * 100
+                self.balance = self.balance * self.cur_rate // 10 * 10
                 prnt('BET_OLIMP.PY: balance convert: {} {} = {} RUB'.format(balance_old, self.cur_rate, self.balance))
             self.balance_in_play = float(self.login_info.get('cs'))
             prnt('BET_OLIMP.PY: balance: ' + str(self.balance))

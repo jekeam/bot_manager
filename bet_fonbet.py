@@ -321,14 +321,14 @@ class FonbetBot:
             self.currency = res.get("currency").get("currency")
             self.balance = float(res.get("saldo"))
             if self.currency == 'RUB':
-                self.balance = self.balance // 100 * 100
+                self.balance = self.balance // 1
             else:
                 from pycbrf.toolbox import ExchangeRates
                 rates = ExchangeRates()
                 self.cur_rate = float(rates['EUR'].value)
                 prnt('BET_FONBET.PY: get current rate {} from bank:{} [{}-{}]'.format(self.currency, self.cur_rate, rates.date_requested, rates.date_received))
                 balance_old = self.balance
-                self.balance = self.balance * self.cur_rate // 100 * 100
+                self.balance = self.balance * self.cur_rate // 10 * 10
                 prnt('BET_FONBET.PY: balance convert: {} {} = {} RUB'.format(balance_old, self.cur_rate, self.balance))
 
             self.limit_group = res.get("limitGroup")
