@@ -1598,6 +1598,7 @@ class BetManager:
                 except Exception as e:
                     prnt(self.msg.format(self.tread_id + ': ' + sys._getframe().f_code.co_name, 'save url_rq error: ' + str(e)))
             else:
+                prnt(vstr='От ' + self.bk_name + ' была получена ошибка, ' + str(err_code) + ': ' + str(err_msg) + '/' + str(msg_str), hide='hide', to_cl=True)
                 get_kof_from_serv(self.bk_name, self.match_id, self.bet_type, get_prop('server_ip'))
             if err_code == 1:
                 self.opposite_stat_get(shared)
