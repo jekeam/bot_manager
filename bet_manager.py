@@ -330,7 +330,7 @@ class BetManager:
         self_opp_data = shared[self.bk_name_opposite].get('self', {})
 
         bal1 = self.balance
-        bal2 = self_opp_data.session.balance
+        bal2 = self_opp_data.balance
 
         k1 = self.cur_val_bet
         k2 = self_opp_data.cur_val_bet
