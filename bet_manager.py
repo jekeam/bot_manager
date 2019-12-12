@@ -106,6 +106,8 @@ class BetManager:
         self.sum_bet_stat = self.sum_bet
         self.sum_sell = None
 
+        self.group_limit_id = 0
+        self.session = ''
         self.balance = 0.0
         self.cur_rate = 1.0
         self.currency = ''
@@ -217,7 +219,6 @@ class BetManager:
             self.mirror = self.not_url
 
         self.session_file = 'session.' + self.bk_name
-        self.session = {}
 
         self.time_start = round(time())
 
@@ -328,8 +329,8 @@ class BetManager:
     def recalc_sum_by_maxbet(self, shared: dict):
         self_opp_data = shared[self.bk_name_opposite].get('self', {})
 
-        bal1 = self.session.get('balance')
-        bal2 = self_opp_data.session.get('balance')
+        bal1 = self.balance
+        bal2 = self_opp_data.session.balance
 
         k1 = self.cur_val_bet
         k2 = self_opp_data.cur_val_bet
@@ -469,7 +470,7 @@ class BetManager:
             if not shared[self.bk_name].get('time_bet'):
                 shared[self.bk_name]['time_bet'] = round(time() - self.time_start)
                 prnt(self.msg.format(self.tread_id + ': ' + sys._getframe().f_code.co_name, 'Завершил работу в ' + self.bk_name))
-            shared[self.bk_name]['balance'] = self.session.get('balance')
+            shared[self.bk_name]['balance'] = self.balance
 
         try:
             try:
@@ -964,8 +965,8 @@ class BetManager:
 
                 data = data_js.get('data', {})
 
-                self.session['session'] = data.get('session')
-                self.session['balance'] = float(dict(data).get('s'))
+                self.session = data.get('session')
+                self.balance = float(dict(data).get('s'))
                 self.currency = dict(data).get('cur', 'RUB')
 
             elif self.bk_name == 'fonbet':
@@ -1030,15 +1031,14 @@ class BetManager:
                     err_msg_login = 'err(' + str(e.__class__.__name__) + '): ' + str(e) + '. ' + str(repr(traceback.format_exception(exc_type, exc_value, exc_traceback)))
                     prnt(self.msg_err.format(self.tread_id + ': ' + sys._getframe().f_code.co_name, err_msg_login))
 
-                self.session['session'] = res.get('fsid', '')
-                self.session['balance'] = float(res.get('saldo', 0.0))
-                self.session['group_limit_id'] = res.get('limitGroup', '0')
+                self.session = res.get('fsid', '')
+                self.balance = float(res.get('saldo', 0.0))
+                self.group_limit_id = res.get('limitGroup', '0')
                 self.currency = res.get('currency').get('currency', 'RUB')
 
-            if not self.session.get('session'):
+            if not self.session:
                 raise SessionNotDefined(self.msg_err.format(self.tread_id + ': ' + sys._getframe().f_code.co_name, 'session_id not defined'))
 
-            self.balance = self.session['balance']
             if self.currency == 'RUB':
                 self.balance = self.balance // 100 * 100
             else:
@@ -1048,12 +1048,10 @@ class BetManager:
                 prnt(self.msg.format(self.tread_id + ': ' + sys._getframe().f_code.co_name, 'get current rate {} from bank:{} [{}-{}]'.format(self.currency, self.cur_rate, rates.date_requested, rates.date_received)))
                 balance_old = self.balance
                 self.balance = self.balance * self.cur_rate // 100 * 100
-                self.session['balance'] = self.balance
                 prnt(self.msg.format(self.tread_id + ': ' + sys._getframe().f_code.co_name, 'balance convert: {} {} = {} RUB'.format(balance_old, self.cur_rate, self.balance)))
 
-            prnt(self.msg.format(self.tread_id + ': ' + sys._getframe().f_code.co_name, 'session: ' + str(self.session['session'])))
-            prnt(self.msg.format(self.tread_id + ': ' + sys._getframe().f_code.co_name, 'balance: ' + str(self.session.get('balance')) + ' ' + str(self.session.get('currency'))))
-            # write_file(self.session_file, self.session['session'].strip())
+            prnt(self.msg.format(self.tread_id + ': ' + sys._getframe().f_code.co_name, 'session: ' + str(self.session)))
+            prnt(self.msg.format(self.tread_id + ': ' + sys._getframe().f_code.co_name, 'balance: ' + str(self.balance) + ' ' + str(self.currency)))
 
             shared['sign_in_' + self.bk_name] = 'ok'
             prnt(vstr='Авторизация в ' + self.bk_name + ' успешна', hide='hide', to_cl=True)
@@ -1081,7 +1079,7 @@ class BetManager:
 
         self.opposite_stat_get(shared)
 
-        cur_bal = self.session.get('balance')
+        cur_bal = self.balance
 
         if cur_bal:
             if cur_bal < self.sum_bet:
@@ -1115,7 +1113,7 @@ class BetManager:
                 'save_any': save_any,
                 'fast': 1,
                 'any_handicap': 1,
-                'session': self.session['session']
+                'session': self.session
             })
             # Принимать с изменёнными коэффициентами:
             # save_any: 1 - никогда, 2 - при повышении, 3 - всегда
@@ -1193,7 +1191,7 @@ class BetManager:
             payload['coupon']['bets'][0]['value'] = float(self.wager['value'])
             payload['coupon']['bets'][0]['event'] = int(self.wager['event'])
             payload['coupon']['bets'][0]['factor'] = int(self.wager['factor'])
-            payload['fsid'] = self.session['session']
+            payload['fsid'] = self.session
             payload['clientId'] = self.account['login']
 
             self.payload = copy.deepcopy(payload)
@@ -1271,7 +1269,7 @@ class BetManager:
             headers = copy.deepcopy(self.fonbet_headers)
 
             payload['clientId'] = self.account['login']
-            payload['fsid'] = self.session['session']
+            payload['fsid'] = self.session
 
             prnt(self.msg.format(self.tread_id + ': ' + sys._getframe().f_code.co_name, 'rq: ' + str(payload) + ' ' + str(headers)), 'hide')
             resp = requests_retry_session_post(url.format('coupon/sell/conditions/getFromVersion'),
@@ -1333,7 +1331,7 @@ class BetManager:
                 payload = {}
                 payload['bet_id'] = self.reg_id
                 payload['amount'] = self.sum_sell * self.cur_rate
-                payload['session'] = self.session['session']
+                payload['session'] = self.session
                 payload.update(copy.deepcopy(ol_payload))
                 payload.pop('time_shift')
 
@@ -1395,7 +1393,7 @@ class BetManager:
                 headers = copy.deepcopy(self.fonbet_headers)
 
                 payload['clientId'] = self.account['login']
-                payload['fsid'] = self.session['session']
+                payload['fsid'] = self.session
 
                 prnt(self.msg.format(self.tread_id + ': ' + sys._getframe().f_code.co_name, 'rq: ' + str(payload) + ' ' + str(headers)), 'hide')
                 resp = requests_retry_session_post(
@@ -1422,7 +1420,7 @@ class BetManager:
                 payload['requestId'] = int(self.reqIdSale)
                 payload['sellSum'] = self.sum_sell * self.cur_rate
                 payload['clientId'] = self.account['login']
-                payload['fsid'] = self.session['session']
+                payload['fsid'] = self.session
 
                 prnt(self.msg.format(self.tread_id + ': ' + sys._getframe().f_code.co_name, 'rq: ' + str(payload) + ' ' + str(headers)), 'hide')
                 resp = requests_retry_session_post(
@@ -1452,7 +1450,7 @@ class BetManager:
                 msg_str = self.msg_err.format(self.tread_id + ': ' + sys._getframe().f_code.co_name, ' Retry: ' + err_msg)
                 raise Retry(msg_str)
             elif 'не вошли в систему'.lower() in err_msg.lower() or 'Not token access'.lower() in err_msg.lower() or 'invalid session id'.lower() in err_msg.lower():
-                err_str = self.msg_err.format(self.tread_id + ': ' + sys._getframe().f_code.co_name, 'session expired: ' + self.session['session'])
+                err_str = self.msg_err.format(self.tread_id + ': ' + sys._getframe().f_code.co_name, 'session expired: ' + self.session)
                 raise SessionExpired(err_msg + ' ' + err_str)
 
             elif 'Продажа ставки недоступна'.lower() in err_msg.lower() or 'Изменилась сумма продажи ставки'.lower() in err_msg.lower():
@@ -1486,7 +1484,7 @@ class BetManager:
         payload['coupon']['bets'][0]['factor'] = int(self.wager['factor'])
         payload['coupon']['amount'] = 0.0
 
-        payload['fsid'] = self.session['session']
+        payload['fsid'] = self.session
         payload['clientId'] = self.account['login']
 
         payload['coupon'].pop('flexBet')
@@ -1528,7 +1526,7 @@ class BetManager:
         if self.sum_bet > max_amount:
             err_str = self.msg_err.format(self.tread_id + ': ' + sys._getframe().f_code.co_name, 'max bet')
             raise BetIsLost(err_str)
-        if self.session.get('balance') and self.session['balance'] < self.sum_bet:
+        if self.balance and self.balance < self.sum_bet:
             err_str = self.msg_err.format(self.tread_id + ': ' + sys._getframe().f_code.co_name, 'mo money')
             raise NoMoney(err_str)
 
@@ -1592,7 +1590,7 @@ class BetManager:
                 shared[self.bk_name + '_err'] = 'ok'
                 prnt(vstr='Ставка в ' + self.bk_name + ' успешно завершена, id = ' + str(self.reg_id), hide='hide', to_cl=True)
                 try:
-                    url_rq = 'http://' + get_prop('server_ip') + ':8888/set/fonbet_maxbet_fact/' + self.key + '/' + str(self.session.get('group_limit_id')) + '/' + str(self.sum_bet * self.cur_rate)
+                    url_rq = 'http://' + get_prop('server_ip') + ':8888/set/fonbet_maxbet_fact/' + self.key + '/' + str(self.group_limit_id) + '/' + str(self.sum_bet * self.cur_rate)
                     rs = requests.get(url=url_rq, timeout=1).text
                     prnt(self.msg.format(self.tread_id + ': ' + sys._getframe().f_code.co_name, 'save url_rq: {}, answer: {}'.format(url_rq, rs)))
                 except Exception as e:
@@ -1809,8 +1807,8 @@ class BetManager:
             raise BetError(err_str)
 
     def set_session_state(self):
-        if not self.session.get('session'):
-            self.session['session'] = read_file(self.session_file)
+        if not self.session:
+            self.session = read_file(self.session_file)
 
     def get_request_id(self, shared):
 
@@ -1860,7 +1858,7 @@ class BetManager:
 
         payload['requestId'] = self.reqIdSale
         payload['clientId'] = self.account['login']
-        payload['fsid'] = self.session['session']
+        payload['fsid'] = self.session
 
         prnt(self.msg.format(self.tread_id + ': ' + sys._getframe().f_code.co_name, 'rq: ' + str(payload) + ' ' + str(headers)), 'hide')
         resp = requests_retry_session_post(
@@ -1915,7 +1913,7 @@ class BetManager:
 
         payload['filter'] = filter  # только не расчитанные
         payload['offset'] = offset
-        payload['session'] = self.session['session']
+        payload['session'] = self.session
 
         headers = copy.deepcopy(ol_headers)
         headers.update(get_xtoken_bet(payload))
