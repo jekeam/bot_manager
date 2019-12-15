@@ -67,6 +67,7 @@ class OlimpBot:
         try:
             """Sign in to olimp, remember session id."""
             req_url = olimp_url2.format("autorize")
+            # req_url = 'https://' + 'api2.olimp.bet' + '/api/{}'.format("autorize")
 
             olimp_payload = {"lang_id": "0", "platforma": "ANDROID1"}
             payload = olimp_payload.copy()
@@ -458,9 +459,10 @@ if __name__ == '__main__':
     obj['amount_olimp'] = 30
 
     olimp = OlimpBot(OLIMP_USER)
+    olimp.proxies = {'https': 'https://shaggy:hzsyk4@212.60.6.231:5000'}
     olimp.sign_in()
     # olimp.place_bet(obj)
     # time.sleep(300)
-    olimp.sale_bet(1)
+    # olimp.sale_bet(1)
     # olimp.sale_bet(3856)
     # olimp.sale_bet(3857)
