@@ -292,10 +292,10 @@ if __name__ == '__main__':
         prnt('Fork key: ' + str(filename) + ', успешно прошел проверку 1 (векторы строго сонаправлены и нет шума)')
         if vect1 != real_vect1:
             prnt('Вектор в Олимп измнен: {}->{}'.format(vect1, real_vect1))
-            shared['olimp']['vect'] = real_vect1
+            # shared['olimp']['vect'] = real_vect1
         if vect2 != real_vect2:
             prnt('Вектор в Фонбет измнен: {}->{}'.format(vect2, real_vect2))
-            shared['fonbet']['vect'] = real_vect2
+            # shared['fonbet']['vect'] = real_vect2
         save_plt(str(ACC_ID) + '_I_ok', filename, plt)
     else:
         prnt('Fork key: ' + str(filename) + ', не прошел проверку 1 (векторы строго сонаправлены и нет шума)')
@@ -319,9 +319,9 @@ if __name__ == '__main__':
             prnt('Fork key: ' + str(filename) + ', успешно прошел проверку 2 (Шумный создатель вилки)')
             if vect1 != fake_vect1:
                 prnt('Вектор в Олимп измнен: {}->{}'.format(vect1, fake_vect1))
-                shared['olimp']['vect'] = fake_vect1
+                # shared['olimp']['vect'] = fake_vect1
             print(vect2, fake_vect2)
             if vect2 != fake_vect2:
                 prnt('Вектор в Фонбет измнен: {}->{}'.format(vect2, fake_vect2))
-                shared['fonbet']['vect'] = fake_vect2
+                # shared['fonbet']['vect'] = fake_vect2
             save_plt(str(ACC_ID) + '_II_ok', filename, plt)
