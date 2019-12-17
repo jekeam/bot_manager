@@ -501,7 +501,7 @@ def go_bets(wag_ol, wag_fb, key, deff_max, vect1, vect2, sc1, sc2, created, even
         fork_info[fork_id]['olimp']['err'] = str(shared.get('olimp_err', 'ok'))
         fork_info[fork_id]['fonbet']['err'] = str(shared.get('fonbet_err', 'ok'))
 
-        fork_info[fork_id]['fonbet']['order_bet'] = str(shared.get('order_bet', '0'))
+        fork_info[fork_id]['fonbet']['order_bet'] = str(shared.get('order_bet', ''))
         fork_info[fork_id]['fonbet']['max_bet'] = shared['fonbet'].get('max_bet')
         fork_info[fork_id]['fonbet']['maxbet_fact'] = info_csv.get('maxbet_fact')
         fork_info[fork_id]['fonbet']['fonbet_maxbet_fact'] = info_csv.get('fonbet_maxbet_fact', '')

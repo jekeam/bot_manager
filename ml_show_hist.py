@@ -245,76 +245,69 @@ def str_to_list_int(s: str) -> list:
 
 
 if __name__ == '__main__':
-    # is_id = [1560624365,
-    #          1560622428,
-    #          1560628236,
-    #          1560643845,
-    #          1560649073,
-    #          1560625685,
-    #          1560627298,
-    #          1560645251]
-    #
-    # with open('D:\\Download\\16_06_2019_1_id_forks.txt', encoding='utf-8') as f:
-    #     fl = f.readlines()
-    #
-    # min_profit = 0
-    # max_profit = 0
-    # sale_profit = 0
-    #
-    # for r in fl:
-    #     r = json.loads(r.strip())
-    #     for id, r in r.items():
-    #         if (is_id and int(id) in is_id) or is_id is None:
-    #             x = str_to_list_int(r.get('fonbet', {})['avg_change'])
-    #             y = str_to_list_float(r.get('fonbet', {})['order_kof'])
-    #             x2 = str_to_list_int(r.get('olimp', {})['avg_change'])
-    #             y2 = str_to_list_float(r.get('olimp', {})['order_kof'])
-    #
-    #             bk1 = r.get('olimp')
-    #             bk2 = r.get('fonbet')
-    #             err_bk1, err_bk2 = bk1.get('err'), bk2.get('err')
-    #             bet_skip = False
-    #
-    #             if err_bk1 and err_bk2:
-    #                 if 'BkOppBetError' in err_bk1 and 'BkOppBetError' in err_bk2:
-    #                     bet_skip = True
-    #
-    #             if err_bk1 != 'ok' or err_bk2 != 'ok':
-    #                 if not bet_skip:
-    #                     sale_profit = sale_profit + bk1.get('sale_profit') + bk2.get('sale_profit')
-    #
-    #             elif not bet_skip:
-    #                 sum_bet1, sum_bet2 = bk1.get('new_bet_sum'), bk2.get('new_bet_sum')
-    #                 k1, k2 = bk1.get('new_bet_kof'), bk2.get('new_bet_kof')
-    #                 if sum_bet1 and sum_bet2 and k1 and k2:
-    #                     total_sum = sum_bet1 + sum_bet2
-    #                     min_profit = min_profit + round(min((sum_bet1 * k1 - total_sum), (sum_bet2 * k2 - total_sum)))
-    #                     max_profit = max_profit + round(max((sum_bet1 * k1 - total_sum), (sum_bet2 * k2 - total_sum)))
-    #
-    #             res_str = str(id) + ': '
-    #             res_str = res_str + 'min профит: ' + '{:,}'.format(round(min_profit)).replace(',', ' ') + ', '
-    #             res_str = res_str + 'max профит: ' + '{:,}'.format(round(max_profit)).replace(',', ' ') + ', '
-    #             res_str = res_str + 'Выкупы: ' + '{:,}'.format(round(sale_profit)).replace(',', ' ') + ', '
-    #             res_str = res_str + '~ доход: ' + '{:,}'.format(round((max_profit + min_profit) / 2) + round(sale_profit)).replace(',', ' ')
-    #             print(res_str)
-    #             get_vect(x, y, x2, y2)
-    #             print(''.rjust(150, '-'))
+    is_id = [1576483799, 1576485908]
 
-    df = pd.read_csv('/mnt/278307951A2C09B7/Yandex.Disk/Вилки/dataset/30_10_2019_forks_simple.csv', encoding='utf-8', sep=';')
-    df = df[df['l'] < 0.995]
+    with open('/home/s/Downloads/17_12_2019_57_id_forks.txt', encoding='utf-8') as f:
+        fl = f.readlines()
 
-    idx = df.groupby(['kof_ol', 'kof_fb', 'name'], sort=False)['live_fork_total'].transform('max') == df['live_fork_total']
-    df = df[idx]
+    min_profit = 0
+    max_profit = 0
+    sale_profit = 0
 
-    for i, r in df.iterrows():
-        x = str_to_list_int(r['fb_avg_change'])
-        y = str_to_list_float(r['fb_kof_order'])
-        x2 = str_to_list_int(r['ol_avg_change'])
-        y2 = str_to_list_float(r['ol_kof_order'])
-        lf = r['live_fork']
-        lft = r['live_fork_total']
-        l = (1 - r['l']) * 100
-        print(x, y, x2, y2)
-        print('proc: {}, t: {}, tt: {}, '.format(l, lf, lft))
-        get_vect(x, y, x2, y2)
-        print(''.ljust(150, '^'))
+    for r in fl:
+        r = json.loads(r.strip())
+        for id, r in r.items():
+            if (is_id and int(id) in is_id) or is_id is None:
+                x = str_to_list_int(r.get('fonbet', {})['avg_change'])
+                y = str_to_list_float(r.get('fonbet', {})['order_kof'])
+                x2 = str_to_list_int(r.get('olimp', {})['avg_change'])
+                y2 = str_to_list_float(r.get('olimp', {})['order_kof'])
+
+                bk1 = r.get('olimp')
+                bk2 = r.get('fonbet')
+                err_bk1, err_bk2 = bk1.get('err'), bk2.get('err')
+                bet_skip = False
+
+                if err_bk1 and err_bk2:
+                    if 'BkOppBetError' in err_bk1 and 'BkOppBetError' in err_bk2:
+                        bet_skip = True
+
+                if err_bk1 != 'ok' or err_bk2 != 'ok':
+                    if not bet_skip:
+                        sale_profit = sale_profit + bk1.get('sale_profit') + bk2.get('sale_profit')
+
+                elif not bet_skip:
+                    sum_bet1, sum_bet2 = bk1.get('new_bet_sum'), bk2.get('new_bet_sum')
+                    k1, k2 = bk1.get('new_bet_kof'), bk2.get('new_bet_kof')
+                    if sum_bet1 and sum_bet2 and k1 and k2:
+                        total_sum = sum_bet1 + sum_bet2
+                        min_profit = min_profit + round(min((sum_bet1 * k1 - total_sum), (sum_bet2 * k2 - total_sum)))
+                        max_profit = max_profit + round(max((sum_bet1 * k1 - total_sum), (sum_bet2 * k2 - total_sum)))
+
+                res_str = str(id) + ': '
+                res_str = res_str + 'min профит: ' + '{:,}'.format(round(min_profit)).replace(',', ' ') + ', '
+                res_str = res_str + 'max профит: ' + '{:,}'.format(round(max_profit)).replace(',', ' ') + ', '
+                res_str = res_str + 'Выкупы: ' + '{:,}'.format(round(sale_profit)).replace(',', ' ') + ', '
+                res_str = res_str + '~ доход: ' + '{:,}'.format(round((max_profit + min_profit) / 2) + round(sale_profit)).replace(',', ' ')
+                print(res_str)
+                get_vect(x, y, x2, y2)
+                print(''.rjust(150, '-'))
+
+    # df = pd.read_csv('/mnt/278307951A2C09B7/Yandex.Disk/Вилки/dataset/30_10_2019_forks_simple.csv', encoding='utf-8', sep=';')
+    # df = df[df['l'] < 0.995]
+    #
+    # idx = df.groupby(['kof_ol', 'kof_fb', 'name'], sort=False)['live_fork_total'].transform('max') == df['live_fork_total']
+    # df = df[idx]
+    #
+    # for i, r in df.iterrows():
+    #     x = str_to_list_int(r['fb_avg_change'])
+    #     y = str_to_list_float(r['fb_kof_order'])
+    #     x2 = str_to_list_int(r['ol_avg_change'])
+    #     y2 = str_to_list_float(r['ol_kof_order'])
+    #     lf = r['live_fork']
+    #     lft = r['live_fork_total']
+    #     l = (1 - r['l']) * 100
+    #     print(x, y, x2, y2)
+    #     print('proc: {}, t: {}, tt: {}, '.format(l, lf, lft))
+    #     get_vect(x, y, x2, y2)
+    #     print(''.ljust(150, '^'))

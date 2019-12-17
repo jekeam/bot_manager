@@ -158,3 +158,10 @@ if __name__ == '__main__':
                 plt.show()
             except Exception as e:
                 print(e)
+    # x = [102, 58, 88, 89, 31, 2]
+    # y = [3.3, 3.35, 3.4, 3.45, 3.5, 5.2]
+    # try:
+    #     real_vect, NOIZE_KOF, k_is_noise, plt = get_vect(x, y)
+    #     plt.show()
+    # except Exception as e:
+    #     print(e)
