@@ -372,7 +372,7 @@ def get_prop(param, set_default=None):
 
 
 def serv_log(filename: str, vstr: str, hide=False):
-    prnt(vstr, hide)
+    prnts(vstr, hide)
     Outfile = open(filename + '.log', "a+", encoding='utf-8')
     Outfile.write(vstr + '\n')
     Outfile.close()
@@ -385,7 +385,7 @@ def client_log(filename: str, vstr: str):
     Outfile.close()
 
 
-def prnt(vstr=None, hide=None):
+def prnts(vstr=None, hide=None):
     if vstr:
         global dtOld
         dtDeff = round((datetime.datetime.now() - dtOld).total_seconds())
