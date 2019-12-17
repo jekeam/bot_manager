@@ -52,7 +52,7 @@ def get_random_proxy(proxi_list):
 
 
 def check_proxy_olimp(proxies_for_check, valid_proxies):
-    from util_olimp import olimp_head, olimp_data, olimp_get_xtoken, olimp_url, olimp_url_https, olimp_secret_key
+    from meta_ol import ol_headers, olimp_data, ol_url_api, olimp_secret_key
     global TIME_OUT
 
     def olimp_get_xtoken(payload, secret_key):
@@ -61,7 +61,7 @@ def check_proxy_olimp(proxies_for_check, valid_proxies):
         return {"X-TOKEN": md5(to_encode.encode()).hexdigest()}
 
     olimp_data_ll = olimp_data.copy()
-    olimp_head_ll = olimp_head.copy()
+    olimp_head_ll = ol_headers.copy()
     olimp_head_ll.update(olimp_get_xtoken(olimp_data_ll, olimp_secret_key))
     olimp_head_ll.pop('Accept-Language', None)
 
@@ -69,10 +69,10 @@ def check_proxy_olimp(proxies_for_check, valid_proxies):
         try:
             x = 0
             http_type = 'https' if 'https' in prx else 'http'
-            url = olimp_url_https if 'https' in http_type else olimp_url
+            # url = olimp_url_https if 'https' in http_type else ol_url_api
             proxies = {http_type: prx}
             resp = requests.post(
-                url + '/api/slice/',
+                ol_url_api,
                 headers=olimp_head_ll,
                 data=olimp_data_ll,
                 proxies=proxies,

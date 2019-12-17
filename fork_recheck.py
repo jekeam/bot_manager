@@ -1,6 +1,6 @@
 # -*- coding: utf-8 -*-
 import requests
-from util_olimp import to_abb, abbreviations
+from meta_ol import to_abb, abbreviations
 from meta_ol import get_xtoken_bet, olimp_secret_key, ol_url_api, ol_payload, ol_headers
 from meta_fb import fb_headers, get_new_bets_fonbet, url_fonbet
 import re
