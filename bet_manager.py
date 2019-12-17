@@ -107,6 +107,7 @@ class BetManager:
         self.sum_sell = None
 
         self.group_limit_id = 0
+        self.sell_blocked = False
         self.session = ''
         self.balance = 0.0
         self.cur_rate = 1.0
@@ -616,7 +617,7 @@ class BetManager:
             prnt(self.msg.format(
                 self.tread_id + ': ' + sys._getframe().f_code.co_name,
                 'Пересчет суммы ставки: {}->{}({}:{}/{}) [k: {}->{}, k_opp:{}, sum_opp:{}]'.
-                    format(self.sum_bet_stat, self.sum_bet, self.bet_profit, bk1_profit, bk2_profit, self.val_bet_stat, self.cur_val_bet, k_opp, sum_opp)))
+                format(self.sum_bet_stat, self.sum_bet, self.bet_profit, bk1_profit, bk2_profit, self.val_bet_stat, self.cur_val_bet, k_opp, sum_opp)))
 
     def bet_safe(self, shared: dict):
 
@@ -696,7 +697,7 @@ class BetManager:
             prnt(self.msg.format(
                 self.tread_id + ': ' + sys._getframe().f_code.co_name,
                 'Получил данные: bet_type:{}, vector:{}, total:{}, half:{}, val_bet:{}({}),minute:{}, sc_main:{}, sc:{}'.
-                    format(self.bet_type, self.vector, self.cur_total, self.cur_half, self.cur_val_bet, self.val_bet_stat, self.cur_minute, self.cur_sc_main, self.cur_sc)))
+                format(self.bet_type, self.vector, self.cur_total, self.cur_half, self.cur_val_bet, self.val_bet_stat, self.cur_minute, self.cur_sc_main, self.cur_sc)))
 
             prnt(self.msg.format(self.tread_id + ': ' + sys._getframe().f_code.co_name, 'Запас тотала: total_stock:{}, total_bet:{}, cur_total:{}'.format(self.total_stock, self.total_bet, self.cur_total)))
 
@@ -707,7 +708,12 @@ class BetManager:
             k_opp = self_opp_data.cur_val_bet
             sum_opp = self_opp_data.sum_bet_stat
             try:
-                self_opp_data.get_sum_sell(shared)
+                if not self.sell_blocked:
+                    self_opp_data.get_sum_sell(shared)
+                else:
+                    err_str = 'Disable get sum sell, if sell_blocked: ' + self.sell_blocked
+                    prnt(self.msg.format(self.tread_id + ': ' + sys._getframe().f_code.co_name, err_str))
+                    raise CouponBlocked(err_str)
             except CouponBlocked as e:
                 prnt(self.msg.format(self.tread_id + ': ' + sys._getframe().f_code.co_name, 'Ошибка: ' + e.__class__.__name__ + ' - ' + str(e)))
 
@@ -1035,6 +1041,7 @@ class BetManager:
                 self.balance = float(res.get('saldo', 0.0))
                 self.group_limit_id = res.get('limitGroup', '0')
                 self.currency = res.get('currency').get('currency', 'RUB')
+                self.sell_blocked = res.get('attributes', {}).get("sellBlocked")
 
             if not self.session:
                 raise SessionNotDefined(self.msg_err.format(self.tread_id + ': ' + sys._getframe().f_code.co_name, 'session_id not defined'))
