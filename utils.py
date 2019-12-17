@@ -222,7 +222,9 @@ def get_new_sum_bets(bk1, bk2, max_bet, bal2, hide=False, round_fork=5):
 def get_vector(bet_type, sc1=None, sc2=None):
     def raise_err(VECT, sc1, sc2):
         if sc1 is None or sc2 is None and VECT != '':
-            raise ValueError('ERROR: sc1 or sc2 not defined!')
+            err_str = 'Error: sc1 or sc2 not defined! bet_type={}, sc1={}, sc2={}'.format(bet_type, sc1, sc2)
+            prnt(err_str)
+            # raise ValueError(err_str)
 
     D = 'DOWN'
     U = 'UP'
@@ -282,8 +284,9 @@ def get_vector(bet_type, sc1=None, sc2=None):
             return D
         else:
             return U
-
-    raise ValueError('Error: vector not defined!')
+    err_str = 'Error: vector not defined! bet_type={}, sc1={}, sc2={}'.format(bet_type, sc1, sc2)
+    prnt(err_str)
+    # raise ValueError(err_str)
 
 
 def invetsion_vect(vect: str):

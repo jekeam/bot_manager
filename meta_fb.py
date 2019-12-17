@@ -19,6 +19,11 @@ TT1U = [['ТМ1({})', 1810], ['ТМ1({})', 1813], ['ТМ1({})', 1816]]
 # TEAM TOTALS-2
 TT2O = [['ТБ2({})', 1854], ['ТБ2({})', 1873], ['ТБ2({})', 1880]]
 TT2U = [['ТМ2({})', 1871], ['ТМ2({})', 1874], ['ТМ2({})', 1881]]
+# FORA
+FORA = [['Ф1({})', 927], ['Ф2({})', 928],
+        ['Ф1({})', 910], ['Ф1({})', 989], ['Ф1({})', 1569],
+        ['Ф2({})', 991], ['Ф2({})', 1572], ['Ф2({})', 1572]
+        ]
 
 LENOVO_MODEL = ''
 
@@ -215,7 +220,7 @@ def get_new_bets_fonbet(match_id, proxies, time_out=50):
         resp = resp.json()
 
         TT = []
-        for bet in [TTO, TTU, TT1O, TT1U, TT2O, TT2U]:
+        for bet in [TTO, TTU, TT1O, TT1U, TT2O, TT2U, FORA]:
             TT.extend(bet)
 
         for event in resp.get("events"):
@@ -232,7 +237,7 @@ def get_new_bets_fonbet(match_id, proxies, time_out=50):
             priority = event.get('priority')
             score_1st = event.get('scoreComment', '').replace('-', ':')
 
-            if event.get('parentId') == 0 or event.get('name') in ('1st half', '2nd half'):
+            if event.get('parentId') == 0 or 'st half' in name or 'nd half' in name:
                 if event.get('parentId') == 0:
                     try:
                         bets_fonbet[key_id].update({
@@ -268,10 +273,8 @@ def get_new_bets_fonbet(match_id, proxies, time_out=50):
                 # prnts('event_name', event.get('name'))
 
                 half = ''
-                if event.get('name') == '1st half':
-                    half = '1'
-                elif event.get('name') == '2nd half':
-                    half = '2'
+                if 'st half' in name or 'nd half' in name:
+                    half = name.replace('st half', '').repoalce('nd half', '')
 
                 for cat in event.get('subcategories'):
 
@@ -281,7 +284,8 @@ def get_new_bets_fonbet(match_id, proxies, time_out=50):
                             '1X2 (90 min)',
                             '1X2',
                             'Goal - no goal',
-                            'Total', 'Totals', 'Team Totals-1', 'Team Totals-2'):  # , '1st half', '2nd half'
+                            'Total', 'Totals', 'Team Totals-1', 'Team Totals-2',
+                            'Hcap'):
 
                         for kof in cat.get('quotes'):
 
