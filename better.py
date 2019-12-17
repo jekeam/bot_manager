@@ -826,6 +826,7 @@ if __name__ == '__main__':
                 prnt('Баланс в БК Фонбет: ' + str(bal2))
                 prnt('Блокировка вывода: ' + str(bk2.get_acc_info('pay')))
                 prnt('Блокировка ставки: ' + str(bk2.get_acc_info('bet')))
+                prnt('Блокировка продажи: ' + str(bk2.get_acc_info('sale')))
                 group_limit_id = str(bk2.get_acc_info('group'))
                 prnt('Группа лимита: ' + group_limit_id)
                 prnt('Тип БК: ' + get_prop('fonbet_s', 'com'))

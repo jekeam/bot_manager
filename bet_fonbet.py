@@ -72,6 +72,7 @@ class FonbetBot:
         self.limit_group = None
         self.pay_blocked = None
         self.live_blocked = None
+        self.sell_blocked = None
 
         session_proxies = get_proxies().get('fonbet', {})
 
@@ -345,6 +346,12 @@ class FonbetBot:
             else:
                 self.live_blocked = 'Нет'
 
+            self.sell_blocked = res.get('attributes', {}).get("sellBlocked")
+            if self.sell_blocked:
+                self.sell_blocked = 'Да'
+            else:
+                self.sell_blocked = 'Нет'
+
             # self.balance_in_play = 0.0
             self.payload = payload
             prnt('BET_FONBET.PY: balance: ' + str(self.balance))
@@ -376,6 +383,8 @@ class FonbetBot:
             return self.pay_blocked
         elif param == 'group':
             return self.limit_group
+        elif param == 'sale':
+            return self.sell_blocked
 
     def _check_in_bounds(self, wager: dict) -> None:
         """Check if amount is in allowed bounds"""

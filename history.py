@@ -92,6 +92,7 @@ def fonbet_get_hist(FONBET_USER):
         balance_str = balance_str + 'Группа лимита: ' + str(fonbet.limit_group) + '\n'
         balance_str = balance_str + 'Блокировка ставки: ' + str(fonbet.live_blocked) + '\n'
         balance_str = balance_str + 'Блокировка вывода: ' + str(fonbet.pay_blocked) + '\n'
+        balance_str = balance_str + 'Блокировка продажи: ' + str(fonbet.sell_blocked) + '\n'
 
     fonbet.sign_in()
     data = fonbet.get_operations(500)
