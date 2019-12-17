@@ -219,8 +219,9 @@ def get_new_sum_bets(bk1, bk2, max_bet, bal2, hide=False, round_fork=5):
     return sum_bk1, sum_bk2
 
 
+
 def get_vector(bet_type, sc1=None, sc2=None):
-    def raise_err(VECT, sc1, sc2):
+    def check_score(VECT, sc1, sc2):
         if sc1 is None or sc2 is None and VECT != '':
             err_str = 'Error: sc1 or sc2 not defined! bet_type={}, sc1={}, sc2={}'.format(bet_type, sc1, sc2)
             prnt(err_str)
@@ -244,49 +245,64 @@ def get_vector(bet_type, sc1=None, sc2=None):
     # но те типы что по длинне написания больше,  должны быть выше
 
     if 'П1Н' in bet_type:
-        raise_err(VECT, sc1, sc2)
+        check_score(VECT, sc1, sc2)
         if sc1 >= sc2:
             return D
         else:
             return U
 
     if 'П2Н' in bet_type:
-        raise_err(VECT, sc1, sc2)
+        check_score(VECT, sc1, sc2)
         if sc1 <= sc2:
             return D
         else:
             return U
 
     if '12' in bet_type:
-        raise_err(VECT, sc1, sc2)
+        check_score(VECT, sc1, sc2)
         if sc1 != sc2:
             return D
         else:
             return U
 
     if 'П1' in bet_type:
-        raise_err(VECT, sc1, sc2)
+        check_score(VECT, sc1, sc2)
         if sc1 > sc2:
             return D
         else:
             return U
 
     if 'П2' in bet_type:
-        raise_err(VECT, sc1, sc2)
+        check_score(VECT, sc1, sc2)
         if sc1 < sc2:
             return D
         else:
             return U
 
     if 'Н' in bet_type:
-        raise_err(VECT, sc1, sc2)
+        check_score(VECT, sc1, sc2)
         if sc1 == sc2:
             return D
         else:
             return U
+
+    if 'Ф' in bet_type:
+        check_score(VECT, sc1, sc2)
+        try:
+            fora_val = float(re.findall('\((.*)\)', bet_type)[0])
+            if sc1 + fora_val > sc2:
+                return D
+            else:
+                return U
+        except Exception as e:
+            exc_type, exc_value, exc_traceback = sys.exc_info()
+            err_str = 'get_vector error: ' + str(e) + ' (' + str(repr(traceback.format_exception(exc_type, exc_value, exc_traceback))) + ')'
+            prnt(err_str)
+
     err_str = 'Error: vector not defined! bet_type={}, sc1={}, sc2={}'.format(bet_type, sc1, sc2)
     prnt(err_str)
     # raise ValueError(err_str)
+
 
 
 def invetsion_vect(vect: str):
@@ -354,7 +370,7 @@ def get_prop(param, set_default=None):
 
 
 def serv_log(filename: str, vstr: str, hide=False):
-    prnts(vstr, hide)
+    prnt(vstr, hide)
     Outfile = open(filename + '.log', "a+", encoding='utf-8')
     Outfile.write(vstr + '\n')
     Outfile.close()
@@ -367,7 +383,7 @@ def client_log(filename: str, vstr: str):
     Outfile.close()
 
 
-def prnts(vstr=None, hide=None):
+def prnt(vstr=None, hide=None):
     if vstr:
         global dtOld
         dtDeff = round((datetime.datetime.now() - dtOld).total_seconds())
