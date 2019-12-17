@@ -11,6 +11,8 @@ from math import floor
 
 from db_model import Account, Properties
 import sys
+import traceback
+import re
 
 DEBUG = False
 MINUTE_COMPLITE = 88
