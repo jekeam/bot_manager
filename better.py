@@ -893,7 +893,7 @@ if __name__ == '__main__':
                 check_statistics()
 
                 last_fork_time_min = (int(time.time()) - last_fork_time) / 60
-                prnt('С момента поледней ставки прошло: ' + str(last_fork_time_hours) + ' мин.')
+                prnt('С момента поледней ставки прошло: ' + str(last_fork_time_min) + ' мин.')
 
                 server_forks = dict()
                 start_see_fork = threading.Thread(target=run_client)  # , args=(server_forks,))
