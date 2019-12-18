@@ -708,11 +708,11 @@ class BetManager:
             k_opp = self_opp_data.cur_val_bet
             sum_opp = self_opp_data.sum_bet_stat
             try:
-                prnt(self.msg.format(self.tread_id + ': ' + sys._getframe().f_code.co_name, 'Allow get sell: {}'.format(self.sell_blocked)))
-                if not self.sell_blocked:
+                prnt(self.msg.format(self.tread_id + ': ' + sys._getframe().f_code.co_name, 'Allow get sell bet from {}: {}'.format(self_opp_data.bk_name, self_opp_data.sell_blocked)))
+                if not self_opp_data.sell_blocked:
                     self_opp_data.get_sum_sell(shared)
                 else:
-                    err_str = 'Disable get sum sell, if sell_blocked: {}'.format(self.sell_blocked)
+                    err_str = 'Disable sell bet in {}, sell_blocked: {}'.format(self_opp_data.bk_name, self_opp_data.sell_blocked)
                     prnt(self.msg.format(self.tread_id + ': ' + sys._getframe().f_code.co_name, err_str))
                     raise CouponBlocked(err_str)
             except CouponBlocked as e:
