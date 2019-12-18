@@ -269,32 +269,66 @@ def export_hist(OLIMP_USER, FONBET_USER):
                         header_str = header_str + ';' + cl
                 header = header_str + ';\n'
 
-            with open(csv_name, 'w', encoding='utf-8') as f:
-                f.write(header + out)
+            if not os.path.isfile(csv_name):
+                with open(csv_name, 'w', encoding='utf-8') as f:
+                    f.write(header + out)
+            else:
+                with open(csv_name, 'a+', encoding='utf-8') as f:
+                    f.write(out)
 
-    if os.path.isfile(str(ACC_ID) + '_client.log'):
+    file_name_log = str(ACC_ID) + '_client.log'
+    if os.path.isfile(file_name_log):
         try:
-            os.rename(str(ACC_ID) + '_client.log', cur_date_str + '_' + str(ACC_ID) + '_' + 'client.log')
+            new_file_name_log = cur_date_str + '_' + file_name_log
+            if not os.path.isfile(new_file_name_log):
+                os.rename(file_name_log, new_file_name_log)
+            else:
+                os.rename(file_name_log, new_file_name_log + datetime.now().strftime('%H_%M'))
         except Exception as e:
             prnt(e)
-    if os.path.isfile(str(ACC_ID) + '_client_hide.log'):
+
+    file_name_hide_log = str(ACC_ID) + '_client_hide.log'
+    if os.path.isfile(file_name_hide_log):
         try:
-            os.rename(str(ACC_ID) + '_client_hide.log', cur_date_str + '_' + str(ACC_ID) + '_' + 'client_hide.log')
+            new_file_name_hide_log = cur_date_str + '_' + file_name_hide_log
+            if not os.path.isfile(new_file_name_hide_log):
+                os.rename(file_name_log, new_file_name_hide_log)
+            else:
+                os.rename(file_name_log, new_file_name_hide_log + datetime.now().strftime('%H_%M'))
         except Exception as e:
             prnt(e)
-    if os.path.isfile(str(ACC_ID) + '_to_cl_bet.log'):
+
+    file_name_cl_bet_log = str(ACC_ID) + '_to_cl_bet.log'
+    if os.path.isfile(file_name_cl_bet_log):
         try:
-            os.rename(str(ACC_ID) + '_to_cl_bet.log', cur_date_str + '_' + str(ACC_ID) + '_to_cl_bet.log')
+            new_file_name_cl_bet_log = cur_date_str + '_' + file_name_hide_log
+            if not os.path.isfile(new_file_name_cl_bet_log):
+                os.rename(file_name_log, new_file_name_cl_bet_log)
+            else:
+                os.rename(file_name_log, new_file_name_cl_bet_log + datetime.now().strftime('%H_%M'))
         except Exception as e:
             prnt(e)
-    if os.path.isfile(str(ACC_ID) + '_to_cl_fork.log'):
+
+    file_name_cl_fork_log = str(ACC_ID) + '_to_cl_fork.log'
+    if os.path.isfile(file_name_cl_fork_log):
         try:
-            os.rename(str(ACC_ID) + '_to_cl_fork.log', cur_date_str + '_' + str(ACC_ID) + '_to_cl_fork.log')
+            new_file_name_cl_fork_log = cur_date_str + '_' + file_name_cl_fork_log
+            if not os.path.isfile(new_file_name_cl_fork_log):
+                os.rename(file_name_log, new_file_name_cl_fork_log)
+            else:
+                os.rename(file_name_log, new_file_name_cl_fork_log + datetime.now().strftime('%H_%M'))
         except Exception as e:
             prnt(e)
+
+
     if os.path.isfile(file_name):
         try:
-            os.rename(file_name, cur_date_str + '_' + file_name)
+            new_id_fork = cur_date_str + '_' + file_name
+            if not os.path.isfile(new_id_fork):
+                os.rename(file_name, new_id_fork)
+            else:
+                os.rename(new_id_fork, new_id_fork + '_old_' + datetime.now().strftime('%H_%M'))
+                os.rename(file_name, new_id_fork)
         except Exception as e:
             prnt(e)
 
