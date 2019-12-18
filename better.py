@@ -892,7 +892,8 @@ if __name__ == '__main__':
                     prnt(e)
                 check_statistics()
 
-                prnt('С момента поледней ставки прошло: ' + str((int(time.time()) - last_fork_time) / 60) + ' мин.')
+                last_fork_time_min = (int(time.time()) - last_fork_time) / 60
+                prnt('С момента поледней ставки прошло: ' + str(last_fork_time_hours) + ' мин.')
 
                 server_forks = dict()
                 start_see_fork = threading.Thread(target=run_client)  # , args=(server_forks,))
@@ -958,7 +959,14 @@ if __name__ == '__main__':
                         msg_err = msg_err + '\n' + 'обнаружена блокировка вывода, нужно пройти верификацию в Фонбет, аккаунт остановлен!'
 
                     if bal_small and not DEBUG:
-                        msg_err = msg_err + '\n' + 'аккаунт остановлен: денег в одной из БК не достаточно для работы, просьба выровнять балансы.\n' + bk1_name + ': ' + str(bal1) + '\n' + bk2_name + ': ' + str(bal2)
+                        if last_fork_time_min >= 120:
+                            msg_err = msg_err + '\n' + 'аккаунт остановлен: денег в одной из БК не достаточно для работы, просьба выровнять балансы.\n' + bk1_name + ': ' + str(bal1) + '\n' + bk2_name + ': ' + str(bal2)
+                        else:
+                            if last_fork_time_min%30 == 0:
+                                prnt('C момента последней ставки прошло {} мин. обновляю балансы')
+                                time.sleep(61)
+                                bal1 = bk1.get_balance()
+                                bal2 = bk2.get_balance()
 
                     if msg_str != msg_str_old:
                         msg_str_old = msg_str
