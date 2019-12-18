@@ -1166,7 +1166,8 @@ class BetManager:
                 raise BetIsLost(err_msg)
 
             elif 'максимальная ставка'.lower() in err_msg.lower():
-                raise BetIsLost(err_msg)
+                # raise BetIsLost(err_msg)
+                raise BetError(err_msg)
 
             elif res.get('data') is None:
                 err_str = self.msg_err.format(self.tread_id + ': ' + sys._getframe().f_code.co_name, err_msg)
