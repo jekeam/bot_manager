@@ -325,10 +325,9 @@ def export_hist(OLIMP_USER, FONBET_USER):
         try:
             new_id_fork = cur_date_str + '_' + file_name
             if not os.path.isfile(new_id_fork):
-                os.rename(file_name, new_id_fork)
+                os.rename(file_name_log, new_id_fork)
             else:
-                os.rename(new_id_fork, new_id_fork.replace('.', '_old_' + datetime.now().strftime('%H_%M') + '.'))
-                os.rename(file_name, new_id_fork)
+                os.rename(file_name_log, new_id_fork.replace('.', datetime.now().strftime('%H_%M') + '.'))
         except Exception as e:
             prnt(e)
 
@@ -344,16 +343,6 @@ def export_hist(OLIMP_USER, FONBET_USER):
 
     try:
         join_file_name = join_csv(cur_date_str)
-        # TODO FIX: error: (1406, "Data too long for column 'blob' at row 1")
-        # if join_file_name:
-        #     for admin in ADMINS:
-        #         with open(join_file_name, 'r', encoding='utf-8') as f:
-        #             db_model.Message.insert({
-        #                 db_model.Message.to_user: admin,
-        #                 db_model.Message.blob: f.read(),
-        #                 db_model.Message.file_name: join_file_name,
-        #                 db_model.Message.file_type: 'document'
-        #             }).execute()
     except Exception as e:
         prnt('def join_csv, error: ' + str(e))
 
