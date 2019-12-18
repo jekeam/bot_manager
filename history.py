@@ -294,7 +294,7 @@ def export_hist(OLIMP_USER, FONBET_USER):
             if not os.path.isfile(new_file_name_hide_log):
                 os.rename(file_name_log, new_file_name_hide_log)
             else:
-                os.rename(file_name_log, new_file_name_hide_log + datetime.now().strftime('%H_%M'))
+                os.rename(file_name_log, new_file_name_hide_log.replace('.', str(datetime.now().strftime('%H_%M')) + '.'))
         except Exception as e:
             prnt(e)
 
@@ -305,7 +305,7 @@ def export_hist(OLIMP_USER, FONBET_USER):
             if not os.path.isfile(new_file_name_cl_bet_log):
                 os.rename(file_name_log, new_file_name_cl_bet_log)
             else:
-                os.rename(file_name_log, new_file_name_cl_bet_log + datetime.now().strftime('%H_%M'))
+                os.rename(file_name_log, new_file_name_cl_bet_log.replace('.', str(datetime.now().strftime('%H_%M')) + '.'))
         except Exception as e:
             prnt(e)
 
@@ -316,7 +316,7 @@ def export_hist(OLIMP_USER, FONBET_USER):
             if not os.path.isfile(new_file_name_cl_fork_log):
                 os.rename(file_name_log, new_file_name_cl_fork_log)
             else:
-                os.rename(file_name_log, new_file_name_cl_fork_log + datetime.now().strftime('%H_%M'))
+                os.rename(file_name_log, new_file_name_cl_fork_log.replace('.', str(datetime.now().strftime('%H_%M')) + '.'))
         except Exception as e:
             prnt(e)
 
@@ -327,7 +327,7 @@ def export_hist(OLIMP_USER, FONBET_USER):
             if not os.path.isfile(new_id_fork):
                 os.rename(file_name, new_id_fork)
             else:
-                os.rename(new_id_fork, new_id_fork + '_old_' + datetime.now().strftime('%H_%M'))
+                os.rename(new_id_fork, new_id_fork.replace('.', '_old_' + datetime.now().strftime('%H_%M') + '.'))
                 os.rename(file_name, new_id_fork)
         except Exception as e:
             prnt(e)
