@@ -453,7 +453,8 @@ if __name__ == '__main__':
     OLIMP_USER.update({'login': 5266288})
     OLIMP_USER.update({'password': 'op1304Abcop'})
     #
-    wager_olimp = {"value": 3.45, "apid": "1407443491:53761583:3:5:20.5:1:0:0:3", "factor": 3.45, "sport_id": 3, "event": "53761583", }
+    wager_olimp = {'time_req': 1576775539, 'value': 1.9, 'apid': '1417627292:54125233:2:4:16.5:1:0:0:10', 'factor': 1.9, 'sport_id': 10, 'event': '54125233', 'vector': 'DOWN',
+                   'hist': {'time_change': 1576775538.5210698, 'avg_change': [1], 'order': [1.9]}}
     obj = {}
     obj['wager_olimp'] = wager_olimp
     obj['amount_olimp'] = 30
@@ -461,7 +462,7 @@ if __name__ == '__main__':
     olimp = OlimpBot(OLIMP_USER)
     olimp.proxies = {'https': 'https://shaggy:hzsyk4@212.60.6.231:5000'}
     olimp.sign_in()
-    # olimp.place_bet(obj)
+    olimp.place_bet(obj)
     # time.sleep(300)
     # olimp.sale_bet(1)
     # olimp.sale_bet(3856)

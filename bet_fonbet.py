@@ -79,7 +79,7 @@ class FonbetBot:
         if self.bk_type == 'com':
             self.app_ver = '5.1.3b'
             self.user_agent = 'Fonbet/5.1.3b (Android 21; Phone; com.bkfonbet)'
-            self.not_url = 'fonbet-4d153.com'
+            self.not_url = 'fonbet-76863.com'
             self.url_api = 'clients-api'  # maybe 'common'?
         elif self.bk_type == 'ru':
             self.app_ver = '5.2.1r'
@@ -110,7 +110,7 @@ class FonbetBot:
         self.payload_bet = {
             "coupon":
                 {
-                    "flexBet": "any",  # Изменения коэф-в, any - все, up - вверх
+                    "flexBet": "up",  # Изменения коэф-в, any - все, up - вверх
                     "flexParam": False,  # Изменения фор и тоталов, True - принимать, False - не принимать
                     "bets":
                         [
@@ -1083,10 +1083,11 @@ def get_new_bets_fonbet(match_id, proxies, time_out):
 if __name__ == '__main__':
     PROXIES = dict()
 
-    FONBET_USER = {"login": 7836658, "password": "VQ1YPcV9", "mirror": "fonbet-4d153.com"}
+    FONBET_USER = {"login": 7836658, "password": "VQ1YPcV9", "mirror": "fonbet-76863.com"}
 
-    wager_fonbet = {"num": 1, "event": 18267496, "factor": 923, "value": 3.7, "score": "30:40"}
-    # [{num: 1, event: 18267496, factor: 923, value: 50, score: "1:0"}]https://www.fonbet-4d153.com/#!/live/football/13942/18267496
+    wager_fonbet = {"event": 18449923, "factor": 927, "value": 1.5, "score": "1:0"}
+    # {'time_req': 1576767538, 'event': 18425760, 'value': 2.15, 'param': -350, 'factor': '989', 'score': '1:0', 'vector': 'UP', 'is_hot': False}
+    # {eventId: 18449923, factorId: 927, place: "live"}
     obj = {}
     obj['wager_fonbet'] = wager_fonbet
     obj['amount_fonbet'] = 30
@@ -1094,8 +1095,8 @@ if __name__ == '__main__':
 
     fonbet = FonbetBot(FONBET_USER)
     fonbet.sign_in()
-    fonbet.place_bet(obj)
+    # fonbet.place_bet(obj)
     # time.sleep(3)
-    # fonbet.sale_bet(20995498860)
+    # fonbet.sale_bet(1386768572)
     # fonbet_reg_id = fonbet.place_bet(amount_fonbet, wager_fonbet)
     # {'e': 12264423, 'f': 931, 'v': 1.4, 'p': 250, 'pt': '2.5', 'isLive': True}

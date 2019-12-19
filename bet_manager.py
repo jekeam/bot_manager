@@ -64,10 +64,10 @@ class BetManager:
         self.vector = bk_container['vect']
         self.order_bet = 0
 
-        # if self.vector == 'DOWN':
-        #     self.flex_bet = False
-        # else:
-        #     self.flex_bet = True
+        if self.vector == 'DOWN':
+            self.flex_bet = False
+        else:
+            self.flex_bet = True
         self.hard_bet = True
         self.override_bet = True
 
@@ -161,7 +161,7 @@ class BetManager:
             self.payload_bet = {
                 "coupon":
                     {
-                        "flexBet": "any",  # Изменения коэф-в, any - все, up - вверх
+                        "flexBet": "up",  # Изменения коэф-в, any - все, up - вверх
                         "flexParam": False,  # Изменения фор и тоталов, True - принимать, False - не принимать
                         "bets":
                             [
@@ -1110,9 +1110,9 @@ class BetManager:
 
             payload = copy.deepcopy(ol_payload)
 
-            save_any = 3
+            save_any = 2
             if self.hard_bet:
-                save_any = 2
+                save_any = 1
 
             payload.update({
                 'coefs_ids': '[["{apid}",{factor},1]]'.format(apid=self.wager.get('apid'), factor=self.wager.get('factor')),
@@ -1223,7 +1223,7 @@ class BetManager:
             self.payload['requestId'] = self.reqId
 
             if self.hard_bet:
-                self.payload['coupon']['flexBet'] = 'up'
+                self.payload['coupon']['flexBet'] = 'any'
 
             self.opposite_stat_get(shared)
             prnt(self.msg.format(self.tread_id + ': ' + sys._getframe().f_code.co_name, 'rq: ' + str(self.payload) + ' ' + str(headers)), 'hide')
