@@ -965,7 +965,7 @@ if __name__ == '__main__':
                         if last_fork_time_min >= 120:
                             bal1 = bk1.get_balance()
                             bal2 = bk2.get_balance()
-                            ref_bal_small(bal1, bal2)
+                            bal_small = ref_bal_small(bal1, bal2)
                             if bal_small:
                                 msg_err = msg_err + '\n' + 'аккаунт остановлен: денег в одной из БК не достаточно для работы, просьба выровнять балансы.\n' + bk1_name + ': ' + str(bal1) + '\n' + bk2_name + ': ' + str(bal2)
                         else:
@@ -974,7 +974,7 @@ if __name__ == '__main__':
                                 time.sleep(61)
                                 bal1 = bk1.get_balance()
                                 bal2 = bk2.get_balance()
-                                ref_bal_small(bal1, bal2)
+                                bal_small = ref_bal_small(bal1, bal2)
 
                     if msg_str != msg_str_old:
                         msg_str_old = msg_str
