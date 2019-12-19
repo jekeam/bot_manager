@@ -97,10 +97,10 @@ def get_olimp_info(id_matche, olimp_k, sport_id, proxies=None):
                             in d.get('n', '').lower() \
                             or 'форы' in group_kof:
                         if 'форы' in group_kof:
-                            key_r = d.get('n', '').replace(resp.get('c1', ''), 'П1сфорой').replace(resp.get('c2', ''), 'П2сфорой')
+                            key_r = d.get('n', '').replace(stake.get('c1', ''), 'П1сфорой').replace(stake.get('c2', ''), 'П2сфорой')
                             key_r = key_r.replace(' ', '')
                         else:
-                            key_r = d.get('n', '').replace(resp.get('c1', ''), 'Т1').replace(resp.get('c2', ''), 'Т2')
+                            key_r = d.get('n', '').replace(stake.get('c1', ''), 'Т1').replace(stake.get('c2', ''), 'Т2')
                         olimp_factor_short = str([
                                                      abbreviations[c.replace(' ', '')]
                                                      if c.replace(' ', '') in abbreviations.keys()
