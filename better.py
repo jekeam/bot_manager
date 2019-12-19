@@ -759,6 +759,9 @@ cnt_acc_sql = "select count(*)\n" + \
 # wag_fb:{'event': '12797479', 'factor': '921', 'param': '', 'score': '0:0', 'value': '2.35'}
 # wag_fb:{'apid': '1144260386:45874030:1:3:-9999:3:NULL:NULL:1', 'factor': '1.66', 'sport_id': 1, 'event': '45874030'}
 
+def ref_bal_small(bal1, bal2):
+    return (bal1 <= 400 or bal2 <= 400)
+
 if __name__ == '__main__':
     try:
 
@@ -921,7 +924,7 @@ if __name__ == '__main__':
                             export_block = True
 
                     one_proc = (bal1 + bal2) / 100
-                    bal_small = (bal1 <= 400 or bal2 <= 400)
+                    bal_small = ref_bal_small(bal1, bal2)
 
                     msg_str = ''
 
@@ -960,13 +963,18 @@ if __name__ == '__main__':
 
                     if bal_small and not DEBUG:
                         if last_fork_time_min >= 120:
-                            msg_err = msg_err + '\n' + 'аккаунт остановлен: денег в одной из БК не достаточно для работы, просьба выровнять балансы.\n' + bk1_name + ': ' + str(bal1) + '\n' + bk2_name + ': ' + str(bal2)
+                            bal1 = bk1.get_balance()
+                            bal2 = bk2.get_balance()
+                            ref_bal_small(bal1, bal2)
+                            if bal_small:
+                                msg_err = msg_err + '\n' + 'аккаунт остановлен: денег в одной из БК не достаточно для работы, просьба выровнять балансы.\n' + bk1_name + ': ' + str(bal1) + '\n' + bk2_name + ': ' + str(bal2)
                         else:
                             if last_fork_time_min%30 == 0:
                                 prnt('C момента последней ставки прошло {} мин. обновляю балансы')
                                 time.sleep(61)
                                 bal1 = bk1.get_balance()
                                 bal2 = bk2.get_balance()
+                                ref_bal_small(bal1, bal2)
 
                     if msg_str != msg_str_old:
                         msg_str_old = msg_str
