@@ -108,7 +108,7 @@ def bet_type_is_work(key, event_type, group_limit_id=None):
     elif event_type == 'esports':
         return False
 
-    if 'Ф1(' in key or 'Ф2(' in key and get_prop('test_oth_sport', 'выкл') == 'выкл':
+    if ('Ф1(' in key or 'Ф2(' in key) and get_prop('test_oth_sport', 'выкл') == 'выкл':
         return False
 
     return True
