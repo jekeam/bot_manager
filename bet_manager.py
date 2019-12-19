@@ -1886,7 +1886,7 @@ class BetManager:
         if result == 'error' and 'temporary unknown result' in msg_str:
             err_str = 'Get temporary unknown result: ' + str(msg_str)
             prnt(self.msg.format(self.tread_id + ': ' + sys._getframe().f_code.co_name, err_str))
-            return self.check_result(shared)
+            return self.check_sell_result(shared)
 
         elif result == 'sellDelay':
             sell_delay_sec = (float(res.get('sellDelay')) / 1000)
