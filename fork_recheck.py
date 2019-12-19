@@ -68,9 +68,12 @@ def get_olimp_info(id_matche, olimp_k, sport_id, proxies=None):
         # minuts
         bet_into['SCORE'] = stake.get('sc', '0:0')  # .get('sc', '0:0').split(' ')[0]
         for c in stake.get('it', []):
+            # del: угловые
             # if c.get('n','') in ['Main Bets', 'Goals', 'Corners', 'Individual total', 'Additional total']:
             # if c.get('n', '').replace(' ', '').lower() in ['основные', 'голы', 'угловые', 'инд.тотал', 'доп.тотал', 'исходыпотаймам']:
-            if c.get('n', '').replace(' ', '').lower() in ['основные', 'голы', 'инд.тотал', 'доп.тотал', 'исходыпотаймам']:
+            group_kof = c.get('n', '').replace(' ', '').lower()
+            group_kof = group_kof.replace('азиатские', '')
+            if group_kof in ['основные', 'голы', 'инд.тотал', 'доп.тотал', 'исходыпотаймам', 'победасучетомфоры', 'форы', 'тоталы', 'инд.тоталы']:
                 for d in c.get('i', []):
                     if 'обе забьют: '.lower() \
                             in d.get('n', '').lower() \
@@ -82,6 +85,8 @@ def get_olimp_info(id_matche, olimp_k, sport_id, proxies=None):
                             in d.get('n', '').lower() \
                             or d.get('n', '').lower().endswith(' бол') \
                             or d.get('n', '').lower().endswith(' мен') \
+                            or 'с форой'.lower() \
+                            in d.get('n', '').lower() \
                             or 'первая не проиграет'.lower() \
                             in d.get('n', '').lower() \
                             or 'вторая не проиграет'.lower() \
@@ -89,9 +94,13 @@ def get_olimp_info(id_matche, olimp_k, sport_id, proxies=None):
                             or 'ничьей не будет' \
                             in d.get('n', '').lower() \
                             or 'ничья'.lower() \
-                            in d.get('n', '').lower():
-                        # prnt(key_r)
-                        key_r = d.get('n', '').replace(stake.get('c1', ''), 'Т1').replace(stake.get('c2', ''), 'Т2')
+                            in d.get('n', '').lower() \
+                            or 'форы' in group_kof:
+                        if 'форы' in group_kof:
+                            key_r = d.get('n', '').replace(resp.get('c1', ''), 'П1сфорой').replace(resp.get('c2', ''), 'П2сфорой')
+                            key_r = key_r.replace(' ', '')
+                        else:
+                            key_r = d.get('n', '').replace(resp.get('c1', ''), 'Т1').replace(resp.get('c2', ''), 'Т2')
                         olimp_factor_short = str([
                                                      abbreviations[c.replace(' ', '')]
                                                      if c.replace(' ', '') in abbreviations.keys()
