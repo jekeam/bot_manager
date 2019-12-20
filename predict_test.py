@@ -155,10 +155,13 @@ if __name__ == '__main__':
                     if sec > 300:
                         if real_vect == 'UP':
                             plt.figtext(.13, .13, info_str.replace(', ', '\n'))
-                            if noize_down:
-                                save_plt('noize', str(i), plt)
+                            if 1==0:
+                                plt.show()
                             else:
-                                save_plt('up', str(i), plt)
+                                if noize_down:
+                                    save_plt('noize', str(i), plt)
+                                else:
+                                    save_plt('up', str(i), plt)
                             time.sleep(1)
                     plt.close()
                 except Exception as e:
