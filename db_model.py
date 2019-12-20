@@ -171,7 +171,7 @@ def get_user_str(id: int) -> str:
 
 
 def get_val_prop_id(id: int, key: str) -> str:
-    res = 'auto'
+    res = prop_abr.get(key.upper(), {}).get('default', 'auto')
     try:
         res = str(Properties.select().where((Properties.acc_id == id) & (Properties.key == key)).get().val)
     except Exception as e:
