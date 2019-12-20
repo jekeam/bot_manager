@@ -64,11 +64,12 @@ class BetManager:
         self.vector = bk_container['vect']
         self.order_bet = 0
 
-        # if self.vector == 'DOWN':
-        #     self.flex_bet = False
-        # else:
-        #     self.flex_bet = True
-        self.hard_bet = True
+        self.flex_bet = False
+        if self.vector == 'DOWN':
+            self.flex_bet = False
+        else:
+            self.flex_bet = True
+
         self.override_bet = True
 
         self.msg_err = self.bk_name + '. {}, err: {}'
@@ -161,7 +162,7 @@ class BetManager:
             self.payload_bet = {
                 "coupon":
                     {
-                        "flexBet": "any",  # Изменения коэф-в, any - все, up - вверх
+                        "flexBet": "up",  # Изменения коэф-в, any - все, up - вверх
                         "flexParam": False,  # Изменения фор и тоталов, True - принимать, False - не принимать
                         "bets":
                             [
@@ -785,7 +786,7 @@ class BetManager:
 
         prnt(self.msg.format(self.tread_id + ': ' + sys._getframe().f_code.co_name, 'Завершающий принял работу'))
 
-        prnt(self.msg.format(self.tread_id + ': ' + sys._getframe().f_code.co_name, 'Жесткая ставка второго плеча: ' + str(self.hard_bet)))
+        prnt(self.msg.format(self.tread_id + ': ' + sys._getframe().f_code.co_name, 'Жесткая ставка второго плеча: ' + str(self.flex_bet)))
         prnt(self.msg.format(self.tread_id + ': ' + sys._getframe().f_code.co_name, 'Переопределять изначальный коэф-т при его изменении: ' + str(self.override_bet)))
 
         is_go = True
@@ -1110,9 +1111,11 @@ class BetManager:
 
             payload = copy.deepcopy(ol_payload)
 
-            save_any = 3
-            if self.hard_bet:
-                save_any = 2
+            save_any = 2
+            if self.flex_bet:
+                save_any = 1
+            # Принимать с изменёнными коэффициентами:
+            # save_any: 1 - никогда, 2 - при повышении, 3 - всегда
 
             payload.update({
                 'coefs_ids': '[["{apid}",{factor},1]]'.format(apid=self.wager.get('apid'), factor=self.wager.get('factor')),
@@ -1123,9 +1126,6 @@ class BetManager:
                 'any_handicap': 1,
                 'session': self.session
             })
-            # Принимать с изменёнными коэффициентами:
-            # save_any: 1 - никогда, 2 - при повышении, 3 - всегда
-
             # Принимать с измененными тоталами/форами:
             # any_handicap: 1 - Нет, 2 - Да
 
@@ -1222,8 +1222,9 @@ class BetManager:
 
             self.payload['requestId'] = self.reqId
 
-            if self.hard_bet:
-                self.payload['coupon']['flexBet'] = 'up'
+            if self.flex_bet:
+                self.payload['coupon']['flexBet'] = 'no'
+                # Изменения коэф-в, any - все, up - вверх, no - не принимать при изменении
 
             self.opposite_stat_get(shared)
             prnt(self.msg.format(self.tread_id + ': ' + sys._getframe().f_code.co_name, 'rq: ' + str(self.payload) + ' ' + str(headers)), 'hide')
