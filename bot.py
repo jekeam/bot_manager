@@ -510,8 +510,9 @@ def change(update, context):
                             for admin in admin_list:
                                 context.bot.send_message(admin.id, msg, parse_mode=telegram.ParseMode.MARKDOWN)
                         else:
-                            context.bot.send_message(user_sender,
-                                                     '{}: Вы пытаетесь сменить тип аккаунта, но значение {} - запрещено, доступно только: {}'.format(id_, type_, ', '.join(map(str, type_acc))))
+                            context.bot.send_message(
+                                user_sender,
+                                '{}: Вы пытаетесь сменить тип аккаунта, но значение {} - запрещено, доступно только: {}'.format(id_, type_, ', '.join(map(str, type_acc))))
                 except Exception as e:
                     if 'instance matching query does not exist' in str(e):
                         context.bot.send_message(user_sender, '{}: Аккаунт не найден!'.format(id_))
@@ -720,7 +721,7 @@ def button(update, context):
 
                 for key, val in prop_abr.items():
 
-                    exclude_all = ('INVERSION_BET')
+                    exclude_all = ('FLEX_BET1', 'FLEX_BET2', 'FLEX_KOF1', 'FLEX_KOF2')
                     exclude_user = ('TEST_OTH_SPORT', 'MAXBET_FACT')
 
                     abr = None
