@@ -9,7 +9,7 @@ import statistics
 import copy
 from math import floor
 
-from db_model import Account, Properties
+from db_model import Account, Properties, prop_abr
 import sys
 import traceback
 import re
@@ -374,6 +374,8 @@ def get_account_info(bk=None, param=None):
 
 def get_prop(param, set_default=None):
     global PROPERTIES
+    if not set_default:
+        set_default = prop_abr.get(param.upper(), {}).get('default', 'auto')
     return PROPERTIES.get(param.upper(), set_default)
 
 
