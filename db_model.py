@@ -15,6 +15,9 @@ first_bet_in = ["fonbet", "olimp", "auto"]
 bks = ["fonbet", "olimp", "auto"]
 on_off = ["вкл", "выкл"]
 
+flex_bet_arr = ["any", "up", "no", "auto"]
+flex_kof_arr = ["yes", "no", "auto"]
+
 prop_abr = {
     "FONBET_U": {"abr": "УЗ Фонбет", "type": "account:fonbet", "max": "", "min": "", "access_list": [], "error": ""},
     "FONBET_P": {"abr": "Прокси Фонбет", "type": "proxi:fonbet", "max": "", "min": "", "access_list": [], "error": ""},
@@ -24,6 +27,12 @@ prop_abr = {
 
     "FONBET_MIRROR": {"abr": "Зеркало Фонбета", "type": "mirror:fonbet", "max": "", "min": "", "access_list": [], "error": ""},
     "FONBET_S": {"abr": "Сервер Фонбета", "type": "str", "max": "", "min": "", "access_list": ["ru", "com"], "error": ""},
+    
+    "FLEX_BET1": {"abr": "1. Измен-я коэф-в", "type": "str", "max": "", "min": "", "access_list": flex_bet_arr, "default": "up", "error": ""},
+    "FLEX_KOF1": {"abr": "1. Измен-я катир-к", "type": "str", "max": "", "min": "", "access_list": flex_kof_arr, "default": "no", "error": ""},
+    
+    "FLEX_BET2": {"abr": "2. Измен-я коэф-в", "type": "str", "max": "", "min": "", "access_list": flex_bet_arr, "default": "no", "error": ""},
+    "FLEX_KOF2": {"abr": "2. Измен-я катир-к", "type": "str", "max": "", "min": "", "access_list": flex_kof_arr, "default": "no", "error": ""},
 
     "FORK_SLICE": {"abr": "Уникальность ставок, %", "type": "int", "max": "90", "min": "0", "access_list": [], "error": ""},
 

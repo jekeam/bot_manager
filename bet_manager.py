@@ -1116,6 +1116,10 @@ class BetManager:
                 save_any = 1
             # Принимать с изменёнными коэффициентами:
             # save_any: 1 - никогда, 2 - при повышении, 3 - всегда
+            
+            any_handicap = 1
+            # Принимать с измененными тоталами/форами:
+            # any_handicap: 1 - Нет, 2 - Да
 
             payload.update({
                 'coefs_ids': '[["{apid}",{factor},1]]'.format(apid=self.wager.get('apid'), factor=self.wager.get('factor')),
@@ -1123,11 +1127,9 @@ class BetManager:
                 'sum': round(self.sum_bet / self.cur_rate, 2),
                 'save_any': save_any,
                 'fast': 1,
-                'any_handicap': 1,
+                'any_handicap': any_handicap,
                 'session': self.session
             })
-            # Принимать с измененными тоталами/форами:
-            # any_handicap: 1 - Нет, 2 - Да
 
             headers = copy.deepcopy(ol_headers)
             headers.update(get_xtoken_bet(payload))
@@ -1225,6 +1227,7 @@ class BetManager:
             if self.flex_bet:
                 self.payload['coupon']['flexBet'] = 'no'
                 # Изменения коэф-в, any - все, up - вверх, no - не принимать при изменении
+            # "flexParam": False,  # Изменения фор и тоталов, True - принимать, False - не принимать
 
             self.opposite_stat_get(shared)
             prnt(self.msg.format(self.tread_id + ': ' + sys._getframe().f_code.co_name, 'rq: ' + str(self.payload) + ' ' + str(headers)), 'hide')
