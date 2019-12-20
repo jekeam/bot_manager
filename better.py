@@ -836,6 +836,12 @@ if __name__ == '__main__':
                 group_limit_id = str(bk2.get_acc_info('group'))
                 prnt('Группа лимита: ' + group_limit_id)
                 prnt('Тип БК: ' + get_prop('fonbet_s', 'com'))
+                
+                prnt('Жесткость ставки 1 плеча: ' + get_prop('flex_bet1')
+                prnt('Жесткость ставки 2 плеча: ' + get_prop('flex_bet2')
+                
+                prnt('Жесткость катировки 1 плеча: ' + get_prop('flex_kof2')
+                prnt('Жесткость катировки 2 плеча: ' + get_prop('flex_kof2')
 
                 get_round_fork = int(get_prop('round_fork'))
                 if get_round_fork not in (1, 5, 10, 50, 100, 1000):

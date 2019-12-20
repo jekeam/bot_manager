@@ -64,11 +64,8 @@ class BetManager:
         self.vector = bk_container['vect']
         self.order_bet = 0
 
-        self.flex_bet = False
-        if self.vector == 'DOWN':
-            self.flex_bet = False
-        else:
-            self.flex_bet = True
+        self.flex_bet = None
+        self.flex_kof = None
 
         self.override_bet = True
 
@@ -509,6 +506,13 @@ class BetManager:
 
                 if self.order_bet == 0:
                     raise BetIsLost('Порядок ставки не определен')
+                    
+                self.flex_bet = get_prop('flex_bet' + str(self.order_bet))
+                prnt(self.msg.format(self.tread_id + ': ' + sys._getframe().f_code.co_name, 'flex bet in ' + self.bk_name + ' set: ' + str(self.flex_bet)))
+                
+                self.flex_kof = get_prop('flex_kof' + str(self.order_bet))
+                prnt(self.msg.format(self.tread_id + ': ' + sys._getframe().f_code.co_name, 'flex kof in ' + self.bk_name + ' set: ' + str(self.flex_kof)))
+                    
 
                 self.bet_place(shared)
                 bet_done(shared)
@@ -786,7 +790,7 @@ class BetManager:
 
         prnt(self.msg.format(self.tread_id + ': ' + sys._getframe().f_code.co_name, 'Завершающий принял работу'))
 
-        prnt(self.msg.format(self.tread_id + ': ' + sys._getframe().f_code.co_name, 'Жесткая ставка второго плеча: ' + str(self.flex_bet)))
+        prnt(self.msg.format(self.tread_id + ': ' + sys._getframe().f_code.co_name, 'Жесткость ставки второго плеча: ' + str(self.flex_bet)))
         prnt(self.msg.format(self.tread_id + ': ' + sys._getframe().f_code.co_name, 'Переопределять изначальный коэф-т при его изменении: ' + str(self.override_bet)))
 
         is_go = True
@@ -1111,13 +1115,19 @@ class BetManager:
 
             payload = copy.deepcopy(ol_payload)
 
-            save_any = 2
-            if self.flex_bet:
+            if self.flex_bet == 'any':
+                save_any = 3
+            elif self.flex_bet == 'up':
+                save_any = 2
+            elif self.flex_bet == 'no':
                 save_any = 1
             # Принимать с изменёнными коэффициентами:
             # save_any: 1 - никогда, 2 - при повышении, 3 - всегда
             
-            any_handicap = 1
+            if self.flex_kof == 'no':
+                any_handicap = 1
+            elif self.flex_kof == 'yes':
+                any_handicap = 2
             # Принимать с измененными тоталами/форами:
             # any_handicap: 1 - Нет, 2 - Да
 
@@ -1224,10 +1234,19 @@ class BetManager:
 
             self.payload['requestId'] = self.reqId
 
-            if self.flex_bet:
+            # Изменения коэф-в, any - все, up - вверх, no - не принимать при изменении
+            if self.flex_bet == 'any':
+                self.payload['coupon']['flexBet'] = 'any'
+            elif self.flex_bet == 'up':
+                self.payload['coupon']['flexBet'] = 'up'
+            elif self.flex_bet == 'no':
                 self.payload['coupon']['flexBet'] = 'no'
-                # Изменения коэф-в, any - все, up - вверх, no - не принимать при изменении
-            # "flexParam": False,  # Изменения фор и тоталов, True - принимать, False - не принимать
+            
+            # Изменения фор и тоталов, True - принимать, False - не принимать         
+            if self.flex_kof == 'no':
+                self.payload['coupon']['flexParam'] = False
+            elif self.flex_kof == 'yes':
+                self.payload['coupon']['flexParam'] = True
 
             self.opposite_stat_get(shared)
             prnt(self.msg.format(self.tread_id + ': ' + sys._getframe().f_code.co_name, 'rq: ' + str(self.payload) + ' ' + str(headers)), 'hide')

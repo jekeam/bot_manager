@@ -15,8 +15,8 @@ first_bet_in = ["fonbet", "olimp", "auto"]
 bks = ["fonbet", "olimp", "auto"]
 on_off = ["вкл", "выкл"]
 
-flex_bet_arr = ["any", "up", "no", "auto"]
-flex_kof_arr = ["yes", "no", "auto"]
+flex_bet_arr = ["any", "up", "no"]
+flex_kof_arr = ["yes", "no"]
 
 prop_abr = {
     "FONBET_U": {"abr": "УЗ Фонбет", "type": "account:fonbet", "max": "", "min": "", "access_list": [], "error": ""},
@@ -28,11 +28,11 @@ prop_abr = {
     "FONBET_MIRROR": {"abr": "Зеркало Фонбета", "type": "mirror:fonbet", "max": "", "min": "", "access_list": [], "error": ""},
     "FONBET_S": {"abr": "Сервер Фонбета", "type": "str", "max": "", "min": "", "access_list": ["ru", "com"], "error": ""},
     
-    "FLEX_BET1": {"abr": "1. Измен-я коэф-в", "type": "str", "max": "", "min": "", "access_list": flex_bet_arr, "default": "up", "error": ""},
-    "FLEX_KOF1": {"abr": "1. Измен-я катир-к", "type": "str", "max": "", "min": "", "access_list": flex_kof_arr, "default": "no", "error": ""},
+    "FLEX_BET1": {"abr": "1. Измен-е коэф-та", "type": "str", "max": "", "min": "", "access_list": flex_bet_arr, "default": "up", "error": ""},
+    "FLEX_BET2": {"abr": "2. Измен-е коэф-та", "type": "str", "max": "", "min": "", "access_list": flex_bet_arr, "default": "no", "error": ""},
     
-    "FLEX_BET2": {"abr": "2. Измен-я коэф-в", "type": "str", "max": "", "min": "", "access_list": flex_bet_arr, "default": "no", "error": ""},
-    "FLEX_KOF2": {"abr": "2. Измен-я катир-к", "type": "str", "max": "", "min": "", "access_list": flex_kof_arr, "default": "no", "error": ""},
+    "FLEX_KOF1": {"abr": "1. Измен-е катир-ки", "type": "str", "max": "", "min": "", "access_list": flex_kof_arr, "default": "no", "error": ""},
+    "FLEX_KOF2": {"abr": "2. Измен-е катир-ки", "type": "str", "max": "", "min": "", "access_list": flex_kof_arr, "default": "no", "error": ""},
 
     "FORK_SLICE": {"abr": "Уникальность ставок, %", "type": "int", "max": "90", "min": "0", "access_list": [], "error": ""},
 
@@ -87,6 +87,17 @@ prop_abr = {
     # "SERVER_IP": {"abr": "IP-адрес бой сервера", "type": "", "max": "", "min": "", "access_list": [], "error": ""},
     # "WORK_HOUR": {"abr": "Работаю (ч.)", "type": "", "max": "", "min": "", "access_list": [], "error": ""},
     # "HARD_BET_RIGHT": {"abr": "Жесткая ставка второго плеча", "type": "", "max": "", "min": "", "access_list": [], "error": ""},
+}
+
+prop_spr = {
+    "FLEX_BET1": "Как действует бот при первой ставке, если в момент ставки произошли изменения коф-та, например 1.35 -> 1.45, any - принимает всегда, неважно куда двинулся коф." + \
+    ", up - только если ушел вверх, no - не принимать при изменении(сделано только для 100% пересчета суммы ставки) в этом случае бот будет пересчитывать суммы ставки и все равно менять коф-т на нужный.",
+    "FLEX_BET2": "Как действует бот при второй ставке, если в момент ставки произошли изменения коф-та, например 1.35 -> 1.45, any - принимает всегда, неважно куда двинулся коф." + \
+    ", up - только если ушел вверх, no - не принимать при изменении(сделано только для 100% пересчета суммы ставки) в этом случае бот будет пересчитывать суммы ставки и все равно менять коф-т на нужный.",
+    
+    "FLEX_KOF1": "Как действует бот при первой ставке, если в момент ставки исчет тотал/фора. Принимать с измененными тоталами/форами: yes-да, no-нет",
+    "FLEX_KOF2": "Как действует бот при второй ставке, если в момент ставки исчет тотал/фора. Принимать с измененными тоталами/форами: yes-да, no-нет",
+    
 }
 
 
