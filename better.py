@@ -585,7 +585,7 @@ def run_client():
     global send_msg
     global connection_error_cnt
 
-    long_pool_wait = randint(30, 60)
+    long_pool_wait = randint(10, 60)
     prnt('Long pool sec: ' + str(long_pool_wait))
 
     try:
@@ -632,21 +632,23 @@ def run_client():
 
         if ('timeout'.lower() in msg_err.lower() or 'timed out'.lower() in msg_err.lower()) and not send_msg:
             time_out_cnt = time_out_cnt + 1
-            if time_out_cnt > 10:
-                subprocess.call('systemctl restart scan.service', shell=True)
+            if time_out_cnt > randint(10, 15):
+                # subprocess.call('systemctl restart scan.service', shell=True)
                 for admin in ADMINS:
-                    msg_err = str(ACC_ID) + ': Возникла ошибка при запросе катировок со сканнера, сканнер перезапущен автоматически, без обновления прокси ' + str(msg_err)
+                    # msg_err = str(ACC_ID) + ': Возникла ошибка при запросе катировок со сканнера, сканнер перезапущен автоматически, без обновления прокси ' + str(msg_err)
+                    msg_err = str(ACC_ID) + ': Возникла ошибка таймаута, при запросе катировок со сканнера, просьба проверить ' + str(msg_err)
                     send_message_bot(admin, msg_err.replace('_', '\\_'))
                 send_msg = True
         elif 'ConnectionRefusedError'.lower() in msg_err.lower() and not send_msg:
             connection_error_cnt = connection_error_cnt + 1
-            if connection_error_cnt > 10:
-                subprocess.call('systemctl stop scan.service', shell=True)
-                time.sleep(60)
-                subprocess.call('python3.6 proxy_push.py', shell=True, cwd='/home/scan/')
-                subprocess.call('systemctl restart scan.service', shell=True)
+            if connection_error_cnt > randint(10, 15):
+                # subprocess.call('systemctl stop scan.service', shell=True)
+                # time.sleep(60)
+                # subprocess.call('python3.6 proxy_push.py', shell=True, cwd='/home/scan/')
+                # subprocess.call('systemctl restart scan.service', shell=True)
                 for admin in ADMINS:
-                    msg_err = str(ACC_ID) + ': Возникла ошибка при запросе катировок со сканнера, прокси запушены и сканнер перезапущен автоматически, ' + str(msg_err)
+                    # msg_err = str(ACC_ID) + ': Возникла ошибка при запросе катировок со сканнера, прокси запушены и сканнер перезапущен автоматически, ' + str(msg_err)
+                    msg_err = str(ACC_ID) + ': Возникла ошибка соединения, при запросе катировок со сканнера, просьба проверить, ' + str(msg_err)
                     send_message_bot(admin, msg_err.replace('_', '\\_'))
                 send_msg = True
 
@@ -756,11 +758,13 @@ cnt_acc_sql = "select count(*)\n" + \
               "  and team >= 1\n" + \
               "  and top = 1;"
 
+
 # wag_fb:{'event': '12797479', 'factor': '921', 'param': '', 'score': '0:0', 'value': '2.35'}
 # wag_fb:{'apid': '1144260386:45874030:1:3:-9999:3:NULL:NULL:1', 'factor': '1.66', 'sport_id': 1, 'event': '45874030'}
 
 def ref_bal_small(bal1, bal2):
     return (bal1 <= 400 or bal2 <= 400)
+
 
 if __name__ == '__main__':
     try:
@@ -836,10 +840,10 @@ if __name__ == '__main__':
                 group_limit_id = str(bk2.get_acc_info('group'))
                 prnt('Группа лимита: ' + group_limit_id)
                 prnt('Тип БК: ' + get_prop('fonbet_s', 'com'))
-                
+
                 prnt('Жесткость ставки 1 плеча: ' + get_prop('flex_bet1'))
                 prnt('Жесткость ставки 2 плеча: ' + get_prop('flex_bet2'))
-                
+
                 prnt('Жесткость катировки 1 плеча: ' + get_prop('flex_kof2'))
                 prnt('Жесткость катировки 2 плеча: ' + get_prop('flex_kof2'))
 
@@ -973,9 +977,10 @@ if __name__ == '__main__':
                             bal2 = bk2.get_balance()
                             bal_small = ref_bal_small(bal1, bal2)
                             if bal_small:
-                                msg_err = msg_err + '\n' + 'аккаунт остановлен: денег в одной из БК не достаточно для работы, просьба выровнять балансы.\n' + bk1_name + ': ' + str(bal1) + '\n' + bk2_name + ': ' + str(bal2)
+                                msg_err = msg_err + '\n' + 'аккаунт остановлен: денег в одной из БК не достаточно для работы, просьба выровнять балансы.\n' + bk1_name + ': ' + str(bal1) + '\n' + bk2_name + ': ' + str(
+                                    bal2)
                         else:
-                            if last_fork_time_min%30 == 0:
+                            if last_fork_time_min % 30 == 0:
                                 prnt('C момента последней ставки прошло {} мин. обновляю балансы')
                                 time.sleep(61)
                                 bal1 = bk1.get_balance()
