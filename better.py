@@ -585,7 +585,7 @@ def run_client():
     global send_msg
     global connection_error_cnt
 
-    long_pool_wait = randint(10, 60)
+    long_pool_wait = randint(5, 60)
     prnt('Long pool sec: ' + str(long_pool_wait))
 
     try:
@@ -629,23 +629,23 @@ def run_client():
 
         if ('timeout'.lower() in msg_err.lower() or 'timed out'.lower() in msg_err.lower()) and not send_msg:
             time_out_cnt = time_out_cnt + 1
-            if time_out_cnt > randint(10, 15):
-                # subprocess.call('systemctl restart scan.service', shell=True)
+            if time_out_cnt > randint(10, 20):
+                subprocess.call('systemctl restart scan.service', shell=True)
                 for admin in ADMINS:
-                    # msg_err = str(ACC_ID) + ': Возникла ошибка при запросе катировок со сканнера, сканнер перезапущен автоматически, без обновления прокси ' + str(msg_err)
-                    msg_err = str(ACC_ID) + ': Возникла ошибка таймаута, при запросе катировок со сканнера, просьба проверить ' + str(msg_err)
+                    msg_err = str(ACC_ID) + ': Возникла ошибка при запросе катировок со сканнера, сканнер перезапущен автоматически, без обновления прокси ' + str(msg_err)
+                    # msg_err = str(ACC_ID) + ': Возникла ошибка таймаута, при запросе катировок со сканнера, просьба проверить ' + str(msg_err)
                     send_message_bot(admin, msg_err.replace('_', '\\_'))
                 send_msg = True
         elif 'ConnectionRefusedError'.lower() in msg_err.lower() and not send_msg:
             connection_error_cnt = connection_error_cnt + 1
-            if connection_error_cnt > randint(10, 15):
-                # subprocess.call('systemctl stop scan.service', shell=True)
-                # time.sleep(60)
-                # subprocess.call('python3.6 proxy_push.py', shell=True, cwd='/home/scan/')
-                # subprocess.call('systemctl restart scan.service', shell=True)
+            if connection_error_cnt > randint(10, 20):
+                subprocess.call('systemctl stop scan.service', shell=True)
+                time.sleep(60)
+                subprocess.call('python3.6 proxy_push.py', shell=True, cwd='/home/scan/')
+                subprocess.call('systemctl restart scan.service', shell=True)
                 for admin in ADMINS:
-                    # msg_err = str(ACC_ID) + ': Возникла ошибка при запросе катировок со сканнера, прокси запушены и сканнер перезапущен автоматически, ' + str(msg_err)
-                    msg_err = str(ACC_ID) + ': Возникла ошибка соединения, при запросе катировок со сканнера, просьба проверить, ' + str(msg_err)
+                    msg_err = str(ACC_ID) + ': Возникла ошибка при запросе катировок со сканнера, прокси запушены и сканнер перезапущен автоматически, ' + str(msg_err)
+                    # msg_err = str(ACC_ID) + ': Возникла ошибка соединения, при запросе катировок со сканнера, просьба проверить, ' + str(msg_err)
                     send_message_bot(admin, msg_err.replace('_', '\\_'))
                 send_msg = True
 
