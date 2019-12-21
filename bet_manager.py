@@ -512,7 +512,12 @@ class BetManager:
                 
                 self.flex_kof = get_prop('flex_kof' + str(self.order_bet))
                 prnt(self.msg.format(self.tread_id + ': ' + sys._getframe().f_code.co_name, 'flex kof in ' + self.bk_name + ' set: ' + str(self.flex_kof)))
-                    
+
+                if not self.flex_bet:
+                    raise BetIsLost('Жескость ставки не определена')
+
+                if not self.flex_kof:
+                    raise BetIsLost('Жескость коф-та не определена')
 
                 self.bet_place(shared)
                 bet_done(shared)
