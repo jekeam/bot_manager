@@ -589,10 +589,7 @@ def run_client():
     prnt('Long pool sec: ' + str(long_pool_wait))
 
     try:
-        if 'Windows' == platform.system() or DEBUG:
-            conn = http.client.HTTPConnection(server_ip, 8888, timeout=long_pool_wait)
-        else:
-            conn = http.client.HTTPConnection(server_ip, 8888, timeout=long_pool_wait)
+        conn = http.client.HTTPConnection(server_ip, 8888, timeout=long_pool_wait)
 
         while True:
             if shutdown:

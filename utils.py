@@ -221,7 +221,6 @@ def get_new_sum_bets(bk1, bk2, max_bet, bal2, hide=False, round_fork=5):
     return sum_bk1, sum_bk2
 
 
-
 def get_vector(bet_type, sc1=None, sc2=None):
     def check_score(VECT, sc1, sc2):
         if sc1 is None or sc2 is None and VECT != '':
@@ -312,7 +311,6 @@ def get_vector(bet_type, sc1=None, sc2=None):
     # raise ValueError(err_str)
 
 
-
 def invetsion_vect(vect: str):
     vect = vect.upper()
     if vect == 'UP':
@@ -375,7 +373,7 @@ def get_account_info(bk=None, param=None):
 def get_prop(param, set_default=None):
     global PROPERTIES
     if not set_default:
-        set_default = prop_abr.get(param.upper(), {}).get('default', 'auto')
+        set_default = prop_abr.get(param.upper(), {}).get('default')
     return PROPERTIES.get(param.upper(), set_default)
 
 
