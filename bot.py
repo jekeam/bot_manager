@@ -291,7 +291,7 @@ def choose_prop(update, context):
             dop_indo = str_r
             print('val.get(type)' + str(val.get('type'))
             print('access_list' + str(val.get('access_list'))
-            print('dop_indo' + str(dop_indo)
+            print('dop_indo' + str(dop_indo))
             if val.get('access_list'):
                 if dop_indo:
                     dop_indo + ', '
