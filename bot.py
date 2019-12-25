@@ -301,11 +301,9 @@ def choose_prop(update, context):
                 account = val.get('type').split(':')[1]
                 dop_indo = 'логин и пароль через / (слеш) в формате: login/password'
     acc_id = context.user_data.get('acc_id')
-    cur_val = 'auto'
+    cur_val = ''
     try:
-        if proxy == '':
-            cur_val = get_val_prop_id(acc_id, v_key)
-        elif proxy:
+        if proxy:
             proxy_str = Account.select().where(Account.id == acc_id).get().proxies.replace('`', '"').replace('https://', '')
             prntb(proxy_str)
             cur_val = json.loads(proxy_str).get(proxy, 'Proxy not found').get('https', 'HTTPS Proxy not found')
@@ -314,6 +312,8 @@ def choose_prop(update, context):
             prntb(account_srt)
             account_json = json.loads(account_srt)
             cur_val = account_json.get(account, 'BK not found').get('login', 'login not found') + '/' + account_json.get(account, 'BK not found').get('password', 'password not found')
+        else:
+            cur_val = get_val_prop_id(acc_id, v_key)
     except Exception as e:
         exc_type, exc_value, exc_traceback = sys.exc_info()
         err_str = str(e) + ' ' + str(repr(traceback.format_exception(exc_type, exc_value, exc_traceback)))

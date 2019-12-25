@@ -176,7 +176,7 @@ def get_val_prop_id(id: int, key: str) -> str:
         res = str(Properties.select().where((Properties.acc_id == id) & (Properties.key == key)).get().val)
     except Exception as e:
         pass
-    print('key:' + str(key) + ', res: ' + str(res))
+    # print('key:' + str(key) + ', res: ' + str(res))
     return res
 
 
