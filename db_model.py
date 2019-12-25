@@ -46,7 +46,7 @@ prop_abr = {
     "MAX_FAIL": {"abr": "MAX выкупов", "type": "int", "max": "10", "min": "1", "access_list": [], "error": ""},
 
     "SUMM": {"abr": "Общая ставка", "type": "int", "max": "10000", "min": "400", "access_list": [], "error": ""},
-    "SUMM_MIN": {"abr": "Ставка ОТ", "type": "int", "max": "10000", "min": "400", "access_list": [], "error": ""},
+    "SUMM_MIN": {"abr": "Ставка ОТ", "type": "int", "max": "10000", "min": "100", "access_list": [], "default": 100, "error": ""},
 
     "WORK_HOUR_END": {"abr": "Остановка в", "type": "int", "max": "23", "min": "0", "access_list": [], "error": ""},
     "ROUND_FORK": {"abr": "Округление", "type": "int", "max": "", "min": "", "access_list": ["1", "5", "10", "50", "100"], "error": ""},
