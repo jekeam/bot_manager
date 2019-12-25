@@ -326,7 +326,7 @@ def choose_prop(update, context):
         prntb(str(err_str))
     update.message.reply_text(
         text='*' + text + '*: ' + cur_val +
-             '\n\n''*Ограничения по настройке*:\n' + dop_indo + '\n\n' + bot_prop.MSG_PUT_VAL,
+             '\n\n''*Ограничения по настройке*:\n' + str(dop_indo) + '\n\n' + str(bot_prop.MSG_PUT_VAL),
         reply_markup=markup,
         parse_mode=telegram.ParseMode.MARKDOWN
     )
