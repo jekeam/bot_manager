@@ -15,7 +15,7 @@ from telegram.ext import Updater, CommandHandler, CallbackQueryHandler, MessageH
 from telegram.error import BadRequest
 from telegram.ext.callbackcontext import CallbackContext
 
-from db_model import Account, Message, User, Properties, get_user_str, send_message_bot, get_prop_str, prop_abr, get_trunc_sysdate
+from db_model import Account, Message, User, Properties, get_user_str, send_message_bot, get_prop_str, prop_abr, get_trunc_sysdate, get_val_prop_id
 import bot_prop
 from emoji import emojize
 
@@ -302,7 +302,7 @@ def choose_prop(update, context):
     cur_val = 'auto'
     try:
         if proxy == '':
-            cur_val = Properties.select().where((Properties.acc_id == acc_id) & (Properties.key == v_key)).get().val
+            cur_val = get_val_prop_id(acc_id, v_key)
         elif proxy:
             proxy_str = Account.select().where(Account.id == acc_id).get().proxies.replace('`', '"').replace('https://', '')
             prntb(proxy_str)
