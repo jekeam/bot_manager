@@ -289,12 +289,10 @@ def choose_prop(update, context):
             if val.get('min'):
                 str_r = str_r + ', max: ' + val.get('max')
             dop_indo = str_r
-            print('val.get(type)' + str(val.get('type')))
-            print('access_list' + str(val.get('access_list')))
-            print('dop_indo' + str(dop_indo))
+            
             if val.get('access_list'):
                 if dop_indo:
-                    dop_indo + ', '
+                    dop_indo = dop_indo + ', '
                 dop_indo = 'допустимые значения: ' + str(val.get('access_list')).replace("'", '')
             elif 'proxi:' in val.get('type'):
                 proxy = val.get('type').split(':')[1]
