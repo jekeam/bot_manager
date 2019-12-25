@@ -108,7 +108,7 @@ def bet_type_is_work(key, event_type, group_limit_id=None):
     elif event_type == 'esports':
         return False
 
-    if ('Ф1(' in key or 'Ф2(' in key) and get_prop('test_oth_sport', 'выкл') == 'выкл':
+    if ('Ф1(' in key or 'Ф2(' in key) and get_prop('fora') == 'выкл':
         return False
 
     return True
@@ -843,6 +843,8 @@ if __name__ == '__main__':
 
                 prnt('Жесткость катировки 1 плеча: ' + get_prop('flex_kof2'))
                 prnt('Жесткость катировки 2 плеча: ' + get_prop('flex_kof2'))
+
+                prnt('Ставить на форы: ' + get_prop('fora'))
 
                 get_round_fork = int(get_prop('round_fork'))
                 if get_round_fork not in (1, 5, 10, 50, 100, 1000):
