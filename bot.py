@@ -305,9 +305,9 @@ def choose_prop(update, context):
     print('acc_id ' + str(acc_id))
     print('proxy ' + str(proxy))
     print('account ' + str(account))
+    print('v_key ' + str(v_key))
     print('get_val_prop_id ' + str(get_val_prop_id(acc_id, v_key)))
     print('acc_id ' + str(acc_id))
-    print('get_val_prop_id ' + str(v_key))
     try:
         if proxy:
             proxy_str = Account.select().where(Account.id == acc_id).get().proxies.replace('`', '"').replace('https://', '')
