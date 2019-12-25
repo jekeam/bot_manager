@@ -302,12 +302,6 @@ def choose_prop(update, context):
                 dop_indo = 'логин и пароль через / (слеш) в формате: login/password'
     acc_id = context.user_data.get('acc_id')
     cur_val = ''
-    print('acc_id ' + str(acc_id))
-    print('proxy ' + str(proxy))
-    print('account ' + str(account))
-    print('v_key ' + str(v_key))
-    print('get_val_prop_id ' + str(get_val_prop_id(int(acc_id), v_key)))
-    print('acc_id ' + str(acc_id))
     try:
         if proxy:
             proxy_str = Account.select().where(Account.id == acc_id).get().proxies.replace('`', '"').replace('https://', '')
@@ -325,7 +319,7 @@ def choose_prop(update, context):
         err_str = str(e) + ' ' + str(repr(traceback.format_exception(exc_type, exc_value, exc_traceback)))
         prntb(str(err_str))
     update.message.reply_text(
-        text='*' + text + '*: ' + cur_val +
+        text='*' + text + '*: ' + str(cur_val) +
              '\n\n''*Ограничения по настройке*:\n' + str(dop_indo) + '\n\n' + str(bot_prop.MSG_PUT_VAL),
         reply_markup=markup,
         parse_mode=telegram.ParseMode.MARKDOWN
