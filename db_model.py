@@ -191,7 +191,7 @@ def get_prop_str(id: int) -> str:
 
     for key, val in prop_abr.items():
         if key not in ('FONBET_U', 'FONBET_P', 'OLIMP_U', 'OLIMP_P'):
-            res += '' + str(val.get('abr', '')) + ': *' + get_val_prop_id(id, key) + '*\n'
+            res += '' + str(val.get('abr', '')) + ': *' + str(get_val_prop_id(id, key)) + '*\n'
     return info_accs + res
 
 
