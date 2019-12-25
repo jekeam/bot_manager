@@ -15,7 +15,7 @@ from telegram.ext import Updater, CommandHandler, CallbackQueryHandler, MessageH
 from telegram.error import BadRequest
 from telegram.ext.callbackcontext import CallbackContext
 
-from db_model import Account, Message, User, Properties, get_user_str, send_message_bot, get_prop_str, prop_abr, get_trunc_sysdate, get_val_prop_id
+from db_model import Account, Message, User, Properties, get_user_str, send_message_bot, get_prop_str, prop_abr, get_trunc_sysdate
 import bot_prop
 from emoji import emojize
 
@@ -279,6 +279,7 @@ def choose_prop(update, context):
     v_key = ''
     proxy = ''
     account = ''
+    dop_indo = ''
     for key, val in prop_abr.items():
         if val.get('abr') == text:
             v_key = key
