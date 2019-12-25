@@ -19,13 +19,13 @@ flex_bet_arr = ["any", "up", "no"]
 flex_kof_arr = ["yes", "no"]
 
 prop_abr = {
-    "FONBET_U": {"abr": "УЗ Фонбет", "type": "account:fonbet", "max": "", "min": "", "access_list": [], "error": ""},
-    "FONBET_P": {"abr": "Прокси Фонбет", "type": "proxi:fonbet", "max": "", "min": "", "access_list": [], "error": ""},
+    "FONBET_U": {"abr": "УЗ Фонбет", "type": "account:fonbet", "max": "", "min": "", "error": ""},
+    "FONBET_P": {"abr": "Прокси Фонбет", "type": "proxi:fonbet", "max": "", "min": "", "error": ""},
 
-    "OLIMP_U": {"abr": "УЗ Олимп", "type": "account:olimp", "max": "", "min": "", "access_list": [], "error": ""},
-    "OLIMP_P": {"abr": "Прокси Олимп", "type": "proxi:olimp", "max": "", "min": "", "access_list": [], "error": ""},
+    "OLIMP_U": {"abr": "УЗ Олимп", "type": "account:olimp", "max": "", "min": "", "error": ""},
+    "OLIMP_P": {"abr": "Прокси Олимп", "type": "proxi:olimp", "max": "", "min": "", "error": ""},
 
-    "FONBET_MIRROR": {"abr": "Зеркало Фонбета", "type": "mirror:fonbet", "max": "", "min": "", "access_list": [], "error": ""},
+    "FONBET_MIRROR": {"abr": "Зеркало Фонбета", "type": "mirror:fonbet", "max": "", "min": "", "error": ""},
     "FONBET_S": {"abr": "Сервер Фонбета", "type": "str", "max": "", "min": "", "access_list": ["ru", "com"], "error": ""},
     
     "FLEX_BET1": {"abr": "1. Измен-е коэф-та", "type": "str", "max": "", "min": "", "access_list": flex_bet_arr, "default": "up", "error": ""},
