@@ -417,11 +417,24 @@ def go_bets(wag_ol, wag_fb, key, deff_max, vect1, vect2, sc1, sc2, created, even
         y2 = wag_ol.get('hist', {}).get('order')
 
         if get_prop('ml_noise', 'выкл') == 'вкл':
-            if sum(x) >= 2 <= sum(x2):
+            try:
                 ml_ok = False
-                
-            else:
-                prnt('Проверка на ML не пройдена т.к. один их Х < 2')
+                data=pd.DataFrame.from_dict({'sec': [x2], 'val': [y2],})
+                data=data[(data.val!='') & (data.val!='[]') & (data.sec!='') & (data.sec!='[]')]
+                #отсеиваю ряды у которых длина значений не равна кол-ву временных интервалов
+                data=data[data.val.apply(len)==data.sec.apply(len)]
+                #отсеиваю ряды у которых длина значений и временных интервалов 1, т.к. они статичные
+                data=data[data.val.apply(len)>1]
+                data=data.reset_index(drop=True)
+                vect = str(preprocessing(data.sec[0], data.val[0], True, str(ACC_ID), str(fork_id)))
+                prin('fork_id: {}, vect: {}'.fromat(fork_id, vect))
+                if vect.lower() != 'up'.lower():
+                    prnt('Проверка на ML не пройдена т.к. вектор в олимп не UP')
+                    return False
+            except Exception as e:
+                exc_type, exc_value, exc_traceback = sys.exc_info()
+                err_str = str(e) + ' ' + str(repr(traceback.format_exception(exc_type, exc_value, exc_traceback)))
+                prnt('Проверка на ML не пройдена т.к. возникла ошибка: ' + str(err_str))
                 return False
 
         from bet_manager import run_bets

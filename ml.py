@@ -85,7 +85,7 @@ def get_label(gradient:float):
     
     return label
 
-def preprocessing(x: list, y: list, is_plot: bool, num: int):
+def preprocessing(x: list, y: list, is_plot: bool, acc_id: str, fork_id: str):
     """
     Функция для получения из списка длительности и значений - ряда
     """
@@ -119,32 +119,7 @@ def preprocessing(x: list, y: list, is_plot: bool, num: int):
     if is_plot:
         plt = plot(t, series, gradient, idx_splits, parts_gradient)
         if type(parts_gradient) is str:
-            save_plt(parts_gradient.lower(), str(num), plt)
+            save_plt(acc_id + '/' + parts_gradient.lower(), fork_id, plt)
         else:
-            save_plt('slice', str(num), plt)
+            save_plt(acc_id + '/' + 'slices', fork_id, plt)
     return parts_gradient
-	
-	
-data=pd.read_csv('test_filter1.csv',
-                 encoding='utf-8',
-                 sep=';',
-                 converters={'val': str_to_list_float, 
-                             'sec': str_to_list_int})
-
-if __name__ == '__main__':
-	data=data[(data.val!='') & (data.val!='[]') & (data.sec!='') & (data.sec!='[]')]
-	#отсеиваю ряды у которых длина значений не равна кол-ву временных интервалов
-	data=data[data.val.apply(len)==data.sec.apply(len)]
-	#отсеиваю ряды у которых длина значений и временных интервалов 1, т.к. они статичные
-	data=data[data.val.apply(len)>1]
-
-	data=data.reset_index(drop=True)
-	
-	for i in data.index[0:200]:
-# 		if i%1000==0:
-# 			print(i)
-		try:
-			print(str(i), preprocessing(data.sec[i], data.val[i], True, i))
-# 			x = input('Time:')
-		except:
-			print(i)
