@@ -417,7 +417,7 @@ def go_bets(wag_ol, wag_fb, key, deff_max, vect1, vect2, sc1, sc2, created, even
         x2 = wag_ol.get('hist', {}).get('avg_change')
         y2 = wag_ol.get('hist', {}).get('order')
 
-        if get_prop('ml_noise', 'выкл') == 'вкл':
+        if get_prop('ml_noise') == 'вкл':
             try:
                 ml_ok = False
                 data=pd.DataFrame.from_dict({'sec': [x2], 'val': [y2],})
