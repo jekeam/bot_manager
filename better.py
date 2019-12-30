@@ -430,7 +430,7 @@ def go_bets(wag_ol, wag_fb, key, deff_max, vect1, vect2, sc1, sc2, created, even
                 data=data[data.val.apply(len)>1]
                 data=data.reset_index(drop=True)
                 vect = str(ml.preprocessing(data.sec[0], data.val[0], True, str(ACC_ID), str(fork_id)))
-                prnt('fork_id: {}, vect: {}'.fromat(fork_id, vect))
+                prnt('fork_id: {}, vect: {}'.format(fork_id, vect))
                 if vect.lower() != 'up'.lower():
                     prnt('Проверка на ML не пройдена т.к. вектор в олимп не UP')
                     return False
