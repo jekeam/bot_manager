@@ -71,7 +71,7 @@ prop_abr = {
     "FIRST_BET_IN": {"abr": "1-я ставка в", "type": "str", "max": "", "min": "", "access_list": first_bet_in, "error": ""},
     # "TOTAL_FIRST": {"abr": "1-я ставка на Тотал", "type": "str", "max": "", "min": "", "access_list": ["auto", "ТМ", "ТБ"], "error": ""},
     "MAX_KOF": {"abr": "MAX коэф-т", "type": "float", "max": "1000", "min": "1.02", "access_list": [], "error": ""},
-    # "ML_NOISE": {"abr": "ML: исключить шум", "type": "str", "max": "", "min": "", "access_list": on_off, "error": ""},
+    "ML_NOISE": {"abr": "ML. Olimp UP", "type": "str", "max": "", "min": "", "access_list": on_off, "error": ""},
     # "POUR_INTO": {"abr": "Перелить в", "type": "str", "max": "", "min": "", "access_list": bks, "error": ""},
     "DOUBLE_BET": {"abr": "Дубли ставок", "type": "str", "max": "", "min": "", "access_list": on_off, "error": ""},
     "MAX_BET_FONBET":
