@@ -420,6 +420,8 @@ def go_bets(wag_ol, wag_fb, key, deff_max, vect1, vect2, sc1, sc2, created, even
         if get_prop('ml_noise') == 'вкл':
             try:
                 ml_ok = False
+                prnt('x2({}): {}'.format(type(x2), x2))
+                prnt('y2({}): {}'.format(type(y2), y2))
                 data=pd.DataFrame.from_dict({'sec': [x2], 'val': [y2],})
                 data=data[(data.val!='') & (data.val!='[]') & (data.sec!='') & (data.sec!='[]')]
                 #отсеиваю ряды у которых длина значений не равна кол-ву временных интервалов
@@ -428,7 +430,7 @@ def go_bets(wag_ol, wag_fb, key, deff_max, vect1, vect2, sc1, sc2, created, even
                 data=data[data.val.apply(len)>1]
                 data=data.reset_index(drop=True)
                 vect = str(ml.preprocessing(data.sec[0], data.val[0], True, str(ACC_ID), str(fork_id)))
-                prin('fork_id: {}, vect: {}'.fromat(fork_id, vect))
+                prnt('fork_id: {}, vect: {}'.fromat(fork_id, vect))
                 if vect.lower() != 'up'.lower():
                     prnt('Проверка на ML не пройдена т.к. вектор в олимп не UP')
                     return False
