@@ -432,7 +432,7 @@ def go_bets(wag_ol, wag_fb, key, deff_max, vect1, vect2, sc1, sc2, created, even
                             data.sec[0],
                             data.val[0],
                             True,
-                            str(ACC_ID) + '/' + datetime.datetime.now().strftime('%d.%M.%Y'),
+                            str(ACC_ID) + '/' + datetime.datetime.now().strftime('%d.%m.%Y'),
                             str(fork_id)
                         )
                     )
