@@ -826,6 +826,8 @@ if __name__ == '__main__':
                 prnt('Жесткость катировки 2 плеча: ' + get_prop('flex_kof2'))
 
                 prnt('Ставить на форы: ' + get_prop('fora'))
+                prnt('Первая ставка в БК: ' + get_prop('first_bet_in'))
+                prnt('Первая ставка на ТМ/ТБ: ' + get_prop('total_first'))
 
                 get_round_fork = int(get_prop('round_fork'))
                 if get_round_fork not in (1, 5, 10, 50, 100, 1000):
@@ -1087,35 +1089,6 @@ if __name__ == '__main__':
                                         if vect1 == vect2:
                                             vect1, vect2 = normalized_vector(vect1, k1, vect2, k2)
                                             prnt('{} - Нормализация векторов: vect1: {}->{}, vect2: {}->{}'.format(key, vect1_old, vect1, vect2_old, vect2), 'hide')
-
-                                        # if self.created_fork == '' and 'created' in self.first_bet_in:
-                                        #     raise BetIsLost('Создатель вилки не определен: ' + str(self.created_fork))
-                                        #
-                                        # if self.first_bet_in == 'created':
-                                        #     if self.created_fork == self.bk_name:
-                                        #         self.first_bet_in = self.bk_name
-                                        #     else:
-                                        #         self.first_bet_in = self.bk_name_opposite
-                                        #
-                                        # if self.first_bet_in == 'notcreator':
-                                        #     if self.created_fork == self.bk_name:
-                                        #         self.first_bet_in = self.bk_name_opposite
-                                        #     else:
-                                        #         self.first_bet_in = self.bk_name
-                                        #
-                                        # prnt(self.msg.format(
-                                        #     sys._getframe().f_code.co_name,
-                                        #     'FIRST BET IN: {}, prop:{}, bk_name:{}, bk_opp_name:{}'.format(self.first_bet_in, get_prop('first_bet_in', 'auto'), self.bk_name, self.bk_name_opposite)
-                                        # ))
-                                        # total_first = get_prop('total_first', 'auto')
-                                        # prnt(self.msg.format(
-                                        #     sys._getframe().f_code.co_name,
-                                        #     'total_first:{}, first_bet_in:{}, vector:{} , bk_name_opposite:{}, bet_type:{}'.format(total_first, self.first_bet_in, self.vector, self.bk_name_opposite, self.bet_type)
-                                        # ))
-
-                                        # if self.first_bet_in == 'parallel':
-                                        #     self.set_order_bet(shared, 1)
-
                                         # TODO: binding for BK_NAME from kofs an not left/rigth side
                                         v_first_bet_in = get_prop('first_bet_in', 'auto')
                                         vect_check_ok = True
