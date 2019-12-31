@@ -723,7 +723,7 @@ def button(update, context):
 
                 for key, val in prop_abr.items():
 
-                    exclude_all = ('ML_NOISE', 'FLEX_BET1', 'FLEX_BET2', 'FLEX_KOF1', 'FLEX_KOF2')
+                    exclude_all = ('ML_NOISE', 'TOTAL_FIRST', 'FLEX_BET1', 'FLEX_BET2', 'FLEX_KOF1', 'FLEX_KOF2')
                     exclude_user = ('TEST_OTH_SPORT', 'MAXBET_FACT')
 
                     abr = None

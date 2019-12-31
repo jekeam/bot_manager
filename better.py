@@ -91,15 +91,6 @@ def bet_type_is_work(key, event_type, group_limit_id=None):
     olimp_bet_type = str(key.split('@')[-2])
     fonbet_bet_type = str(key.split('@')[-1])
 
-    # Работает как надо, только если первая ставка в ФБ, то ставим только если это ТБ
-    if group_limit_id == '4':
-        # Чтобы брать другие исходы, например П1
-        if 'ТБ' in key:
-            if 'ТБ' in fonbet_bet_type:
-                return True
-            else:
-                return False
-
     if event_type == 'tennis':
         # Чтобы брать другие исходы, например П1
         if 'ТБ' in key:
@@ -134,12 +125,12 @@ fork_exclude_list = []
 
 def check_fork(key, L, k1, k2, live_fork, live_fork_total, bk1_score, bk2_score, event_type, minute, time_break_fonbet, period, team_type, team_names, deff_max, is_top, is_hot, info=''):
     global bal1, bal2, bet1, bet2, cnt_fork_success, black_list_matches, matchs_success, summ_min, fonbet_maxbet_fact, vect1, vect2, group_limit_id
-    global fork_exclude_list
+    global fork_exclude_list, vect_check_ok
 
     fork_exclude_text = ''
     v = True
 
-    if vect1 == vect2 or not vect1 or not vect2:
+    if vect1 == vect2 or not vect1 or not vect2 or not vect_check_ok:
         fork_exclude_text = fork_exclude_text + 'Вилка исключена т.к. вектор движения не определен или сонаправлен, vect1:{}, vect2:{}\n'.format(vect1, vect2)
 
     if get_prop('maxbet_fact', 'выкл') == 'вкл' and fonbet_maxbet_fact == 0:
@@ -989,8 +980,8 @@ if __name__ == '__main__':
                         for key, val_json in sorted(server_forks.items(), key=lambda x: random.random()):
                             l = val_json.get('l', 0.0)
                             l_fisrt = val_json.get('l_fisrt', 0.0)
-                            k1_type = key.split('@')[-1]
-                            k2_type = key.split('@')[-2]
+                            k1_type = key.split('@')[-2]
+                            k2_type = key.split('@')[-1]
 
                             name = val_json.get('name', 'name')
                             name_rus = val_json.get('name_rus', 'name_rus')
@@ -1075,10 +1066,10 @@ if __name__ == '__main__':
                                 prnt('score: ' + str(score))
                                 prnt('minute: ' + str(minute))
                                 prnt('time: ' + str(v_time))
-                                prnt('k2_type: ' + str(k2_type))
-                                prnt('k1_type: ' + str(k1_type))
                                 prnt('k1: ' + str(k1))
+                                prnt('k1_type: ' + str(k1_type))
                                 prnt('k2: ' + str(k2))
+                                prnt('k2_type: ' + str(k2_type))
                                 prnt('name: ' + str(name))
                                 prnt('key: ' + str(key))
                                 prnt('val_json: ' + str(val_json))
@@ -1127,14 +1118,30 @@ if __name__ == '__main__':
 
                                         # TODO: binding for BK_NAME from kofs an not left/rigth side
                                         v_first_bet_in = get_prop('first_bet_in', 'auto')
+                                        vect_check_ok = True
                                         if v_first_bet_in != 'auto':
                                             if v_first_bet_in == 'fonbet':
-                                                vect2 = 'DOWN'
                                                 vect1 = 'UP'
+                                                vect2 = 'DOWN'
+                                                if get_prop('total_first') not in k2_type:
+                                                    vect_check_ok = True
                                             elif v_first_bet_in == 'olimp':
                                                 vect1 = 'DOWN'
                                                 vect2 = 'UP'
-                                            prnt('{} - Задана первая ставка в {}: vect1: {}->{}, vect2: {}->{}'.format(key, v_first_bet_in, vect1_old, vect1, vect2_old, vect2), 'hide')
+                                                if get_prop('total_first') not in k1_type:
+                                                    vect_check_ok = True
+                                        elif get_prop('total_first') in key:
+                                            # FB
+                                            if get_prop('total_first') in k2_type:
+                                                vect1 = 'UP'
+                                                vect2 = 'DOWN'
+                                            # OL
+                                            elif get_prop('total_first') in k1_type:
+                                                vect1 = 'DOWN'
+                                                vect2 = 'UP'
+                                            else:
+                                                vect_check_ok = False
+                                        prnt('{} - Первая ставка в {}: vect1: {}->{}, vect2: {}->{}'.format(key, v_first_bet_in, vect1_old, vect1, vect2_old, vect2), 'hide')
 
                                         round_bet = int(get_prop('round_fork'))
                                         total_bet = round(randint(total_bet_min, total_bet_max) / round_bet) * round_bet
