@@ -418,29 +418,39 @@ def go_bets(wag_ol, wag_fb, key, deff_max, vect1, vect2, sc1, sc2, created, even
         y2 = wag_ol.get('hist', {}).get('order')
 
         if get_prop('ml_noise') == 'вкл':
+            if vect1 == 'UP':
+                x_ml = x
+                y_ml = y
+            elif vect2 == 'UP':
+                x_ml = x2
+                y_ml = y2
             try:
-                ml_ok = False
-                prnt('x2({}): {}'.format(type(x2), x2))
-                prnt('y2({}): {}'.format(type(y2), y2))
-                data=pd.DataFrame.from_dict({'sec': [x2], 'val': [y2],})
-                data=data[(data.val!='') & (data.val!='[]') & (data.sec!='') & (data.sec!='[]')]
-                #отсеиваю ряды у которых длина значений не равна кол-ву временных интервалов
-                data=data[data.val.apply(len)==data.sec.apply(len)]
-                #отсеиваю ряды у которых длина значений и временных интервалов 1, т.к. они статичные
-                data=data[data.val.apply(len)>1]
-                data=data.reset_index(drop=True)
-                vect = str(
-                    ml.preprocessing(
-                        data.sec[0],
-                        data.val[0],
-                        True,
-                        str(ACC_ID) + '/' + datetime.datetime.now().strftime('%d.%M.%Y'),
-                        str(fork_id)
+                if sum(x_ml) > 2:
+                    ml_ok = False
+                    prnt('x_ml({}): {}'.format(type(x_ml), x_ml))
+                    prnt('y_ml({}): {}'.format(type(y_ml), y_ml))
+                    data=pd.DataFrame.from_dict({'sec': [x_ml], 'val': [y_ml],})
+                    data=data[(data.val!='') & (data.val!='[]') & (data.sec!='') & (data.sec!='[]')]
+                    #отсеиваю ряды у которых длина значений не равна кол-ву временных интервалов
+                    data=data[data.val.apply(len)==data.sec.apply(len)]
+                    #отсеиваю ряды у которых длина значений и временных интервалов 1, т.к. они статичные
+                    data=data[data.val.apply(len)>1]
+                    data=data.reset_index(drop=True)
+                    vect = str(
+                        ml.preprocessing(
+                            data.sec[0],
+                            data.val[0],
+                            True,
+                            str(ACC_ID) + '/' + datetime.datetime.now().strftime('%d.%M.%Y'),
+                            str(fork_id)
+                        )
                     )
-                )
-                prnt('fork_id: {}, vect: {}'.format(fork_id, vect))
-                if vect.lower() != 'up'.lower():
-                    prnt('Проверка на ML не пройдена т.к. вектор в олимп не UP')
+                    prnt('fork_id: {}, real vect: {}'.format(fork_id, vect))
+                    if vect.lower() != 'up'.lower():
+                        prnt('Проверка на ML не пройдена т.к. вектор не UP')
+                        return False
+                else:
+                    prnt('Проверка на ML не пройдена т.к. кол-ва сек. недостаточно')
                     return False
             except Exception as e:
                 exc_type, exc_value, exc_traceback = sys.exc_info()
