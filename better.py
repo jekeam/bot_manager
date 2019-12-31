@@ -826,8 +826,8 @@ if __name__ == '__main__':
                 prnt('Жесткость катировки 2 плеча: ' + get_prop('flex_kof2'))
 
                 prnt('Ставить на форы: ' + get_prop('fora'))
-                prnt('Первая ставка в БК: ' + get_prop('first_bet_in'))
-                prnt('Первая ставка на ТМ/ТБ: ' + get_prop('total_first'))
+                prnt('Первая ставка в БК: ' + str(get_prop('first_bet_in')))
+                prnt('Первая ставка на ТМ/ТБ: ' + str(get_prop('total_first')))
 
                 get_round_fork = int(get_prop('round_fork'))
                 if get_round_fork not in (1, 5, 10, 50, 100, 1000):
