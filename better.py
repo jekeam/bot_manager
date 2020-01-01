@@ -353,9 +353,66 @@ def go_bets(wag_ol, wag_fb, key, deff_max, vect1, vect2, sc1, sc2, created, even
         }
 
         if DEBUG:
-            bet1 = 30
-            bet2 = 30
+            pass
+            # bet1 = 30
+            # bet2 = 30
         # return False
+
+        x = wag_fb.get('hist', {}).get('avg_change')
+        y = wag_fb.get('hist', {}).get('order')
+        x2 = wag_ol.get('hist', {}).get('avg_change')
+        y2 = wag_ol.get('hist', {}).get('order')
+
+        if get_prop('ml_noise') == 'вкл':
+            if vect1 == 'UP':
+                x_ml = x2
+                y_ml = y2
+            elif vect2 == 'UP':
+                x_ml = x
+                y_ml = y
+            try:
+                if sum(x_ml) > 2:
+                    prnt('x_ml({}): {}'.format(type(x_ml), x_ml))
+                    prnt('y_ml({}): {}'.format(type(y_ml), y_ml))
+                    data=pd.DataFrame.from_dict({'sec': [x_ml], 'val': [y_ml],})
+                    data=data[(data.val!='') & (data.val!='[]') & (data.sec!='') & (data.sec!='[]')]
+                    #отсеиваю ряды у которых длина значений не равна кол-ву временных интервалов
+                    data=data[data.val.apply(len)==data.sec.apply(len)]
+                    #отсеиваю ряды у которых длина значений и временных интервалов 1, т.к. они статичные
+                    data=data[data.val.apply(len)>1]
+                    data=data.reset_index(drop=True)
+                    parts_gradient, plt =
+                        ml.preprocessing(
+                            data.sec[0],
+                            data.val[0],
+                            True,
+                            str(ACC_ID) + '/' + datetime.datetime.now().strftime('%d.%m.%Y'),
+                            str(fork_id)
+                        )
+                    vect = str(parts_gradient)
+                    prnt('fork_id: {}, real vect: {}'.format(fork_id, vect))
+                    if vect.lower() != 'up'.lower():
+                        prnt('Проверка на ML не пройдена т.к. вектор не UP')
+                        return False
+                    else:
+                        # if type(parts_gradient) is str:
+                        ml.save_plt(acc_id + '/' + parts_gradient.lower(), fork_id, plt)
+                        # else:
+                            # ml.save_plt(acc_id + '/' + 'slices', fork_id, plt)
+                        if vect1 == 'UP':
+                            x_ml = x
+                            y_ml = y
+                        elif vect2 == 'UP':
+                            x_ml = x2
+                            y_ml = y2
+                else:
+                    prnt('Проверка на ML не пройдена т.к. кол-ва сек. недостаточно')
+                    return False
+            except Exception as e:
+                exc_type, exc_value, exc_traceback = sys.exc_info()
+                err_str = str(e) + ' ' + str(repr(traceback.format_exception(exc_type, exc_value, exc_traceback)))
+                prnt('Проверка на ML не пройдена т.к. возникла ошибка: ' + str(err_str))
+                return False
 
         shared = dict()
 
@@ -401,53 +458,6 @@ def go_bets(wag_ol, wag_fb, key, deff_max, vect1, vect2, sc1, sc2, created, even
                      val.get('bet_total', ''), val.get('cur_total', ''),
                      val.get('sc1', ''), val.get('sc2', ''),
                      val.get('vect', ''), val.get('wager', '')))
-
-        x = wag_fb.get('hist', {}).get('avg_change')
-        y = wag_fb.get('hist', {}).get('order')
-
-        x2 = wag_ol.get('hist', {}).get('avg_change')
-        y2 = wag_ol.get('hist', {}).get('order')
-
-        if get_prop('ml_noise') == 'вкл':
-            if vect1 == 'UP':
-                x_ml = x
-                y_ml = y
-            elif vect2 == 'UP':
-                x_ml = x2
-                y_ml = y2
-            try:
-                if sum(x_ml) > 2:
-                    ml_ok = False
-                    prnt('x_ml({}): {}'.format(type(x_ml), x_ml))
-                    prnt('y_ml({}): {}'.format(type(y_ml), y_ml))
-                    data=pd.DataFrame.from_dict({'sec': [x_ml], 'val': [y_ml],})
-                    data=data[(data.val!='') & (data.val!='[]') & (data.sec!='') & (data.sec!='[]')]
-                    #отсеиваю ряды у которых длина значений не равна кол-ву временных интервалов
-                    data=data[data.val.apply(len)==data.sec.apply(len)]
-                    #отсеиваю ряды у которых длина значений и временных интервалов 1, т.к. они статичные
-                    data=data[data.val.apply(len)>1]
-                    data=data.reset_index(drop=True)
-                    vect = str(
-                        ml.preprocessing(
-                            data.sec[0],
-                            data.val[0],
-                            True,
-                            str(ACC_ID) + '/' + datetime.datetime.now().strftime('%d.%m.%Y'),
-                            str(fork_id)
-                        )
-                    )
-                    prnt('fork_id: {}, real vect: {}'.format(fork_id, vect))
-                    if vect.lower() != 'up'.lower():
-                        prnt('Проверка на ML не пройдена т.к. вектор не UP')
-                        return False
-                else:
-                    prnt('Проверка на ML не пройдена т.к. кол-ва сек. недостаточно')
-                    return False
-            except Exception as e:
-                exc_type, exc_value, exc_traceback = sys.exc_info()
-                err_str = str(e) + ' ' + str(repr(traceback.format_exception(exc_type, exc_value, exc_traceback)))
-                prnt('Проверка на ML не пройдена т.к. возникла ошибка: ' + str(err_str))
-                return False
 
         from bet_manager import run_bets
         run_bets(shared)
@@ -1194,7 +1204,9 @@ if __name__ == '__main__':
                                                         'total_first': get_prop('total_first', 'auto'),
                                                     })
                                                     prnt('info_csv: ' + str(info_csv))
-
+                                                    prnt('{} - Первая ставка в {}: vect1-olimp: {}->{}, vect2-fonbet: {}->{}'.format(
+                                                        key, v_first_bet_in, vect1_old, vect1, vect2_old, vect2)
+                                                    )
                                                     fork_success = go_bets(
                                                         val_json.get('kof_olimp'), val_json.get('kof_fonbet'),
                                                         key, deff_max, vect1, vect2, sc1, sc2, created_fork, event_type,

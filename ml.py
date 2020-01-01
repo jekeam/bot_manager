@@ -116,10 +116,7 @@ def preprocessing(x: list, y: list, is_plot: bool, acc_id: str, fork_id: str):
 
         
     #построение графиков
+    plt = None
     if is_plot:
         plt = plot(t, series, gradient, idx_splits, parts_gradient)
-        if type(parts_gradient) is str:
-            save_plt(acc_id + '/' + parts_gradient.lower(), fork_id, plt)
-        else:
-            save_plt(acc_id + '/' + 'slices', fork_id, plt)
-    return parts_gradient
+    return parts_gradient, plt
