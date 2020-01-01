@@ -381,12 +381,11 @@ def go_bets(wag_ol, wag_fb, key, deff_max, vect1, vect2, sc1, sc2, created, even
                     #отсеиваю ряды у которых длина значений и временных интервалов 1, т.к. они статичные
                     data=data[data.val.apply(len)>1]
                     data=data.reset_index(drop=True)
-                    parts_gradient, plt =
-                        ml.preprocessing(
-                            data.sec[0],
-                            data.val[0],
-                            True
-                        )
+                    parts_gradient, plt = ml.preprocessing(
+                        data.sec[0],
+                        data.val[0],
+                        True
+                    )
                     vect = str(parts_gradient)
                     if vect.lower() != 'up'.lower():
                         prnt('Проверка на ML не пройдена т.к. вектор не UP')
