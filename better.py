@@ -131,7 +131,7 @@ def check_fork(key, L, k1, k2, live_fork, live_fork_total, bk1_score, bk2_score,
     v = True
 
     if vect1 == vect2 or not vect1 or not vect2 or not vect_check_ok:
-        fork_exclude_text = fork_exclude_text + 'Вилка исключена т.к. вектор движения не определен или сонаправлен, vect1:{}, vect2:{}\n'.format(vect1, vect2)
+        fork_exclude_text = fork_exclude_text + 'Вилка исключена т.к. вектор движения не определен или сонаправлен, vect1:{}, vect2:{}, vect_check_ok:{}\n'.format(vect1, vect2, vect_check_ok)
 
     if get_prop('maxbet_fact', 'выкл') == 'вкл' and fonbet_maxbet_fact == 0:
         fork_exclude_text = fork_exclude_text + 'Вилка исключена т.к. нет значения fonbet_maxbet_fact\n'
