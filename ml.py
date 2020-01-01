@@ -85,7 +85,7 @@ def get_label(gradient:float):
     
     return label
 
-def preprocessing(x: list, y: list, is_plot: bool, acc_id: str, fork_id: str):
+def preprocessing(x: list, y: list, is_plot: bool):
     """
     Функция для получения из списка длительности и значений - ряда
     """
@@ -105,16 +105,12 @@ def preprocessing(x: list, y: list, is_plot: bool, acc_id: str, fork_id: str):
         #добавляем 0 и последнее значение, чтобы негородить сложные циклы с if
         idx_splits=np.insert(idx_splits, [0, idx_splits.size], [0, len(series)])
         #деление ряда на отрезки из-за сильного скачка значений
-        splitted_series=[series[idx_splits[i-1]:idx_splits[i]]
-                                     for i in range(1, len(idx_splits))]
-    
+        splitted_series=[series[idx_splits[i-1]:idx_splits[i]] for i in range(1, len(idx_splits))]
         parts_gradient=[get_label(sum(np.gradient(series_part))) if len(series_part)>1 else 'SHORT' for series_part in splitted_series ]
-            
     else:
         #если ряд не делится
         parts_gradient=get_label(sum(np.gradient(series)))
 
-        
     #построение графиков
     plt = None
     if is_plot:

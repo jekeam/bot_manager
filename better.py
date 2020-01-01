@@ -385,26 +385,21 @@ def go_bets(wag_ol, wag_fb, key, deff_max, vect1, vect2, sc1, sc2, created, even
                         ml.preprocessing(
                             data.sec[0],
                             data.val[0],
-                            True,
-                            str(ACC_ID) + '/' + datetime.datetime.now().strftime('%d.%m.%Y'),
-                            str(fork_id)
+                            True
                         )
                     vect = str(parts_gradient)
-                    prnt('fork_id: {}, real vect: {}'.format(fork_id, vect))
                     if vect.lower() != 'up'.lower():
                         prnt('Проверка на ML не пройдена т.к. вектор не UP')
                         return False
-                    else:
+                    # else:
+                        # str(ACC_ID) + '/' + datetime.datetime.now().strftime('%d.%m.%Y'),
+                        # str(fork_id)
+                        # peremennie errors
                         # if type(parts_gradient) is str:
-                        ml.save_plt(acc_id + '/' + parts_gradient.lower(), fork_id, plt)
+                        #    ml.save_plt(acc_id + '/' + parts_gradient.lower(), fork_id, plt)
                         # else:
                             # ml.save_plt(acc_id + '/' + 'slices', fork_id, plt)
-                        if vect1 == 'UP':
-                            x_ml = x
-                            y_ml = y
-                        elif vect2 == 'UP':
-                            x_ml = x2
-                            y_ml = y2
+                        # переопределение векторов. тут внимательно они перепутаны местами фб и олимп
                 else:
                     prnt('Проверка на ML не пройдена т.к. кол-ва сек. недостаточно')
                     return False
@@ -545,6 +540,12 @@ def go_bets(wag_ol, wag_fb, key, deff_max, vect1, vect2, sc1, sc2, created, even
         get_statistics()
         msg_errs = ' ' + shared.get('olimp_err') + shared.get('fonbet_err')
         if not 'BkOppBetError'.lower() in msg_errs.lower():
+            if get_prop('ml_noise') == 'вкл' and parts_gradient and plt:
+                ml.save_plt(
+                    str(ACC_ID) + '/' + datetime.datetime.now().strftime('%d.%m.%Y') + '/' + str(parts_gradient).lower(), 
+                    str(fork_id), 
+                    plt
+                )
             # SAVE INFO
             save_fork(fork_info)
             # WAITING AFTER BET
