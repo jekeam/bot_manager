@@ -429,7 +429,8 @@ class BetManager:
 
     def set_order_bet(self, shared, order_bet):
         self.order_bet = order_bet
-        shared['order_bet'] = self.bk_name
+        if order_bet == 1:
+            shared['order_bet'] = self.bk_name
         prnt(self.msg.format(self.tread_id + ': ' + sys._getframe().f_code.co_name, 'order_bet: ' + str(order_bet)))
 
     def bet_simple(self, shared: dict):
