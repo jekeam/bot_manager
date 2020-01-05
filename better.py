@@ -1113,7 +1113,7 @@ if __name__ == '__main__':
                                                 vect2 = 'UP'
                                                 if get_prop('total_first') not in k1_type:
                                                     vect_check_ok = False
-                                            if not vect_check_ok and get_prop('total_first') == 'auto':
+                                            if not vect_check_ok and get_prop('total_first') == 'any':
                                                 vect_check_ok = True
                                         elif get_prop('total_first') in key:
                                             # FB
@@ -1124,7 +1124,7 @@ if __name__ == '__main__':
                                             elif get_prop('total_first') in k1_type:
                                                 vect1 = 'DOWN'
                                                 vect2 = 'UP'
-                                            elif get_prop('total_first') == 'auto':
+                                            elif get_prop('total_first') == 'any':
                                                 pass
                                             else:
                                                 vect_check_ok = False
