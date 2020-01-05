@@ -1107,12 +1107,12 @@ if __name__ == '__main__':
                                                 vect1 = 'UP'
                                                 vect2 = 'DOWN'
                                                 if get_prop('total_first') not in k2_type:
-                                                    vect_check_ok = True
+                                                    vect_check_ok = False
                                             elif v_first_bet_in == 'olimp':
                                                 vect1 = 'DOWN'
                                                 vect2 = 'UP'
                                                 if get_prop('total_first') not in k1_type:
-                                                    vect_check_ok = True
+                                                    vect_check_ok = False
                                         elif get_prop('total_first') in key:
                                             # FB
                                             if get_prop('total_first') in k2_type:
