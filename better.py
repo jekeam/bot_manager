@@ -1113,6 +1113,8 @@ if __name__ == '__main__':
                                                 vect2 = 'UP'
                                                 if get_prop('total_first') not in k1_type:
                                                     vect_check_ok = False
+                                            if not vect_check_ok and get_prop('total_first') == 'auto':
+                                                vect_check_ok = True
                                         elif get_prop('total_first') in key:
                                             # FB
                                             if get_prop('total_first') in k2_type:
@@ -1122,6 +1124,8 @@ if __name__ == '__main__':
                                             elif get_prop('total_first') in k1_type:
                                                 vect1 = 'DOWN'
                                                 vect2 = 'UP'
+                                            elif get_prop('total_first') == 'auto':
+                                                pass
                                             else:
                                                 vect_check_ok = False
                                         prnt('{} - Первая ставка в {}: vect1: {}->{}, vect2: {}->{}'.format(key, v_first_bet_in, vect1_old, vect1, vect2_old, vect2), 'hide')
