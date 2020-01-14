@@ -386,6 +386,7 @@ def go_bets(wag_ol, wag_fb, key, deff_max, vect1, vect2, sc1, sc2, created, even
                         data.val[0],
                         True
                     )
+                    parts_gradient = parts_gradient[0]
                     vect = str(parts_gradient)
                     if vect.lower() != 'up'.lower():
                         prnt('Проверка на ML не пройдена т.к. вектор не UP')

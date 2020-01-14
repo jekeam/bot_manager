@@ -58,7 +58,7 @@ def splits(series: list):
     return np.argwhere((diff>=2) | (diff<=0.5))+1
 
 
-def plot(t: list, series: list, gradient: list, idx_splits: list, parts_gradient: str): ) # parts_gradient-ADD
+def plot(t: list, series: list, gradient: list, idx_splits: list, parts_gradient: str): # parts_gradient-ADD
     """
     Для графиков ряда, градиента, нижнего и верхнего интервала,
     и точек разделения ряда
