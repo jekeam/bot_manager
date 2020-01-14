@@ -931,6 +931,11 @@ if __name__ == '__main__':
 
                     msg_str = ''
 
+                    if group_limit_id == '4' and not start_message_send:
+                        msg_str = msg_str + 'Обнаружена порезка до 4й группы\n'
+                    elif bk2.get_acc_info('sale').lower() == 'да' and not start_message_send:
+                        msg_str = msg_str + 'Обнаружена неявная порезка до 4й группы, т.к. есть блокировка выкупа ставки\n'
+                        
                     if not start_message_send:
                         cnt_fork_success_old = len(cnt_fork_success)
                         cnt_fork_fail_old = cnt_fail
@@ -953,11 +958,6 @@ if __name__ == '__main__':
                         msg_str = msg_str + 'Проставлено вилок: {}'.format(len(cnt_fork_success)) + '\n'
                         msg_str = msg_str + 'Сделано минусовы выкупов: {}->{}'.format(cnt_fork_fail_old, cnt_fail) + '\n'
                         cnt_fork_fail_old = cnt_fail
-
-                    if group_limit_id == '4' and not start_message_send:
-                        msg_str = msg_str + 'Обнаружена порезка до 4й группы\n'
-                    elif bk2.get_acc_info('sale').lower() == 'да' and not start_message_send:
-                        msg_str = msg_str + 'Обнаружена неявная порезка до 4й группы, т.к. есть блокировка выкупа ставки\n'
 
                     msg_err = ''
                     if bk2.get_acc_info('bet').lower() != 'Нет'.lower():
