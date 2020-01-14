@@ -955,6 +955,8 @@ if __name__ == '__main__':
 
                     if group_limit_id == '4' and not start_message_send:
                         msg_str = msg_str + 'Обнаружена порезка до 4й группы\n'
+                    elif bk2.get_acc_info('sale').lower() == 'да' and not start_message_send:
+                        msg_str = msg_str + 'Обнаружена неявная порезка до 4й группы, т.к. есть блокировка выкупа ставки\n'
 
                     msg_err = ''
                     if bk2.get_acc_info('bet').lower() != 'Нет'.lower():
@@ -1189,7 +1191,7 @@ if __name__ == '__main__':
 
                                                     is_bet = randint(1, 100)
 
-                                                    prnt('Активных аккаунтов на вилку: ' + str(cnt_act_acc))
+                                                    prnt('Активных а��каунтов на вилку: ' + str(cnt_act_acc))
                                                     prnt('Случайное число: ' + str(is_bet) + ', => ' + str(fork_slice))
 
                                                 if fork_slice <= is_bet or cnt_act_acc <= 5 or fork_slice == 0:
