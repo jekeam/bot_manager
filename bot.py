@@ -918,13 +918,12 @@ def matches(update, context):
     msg = 'Кол-во матчей: ' + str(len(cnt)) + ' \n'
     matches_dict = {}
     for match in cnt:
-        match_type = match[2][0:1].upper() + match[2][1:]
+        match_type = match[3][0:1].upper() + match[3][1:]
         is_top = 1 if int(match[0]) in top or int(match[1]) in top else 0
         matches_dict[match_type] = {
             'cnt': matches_dict.get(match_type, {}).get('cnt', 0) + 1,
             'top': matches_dict.get(match_type, {}).get('top', 0) + is_top
         }
-
     for match_type, match_cnt in matches_dict.items():
         msg = msg + match_type + ': ' + str(match_cnt.get('cnt')) + ', top: ' + str(match_cnt.get('top')) + '\n'
     msg = msg.strip()
