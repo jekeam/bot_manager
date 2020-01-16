@@ -1041,7 +1041,7 @@ if __name__ == '__main__':
 
                             deff_olimp = round(float(time.time() - float(val_json.get('time_req_olimp', 0.0))))
                             deff_fonbet = round(float(time.time() - float(val_json.get('time_req_fonbet', 0.0))))
-                            deff_max = max(0, deff_olimp, deff_fonbet)
+                            curr_deff = max(0, deff_olimp, deff_fonbet)
 
                             bk1_bet_json = val_json.get('kof_olimp', {})
                             bk2_bet_json = val_json.get('kof_fonbet', {})
@@ -1073,7 +1073,7 @@ if __name__ == '__main__':
                                        score + ' ' + str(pair_math) + \
                                        ', live_fork: ' + str(live_fork) + \
                                        ', live_fork_total: ' + str(live_fork_total) + \
-                                       ', max deff: ' + str(deff_max) + \
+                                       ', max deff: ' + str(curr_deff) + \
                                        ', event_type: ' + event_type + \
                                        ', fonbet_maxbet_fact: ' + str(fonbet_maxbet_fact)
                             except Exception as e:
@@ -1081,7 +1081,7 @@ if __name__ == '__main__':
                                 err_str = str(e) + ' ' + str(repr(traceback.format_exception(exc_type, exc_value, exc_traceback)))
                                 prnt('better: ' + err_str)
                                 prnt('event_type: ' + event_type)
-                                prnt('deff max: ' + str(deff_max))
+                                prnt('deff max: ' + str(curr_deff))
                                 prnt('live fork total: ' + str(live_fork_total))
                                 prnt('live fork: ' + str(live_fork))
                                 prnt('pair_math: ' + str(pair_math))
@@ -1101,7 +1101,10 @@ if __name__ == '__main__':
                             if (event_type in ('football', 'hockey') and test_oth_sport == 'выкл') or test_oth_sport == 'вкл':
                                 # or ((event_type not in ('football', 'hockey') and test_oth_sport == 'вкл' and str(USER_ID) in list(map(str, ADMINS)))) \
                                 if vect1 and vect2:
-                                    if deff_max <= 3 and k1 > 0 < k2:
+                                    max_deff = 3
+                                    if place == 'pre':
+                                        max_deff = 33
+                                    if curr_deff <= curr_deff and k1 > 0 < k2:
                                         vect1_old = vect1
                                         vect2_old = vect2
                                         if vect1 == vect2:
@@ -1154,7 +1157,7 @@ if __name__ == '__main__':
 
                                         # Проверим вилку на исключения
                                         if check_fork(
-                                                key, l, k1, k2, live_fork, live_fork_total, bk1_score, bk2_score, event_type, minute, time_break_fonbet, period, team_type, team_names, deff_max,
+                                                key, l, k1, k2, live_fork, live_fork_total, bk1_score, bk2_score, event_type, minute, time_break_fonbet, period, team_type, team_names, curr_deff,
                                                 is_top, is_hot, info
                                         ) or DEBUG:
 
@@ -1224,10 +1227,10 @@ if __name__ == '__main__':
                                                     )
                                                     fork_success = go_bets(
                                                         val_json.get('kof_olimp'), val_json.get('kof_fonbet'),
-                                                        key, deff_max, vect1, vect2, sc1, sc2, created_fork, event_type,
+                                                        key, curr_deff, vect1, vect2, sc1, sc2, created_fork, event_type,
                                                         l, l_fisrt, is_top, str(fork_slice), str(cnt_act_acc), info_csv
                                                     )
-                                    elif deff_max > 3:
+                                    elif curr_deff > 3:
                                         pass
                                         # if key not in sleeping_forks:
                                         #     sleeping_forks.append(key)
