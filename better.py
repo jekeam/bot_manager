@@ -1007,7 +1007,6 @@ if __name__ == '__main__':
                             name = val_json.get('name', 'name')
                             name_rus = val_json.get('name_rus', 'name_rus')
                             pair_math = val_json.get('pair_math', 'pair_math')
-                            prnt('\nGET FORK: ' + name + ', ' + key, 'end')
 
                             bk1_score = str(val_json.get('bk1_score', 'bk1_score'))
                             bk2_score = str(val_json.get('bk2_score', 'bk2_score'))
@@ -1036,6 +1035,9 @@ if __name__ == '__main__':
                             created_fork = val_json.get('created_fork', '')
                             event_type = val_json.get('event_type')
                             place = val_json.get('place')
+
+                            prnt('')
+                            prnt('GET ' + place.upper() + ' FORK: ' + name + ', ' + key, 'end')
 
                             fonbet_maxbet_fact = val_json.get('fonbet_maxbet_fact', {}).get(str(group_limit_id), 0)
 
