@@ -77,6 +77,7 @@ class BetManager:
         self.bet_type = bk_container['bet_type']
         self.event_type = bk_container['event_type']
         self.key = bk_container.get('key', '')
+        self.place = bk_container.get('place', '')
         self.summ_min = int(bk_container.get('summ_min', '0'))
         self.dop_stat = dict()
         # dynamic params
@@ -392,7 +393,7 @@ class BetManager:
 
         if self.bk_name == 'olimp':
             try:
-                self.cur_val_bet, self.cur_sc, self.time_req = get_olimp_info(match_id, self.bet_type, self.wager.get('sport_id'), proxies=self.proxies)
+                self.cur_val_bet, self.cur_sc, self.time_req = get_olimp_info(match_id, self.bet_type, self.wager.get('sport_id'), proxies=self.proxies, self.place)
             except Exception as e:
                 err_msg = self.bk_name + ': recheck err (' + str(e.__class__.__name__) + '): ' + str(e)
                 prnt(self.msg_err.format(self.tread_id + ': ' + sys._getframe().f_code.co_name, err_msg))
@@ -665,7 +666,7 @@ class BetManager:
 
             if self.bk_name == 'olimp':
                 try:
-                    self.cur_val_bet, self.cur_sc, self.time_req = get_olimp_info(match_id, self.bet_type, self.wager.get('sport_id'), proxies=self.proxies)
+                    self.cur_val_bet, self.cur_sc, self.time_req = get_olimp_info(match_id, self.bet_type, self.wager.get('sport_id'), proxies=self.proxies, self.place)
                 except Exception as e:
                     err_msg = 'recheck err (' + str(e.__class__.__name__) + '): ' + str(e)
                     prnt(self.msg_err.format(self.tread_id + ': ' + sys._getframe().f_code.co_name, err_msg))

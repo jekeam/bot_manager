@@ -3,7 +3,6 @@ from bet_fonbet import *
 from bet_olimp import *
 import datetime
 import time
-from fork_recheck import get_kof_olimp, get_kof_fonbet
 from utils import prnt, get_account_info, get_prop, get_sum_bets, get_new_sum_bets, get_proxies, normalized_vector
 import threading
 from multiprocessing import Manager, Process
@@ -430,6 +429,7 @@ def go_bets(wag_ol, wag_fb, key, deff_max, vect1, vect2, sc1, sc2, created, even
             'side_team': '1',
             'event_type': event_type,
             'summ_min': summ_min,
+            'place': info_csv['place'],
         }
         shared['fonbet'] = {
             'acc_id': ACC_ID,
@@ -447,6 +447,7 @@ def go_bets(wag_ol, wag_fb, key, deff_max, vect1, vect2, sc1, sc2, created, even
             'event_type': event_type,
             'key': key,
             'summ_min': summ_min,
+            'place': info_csv['place'],
         }
         if '(' in fonbet_bet_type:
             shared['olimp']['bet_total'] = float(re.findall(r'\((.*)\)', fonbet_bet_type)[0])
@@ -519,6 +520,7 @@ def go_bets(wag_ol, wag_fb, key, deff_max, vect1, vect2, sc1, sc2, created, even
         fork_info[fork_id]['fonbet']['live_fork'] = info_csv.get('live_fork', '')
         fork_info[fork_id]['fonbet']['team_type'] = info_csv.get('team_type', '')
         fork_info[fork_id]['fonbet']['summ_min'] = info_csv.get('summ_min', '')
+        fork_info[fork_id]['fonbet']['place'] = info_csv.get('place', '')
 
         fork_info[fork_id]['fonbet']['avg_change'] = str(x)
         fork_info[fork_id]['fonbet']['order_kof'] = str(y)
@@ -1214,6 +1216,7 @@ if __name__ == '__main__':
                                                         'fb_bk_type': get_prop('fonbet_s', 'com'),
                                                         'first_bet_in': get_prop('first_bet_in', 'auto'),
                                                         'total_first': get_prop('total_first', 'auto'),
+                                                        'place': place
                                                     })
                                                     prnt('info_csv: ' + str(info_csv))
                                                     prnt('{} - Первая ставка в {}: vect1-olimp: {}->{}, vect2-fonbet: {}->{}'.format(

@@ -242,6 +242,7 @@ def export_hist(OLIMP_USER, FONBET_USER):
                           str(info['fonbet'].get('is_hot', '')) + ';' + \
                           str(info['fonbet'].get('fork_slice', '')) + ';' + \
                           str(info['fonbet'].get('cnt_act_acc', '')) + ';' + \
+                          str(info['fonbet'].get('place', '')) + ';' + \
  \
                           str(info['fonbet'].get('fork_time_type', '')) + ';' + \
                           str(info['fonbet'].get('fork_life_time', '')) + ';' + \

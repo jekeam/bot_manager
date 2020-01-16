@@ -14,7 +14,7 @@ import urllib3
 urllib3.disable_warnings()
 
 
-def get_olimp_info(id_matche, olimp_k, sport_id, proxies=None):
+def get_olimp_info(id_matche, olimp_k, sport_id, proxies=None, place=None):
     prnt('get_olimp_info: id_matche=' + str(id_matche) + ';sport_id=' + str(sport_id) + ';olimp_k=' + str(olimp_k) + ';proxies=' + str(proxies), 'hide')
     bet_into = {}
     olimp_data = copy.deepcopy(ol_payload)
@@ -23,7 +23,8 @@ def get_olimp_info(id_matche, olimp_k, sport_id, proxies=None):
         "sport_id": sport_id
     })
     olimp_data.update({'id': id_matche})
-
+    if place == 'pre':
+        olimp_data.update({'live': 0})
     olimp_stake_head = copy.deepcopy(ol_headers)
     olimp_stake_head.update(get_xtoken_bet(olimp_data))
     olimp_stake_head.pop('Accept-Language', None)
@@ -249,12 +250,12 @@ def get_kof_fonbet(obj, match_id, factor_id, param):
     return obj
 
 
-def get_kof_olimp(obj, olimp_match, olimp_k, proxies):
+def get_kof_olimp(obj, olimp_match, olimp_k, proxies, place):
     obj['olimp'] = 0
     obj['olimp_time_req'] = 0
     sc = ''
     try:
-        r_olimp_coef1, sc, rime_req = get_olimp_info(olimp_match, olimp_k, proxies)
+        r_olimp_coef1, sc, rime_req = get_olimp_info(olimp_match, olimp_k, proxies, place)
         obj['olimp_time_req'] = rime_req
         obj['olimp'] = r_olimp_coef1
     except Exception as e:

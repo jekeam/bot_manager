@@ -27,7 +27,7 @@ csv_head = [
     'fb_id', 'o_id', 'fb_time', 'o_time', 'fb_kof', 'o_kof', 'fb_sum_bet', 'o_sum_bet',
     'fb_profit', 'o_profit', 'fb_result', 'o_result', 'fb_name', 'o_name', 'fb_status',
     'o_sum_sale', 'f_kof_type', 'o_kof_type', 'order_bet', 'fb_vector', 'ol_vector', 'first_bet_in', 'total_first', 'fb_time_bet', 'ol_time_bet',
-    'fb_new_bet_sum', 'ol_new_bet_sum', 'fb_bal', 'ol_bal', 'fb_max_bet', 'maxbet_fact', 'fb_max_bet_fact', 'fb_bet_delay', 'fb_is_top', 'fb_is_hot', 'fork_slice', 'cnt_act_acc', 'time_type', 'fork_time',
+    'fb_new_bet_sum', 'ol_new_bet_sum', 'fb_bal', 'ol_bal', 'fb_max_bet', 'maxbet_fact', 'fb_max_bet_fact', 'fb_bet_delay', 'fb_is_top', 'fb_is_hot', 'fork_slice', 'cnt_act_acc', 'place', 'time_type', 'fork_time',
     'fork_time_max', 'min_proc', 'max_proc',
     'user_id', 'fb_bk_type', 'group_limit_id', 'live_fork', 'team_type', 'summ_min',
     'cur_proc', 'fisrt_proc', 'fb_err', 'ol_err'
