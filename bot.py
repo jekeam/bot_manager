@@ -289,7 +289,7 @@ def choose_prop(update, context):
             if val.get('min'):
                 str_r = str_r + ', max: ' + val.get('max')
             dop_indo = str_r
-            
+
             if val.get('access_list'):
                 if dop_indo:
                     dop_indo = dop_indo + ', '

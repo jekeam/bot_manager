@@ -508,10 +508,10 @@ class BetManager:
 
                 if self.order_bet == 0:
                     raise BetIsLost('Порядок ставки не определен')
-                    
+
                 self.flex_bet = get_prop('flex_bet' + str(self.order_bet))
                 prnt(self.msg.format(self.tread_id + ': ' + sys._getframe().f_code.co_name, 'flex bet in ' + self.bk_name + ' set: ' + str(self.flex_bet)))
-                
+
                 self.flex_kof = get_prop('flex_kof' + str(self.order_bet))
                 prnt(self.msg.format(self.tread_id + ': ' + sys._getframe().f_code.co_name, 'flex kof in ' + self.bk_name + ' set: ' + str(self.flex_kof)))
 
@@ -1130,7 +1130,7 @@ class BetManager:
                 save_any = 1
             # Принимать с изменёнными коэффициентами:
             # save_any: 1 - никогда, 2 - при повышении, 3 - всегда
-            
+
             if self.flex_kof == 'no':
                 any_handicap = 1
             elif self.flex_kof == 'yes':
@@ -1248,7 +1248,7 @@ class BetManager:
                 self.payload['coupon']['flexBet'] = 'up'
             elif self.flex_bet == 'no':
                 self.payload['coupon']['flexBet'] = 'no'
-            
+
             # Изменения фор и тоталов, True - принимать, False - не принимать         
             if self.flex_kof == 'no':
                 self.payload['coupon']['flexParam'] = False
