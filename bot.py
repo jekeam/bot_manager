@@ -723,7 +723,7 @@ def button(update, context):
 
                 for key, val in prop_abr.items():
 
-                    exclude_all = ('ML_NOISE', 'TOTAL_FIRST', 'FLEX_BET1', 'FLEX_BET2', 'FLEX_KOF1', 'FLEX_KOF2')
+                    exclude_all = ('ML_NOISE', 'TOTAL_FIRST', 'FLEX_BET1', 'FLEX_BET2', 'FLEX_KOF1', 'FLEX_KOF2', 'PLACE')
                     exclude_user = ('TEST_OTH_SPORT', 'MAXBET_FACT')
 
                     abr = None
@@ -889,7 +889,6 @@ def sender(context):
 
 def close_prop(update, context):
     markup = ReplyKeyboardRemove()
-
     update.message.reply_text(text='Настройка завершена.', reply_markup=markup)
 
 
@@ -919,13 +918,18 @@ def matches(update, context):
     matches_dict = {}
     for match in cnt:
         match_type = match[2][0:1].upper() + match[2][1:]
+        place = match[3][0:1].upper() + match[3][1:]
         is_top = 1 if int(match[0]) in top or int(match[1]) in top else 0
-        matches_dict[match_type] = {
-            'cnt': matches_dict.get(match_type, {}).get('cnt', 0) + 1,
-            'top': matches_dict.get(match_type, {}).get('top', 0) + is_top
+        if not matches_dict.get(place):
+            matches_dict[place] = {}
+        matches_dict[place][match_type] = {
+            'cnt': matches_dict[place].get(match_type, {}).get('cnt', 0) + 1,
+            'top': matches_dict[place].get(match_type, {}).get('top', 0) + is_top
         }
-    for match_type, match_cnt in matches_dict.items():
-        msg = msg + match_type + ': ' + str(match_cnt.get('cnt')) + ', top: ' + str(match_cnt.get('top')) + '\n'
+    for place, data in matches_dict.items():
+        msg = msg + place + ': \n'
+        for match_type, match_cnt in data.items():
+            msg = msg + match_type + ': ' + str(match_cnt.get('cnt')) + ', top: ' + str(match_cnt.get('top')) + '\n'
     msg = msg.strip()
 
     update.message.reply_text(text=msg)

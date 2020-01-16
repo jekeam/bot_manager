@@ -124,11 +124,16 @@ fork_exclude_list = []
 
 
 def check_fork(key, L, k1, k2, live_fork, live_fork_total, bk1_score, bk2_score, event_type, minute, time_break_fonbet, period, team_type, team_names, deff_max, is_top, is_hot, info=''):
-    global bal1, bal2, bet1, bet2, cnt_fork_success, black_list_matches, matchs_success, summ_min, fonbet_maxbet_fact, vect1, vect2, group_limit_id
+    global bal1, bal2, bet1, bet2, cnt_fork_success, black_list_matches, matchs_success, summ_min, fonbet_maxbet_fact, vect1, vect2, group_limit_id, place
     global fork_exclude_list, vect_check_ok
 
     fork_exclude_text = ''
     v = True
+
+    place_prop = str(get_prop('place'))
+    if place_prop != 'any':
+        if place_prop != place:
+            fork_exclude_text = fork_exclude_text + 'Вилка исключена т.к. тип матча (лайф/прематч) не определен, place_prop:{}, place_current:{}\n'.format(place_prop, place)
 
     if vect1 == vect2 or not vect1 or not vect2 or not vect_check_ok:
         fork_exclude_text = fork_exclude_text + 'Вилка исключена т.к. вектор движения не определен или сонаправлен, vect1:{}, vect2:{}, vect_check_ok:{}\n'.format(vect1, vect2, vect_check_ok)
@@ -1028,6 +1033,7 @@ if __name__ == '__main__':
                             live_fork = val_json.get('live_fork', 0)
                             created_fork = val_json.get('created_fork', '')
                             event_type = val_json.get('event_type')
+                            place = val_json.get('place')
 
                             fonbet_maxbet_fact = val_json.get('fonbet_maxbet_fact', {}).get(str(group_limit_id), 0)
 
@@ -1057,6 +1063,7 @@ if __name__ == '__main__':
                             vect2 = bk2_bet_json.get('vector')
                             try:
                                 info = key + ': ' + name + ', ' + \
+                                       'place: ' + str(place) + ', ' + \
                                        'created: ' + created_fork + ', ' + \
                                        k1_type + '=' + str(k1) + '/' + \
                                        k2_type + '=' + str(k2) + ', ' + \
@@ -1071,9 +1078,7 @@ if __name__ == '__main__':
                                 exc_type, exc_value, exc_traceback = sys.exc_info()
                                 err_str = str(e) + ' ' + str(repr(traceback.format_exception(exc_type, exc_value, exc_traceback)))
                                 prnt('better: ' + err_str)
-
                                 prnt('event_type: ' + event_type)
-
                                 prnt('deff max: ' + str(deff_max))
                                 prnt('live fork total: ' + str(live_fork_total))
                                 prnt('live fork: ' + str(live_fork))
@@ -1090,9 +1095,7 @@ if __name__ == '__main__':
                                 prnt('val_json: ' + str(val_json))
                                 prnt('vect1: ' + str(vect1))
                                 prnt('vect2: ' + str(vect2))
-
                                 info = ''
-
                             if (event_type in ('football', 'hockey') and test_oth_sport == 'выкл') or test_oth_sport == 'вкл':
                                 # or ((event_type not in ('football', 'hockey') and test_oth_sport == 'вкл' and str(USER_ID) in list(map(str, ADMINS)))) \
                                 if vect1 and vect2:
