@@ -1145,24 +1145,21 @@ if __name__ == '__main__':
                                         round_bet = int(get_prop('round_fork'))
                                         total_bet = round(randint(total_bet_min, total_bet_max) / round_bet) * round_bet
                                         prnt('total_bet random: ' + str(total_bet), 'hide')
-
+                                        prnt(key + ' recalc_bets start: ', 'hide')
                                         recalc_bets()
-
+                                        prnt(key + ' recalc_bets start: ', 'end')
                                         team_type, team_names = get_team_type(name_rus, name)
                                         # team_junior - юнош.команды
                                         # team_female - жен.команды
                                         # team_stud - студ.команды
                                         # team_res - рез - екоманды
-
                                         # Проверим вилку на исключения
                                         if check_fork(
                                                 key, l, k1, k2, live_fork, live_fork_total, bk1_score, bk2_score, event_type, minute, time_break_fonbet, period, team_type, team_names, curr_deff,
                                                 is_top, is_hot, info
                                         ) or DEBUG:
-
                                             now_timestamp = int(time.time())
                                             last_timestamp = temp_lock_fork.get(key, now_timestamp)
-
                                             if 0 < (now_timestamp - last_timestamp) < 60 and len(server_forks) > 1:
                                                 if key not in msg_excule_pushed:
                                                     msg_excule_pushed.append(key)
