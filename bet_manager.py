@@ -393,7 +393,7 @@ class BetManager:
 
         if self.bk_name == 'olimp':
             try:
-                self.cur_val_bet, self.cur_sc, self.time_req = get_olimp_info(match_id, self.bet_type, self.wager.get('sport_id'), proxies=self.proxies, self.place)
+                self.cur_val_bet, self.cur_sc, self.time_req = get_olimp_info(match_id, self.bet_type, self.wager.get('sport_id'), self.proxies, self.place)
             except Exception as e:
                 err_msg = self.bk_name + ': recheck err (' + str(e.__class__.__name__) + '): ' + str(e)
                 prnt(self.msg_err.format(self.tread_id + ': ' + sys._getframe().f_code.co_name, err_msg))
@@ -666,7 +666,7 @@ class BetManager:
 
             if self.bk_name == 'olimp':
                 try:
-                    self.cur_val_bet, self.cur_sc, self.time_req = get_olimp_info(match_id, self.bet_type, self.wager.get('sport_id'), proxies=self.proxies, self.place)
+                    self.cur_val_bet, self.cur_sc, self.time_req = get_olimp_info(match_id, self.bet_type, self.wager.get('sport_id'), self.proxies, self.place)
                 except Exception as e:
                     err_msg = 'recheck err (' + str(e.__class__.__name__) + '): ' + str(e)
                     prnt(self.msg_err.format(self.tread_id + ': ' + sys._getframe().f_code.co_name, err_msg))
