@@ -122,8 +122,8 @@ def get_team_type(name_rus: str, name: str):
 fork_exclude_list = []
 
 
-def check_fork(key, L, k1, k2, live_fork, live_fork_total, bk1_score, bk2_score, event_type, minute, time_break_fonbet, period, team_type, team_names, deff_max, is_top, is_hot, info=''):
-    global bal1, bal2, bet1, bet2, cnt_fork_success, black_list_matches, matchs_success, summ_min, fonbet_maxbet_fact, vect1, vect2, group_limit_id, place
+def check_fork(key, L, k1, k2, live_fork, live_fork_total, bk1_score, bk2_score, event_type, minute, time_break_fonbet, period, team_type, team_names, curr_deff, is_top, is_hot, info=''):
+    global bal1, bal2, bet1, bet2, cnt_fork_success, black_list_matches, matchs_success, summ_min, fonbet_maxbet_fact, vect1, vect2, group_limit_id, place, max_deff
     global fork_exclude_list, vect_check_ok
 
     fork_exclude_text = ''
@@ -159,9 +159,8 @@ def check_fork(key, L, k1, k2, live_fork, live_fork_total, bk1_score, bk2_score,
     if not bet_type_is_work(key, event_type, group_limit_id):
         fork_exclude_text = fork_exclude_text + 'Вилка исключена, т.к. я еще не умею работать с этой ставкой: ' + str(key) + ', event_type: ' + str(event_type) + ', group_limit_id: ' + str(group_limit_id) + '\n'
 
-    deff_limit = 3
-    if deff_max > deff_limit:
-        fork_exclude_text = fork_exclude_text + 'Вилка исключена, т.к. deff_max (' + str(deff_max) + ' > ' + str(deff_limit) + ')\n'
+    if curr_deff > max_deff:
+        fork_exclude_text = fork_exclude_text + 'Вилка исключена, т.к. deff_max (' + str(curr_deff) + ' > ' + str(max_deff) + ')\n'
 
     if get_prop('double_bet', 'выкл') == 'выкл':
         if cnt_fork_success.count(key) > 0:
@@ -378,13 +377,13 @@ def go_bets(wag_ol, wag_fb, key, deff_max, vect1, vect2, sc1, sc2, created, even
                 if sum(x_ml) > 2:
                     prnt('x_ml({}): {}'.format(type(x_ml), x_ml))
                     prnt('y_ml({}): {}'.format(type(y_ml), y_ml))
-                    data=pd.DataFrame.from_dict({'sec': [x_ml], 'val': [y_ml],})
-                    data=data[(data.val!='') & (data.val!='[]') & (data.sec!='') & (data.sec!='[]')]
-                    #отсеиваю ряды у которых длина значений не равна кол-ву временных интервалов
-                    data=data[data.val.apply(len)==data.sec.apply(len)]
-                    #отсеиваю ряды у которых длина значений и временных интервалов 1, т.к. они статичные
-                    data=data[data.val.apply(len)>1]
-                    data=data.reset_index(drop=True)
+                    data = pd.DataFrame.from_dict({'sec': [x_ml], 'val': [y_ml], })
+                    data = data[(data.val != '') & (data.val != '[]') & (data.sec != '') & (data.sec != '[]')]
+                    # отсеиваю ряды у которых длина значений не равна кол-ву временных интервалов
+                    data = data[data.val.apply(len) == data.sec.apply(len)]
+                    # отсеиваю ряды у которых длина значений и временных интервалов 1, т.к. они статичные
+                    data = data[data.val.apply(len) > 1]
+                    data = data.reset_index(drop=True)
                     parts_gradient, plt = ml.preprocessing(
                         data.sec[0],
                         data.val[0],
@@ -396,14 +395,14 @@ def go_bets(wag_ol, wag_fb, key, deff_max, vect1, vect2, sc1, sc2, created, even
                         prnt('Проверка на ML не пройдена т.к. вектор не UP')
                         return False
                     # else:
-                        # str(ACC_ID) + '/' + datetime.datetime.now().strftime('%d.%m.%Y'),
-                        # str(fork_id)
-                        # peremennie errors
-                        # if type(parts_gradient) is str:
-                        #    ml.save_plt(acc_id + '/' + parts_gradient.lower(), fork_id, plt)
-                        # else:
-                            # ml.save_plt(acc_id + '/' + 'slices', fork_id, plt)
-                        # переопределение векторов. тут внимательно они перепутаны местами фб и олимп
+                    # str(ACC_ID) + '/' + datetime.datetime.now().strftime('%d.%m.%Y'),
+                    # str(fork_id)
+                    # peremennie errors
+                    # if type(parts_gradient) is str:
+                    #    ml.save_plt(acc_id + '/' + parts_gradient.lower(), fork_id, plt)
+                    # else:
+                    # ml.save_plt(acc_id + '/' + 'slices', fork_id, plt)
+                    # переопределение векторов. тут внимательно они перепутаны местами фб и олимп
                 else:
                     prnt('Проверка на ML не пройдена т.к. кол-ва сек. недостаточно')
                     return False
@@ -549,8 +548,8 @@ def go_bets(wag_ol, wag_fb, key, deff_max, vect1, vect2, sc1, sc2, created, even
         if not 'BkOppBetError'.lower() in msg_errs.lower():
             if get_prop('ml_noise') == 'вкл' and parts_gradient and plt:
                 ml.save_plt(
-                    str(ACC_ID) + '/' + datetime.datetime.now().strftime('%d.%m.%Y') + '/' + str(parts_gradient).lower(), 
-                    str(fork_id), 
+                    str(ACC_ID) + '/' + datetime.datetime.now().strftime('%d.%m.%Y') + '/' + str(parts_gradient).lower(),
+                    str(fork_id),
                     plt
                 )
             # SAVE INFO
@@ -942,7 +941,7 @@ if __name__ == '__main__':
                         msg_str = msg_str + 'Обнаружена порезка до 4й группы\n'
                     elif bk2.get_acc_info('sale').lower() == 'да' and not start_message_send:
                         msg_str = msg_str + 'Обнаружена неявная порезка до 4й группы, т.к. есть блокировка выкупа ставки\n'
-                        
+
                     if not start_message_send:
                         cnt_fork_success_old = len(cnt_fork_success)
                         cnt_fork_fail_old = cnt_fail
@@ -1230,7 +1229,7 @@ if __name__ == '__main__':
                                                         key, curr_deff, vect1, vect2, sc1, sc2, created_fork, event_type,
                                                         l, l_fisrt, is_top, str(fork_slice), str(cnt_act_acc), info_csv
                                                     )
-                                    elif curr_deff > 3:
+                                    elif curr_deff > max_deff:
                                         pass
                                         # if key not in sleeping_forks:
                                         #     sleeping_forks.append(key)
