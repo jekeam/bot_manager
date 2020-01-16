@@ -191,7 +191,7 @@ def check_fork(key, L, k1, k2, live_fork, live_fork_total, bk1_score, bk2_score,
         if k1 > max_kof or k2 > max_kof:
             fork_exclude_text = fork_exclude_text + 'Вилка ' + key + ' исключена т.к. коэф-большой: ({}/{}) > {})\n'.format(k1, k2, max_kof)
 
-    if bk1_score != bk2_score:
+    if bk1_score != bk2_score and place != 'pre':
         fork_exclude_text = fork_exclude_text + 'Вилка ' + key + ' исключена т.к. счет не совпадает: olimp(' + bk1_score + ') fonbet(' + bk2_score + ')\n'
 
     if event_type == 'football':
