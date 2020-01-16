@@ -1036,7 +1036,7 @@ if __name__ == '__main__':
                             event_type = val_json.get('event_type')
                             place = val_json.get('place')
 
-                            prnt('')
+                            prnt(' ')
                             prnt('GET ' + place.upper() + ' FORK: ' + name + ', ' + key, 'end')
 
                             fonbet_maxbet_fact = val_json.get('fonbet_maxbet_fact', {}).get(str(group_limit_id), 0)
@@ -1161,6 +1161,7 @@ if __name__ == '__main__':
                                                 key, l, k1, k2, live_fork, live_fork_total, bk1_score, bk2_score, event_type, minute, time_break_fonbet, period, team_type, team_names, curr_deff,
                                                 is_top, is_hot, info
                                         ) or DEBUG:
+                                            prnt('OK - check_fork', 'hide')
                                             now_timestamp = int(time.time())
                                             last_timestamp = temp_lock_fork.get(key, now_timestamp)
                                             if 0 < (now_timestamp - last_timestamp) < 60 and len(server_forks) > 1:
@@ -1234,6 +1235,8 @@ if __name__ == '__main__':
                                         # if key not in sleeping_forks:
                                         #     sleeping_forks.append(key)
                                         #     prnt('Sleeping forks: ' + str(deff_max) + ' sec (' + str(time.time()) + '), ' + str(key) + ': ' + str(val_json))
+                                    else:
+                                        prnt('ERR - check_fork', 'hide')
                                 else:
                                     # prnt('Вектор направления коф-та не определен: VECT1=' + str(vect1) + ', VECT2=' + str(vect2))
                                     pass
