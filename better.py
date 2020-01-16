@@ -1145,9 +1145,9 @@ if __name__ == '__main__':
                                         round_bet = int(get_prop('round_fork'))
                                         total_bet = round(randint(total_bet_min, total_bet_max) / round_bet) * round_bet
                                         prnt('total_bet random: ' + str(total_bet), 'hide')
-                                        prnt(key + ' recalc_bets start: ', 'hide')
+                                        prnt('start recalc_bets: ' + key, 'end')
                                         recalc_bets()
-                                        prnt(key + ' recalc_bets start: ', 'end')
+                                        prnt('end recalc_bets: ' + key, 'end')
                                         team_type, team_names = get_team_type(name_rus, name)
                                         # team_junior - юнош.команды
                                         # team_female - жен.команды
