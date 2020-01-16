@@ -1230,13 +1230,14 @@ if __name__ == '__main__':
                                                         key, curr_deff, vect1, vect2, sc1, sc2, created_fork, event_type,
                                                         l, l_fisrt, is_top, str(fork_slice), str(cnt_act_acc), info_csv
                                                     )
+                                        else:
+                                            prnt('ERR - check_fork', 'hide')
                                     elif curr_deff > max_deff:
                                         pass
+                                        prnt('ERR T - check_fork', 'hide')
                                         # if key not in sleeping_forks:
                                         #     sleeping_forks.append(key)
                                         #     prnt('Sleeping forks: ' + str(deff_max) + ' sec (' + str(time.time()) + '), ' + str(key) + ': ' + str(val_json))
-                                    else:
-                                        prnt('ERR - check_fork', 'hide')
                                 else:
                                     # prnt('Вектор направления коф-та не определен: VECT1=' + str(vect1) + ', VECT2=' + str(vect2))
                                     pass
