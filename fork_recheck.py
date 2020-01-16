@@ -122,7 +122,10 @@ def get_olimp_info(id_matche, olimp_k, sport_id, proxies=None, place=None):
     k = bet_into.get(olimp_k, 0)
     if is_block == 'BLOCKED':
         k = 0
-    sc = bet_into.get('SCORE', '0:0').split(' ')[0]
+    try:
+        sc = bet_into.get('SCORE', '0:0').split(' ')[0]
+    except:
+        sc = '0'
     prnt('olimp is_block: ' + str(is_block))
     prnt('olimp score: ' + sc)
     prnt('olimp bet_into: ' + str(bet_into))
@@ -173,7 +176,6 @@ def get_fonbet_info(match_id, factor_id, param, bet_type=None):
                 sc1 = int(sc.split(':')[0])
             except:
                 pass
-
             try:
                 sc2 = int(sc.split(':')[1])
             except:
