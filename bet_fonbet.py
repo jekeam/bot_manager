@@ -1025,14 +1025,8 @@ def get_new_bets_fonbet(match_id, proxies, time_out):
 
                     cat_name = cat.get('name')
                     # prnt('cat_name', cat_name)
-                    if cat_name in (
-                            '1X2 (90 min)',
-                            '1X2',
-                            'Goal - no goal',
-                            'Total', 'Totals', 'Team Totals-1', 'Team Totals-2'):  # , '1st half', '2nd half'
-
+                    if cat_name in ('1X2 (90 min)', '1X2', 'Goal - no goal', 'Total', 'Totals', 'Team Totals-1', 'Team Totals-2', 'Hcap'):  # , '1st half', '2nd half'
                         for kof in cat.get('quotes'):
-
                             factorId = str(kof.get('factorId'))
                             pValue = kof.get('pValue', '')
                             p = kof.get('p', '')

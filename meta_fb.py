@@ -280,12 +280,7 @@ def get_new_bets_fonbet(match_id, proxies, time_out=50):
 
                     cat_name = cat.get('name')
                     # prnts('cat_name', cat_name)
-                    if cat_name in (
-                            '1X2 (90 min)',
-                            '1X2',
-                            'Goal - no goal',
-                            'Total', 'Totals', 'Team Totals-1', 'Team Totals-2',
-                            'Hcap'):
+                    if cat_name in ('1X2 (90 min)', '1X2', 'Goal - no goal', 'Total', 'Totals', 'Team Totals-1', 'Team Totals-2', 'Hcap'):
 
                         for kof in cat.get('quotes'):
 
