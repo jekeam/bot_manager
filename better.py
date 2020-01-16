@@ -1036,7 +1036,7 @@ if __name__ == '__main__':
                             event_type = val_json.get('event_type')
                             place = val_json.get('place')
 
-                            prnt(' ')
+                            prnt(' ', 'hide')
                             prnt('GET ' + place.upper() + ' FORK: ' + name + ', ' + key, 'end')
 
                             fonbet_maxbet_fact = val_json.get('fonbet_maxbet_fact', {}).get(str(group_limit_id), 0)
