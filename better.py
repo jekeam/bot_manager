@@ -1007,6 +1007,7 @@ if __name__ == '__main__':
                             name = val_json.get('name', 'name')
                             name_rus = val_json.get('name_rus', 'name_rus')
                             pair_math = val_json.get('pair_math', 'pair_math')
+                            prnt('\nGET FORK: ' + name + ', ' + key, 'end')
 
                             bk1_score = str(val_json.get('bk1_score', 'bk1_score'))
                             bk2_score = str(val_json.get('bk2_score', 'bk2_score'))
