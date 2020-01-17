@@ -869,8 +869,8 @@ if __name__ == '__main__':
                     total_bet_min = total_bet
                     total_bet_max = total_bet
 
-                if not DEBUG and total_bet < 400:
-                    err_msg = 'Обшая сумма ставки должна превышать 400 руб.'
+                if not DEBUG and total_bet < summ_min_stat:
+                    err_msg = 'Обшая сумма ставки должна превышать ' + str(summ_min_stat) + ' руб.'
                     raise ValueError(err_msg)
 
                 acc_info = Account.select().where(Account.key == KEY)
