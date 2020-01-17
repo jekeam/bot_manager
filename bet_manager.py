@@ -1605,7 +1605,7 @@ class BetManager:
 
         self.opposite_stat_get(shared)
         try:
-            self.check_responce(shared, msg_str + err_msg)
+            self.check_responce(shared, str(msg_str) + str(err_msg))
         except Retry:
             return self.check_result(shared)
 
