@@ -1049,7 +1049,9 @@ if __name__ == '__main__':
                             bk2_bet_json = val_json.get('kof_fonbet', {})
 
                             bk1_hist = bk1_bet_json.get('hist', {})
+                            bk1_start_after_min = bk1_bet_json.get('start_after_min', 0)
                             bk2_hist = bk2_bet_json.get('hist', {})
+                            bk2_start_after_min = bk2_bet_json.get('start_after_min', 0)
 
                             base_line = bk2_bet_json.get('base_line', False)
                             is_hot = bk2_bet_json.get('is_hot', False)
