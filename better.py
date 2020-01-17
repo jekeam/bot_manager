@@ -939,6 +939,8 @@ if __name__ == '__main__':
 
                     if group_limit_id == '4' and not start_message_send:
                         msg_str = msg_str + 'Обнаружена порезка до 4й группы\n'
+                        summ_min_stat = 60
+                        summ_min = 60
                     elif bk2.get_acc_info('sale').lower() == 'да' and not start_message_send:
                         msg_str = msg_str + 'Обнаружена неявная порезка до 4й группы, т.к. есть блокировка выкупа ставки\n'
 
