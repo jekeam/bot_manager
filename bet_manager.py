@@ -1663,9 +1663,10 @@ class BetManager:
                     try:
                         self.max_bet = int(re.sub(r'[^\d]', '', re.search('=(.+?)руб', err_msg).group(1)))
                         prnt(self.msg.format(self.tread_id + ': ' + sys._getframe().f_code.co_name, 'max_bet=' + str(self.max_bet)))
-                        if self.max_bet == 0:
+                        if self.max_bet == 0 and self.attempt_bet <= 3:
+                            self.attempt_bet = self.attempt_bet + 1
                             self.max_bet = 50
-                            prnt(self.msg.format(self.tread_id + ': ' + sys._getframe().f_code.co_name, 'получен max_bet=0, делаю max_bet=50'))
+                            prnt(self.msg.format(self.tread_id + ': ' + sys._getframe().f_code.co_name, 'получен max_bet=0, делаю max_bet=50, попытка: ' + str(self.attempt_bet)))
                         return replay_bet(str(err_code))
                     except AttributeError as e:
                         prnt(self.msg.format(self.tread_id + ': ' + sys._getframe().f_code.co_name, str(e) + ': ' + err_msg))
