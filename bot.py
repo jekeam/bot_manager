@@ -431,7 +431,7 @@ def add(update, context):
                         )
                         prop = (
                             Properties.insert_from(
-                                Properties.select(acc.id, Properties.val, Properties.key).where((Properties.acc_id == acc_copy) & (Properties.key not in prop_exclude)),
+                                Properties.select(acc.id, Properties.val, Properties.key).where((Properties.acc_id == acc_copy) & (Properties.key.not_in(prop_exclude))),
                                 fields=[Properties.acc_id, Properties.val, Properties.key]
                             ).execute()
                         )
@@ -526,8 +526,8 @@ def change(update, context):
                     prop_new = Account.select().where(Account.id == new_val).get()
                     prop_old = Account.select().where(Account.id == id_).get()
                     if prop_new and prop_old:
-                        Properties.delete().where((Properties.acc_id == id_) & (Properties.key not in prop_exclude)).execute()
-                        source = (Properties.select(id_, Properties.key, Properties.val).where((Properties.acc_id == new_val) & (Properties.key not in prop_exclude)))
+                        Properties.delete().where((Properties.acc_id == id_) & (Properties.key.not_in(prop_exclude))).execute()
+                        source = (Properties.select(id_, Properties.key, Properties.val).where((Properties.acc_id == new_val) & (Properties.key.not_in(prop_exclude))))
                         Properties.insert_from(source, [Properties.acc_id, Properties.key, Properties.val]).execute()
 
                         msg = '{}: Настройки аккаунта скопированы с {}'.format(id_, new_val)
