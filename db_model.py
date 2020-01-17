@@ -104,8 +104,9 @@ prop_spr = {
 
 }
 
-prop_exclude = ('FONBET_P', 'FONBET_S', 'FONBET_U', 'OLIMP_P', 'OLIMP_U')
-
+exclude_copy = ('FONBET_P', 'FONBET_S', 'FONBET_U', 'OLIMP_P', 'OLIMP_U')
+exclude_all = ('ML_NOISE', 'TOTAL_FIRST', 'FLEX_BET1', 'FLEX_BET2', 'FLEX_KOF1', 'FLEX_KOF2', 'PLACE', 'PLACE_TIME')
+exclude_user = ('TEST_OTH_SPORT', 'MAXBET_FACT')
 
 def get_trunc_sysdate(days=0):
     return round(time.time() + days * 60 * 60 * 24)

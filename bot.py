@@ -15,7 +15,7 @@ from telegram.ext import Updater, CommandHandler, CallbackQueryHandler, MessageH
 from telegram.error import BadRequest
 from telegram.ext.callbackcontext import CallbackContext
 
-from db_model import Account, Message, User, Properties, get_user_str, send_message_bot, get_prop_str, prop_abr, get_trunc_sysdate, get_val_prop_id, prop_exclude
+from db_model import Account, Message, User, Properties, get_user_str, send_message_bot, get_prop_str, prop_abr, get_trunc_sysdate, get_val_prop_id, exclude_copy, exclude_all, exclude_user
 import bot_prop
 from emoji import emojize
 
@@ -431,7 +431,7 @@ def add(update, context):
                         )
                         prop = (
                             Properties.insert_from(
-                                Properties.select(acc.id, Properties.val, Properties.key).where((Properties.acc_id == acc_copy) & (Properties.key.not_in(prop_exclude))),
+                                Properties.select(acc.id, Properties.val, Properties.key).where((Properties.acc_id == acc_copy) & (Properties.key.not_in(exclude_copy))),
                                 fields=[Properties.acc_id, Properties.val, Properties.key]
                             ).execute()
                         )
@@ -526,8 +526,8 @@ def change(update, context):
                     prop_new = Account.select().where(Account.id == new_val).get()
                     prop_old = Account.select().where(Account.id == id_).get()
                     if prop_new and prop_old:
-                        Properties.delete().where((Properties.acc_id == id_) & (Properties.key.not_in(prop_exclude))).execute()
-                        source = (Properties.select(id_, Properties.key, Properties.val).where((Properties.acc_id == new_val) & (Properties.key.not_in(prop_exclude))))
+                        Properties.delete().where((Properties.acc_id == id_) & (Properties.key.not_in(exclude_copy))).execute()
+                        source = (Properties.select(id_, Properties.key, Properties.val).where((Properties.acc_id == new_val) & (Properties.key.not_in(exclude_copy))))
                         Properties.insert_from(source, [Properties.acc_id, Properties.key, Properties.val]).execute()
 
                         msg = '{}: Настройки аккаунта скопированы с {}'.format(id_, new_val)
@@ -721,10 +721,6 @@ def button(update, context):
                 prop_btn = []
 
                 for key, val in prop_abr.items():
-
-                    exclude_all = ('ML_NOISE', 'TOTAL_FIRST', 'FLEX_BET1', 'FLEX_BET2', 'FLEX_KOF1', 'FLEX_KOF2', 'PLACE')
-                    exclude_user = ('TEST_OTH_SPORT', 'MAXBET_FACT')
-
                     abr = None
                     if user_role == 'admin':
                         abr = val.get('abr')
