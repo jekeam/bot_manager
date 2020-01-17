@@ -134,7 +134,7 @@ def check_fork(key, L, k1, k2, live_fork, live_fork_total, bk1_score, bk2_score,
         if place_prop != place:
             fork_exclude_text = fork_exclude_text + 'Вилка исключена т.к. тип матча (лайф/прематч) не определен, place_prop:{}, place_current:{}\n'.format(place_prop, place)
     if place == 'pre':
-        if start_after_min / 60 > get_prop('place_time'):
+        if start_after_min / 60 > float(get_prop('place_time')):
             fork_exclude_text = fork_exclude_text + 'Вилка исключена т.к. матч будет через:{} ч, а в настройках не больше:{} ч.\n'.format(start_after_min / 60, get_prop('place_time'))
 
     if vect1 == vect2 or not vect1 or not vect2 or not vect_check_ok:
