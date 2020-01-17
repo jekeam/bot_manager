@@ -1486,7 +1486,6 @@ class BetManager:
                 return self.check_sell_result(shared)
 
     def check_responce(self, shared, err_msg):
-
         if err_msg:
             if 'temporarily unavailable'.lower() in err_msg.lower():
                 msg_str = self.msg_err.format(self.tread_id + ': ' + sys._getframe().f_code.co_name, ' Retry: ' + err_msg)
@@ -1494,13 +1493,10 @@ class BetManager:
             elif 'не вошли в систему'.lower() in err_msg.lower() or 'Not token access'.lower() in err_msg.lower() or 'invalid session id'.lower() in err_msg.lower():
                 err_str = self.msg_err.format(self.tread_id + ': ' + sys._getframe().f_code.co_name, 'session expired: ' + self.session)
                 raise SessionExpired(err_msg + ' ' + err_str)
-
             elif 'Продажа ставки недоступна'.lower() in err_msg.lower() or 'Изменилась сумма продажи ставки'.lower() in err_msg.lower():
                 raise CouponBlocked(self.msg.format(self.tread_id + ': ' + sys._getframe().f_code.co_name, err_msg))
-
             elif 'Слишком частые ставки на событие'.lower() in err_msg.lower():
                 raise BetIsLost(err_msg)
-
             elif 'Нет прав на выполнение операции'.lower() in err_msg.lower() or 'No rights for operation'.lower() in err_msg.lower():
                 shared[self.bk_name + '_err_fatal'] = err_msg
                 raise BetIsLost(err_msg)
@@ -1620,7 +1616,7 @@ class BetManager:
 
         self.opposite_stat_get(shared)
         try:
-            self.check_responce(shared, msg_str)
+            self.check_responce(shared, msg_str + err_msg)
         except Retry:
             return self.check_result(shared)
 
