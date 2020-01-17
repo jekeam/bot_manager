@@ -1172,7 +1172,8 @@ if __name__ == '__main__':
                                                 if key not in msg_excule_pushed:
                                                     msg_excule_pushed.append(key)
                                                     prnt(
-                                                        vstr='Вилка ' + str(key) + ' исключена, т.к. мы ее пытались проставить успешно/не успешно, но прошло менее 60 секунд и есть еще вилки, будем ставить другие, новые',
+                                                        vstr='Вилка ' + str(key) + ' исключена, т.к. мы ее пытались проставить не успешно, но прошло менее 60 секунд и есть еще вилки,'
+                                                                                   'now:{}, lasr:{}'.format(now_timestamp, last_timestamp),
                                                         hide=None,
                                                         to_cl=True,
                                                         type_='fork'
