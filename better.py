@@ -123,7 +123,7 @@ fork_exclude_list = []
 
 
 def check_fork(key, L, k1, k2, live_fork, live_fork_total, bk1_score, bk2_score, event_type, minute, time_break_fonbet, period, team_type, team_names, curr_deff, is_top, is_hot, info=''):
-    global bal1, bal2, bet1, bet2, cnt_fork_success, black_list_matches, matchs_success, summ_min, fonbet_maxbet_fact, vect1, vect2, group_limit_id, place, max_deff
+    global bal1, bal2, bet1, bet2, cnt_fork_success, black_list_matches, matchs_success, summ_min, fonbet_maxbet_fact, vect1, vect2, group_limit_id, place, max_deff, start_after_min
     global fork_exclude_list, vect_check_ok
 
     fork_exclude_text = ''
@@ -133,6 +133,9 @@ def check_fork(key, L, k1, k2, live_fork, live_fork_total, bk1_score, bk2_score,
     if place_prop != 'any':
         if place_prop != place:
             fork_exclude_text = fork_exclude_text + 'Вилка исключена т.к. тип матча (лайф/прематч) не определен, place_prop:{}, place_current:{}\n'.format(place_prop, place)
+    if place == 'pre':
+        if start_after_min / 60 > get_prop('place_time'):
+            fork_exclude_text = fork_exclude_text + 'Вилка исключена т.к. матч будет через:{} ч, а в настройках не больше:{} ч.\n'.format(start_after_min / 60, get_prop('place_time'))
 
     if vect1 == vect2 or not vect1 or not vect2 or not vect_check_ok:
         fork_exclude_text = fork_exclude_text + 'Вилка исключена т.к. вектор движения не определен или сонаправлен, vect1:{}, vect2:{}, vect_check_ok:{}\n'.format(vect1, vect2, vect_check_ok)
@@ -1047,11 +1050,10 @@ if __name__ == '__main__':
 
                             bk1_bet_json = val_json.get('kof_olimp', {})
                             bk2_bet_json = val_json.get('kof_fonbet', {})
+                            start_after_min = val_json.get('start_after_min', 0)
 
                             bk1_hist = bk1_bet_json.get('hist', {})
-                            bk1_start_after_min = bk1_bet_json.get('start_after_min', 0)
                             bk2_hist = bk2_bet_json.get('hist', {})
-                            bk2_start_after_min = bk2_bet_json.get('start_after_min', 0)
 
                             base_line = bk2_bet_json.get('base_line', False)
                             is_hot = bk2_bet_json.get('is_hot', False)
