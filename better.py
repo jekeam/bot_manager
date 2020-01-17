@@ -262,11 +262,11 @@ def set_statistics(key, err_bk1, err_bk2, fork_info=None, bk1_sale_profit=0, bk2
 
     if err_bk1 != 'ok' or err_bk2 != 'ok':
         if not bet_skip:
-            if bk1_sale_profit < 0 or bk2_sale_profit < 0 or 'ttempt limit exceeded'.lower() in str(err_bk1).lower() + str(err_bk2).lower():
+            if bk1_sale_profit < 0 or bk2_sale_profit < 0:
                 cnt_fail = cnt_fail + 1
-                black_list_matches.append(key.split('@')[0])
-                black_list_matches.append(key.split('@')[1])
-                # Добавим доп инфу о проставлении
+            black_list_matches.append(key.split('@')[0])
+            black_list_matches.append(key.split('@')[1])
+            # Добавим доп инфу о проставлении
             upd_last_fork_time()
     elif not bet_skip:
         cnt_fork_success.append(key)
