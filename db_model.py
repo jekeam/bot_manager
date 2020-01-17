@@ -56,7 +56,7 @@ prop_abr = {
     "SUM_BY_MAX": {"abr": "Пересчет maxbet", "type": "str", "max": "", "min": "", "access_list": on_off, "error": ""},
     "PROC_BY_MAX": {"abr": "% от maxbet", "type": "int", "max": "100", "min": "10", "access_list": [], "error": ""},
 
-    "TIMEOUT_FORK": {"abr": "Ждать после ставки", "type": "int", "max": "5400", "min": "180", "access_list": [], "error": ""},
+    "TIMEOUT_FORK": {"abr": "Ждать после ставки", "type": "int", "max": "5400", "min": "120", "default": 180, "access_list": [], "error": ""},
 
     "TEAM_RES": {"abr": "Рез-е команды", "type": "str", "max": "", "min": "", "access_list": on_off, "error": ""},
     "TEAM_STUD": {"abr": "Студ. команды", "type": "str", "max": "", "min": "", "access_list": on_off, "error": ""},
