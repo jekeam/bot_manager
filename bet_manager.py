@@ -1137,9 +1137,12 @@ class BetManager:
                 any_handicap = 2
             # Принимать с измененными тоталами/форами:
             # any_handicap: 1 - Нет, 2 - Да
-
+            if self.place == 'pre':
+                place = 0
+            else:
+                place = 1
             payload.update({
-                'coefs_ids': '[["{apid}",{factor},1]]'.format(apid=self.wager.get('apid'), factor=self.wager.get('factor')),
+                'coefs_ids': '[["{apid}",{factor},{place}]]'.format(apid=self.wager.get('apid'), factor=self.wager.get('factor'), place=place),
                 'sport_id': self.wager.get('sport_id'),
                 'sum': round(self.sum_bet / self.cur_rate, 2),
                 'save_any': save_any,
