@@ -254,7 +254,7 @@ def set_statistics(key, err_bk1, err_bk2, fork_info=None, bk1_sale_profit=0, bk2
     global cnt_fail, black_list_matches, cnt_fork_success, matchs_success
     bet_skip = False
     if err_bk1 and err_bk2:
-        if 'BkOppBetError' in err_bk1 + err_bk2 and 'ttempt limit exceeded' not in err_bk1 + err_bk2:
+        if 'BkOppBetError'.lower() in str(err_bk1).lower() + str(err_bk2).lower() and 'ttempt limit exceeded'.lower() not in str(err_bk1).lower() + str(err_bk2).lower():
             bet_skip = True
             if fork_info:
                 fork_info['olimp']['err'] = 'Вилка была пропущена: ' + err_bk1
@@ -262,11 +262,11 @@ def set_statistics(key, err_bk1, err_bk2, fork_info=None, bk1_sale_profit=0, bk2
 
     if err_bk1 != 'ok' or err_bk2 != 'ok':
         if not bet_skip:
-            if bk1_sale_profit < 0 or bk2_sale_profit < 0:
+            if bk1_sale_profit < 0 or bk2_sale_profit < 0 or 'ttempt limit exceeded'.lower() in str(err_bk1).lower() + str(err_bk2).lower():
                 cnt_fail = cnt_fail + 1
                 black_list_matches.append(key.split('@')[0])
                 black_list_matches.append(key.split('@')[1])
-            # Добавим доп инфу о проставлении
+                # Добавим доп инфу о проставлении
             upd_last_fork_time()
     elif not bet_skip:
         cnt_fork_success.append(key)
@@ -1206,7 +1206,7 @@ if __name__ == '__main__':
 
                                                     is_bet = randint(1, 100)
 
-                                                    prnt('Активных а��каунтов на вилку: ' + str(cnt_act_acc))
+                                                    prnt('Активных акаунтов на вилку: ' + str(cnt_act_acc))
                                                     prnt('Случайное число: ' + str(is_bet) + ', => ' + str(fork_slice))
 
                                                 if fork_slice <= is_bet or cnt_act_acc <= 5 or fork_slice == 0:
