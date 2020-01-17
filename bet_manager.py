@@ -253,7 +253,6 @@ class BetManager:
 
     def wait_sign_in_opp(self, shared: dict):
         sign_stat = shared.get('sign_in_' + self.bk_name_opposite, 'wait')
-
         push_ok = False
         while sign_stat == 'wait':
             if not push_ok:
@@ -264,16 +263,13 @@ class BetManager:
                 push_ok = True
             sign_stat = shared.get('sign_in_' + self.bk_name_opposite, 'wait')
             sleep(0.1)
-
         if sign_stat not in ('ok', 'wait'):
             err_str = self.msg_err.format(self.tread_id + ': ' + sys._getframe().f_code.co_name, self.bk_name + ' get error from ' + self.bk_name_opposite + ': ' + sign_stat)
             raise BkOppBetError(err_str)
-
         prnt(self.msg.format(self.tread_id + ': ' + sys._getframe().f_code.co_name, self.bk_name + ' get sign in from ' + self.bk_name_opposite + ': ' + str(sign_stat) + '(' + str(type(sign_stat)) + ')'))
 
     def wait_maxbet_check(self, shared: dict):
         maxbet_stat = shared.get('maxbet_in_' + self.bk_name_opposite, 'wait')
-
         push_ok = False
         while maxbet_stat == 'wait':
             if not push_ok:
@@ -282,13 +278,10 @@ class BetManager:
             maxbet_stat = shared.get('maxbet_in_' + self.bk_name_opposite, 'wait')
             sleep(0.1)
             self.opposite_stat_get(shared)
-
         prnt(self.msg.format(self.tread_id + ': ' + sys._getframe().f_code.co_name, self.bk_name + ' get maxbet from ' + self.bk_name_opposite + ': ' + str(maxbet_stat)))
 
     def opposite_stat_get(self, shared: dict):
-
         opposite_stat = str(shared.get(self.bk_name_opposite + '_err', 'ok'))
-
         if opposite_stat != 'ok':
             err_str = self.msg_err.format(self.tread_id + ': ' + sys._getframe().f_code.co_name, self.bk_name + ' get error from ' + self.bk_name_opposite + ': ' + opposite_stat)
             raise BkOppBetError(err_str)
@@ -301,12 +294,10 @@ class BetManager:
     def opposite_stat_wait(self, shared: dict):
         # if not DEBUG:
         prnt(self.msg.format(self.tread_id + ': ' + sys._getframe().f_code.co_name, self.bk_name + ' wait status bet in from ' + self.bk_name_opposite))
-
         opp_stat = None
         while opp_stat is None:
             opp_stat = shared.get(self.bk_name_opposite + '_err')
             sleep(0.1)
-
         prnt(self.msg.format(
             self.tread_id + ': ' + sys._getframe().f_code.co_name,
             self.bk_name + ' after wait, get status bet in from ' +
@@ -314,7 +305,6 @@ class BetManager:
 
     def opposite_wait(self, shared: dict, event: str):
         prnt(self.msg.format(self.tread_id + ': ' + sys._getframe().f_code.co_name, self.bk_name + ' wait ' + event + ' in from ' + self.bk_name_opposite))
-
         opp_stat = None
         sec = 0
         while opp_stat is None:
@@ -322,7 +312,6 @@ class BetManager:
             s_cnt = 0.1
             sleep(s_cnt)
             sec = sec + s_cnt
-
         prnt(self.msg.format(self.tread_id + ': ' + sys._getframe().f_code.co_name,
                              self.bk_name + ' after wait ' + str(sec) + ' sec., get ' + event + ' in from ' + self.bk_name_opposite + ': ' + str(opp_stat)))
 
@@ -1655,15 +1644,18 @@ class BetManager:
                     raise BetIsLost(err_str)
             elif err_code == 100:
                 self.opposite_stat_get(shared)
-                if 'Превышена cуммарная ставка для события' in err_msg:
+                if 'Превышена cуммарная ставка для события'.lower() in str(err_msg).lower():
                     try:
                         self.max_bet = int(re.sub(r'[^\d]', '', re.search('=(.+?)руб', err_msg).group(1)))
                         prnt(self.msg.format(self.tread_id + ': ' + sys._getframe().f_code.co_name, 'max_bet=' + str(self.max_bet)))
-                        if self.max_bet == 0 and self.attempt_bet <= 2:
+                        if self.attempt_bet <= 2:
                             self.attempt_bet = self.attempt_bet + 1
-                            self.max_bet = 50
-                            prnt(self.msg.format(self.tread_id + ': ' + sys._getframe().f_code.co_name, 'получен max_bet=0, делаю max_bet=50, попытка: ' + str(self.attempt_bet)))
-                        return replay_bet(str(err_code))
+                            if self.max_bet <= 50 / self.cur_rate:
+                                self.max_bet = 50 / self.cur_rate
+                                prnt(self.msg.format(self.tread_id + ': ' + sys._getframe().f_code.co_name, 'получен max_bet <= 50, делаю max_bet=' + str(self.max_bet) + ', попытка: ' + str(self.attempt_bet)))
+                            return replay_bet(str(err_code))
+                        else:
+                            raise BetIsLost(err_msg)
                     except AttributeError as e:
                         prnt(self.msg.format(self.tread_id + ': ' + sys._getframe().f_code.co_name, str(e) + ': ' + err_msg))
                         self.max_bet = 0

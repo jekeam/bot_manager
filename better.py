@@ -529,9 +529,7 @@ def go_bets(wag_ol, wag_fb, key, deff_max, vect1, vect2, sc1, sc2, created, even
 
         # CHECK FATAL ERROR
         if shared.get('fonbet_err_fatal') or shared.get('olimp_err_fatal'):
-            msg_str = 'Обнаружена фатальная ошибка: ' + \
-                      str(shared.get('fonbet_err_fatal')) + \
-                      str(shared.get('olimp_err_fatal')) + ', проверьте счет на порезку, блокировку ставки и вывода средств!'
+            msg_str = 'Обнаружена фатальная ошибка: ' + str(shared.get('fonbet_err_fatal')) + str(shared.get('olimp_err_fatal')) + ', проверьте счет на порезку, блокировку ставки и вывода средств!'
             raise MaxFail(msg_str)
 
         # CALC/SET STATISTICS
