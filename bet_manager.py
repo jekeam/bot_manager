@@ -1133,7 +1133,7 @@ class BetManager:
 
             if self.flex_kof == 'no':
                 any_handicap = 1
-            elif self.flex_kof == 'yes':м
+            elif self.flex_kof == 'yes':
                 any_handicap = 2
             # Принимать с измененными тоталами/форами:
             # any_handicap: 1 - Нет, 2 - Да
