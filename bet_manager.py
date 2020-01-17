@@ -1133,7 +1133,7 @@ class BetManager:
 
             if self.flex_kof == 'no':
                 any_handicap = 1
-            elif self.flex_kof == 'yes':
+            elif self.flex_kof == 'yes':м
                 any_handicap = 2
             # Принимать с измененными тоталами/форами:
             # any_handicap: 1 - Нет, 2 - Да
@@ -1663,6 +1663,9 @@ class BetManager:
                     try:
                         self.max_bet = int(re.sub(r'[^\d]', '', re.search('=(.+?)руб', err_msg).group(1)))
                         prnt(self.msg.format(self.tread_id + ': ' + sys._getframe().f_code.co_name, 'max_bet=' + str(self.max_bet)))
+                        if self.max_bet == 0:
+                            self.max_bet = 50
+                            prnt(self.msg.format(self.tread_id + ': ' + sys._getframe().f_code.co_name, 'получен max_bet=0, делаю max_bet=50'))
                         return replay_bet(str(err_code))
                     except AttributeError as e:
                         prnt(self.msg.format(self.tread_id + ': ' + sys._getframe().f_code.co_name, str(e) + ': ' + err_msg))
