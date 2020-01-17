@@ -107,6 +107,7 @@ class BetManager:
 
         self.group_limit_id = 0
         self.sell_blocked = False
+        self.bet_to_bet_timeout = 120
         self.session = ''
         self.balance = 0.0
         self.cur_rate = 1.0
@@ -1484,7 +1485,8 @@ class BetManager:
                 raise SessionExpired(err_msg + ' ' + err_str)
             elif 'Продажа ставки недоступна'.lower() in err_msg.lower() or 'Изменилась сумма продажи ставки'.lower() in err_msg.lower():
                 raise CouponBlocked(self.msg.format(self.tread_id + ': ' + sys._getframe().f_code.co_name, err_msg))
-            elif 'Слишком частые ставки на событие'.lower() in err_msg.lower():
+            elif 'Слишком частые ставки на событие'.lower() in err_msg.lower() or 'Слишком маленький интервал между ставками'.lower() in err_msg.lower():
+                sleep(self.bet_to_bet_timeout)
                 raise BetIsLost(err_msg)
             elif 'Нет прав на выполнение операции'.lower() in err_msg.lower() or 'No rights for operation'.lower() in err_msg.lower():
                 shared[self.bk_name + '_err_fatal'] = err_msg
