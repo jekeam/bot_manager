@@ -251,7 +251,7 @@ def set_statistics(key, err_bk1, err_bk2, fork_info=None, bk1_sale_profit=0, bk2
     global cnt_fail, black_list_matches, cnt_fork_success, matchs_success
     bet_skip = False
     if err_bk1 and err_bk2:
-        if 'BkOppBetError' in err_bk1 and 'BkOppBetError' in err_bk2:
+        if 'BkOppBetError' in err_bk1 + err_bk2 and 'ttempt limit exceeded' not in err_bk1 + err_bk2:
             bet_skip = True
             if fork_info:
                 fork_info['olimp']['err'] = 'Вилка была пропущена: ' + err_bk1

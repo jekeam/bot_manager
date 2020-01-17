@@ -1655,7 +1655,7 @@ class BetManager:
                                 prnt(self.msg.format(self.tread_id + ': ' + sys._getframe().f_code.co_name, 'получен max_bet <= 50, делаю max_bet=' + str(self.max_bet) + ', попытка: ' + str(self.attempt_bet)))
                             return replay_bet(str(err_code))
                         else:
-                            raise BetIsLost(err_msg)
+                            raise BetIsLost('Attempt limit exceeded: ' + err_msg)
                     except AttributeError as e:
                         prnt(self.msg.format(self.tread_id + ': ' + sys._getframe().f_code.co_name, str(e) + ': ' + err_msg))
                         self.max_bet = 0
