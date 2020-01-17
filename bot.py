@@ -527,7 +527,7 @@ def change(update, context):
                     prop_old = Account.select().where(Account.id == id_).get()
                     if prop_new and prop_old:
                         Properties.delete().where((Properties.acc_id == id_) & (Properties.key not in prop_exclude)).execute()
-                        source = (Properties.select(id_, Properties.key, Properties.val).where(Properties.acc_id == new_val).where((Properties.key not in prop_exclude)))
+                        source = (Properties.select(id_, Properties.key, Properties.val).where((Properties.acc_id == new_val) & (Properties.key not in prop_exclude)))
                         Properties.insert_from(source, [Properties.acc_id, Properties.key, Properties.val]).execute()
 
                         msg = '{}: Настройки аккаунта скопированы с {}'.format(id_, new_val)
