@@ -81,7 +81,10 @@ prop_abr = {
         },
     # "SERVER_OLIMP": {"abr": "Сервер Олимп", "type": "str", "max": "", "min": "", "access_list": [], "error": ""},
     "TEST_OTH_SPORT": {"abr": "Новые виды спорта", "type": "str", "max": "", "min": "", "access_list": on_off, "error": ""},
+
     "PLACE": {"abr": "Ставить на прематч", "type": "str", "max": "", "min": "", "access_list": ["any", "live", "pre"], "default": "live", "error": ""},
+    "PLACE_TIME": {"abr": "Прематчи до(часов)", "type": "int", "max": "24", "min": "1", "access_list": "", "default": "2", "error": ""},
+
     "FORA": {"abr": "Ставить на форы", "type": "str", "max": "", "min": "", "access_list": on_off, "default": "вкл", "error": ""},
     "SALE_BET": {"abr": "НЕвыкуп при потере, %", "type": "int", "max": "100", "min": "0", "access_list": [], "error": ""},
     # "SERVER_IP_TEST": {"abr": "IP-адрес тест. сервера", "type": "", "max": "", "min": "", "access_list": [], "error": ""},
