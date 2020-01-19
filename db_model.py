@@ -188,7 +188,7 @@ def get_val_prop_id(id: int, key: str) -> str:
     return res
 
 
-def get_prop_str(id: int, user_role: srt) -> str:
+def get_prop_str(id: int, user_role: str) -> str:
     res = ''
 
     info_accs = ''
