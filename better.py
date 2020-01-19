@@ -173,8 +173,8 @@ def check_fork(key, L, k1, k2, live_fork, live_fork_total, bk1_score, bk2_score,
         if matchs_success.count(str(key.split('@')[0])) > 0 or matchs_success.count(str(key.split('@')[1])) > 0:
             fork_exclude_text = fork_exclude_text + 'Вилка не проставлена, т.к. уже ставили 1 вилку на данный матч: ' + str(matchs_success) + '\n'
 
-    if black_list_matches.count(key.split('@')[0]) > 0 or black_list_matches.count(key.split('@')[1]) > 0:
-        fork_exclude_text = fork_exclude_text + 'Вилка исключена, т.к. матч занесен в blacklist: ' + key + ', ' + str(black_list_matches) + '\n'
+    if black_list_matches.count(key) > 0:
+        fork_exclude_text = fork_exclude_text + 'Вилка исключена, т.к. событие анесено в blacklist: ' + key + ', ' + str(black_list_matches) + '\n'
 
     # Проверяем корректная ли сумма
     if bet1 < 30 or bet2 < 30:
@@ -264,8 +264,7 @@ def set_statistics(key, err_bk1, err_bk2, fork_info=None, bk1_sale_profit=0, bk2
         if not bet_skip:
             if bk1_sale_profit < 0 or bk2_sale_profit < 0:
                 cnt_fail = cnt_fail + 1
-            black_list_matches.append(key.split('@')[0])
-            black_list_matches.append(key.split('@')[1])
+            black_list_matches.append(key)
             # Добавим доп инфу о проставлении
             upd_last_fork_time()
     elif not bet_skip:
