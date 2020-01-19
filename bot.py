@@ -490,8 +490,7 @@ def change(update, context):
                             for admin in admin_list:
                                 context.bot.send_message(admin.id, msg, parse_mode=telegram.ParseMode.MARKDOWN)
                         else:
-                            context.bot.send_message(user_sender,
-                                                     '{}: Вы пытаетесь сменить тип аккаунта, но значение {} - запрещено, доступно только: {}'.format(id_, type_, ', '.join(map(str, type_user))))
+                            context.bot.send_message(user_sender, '{}: Вы пытаетесь сменить тип аккаунта, но значение {} - запрещено, доступно только: {}'.format(id_, type_, ', '.join(map(str, type_user))))
                 except Exception as e:
                     if 'instance matching query does not exist' in str(e):
                         context.bot.send_message(user_sender, '{}: Пользователь не найден!'.format(id_))
@@ -697,7 +696,7 @@ def button(update, context):
         reply_markup = InlineKeyboardMarkup(keyboard)
 
         query.message.edit_text(
-            text=bot_prop.MSG_START_STOP + ' [ID: ' + str(acc_info.get().id) + '@' + str(acc_info.get().user_id) + '](tg://user?id=' + str(acc_info.get().user_id) + ')\n' + get_prop_str(acc_info.get().id),
+            text=bot_prop.MSG_START_STOP + ' [ID: ' + str(acc_info.get().id) + '@' + str(acc_info.get().user_id) + '](tg://user?id=' + str(acc_info.get().user_id) + ')\n' + get_prop_str(acc_info.get().id, user_role),
             reply_markup=reply_markup,
             parse_mode=telegram.ParseMode.MARKDOWN
         )

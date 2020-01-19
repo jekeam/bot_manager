@@ -108,6 +108,7 @@ exclude_copy = ('FONBET_P', 'FONBET_S', 'FONBET_U', 'OLIMP_P', 'OLIMP_U')
 exclude_all = ('ML_NOISE', 'TOTAL_FIRST', 'FLEX_BET1', 'FLEX_BET2', 'FLEX_KOF1', 'FLEX_KOF2', 'PLACE', 'PLACE_TIME')
 exclude_user = ('TEST_OTH_SPORT', 'MAXBET_FACT')
 
+
 def get_trunc_sysdate(days=0):
     return round(time.time() + days * 60 * 60 * 24)
 
@@ -187,7 +188,7 @@ def get_val_prop_id(id: int, key: str) -> str:
     return res
 
 
-def get_prop_str(id: int) -> str:
+def get_prop_str(id: int, user_role: srt) -> str:
     res = ''
 
     info_accs = ''
@@ -197,9 +198,20 @@ def get_prop_str(id: int) -> str:
     for key, val in loads(Account.get_by_id(id).proxies.replace('`', '"')).items():
         info_accs = info_accs + key.capitalize() + ': * ' + str(val.get('http', '').replace('http://', '')) + '*\n'
 
+    # TODO:in fact this is duble code
     for key, val in prop_abr.items():
         if key not in ('FONBET_U', 'FONBET_P', 'OLIMP_U', 'OLIMP_P'):
-            res += '' + str(val.get('abr', '')) + ': *' + str(get_val_prop_id(id, key)) + '*\n'
+            if user_role == 'admin':
+                res += '' + str(val.get('abr', '')) + ': *' + str(get_val_prop_id(id, key)) + '*\n'
+            elif user_role == 'investor':
+                if key not in exclude_all:
+                    res += '' + str(val.get('abr', '')) + ': *' + str(get_val_prop_id(id, key)) + '*\n'
+            elif key not in exclude_all and key not in exclude_user:
+                if user_role == 'junior':
+                    if key in ('SUMM', 'WORK_HOUR_END', 'FONBET_MIRROR', 'FONBET_S', 'WORK_HOUR_END', 'SUMM', 'MAX_FORK', 'FONBET_P', 'OLIMP_P'):
+                        res += '' + str(val.get('abr', '')) + ': *' + str(get_val_prop_id(id, key)) + '*\n'
+                else:
+                    res += '' + str(val.get('abr', '')) + ': *' + str(get_val_prop_id(id, key)) + '*\n'
     return info_accs + res
 
 
