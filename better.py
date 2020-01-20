@@ -1215,6 +1215,7 @@ if __name__ == '__main__':
                                                     prnt('Случайное число: ' + str(is_bet) + ', => ' + str(fork_slice))
 
                                                 if fork_slice <= is_bet or cnt_act_acc <= 5 or fork_slice == 0:
+                                                    prnt(vstr=' ' + key + ' ' + info, hide=None, to_cl=True)
                                                     prnt(vstr='Делаю ставку: ' + key + ' ' + info, hide=None, to_cl=True)
 
                                                     info_csv.update({
