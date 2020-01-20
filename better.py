@@ -395,7 +395,7 @@ def go_bets(wag_ol, wag_fb, key, deff_max, vect1, vect2, sc1, sc2, created, even
                     prnt('get parts_gradient: ' + str(parts_gradient))
                     parts_gradient = parts_gradient
                     if type(parts_gradient[0]) is str:
-                        vect = str(parts_gradient[0])
+                        vect = str(vect[0])
                     else:
                         vect = str(parts_gradient[-1][0])
                     if vect.lower() != 'up'.lower():
@@ -551,9 +551,9 @@ def go_bets(wag_ol, wag_fb, key, deff_max, vect1, vect2, sc1, sc2, created, even
         get_statistics()
         msg_errs = ' ' + shared.get('olimp_err') + shared.get('fonbet_err')
         if not 'BkOppBetError'.lower() in msg_errs.lower():
-            if get_prop('ml_noise') == 'вкл' and parts_gradient and plt:
+            if get_prop('ml_noise') == 'вкл' and vect and plt:
                 ml.save_plt(
-                    str(ACC_ID) + '/' + datetime.datetime.now().strftime('%d.%m.%Y') + '/' + str(parts_gradient).lower(),
+                    str(ACC_ID) + '/' + datetime.datetime.now().strftime('%d.%m.%Y') + '/' + str(vect).lower(),
                     str(fork_id),
                     plt
                 )
