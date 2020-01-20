@@ -87,6 +87,7 @@ class BetManager:
         self.cur_total_new = None
         self.cur_half = None
         self.cur_val_bet = bk_container.get('wager', {}).get('value')
+        self.cur_val_bet_resp = None
         self.match_id = bk_container.get('wager', {}).get('event', 0)
         self.val_bet_stat = self.cur_val_bet
         self.val_bet_old = self.cur_val_bet
@@ -701,8 +702,16 @@ class BetManager:
                 'Получил данные: bet_type:{}, vector:{}, total:{}, half:{}, val_bet:{}({}),minute:{}, sc_main:{}, sc:{}'.
                 format(self.bet_type, self.vector, self.cur_total, self.cur_half, self.cur_val_bet, self.val_bet_stat, self.cur_minute, self.cur_sc_main, self.cur_sc)))
 
-            prnt(self.msg.format(self.tread_id + ': ' + sys._getframe().f_code.co_name, 'Запас тотала: total_stock:{}, total_bet:{}, cur_total:{}'.format(self.total_stock, self.total_bet, self.cur_total)))
+            if self.cur_val_bet_resp:
+                if self.cur_val_bet_resp != self.cur_val_bet:
+                    prnt(self.msg.format(
+                        self.tread_id + ': ' + sys._getframe().f_code.co_name,
+                        'Выявлено различие в коф-те полученном при перепроверке:{} и в ошибке при ставке:{}. Берем коф. из ошибки при ставке'.format(self.cur_val_bet, self.cur_val_bet_resp)
+                    ))
+                    self.cur_val_bet = self.cur_val_bet_resp
+                    self.cur_val_bet_resp = None
 
+            prnt(self.msg.format(self.tread_id + ': ' + sys._getframe().f_code.co_name, 'Запас тотала: total_stock:{}, total_bet:{}, cur_total:{}'.format(self.total_stock, self.total_bet, self.cur_total)))
             # CHECK SUM SELL
             prnt(' ')
             prnt(self.msg.format(self.tread_id + ': ' + sys._getframe().f_code.co_name, 'GET SUM SELL'))
@@ -1167,6 +1176,13 @@ class BetManager:
                 sleep(2)
                 self.attempt_bet += 1
                 return self.bet_place(shared)
+            elif err_code == 417 and 'Сменился коэффициент на событие'.lower() in str(err_msg).lower():
+                # exml: 'Сменился коэффициент на событие (2.16=>2.18)'
+                try:
+                    self.cur_val_bet_resp = float(re.search('(\(.*)(=>)(.*\))', err_msg).group(3).replace(')', ''))
+                except:
+                    prnt(self.msg.format(self.tread_id + ': ' + sys._getframe().f_code.co_name, 'Ошибка при парсинге "Сменился коэффициент на событие": ' + str(err_msg)))
+              
 
             self.check_responce(shared, err_msg)
 
