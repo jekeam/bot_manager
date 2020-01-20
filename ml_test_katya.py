@@ -2,8 +2,10 @@ import ml
 import pandas as pd
 import datetime
 
-x_ml = [11, 3, 2, 2]
-y_ml = [1.23, 1.23, 1.23, 1.32]
+x_ml = [10,20,30, 5, 11, 3, 2, 2]
+y_ml = [1.5, 1.4, 1.1, 0,1.23, 1.23, 1.23, 1.32]
+# x_ml = [5, 11, 3, 2, 2]
+# y_ml = [0,1.23, 1.23, 1.23, 1.32]
 
 print('x_ml({}): {}'.format(type(x_ml), x_ml))
 print('y_ml({}): {}'.format(type(y_ml), y_ml))
@@ -19,8 +21,14 @@ parts_gradient, plt = ml.preprocessing(
     data.val[0],
     True
 )
-vect = str(parts_gradient[0])
+print(parts_gradient)
+data = parts_gradient
+if type(data) is str:
+    vect = str(data[0])
+else:
+    vect = str(data[-1][0])
 print(vect)
+# print(data)
 if vect.lower() != 'up'.lower():
     print('Проверка на ML не пройдена т.к. вектор не UP')
 ml.save_plt(

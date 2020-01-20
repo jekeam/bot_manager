@@ -149,6 +149,7 @@ def preprocessing(x: list, y: list, is_plot: bool):
     """
     Функция обработки ряда
     """
+    slice_flag = ''
     #замена коротких нулевых интервалов и выбросов
     y=replace_outliers(x,y)
     #получение индексов по которым нужно дробить ряд
@@ -162,6 +163,7 @@ def preprocessing(x: list, y: list, is_plot: bool):
         idx_splits = np.sort(np.unique(np.append(idx_splits, extremums)))
     #Если ряд делится на промежутки:
     if len(idx_splits)!=0:
+        slice_flag = ' is slices'
         #добавляем 0 и последнее значение, чтобы негородить сложные циклы с if
         idx_splits=np.insert(idx_splits, [0, idx_splits.size], [0, len(y)])
         #деление ряда на отрезки из-за сильного скачка значений
@@ -182,5 +184,5 @@ def preprocessing(x: list, y: list, is_plot: bool):
         gradient=np.gradient(series)
         idx_splits_plot=np.array([sum(x[:i]) for i in idx_splits])
         
-        plt = plot(t, series, gradient, idx_splits_plot, parts_gradient) # parts_gradient - ADD
+        plt = plot(t, series, gradient, idx_splits_plot, str(parts_gradient) + slice_flag) # parts_gradient - ADD
     return parts_gradient, plt
