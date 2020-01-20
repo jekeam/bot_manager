@@ -335,7 +335,7 @@ class OlimpBot:
 
         payload = {}
 
-        payload["filter"] = filter  # только не расчитанные
+        payload["filter"] = filter # только не расчитанные
         payload["offset"] = offset
         payload["session"] = self.session_payload["session"]
         payload["lang_id"] = "0"
