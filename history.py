@@ -149,7 +149,8 @@ def export_hist(OLIMP_USER, FONBET_USER):
         o_list = olimp_get_hist(OLIMP_USER)
         f_list = fonbet_get_hist(FONBET_USER)
         all_banalce_str = '*Общий баланс: ' + int_to_str(balance_int) + '*'
-        balance_msg = balance_str + all_banalce_str.strip()
+        balance_msg = all_banalce_str + '\n' + balance_str
+        balance_msg = balance_msg.strip()
         db_model.send_message_bot(USER_ID, str(ACC_ID) + ': ' + balance_msg, ADMINS)
 
         ol_list = json.loads(json.dumps(o_list, ensure_ascii=False))
