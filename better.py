@@ -393,7 +393,7 @@ def go_bets(wag_ol, wag_fb, key, deff_max, vect1, vect2, sc1, sc2, created, even
                     )
                     # parts_gradient ['UP', 18, 0.0675, 22.22] / (vect, sec, speed(if > 0.02 - fast), quality (if > 80 - ok))
                     parts_gradient = parts_gradient
-                    if type(data) is str:
+                    if type(data[0]) is str:
                         vect = str(data[0])
                     else:
                         vect = str(data[-1][0])
