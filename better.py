@@ -411,7 +411,7 @@ def go_bets(wag_ol, wag_fb, key, deff_max, vect1, vect2, sc1, sc2, created, even
                     # ml.save_plt(acc_id + '/' + 'slices', fork_id, plt)
                     # переопределение векторов. тут внимательно они перепутаны местами фб и олимп
                 else:
-                    prnt('Проверка на ML не пройдена т.к. кол-ва сек. недостаточно')
+                    prnt('Проверка на ML не пройдена т.к. кол-ва сек. недостаточно: ' + str(x_ml))
                     return False
             except Exception as e:
                 exc_type, exc_value, exc_traceback = sys.exc_info()
