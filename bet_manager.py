@@ -710,6 +710,8 @@ class BetManager:
                     ))
                     self.cur_val_bet = self.cur_val_bet_resp
                     self.cur_val_bet_resp = None
+                else:
+                    prnt(self.msg.format(self.tread_id + ': ' + sys._getframe().f_code.co_name, 'Различия в коф-те полученном при перепроверке неВыявлено'))
 
             prnt(self.msg.format(self.tread_id + ': ' + sys._getframe().f_code.co_name, 'Запас тотала: total_stock:{}, total_bet:{}, cur_total:{}'.format(self.total_stock, self.total_bet, self.cur_total)))
             # CHECK SUM SELL
