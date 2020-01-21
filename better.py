@@ -375,6 +375,7 @@ def go_bets(wag_ol, wag_fb, key, deff_max, vect1, vect2, sc1, sc2, created, even
             elif vect2 == 'UP':
                 x_ml = x
                 y_ml = y
+            vect = ''
             try:
                 if sum(x_ml) > 2:
                     prnt('x_ml({}): {}'.format(type(x_ml), x_ml))
@@ -395,7 +396,7 @@ def go_bets(wag_ol, wag_fb, key, deff_max, vect1, vect2, sc1, sc2, created, even
                     prnt('get parts_gradient: ' + str(parts_gradient))
                     parts_gradient = parts_gradient
                     if type(parts_gradient[0]) is str:
-                        vect = str(vect[0])
+                        vect = str(parts_gradient[0])
                     else:
                         vect = str(parts_gradient[-1][0])
                     if vect.lower() != 'up'.lower():

@@ -60,7 +60,7 @@ def olimp_get_hist(OLIMP_USER):
 
     if olimp.get_balance() >= 0:
         balance_int += olimp.get_balance()
-        balance_str = balance_str + 'Баланс в Олимп: ' + int_to_str(olimp.get_balance()) + '\n'
+        balance_str = balance_str + 'Олимп: ' + int_to_str(olimp.get_balance()) + '\n'
 
     data = olimp.get_history_bet(filter="0011", offset=0)
     count = data.get('count')
@@ -87,12 +87,12 @@ def fonbet_get_hist(FONBET_USER):
 
     if fonbet.get_balance() >= 0:
         balance_int += fonbet.get_balance()
-        balance_str = balance_str + 'Фонбет:\n'
-        balance_str = balance_str + 'Баланс: ' + int_to_str(fonbet.get_balance()) + '\n'
+        balance_str = balance_str + 'Фонбет: ' +int_to_str(fonbet.get_balance()) + '\n'
         balance_str = balance_str + 'Группа лимита: ' + str(fonbet.limit_group) + '\n'
-        balance_str = balance_str + 'Блокировка ставки: ' + str(fonbet.live_blocked) + '\n'
-        balance_str = balance_str + 'Блокировка вывода: ' + str(fonbet.pay_blocked) + '\n'
-        balance_str = balance_str + 'Блокировка продажи: ' + str(fonbet.sell_blocked) + '\n'
+        balance_str = balance_str + 'Блокировки:\n'
+        balance_str = balance_str + '- ставки: ' + str(fonbet.live_blocked) + '\n'
+        balance_str = balance_str + '- вывода: ' + str(fonbet.pay_blocked) + '\n'
+        balance_str = balance_str + '- продажи: ' + str(fonbet.sell_blocked) + '\n'
 
     fonbet.sign_in()
     data = fonbet.get_operations(500)
