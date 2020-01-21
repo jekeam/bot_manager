@@ -191,6 +191,11 @@ def check_fork(key, L, k1, k2, live_fork, live_fork_total, bk1_score, bk2_score,
         max_kof = float(get_prop('max_kof'))
         if k1 > max_kof or k2 > max_kof:
             fork_exclude_text = fork_exclude_text + 'Вилка ' + key + ' исключена т.к. коэф-большой: ({}/{}) > {})\n'.format(k1, k2, max_kof)
+            
+    if get_prop('min_kof'):
+        min_kof = float(get_prop('min_kof'))
+        if k1 < min_kof or k2 < min_kof:
+            fork_exclude_text = fork_exclude_text + 'Вилка ' + key + ' исключена т.к. коэф-маленький: ({}/{}) > {})\n'.format(k1, k2, min_kof)
 
     if bk1_score != bk2_score and place != 'pre':
         fork_exclude_text = fork_exclude_text + 'Вилка ' + key + ' исключена т.к. счет не совпадает: olimp(' + bk1_score + ') fonbet(' + bk2_score + ')\n'

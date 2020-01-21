@@ -70,7 +70,10 @@ prop_abr = {
     # "FORK_TIME_TYPE": {"abr": "Тип времени вилки", "type": "str", "max": "", "min": "", "access_list": ["текущее", "общее"], "error": ""},
     "FIRST_BET_IN": {"abr": "Первая ставка в", "type": "str", "max": "", "min": "", "access_list": first_bet_in, "default": "auto", "error": ""},
     "TOTAL_FIRST": {"abr": "Первая ставка на Тот.", "type": "str", "max": "", "min": "", "access_list": ["ТМ", "ТБ", "any"], "default": "ТМ", "error": ""},
-    "MAX_KOF": {"abr": "MAX коэф-т", "type": "float", "max": "1000", "min": "1.02", "access_list": [], "error": ""},
+    
+    "MAX_KOF": {"abr": "MAX коэф-т", "type": "float", "max": "1000", "min": "1.0", "access_list": [], "error": ""},
+    "MIN_KOF": {"abr": "MIN коэф-т", "type": "float", "max": "1000", "min": "1.0", "access_list": [], "error": ""},
+    
     "ML_NOISE": {"abr": "ML. Olimp UP", "type": "str", "max": "", "min": "", "access_list": on_off, "error": "", "default": "выкл", },
     # "POUR_INTO": {"abr": "Перелить в", "type": "str", "max": "", "min": "", "access_list": bks, "error": ""},
     "DOUBLE_BET": {"abr": "Дубли ставок", "type": "str", "max": "", "min": "", "access_list": on_off, "error": ""},
