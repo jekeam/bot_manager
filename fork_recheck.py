@@ -49,11 +49,17 @@ def get_olimp_info(id_matche, olimp_k, sport_id, proxies=None, place=None):
         bet_into['ID'] = id_matche
 
         is_block = ''
-        prnt('olimp kof is blocked: ' + str(stake.get('ms', 'None')))
-        if str(stake.get('ms', '')) == '1':
-            is_block = 'BLOCKED'  # 1 - block, 2 - available
-            prnt('Олимп: ставки приостановлены: http://olimp.com/app/event/live/1/' + str(stake.get('id', '')))
+        if place == 'pre':
+            if stake:
+                is_block = stake.get('ms', False)
+            else:
+                is_block = False
+        else:
+            if str(stake.get('ms', '')) == '1':
+                is_block = True  # 1 - block, 2 - available
+                # prnt('Олимп: ставки приостановлены: http://olimp.com/app/event/live/1/' + str(stake.get('id', '')))
         bet_into['BLOCKED'] = is_block
+        prnt('olimp kof is blocked: ' + str(is_block))
 
         minutes = "-1"
         try:
@@ -112,15 +118,15 @@ def get_olimp_info(id_matche, olimp_k, sport_id, proxies=None, place=None):
                                                  ][0])
 
                         val_kof = d.get('v', '')
-                        if is_block == 'BLOCKED':
+                        if is_block:
                             val_kof = 0
 
                         bet_into[olimp_factor_short] = val_kof
 
     else:
-        is_block = 'BLOCKED'
+        is_block = True
     k = bet_into.get(olimp_k, 0)
-    if is_block == 'BLOCKED':
+    if is_block:
         k = 0
     try:
         sc = bet_into.get('SCORE', '0:0').split(' ')[0]
