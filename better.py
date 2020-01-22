@@ -1004,6 +1004,7 @@ if __name__ == '__main__':
                         msg_err = msg_err + '\n' + 'обнаружена блокировка вывода, нужно пройти верификацию в Фонбет, аккаунт остановлен!'
 
                     if bal_small and not DEBUG:
+                        last_fork_time_min = (int(time.time()) - last_fork_time) / 60
                         if last_fork_time_min >= 120:
                             bal1 = bk1.get_balance()
                             bal2 = bk2.get_balance()
@@ -1013,11 +1014,11 @@ if __name__ == '__main__':
                         else:
                             if last_fork_time_min % 30 == 0:
                                 time.sleep(61)
-                                msg_bal = 'C момента последней ставки прошло {min} мин. обновляю балансы ' + str(bal1) + '->{}, ' + str(bal2) + '->{}, дисбаланс:{}'
+                                msg_bal = 'C момента последней ставки прошло {} мин. обновляю балансы ' + str(bal1) + '->{}, ' + str(bal2) + '->{}, дисбаланс:{}'
                                 bal1 = bk1.get_balance()
                                 bal2 = bk2.get_balance()
                                 bal_small = ref_bal_small(bal1, bal2)
-                                msg_bal = msg_bal.format(bal1, bal2, bal_small)
+                                msg_bal = msg_bal.format(last_fork_time_min, bal1, bal2, bal_small)
                                 prnt(msg_bal)
                                 send_message_bot(USER_ID, str(ACC_ID) + ': ' + msg_bal, ADMINS)
 
