@@ -313,6 +313,7 @@ def save_plt(folder, filename, plt):
 
 def go_bets(wag_ol, wag_fb, key, deff_max, vect1, vect2, sc1, sc2, created, event_type, l, l_fisrt, is_top, fork_slice, cnt_act_acc, info_csv):
     global bal1, bal2, cnt_fail, cnt_fork_success, k1, k2, total_bet, bet1, bet2, OLIMP_USER, FONBET_USER, ACC_ID, summ_min
+    global USER_ID, ACC_ID, ADMINS
 
     olimp_bet_type = str(key.split('@')[-2])
     fonbet_bet_type = str(key.split('@')[-1])
@@ -562,6 +563,8 @@ def go_bets(wag_ol, wag_fb, key, deff_max, vect1, vect2, sc1, sc2, created, even
         )
         get_statistics()
         msg_errs = ' ' + shared.get('olimp_err') + shared.get('fonbet_err')
+        if 'шибка баланса' in msg_errs:
+            send_message_bot(USER_ID, str(ACC_ID) + ': ' + msg_errs, ADMINS)
         if not 'BkOppBetError'.lower() in msg_errs.lower():
             if get_prop('ml_noise') == 'вкл' and vect and plt:
                 ml.save_plt(
