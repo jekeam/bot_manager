@@ -848,7 +848,11 @@ def sender(context):
                         Message.update(date_send=round(time.time())).where(Message.id == msg.id).execute()
                 elif msg.file_type == 'message':
                     try:
-                        context.bot.send_message(msg.to_user, msg.text[0:4000].strip(), parse_mode=telegram.ParseMode.MARKDOWN)
+                        try:
+                            context.bot.send_message(msg.to_user, msg.text[0:4000].strip(), parse_mode=telegram.ParseMode.MARKDOWN)
+                        except Exception as e:
+                            if 't parse entities: ' in str(e):
+                                context.bot.send_message(msg.to_user, msg.text[0:4000].strip().replace("_", "\\_").replace("*", "\\*").replace("[", "\\[").replace("`", "\\`"), parse_mode=telegram.ParseMode.MARKDOWN)
                         Message.update(date_send=round(time.time())).where(Message.id == msg.id).execute()
                     except Exception as e:
 
