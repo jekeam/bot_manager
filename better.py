@@ -179,23 +179,26 @@ def check_fork(key, L, k1, k2, live_fork, live_fork_total, bk1_score, bk2_score,
 
     # Проверяем корректная ли сумма
     if bet1 < 30 or bet2 < 30:
-        fork_exclude_text = fork_exclude_text + 'Сумма одной из ставок меньше 30р.\n'
-        if key not in msg_by_fork:
+        msg_temp = 'Вилка ' + key + '  исключена, т.к сумма одной из ставок меньше 30р\n'
+        if key not in msg_by_fork and fork_exclude_text == '':
             msg_by_fork.append(key)
-            send_message_bot(USER_ID, str(ACC_ID) + ': ' + fork_exclude_text, ADMINS)
+            send_message_bot(USER_ID, str(ACC_ID) + ': ' + msg_temp, ADMINS)
+        fork_exclude_text = fork_exclude_text + msg_temp
 
     if (bet1 + bet2) < summ_min:
-        fork_exclude_text = fork_exclude_text + 'Общая сумма ставки: {}, меньше нижнего предела: {}.\n'.format((bet1 + bet2), summ_min)
-        if key not in msg_by_fork:
+        msg_temp = 'Общая сумма ставки: {}, меньше нижнего предела: {}.\n'.format((bet1 + bet2), summ_min)
+        if key not in msg_by_fork and fork_exclude_text == '':
             msg_by_fork.append(key)
             send_message_bot(USER_ID, str(ACC_ID) + ': ' + fork_exclude_text, ADMINS)
+        fork_exclude_text = fork_exclude_text + msg_temp
 
     # Проверяем хватить денег для ставки
     if (bal1 < bet1) or (bal2 < bet2):
-        fork_exclude_text = fork_exclude_text + 'Для проставления вилки ' + key + ' недостаточно средств, bal1=' + str(bal1) + ', bet1=' + str(bet1) + ', bal2=' + str(bal2) + ', bet2=' + str(bet2) + '\n'
-        if key not in msg_by_fork:
+        msg_temp = 'Для проставления вилки ' + key + ' недостаточно средств, bal1=' + str(bal1) + ', bet1=' + str(bet1) + ', bal2=' + str(bal2) + ', bet2=' + str(bet2) + '\n'
+        if key not in msg_by_fork and fork_exclude_text == '':
             msg_by_fork.append(key)
             send_message_bot(USER_ID, str(ACC_ID) + ': ' + fork_exclude_text, ADMINS)
+        fork_exclude_text = fork_exclude_text + msg_temp
 
     if get_prop('max_kof'):
         max_kof = float(get_prop('max_kof'))
