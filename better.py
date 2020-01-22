@@ -125,7 +125,7 @@ fork_exclude_list = []
 def check_fork(key, L, k1, k2, live_fork, live_fork_total, bk1_score, bk2_score, event_type, minute, time_break_fonbet, period, team_type, team_names, curr_deff, is_top, is_hot, info=''):
     global bal1, bal2, bet1, bet2, cnt_fork_success, black_list_matches, matchs_success, summ_min, fonbet_maxbet_fact, vect1, vect2, group_limit_id, place, max_deff, start_after_min
     global fork_exclude_list, vect_check_ok
-    global USER_ID, ACC_ID, ADMINS
+    global USER_ID, ACC_ID, ADMINS, msg_by_fork
 
     fork_exclude_text = ''
     v = True
@@ -180,16 +180,22 @@ def check_fork(key, L, k1, k2, live_fork, live_fork_total, bk1_score, bk2_score,
     # Проверяем корректная ли сумма
     if bet1 < 30 or bet2 < 30:
         fork_exclude_text = fork_exclude_text + 'Сумма одной из ставок меньше 30р.\n'
-        send_message_bot(USER_ID, str(ACC_ID) + ': ' + fork_exclude_text, ADMINS)
+        if key not in msg_by_fork:
+            msg_by_fork.append(key)
+            send_message_bot(USER_ID, str(ACC_ID) + ': ' + fork_exclude_text, ADMINS)
 
     if (bet1 + bet2) < summ_min:
         fork_exclude_text = fork_exclude_text + 'Общая сумма ставки: {}, меньше нижнего предела: {}.\n'.format((bet1 + bet2), summ_min)
-        send_message_bot(USER_ID, str(ACC_ID) + ': ' + fork_exclude_text, ADMINS)
+        if key not in msg_by_fork:
+            msg_by_fork.append(key)
+            send_message_bot(USER_ID, str(ACC_ID) + ': ' + fork_exclude_text, ADMINS)
 
     # Проверяем хватить денег для ставки
     if (bal1 < bet1) or (bal2 < bet2):
         fork_exclude_text = fork_exclude_text + 'Для проставления вилки ' + key + ' недостаточно средств, bal1=' + str(bal1) + ', bet1=' + str(bet1) + ', bal2=' + str(bal2) + ', bet2=' + str(bet2) + '\n'
-        send_message_bot(USER_ID, str(ACC_ID) + ': ' + fork_exclude_text, ADMINS)
+        if key not in msg_by_fork:
+            msg_by_fork.append(key)
+            send_message_bot(USER_ID, str(ACC_ID) + ': ' + fork_exclude_text, ADMINS)
 
     if get_prop('max_kof'):
         max_kof = float(get_prop('max_kof'))
@@ -313,7 +319,7 @@ def save_plt(folder, filename, plt):
 
 def go_bets(wag_ol, wag_fb, key, deff_max, vect1, vect2, sc1, sc2, created, event_type, l, l_fisrt, is_top, fork_slice, cnt_act_acc, info_csv):
     global bal1, bal2, cnt_fail, cnt_fork_success, k1, k2, total_bet, bet1, bet2, OLIMP_USER, FONBET_USER, ACC_ID, summ_min
-    global USER_ID, ACC_ID, ADMINS
+    global USER_ID, ACC_ID, ADMINS, msg_by_fork
 
     olimp_bet_type = str(key.split('@')[-2])
     fonbet_bet_type = str(key.split('@')[-1])
@@ -564,7 +570,9 @@ def go_bets(wag_ol, wag_fb, key, deff_max, vect1, vect2, sc1, sc2, created, even
         get_statistics()
         msg_errs = ' ' + shared.get('olimp_err') + shared.get('fonbet_err')
         if 'шибка баланса' in msg_errs:
-            send_message_bot(USER_ID, str(ACC_ID) + ': ' + msg_errs, ADMINS)
+            if key not in msg_by_fork:
+                msg_by_fork.append(key)
+                send_message_bot(USER_ID, str(ACC_ID) + ': ' + msg_errs, ADMINS)
         if not 'BkOppBetError'.lower() in msg_errs.lower():
             if get_prop('ml_noise') == 'вкл' and vect and plt:
                 ml.save_plt(
@@ -742,6 +750,7 @@ export_block = False
 msg_str_old = ''
 msg_str = ''
 info_csv = {}
+msg_by_fork = []
 
 # sleeping_forks = []
 
@@ -1000,15 +1009,17 @@ if __name__ == '__main__':
                             bal2 = bk2.get_balance()
                             bal_small = ref_bal_small(bal1, bal2)
                             if bal_small:
-                                msg_err = msg_err + '\n' + 'аккаунт остановлен: денег в одной из БК не достаточно для работы, просьба выровнять балансы.\n' + bk1_name + ': ' + str(bal1) + '\n' + bk2_name + ': ' + str(
-                                    bal2)
+                                msg_err = msg_err + '\nаккаунт остановлен: денег в одной из БК не достаточно для работы, просьба выровнять балансы.\n' + bk1_name + ': ' + str(bal1) + '\n' + bk2_name + ': ' + str(bal2)
                         else:
                             if last_fork_time_min % 30 == 0:
-                                prnt('C момента последней ставки прошло {} мин. обновляю балансы')
                                 time.sleep(61)
+                                msg_bal = 'C момента последней ставки прошло {min} мин. обновляю балансы ' + str(bal1) + '->{}, ' + str(bal2) + '->{}, дисбаланс:{}'
                                 bal1 = bk1.get_balance()
                                 bal2 = bk2.get_balance()
                                 bal_small = ref_bal_small(bal1, bal2)
+                                msg_bal = msg_bal.format(bal1, bal2, bal_small)
+                                prnt(msg_bal)
+                                send_message_bot(USER_ID, str(ACC_ID) + ': ' + msg_bal, ADMINS)
 
                     if msg_str != msg_str_old:
                         msg_str_old = msg_str
