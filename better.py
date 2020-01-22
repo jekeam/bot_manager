@@ -125,6 +125,7 @@ fork_exclude_list = []
 def check_fork(key, L, k1, k2, live_fork, live_fork_total, bk1_score, bk2_score, event_type, minute, time_break_fonbet, period, team_type, team_names, curr_deff, is_top, is_hot, info=''):
     global bal1, bal2, bet1, bet2, cnt_fork_success, black_list_matches, matchs_success, summ_min, fonbet_maxbet_fact, vect1, vect2, group_limit_id, place, max_deff, start_after_min
     global fork_exclude_list, vect_check_ok
+    global USER_ID, ACC_ID, ADMINS
 
     fork_exclude_text = ''
     v = True
@@ -179,13 +180,16 @@ def check_fork(key, L, k1, k2, live_fork, live_fork_total, bk1_score, bk2_score,
     # Проверяем корректная ли сумма
     if bet1 < 30 or bet2 < 30:
         fork_exclude_text = fork_exclude_text + 'Сумма одной из ставок меньше 30р.\n'
+        send_message_bot(USER_ID, str(ACC_ID) + ': ' + fork_exclude_text, ADMINS)
 
     if (bet1 + bet2) < summ_min:
         fork_exclude_text = fork_exclude_text + 'Общая сумма ставки: {}, меньше нижнего предела: {}.\n'.format((bet1 + bet2), summ_min)
+        send_message_bot(USER_ID, str(ACC_ID) + ': ' + fork_exclude_text, ADMINS)
 
     # Проверяем хватить денег для ставки
     if (bal1 < bet1) or (bal2 < bet2):
         fork_exclude_text = fork_exclude_text + 'Для проставления вилки ' + key + ' недостаточно средств, bal1=' + str(bal1) + ', bet1=' + str(bet1) + ', bal2=' + str(bal2) + ', bet2=' + str(bet2) + '\n'
+        send_message_bot(USER_ID, str(ACC_ID) + ': ' + fork_exclude_text, ADMINS)
 
     if get_prop('max_kof'):
         max_kof = float(get_prop('max_kof'))
