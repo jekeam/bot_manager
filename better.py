@@ -441,6 +441,7 @@ def go_bets(wag_ol, wag_fb, key, deff_max, vect1, vect2, sc1, sc2, created, even
             'side_team': '1',
             'event_type': event_type,
             'summ_min': summ_min,
+            'round': int(get_prop('round_fork')),
             'place': info_csv['place'],
         }
         shared['fonbet'] = {
@@ -459,6 +460,7 @@ def go_bets(wag_ol, wag_fb, key, deff_max, vect1, vect2, sc1, sc2, created, even
             'event_type': event_type,
             'key': key,
             'summ_min': summ_min,
+            'round': int(get_prop('round_fork')),
             'place': info_csv['place'],
         }
         if '(' in fonbet_bet_type:

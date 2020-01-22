@@ -79,6 +79,7 @@ class BetManager:
         self.key = bk_container.get('key', '')
         self.place = bk_container.get('place', '')
         self.summ_min = int(bk_container.get('summ_min', '0'))
+        self.round = int(bk_container.get('round', 1))
         self.dop_stat = dict()
         # dynamic params
         self.cur_sc = None
@@ -609,7 +610,12 @@ class BetManager:
             prnt(self.msg.format(self.tread_id + ': ' + sys._getframe().f_code.co_name, 'RECALC SUM BET'))
 
             # round_rang = int(get_prop('round_fork'))
-            self.sum_bet = round(self.sum_bet_stat * self.val_bet_stat / self.cur_val_bet / 5) * 5
+            self.sum_bet = round(self.sum_bet_stat * self.val_bet_stat / self.cur_val_bet / self.round) * self.round
+            prnt(self.msg.format(
+                self.tread_id + ': ' + sys._getframe().f_code.co_name,
+                'sum_bet_stat:{}, val_bet_stat:{}, cur_val_bet:{}, round:{}'.format(
+                self.sum_bet_stat, self.val_bet_stat, self.cur_val_bet, self.round)
+            ))
 
             total_new_sum = self.sum_bet + sum_opp
 
