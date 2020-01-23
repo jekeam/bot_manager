@@ -919,7 +919,7 @@ class BetManager:
                     prnt(self.msg.format(self.tread_id + ': ' + sys._getframe().f_code.co_name, 'Ошибка при проставлении ставки в ' + self.bk_name + ', делаю выкуп ставки в ' + self.bk_name_opposite))
                     try:
                         bk_oop_sale = shared[self.bk_name_opposite].get('self', {})
-                        if not bl_oop_sale.sell_blocked:
+                        if not bk_oop_sale.sell_blocked:
                             bk_oop_sale.sale_bet(shared)
                             shared[self.bk_name]['sale_profit'] = bk_oop_sale.sale_profit
                         else:
