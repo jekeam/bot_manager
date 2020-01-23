@@ -820,7 +820,7 @@ class BetManager:
                 prnt(self.msg.format(self.tread_id + ': ' + sys._getframe().f_code.co_name, 'UPDATE TIME LEFT'))
 
                 if self.vector == 'UP':
-                    self.timeout_left = float(60 * 10)
+                    self.timeout_left = float(60 * int(get_prop('timeout_left')))
                     if DEBUG:
                         self.timeout_left = float(45)
                 elif self.vector == 'DOWN':
@@ -1190,7 +1190,7 @@ class BetManager:
                     self.cur_val_bet_resp = float(re.search('(\(.*)(=>)(.*\))', err_msg).group(3).replace(')', ''))
                 except:
                     prnt(self.msg.format(self.tread_id + ': ' + sys._getframe().f_code.co_name, 'Ошибка при парсинге "Сменился коэффициент на событие": ' + str(err_msg)))
-              
+
 
             self.check_responce(shared, err_msg)
 

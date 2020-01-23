@@ -70,10 +70,10 @@ prop_abr = {
     # "FORK_TIME_TYPE": {"abr": "Тип времени вилки", "type": "str", "max": "", "min": "", "access_list": ["текущее", "общее"], "error": ""},
     "FIRST_BET_IN": {"abr": "Первая ставка в", "type": "str", "max": "", "min": "", "access_list": first_bet_in, "default": "auto", "error": ""},
     "TOTAL_FIRST": {"abr": "Первая ставка на Тот.", "type": "str", "max": "", "min": "", "access_list": ["ТМ", "ТБ", "any"], "default": "ТМ", "error": ""},
-    
+
     "MAX_KOF": {"abr": "MAX коэф-т", "type": "float", "max": "1000", "min": "1.0", "access_list": [], "error": ""},
     "MIN_KOF": {"abr": "MIN коэф-т", "type": "float", "max": "1000", "min": "1.0", "access_list": [], "error": ""},
-    
+
     "ML_NOISE": {"abr": "ML. Olimp UP", "type": "str", "max": "", "min": "", "access_list": on_off, "error": "", "default": "выкл", },
     # "POUR_INTO": {"abr": "Перелить в", "type": "str", "max": "", "min": "", "access_list": bks, "error": ""},
     "DOUBLE_BET": {"abr": "Дубли ставок", "type": "str", "max": "", "min": "", "access_list": on_off, "error": ""},
@@ -90,6 +90,8 @@ prop_abr = {
 
     "FORA": {"abr": "Ставить на форы", "type": "str", "max": "", "min": "", "access_list": on_off, "default": "вкл", "error": ""},
     "SALE_BET": {"abr": "НЕвыкуп при потере, %", "type": "int", "max": "100", "min": "0", "access_list": [], "error": ""},
+
+    "TIMEOUT_LEFT": {"abr": "MAX Время проставления, мин.", "type": "int", "max": "30", "min": "1", "access_list": [], "default": "10", "error": ""},
     # "SERVER_IP_TEST": {"abr": "IP-адрес тест. сервера", "type": "", "max": "", "min": "", "access_list": [], "error": ""},
     # "SERVER_IP": {"abr": "IP-адрес бой сервера", "type": "", "max": "", "min": "", "access_list": [], "error": ""},
     # "WORK_HOUR": {"abr": "Работаю (ч.)", "type": "", "max": "", "min": "", "access_list": [], "error": ""},
@@ -235,7 +237,7 @@ def send_message_bot(user_id: int, msg: str, admin_list=None):
                 }).execute()
     return True
 
-    
+
 # def send_img(admin_list, img):
 #     # bot.send_photo(chat_id, photo=bio)
 #     # Message.insert({
