@@ -413,13 +413,33 @@ def go_bets(wag_ol, wag_fb, key, deff_max, vect1, vect2, sc1, sc2, created, even
                     )
                     # parts_gradient ['UP', 18, 0.0675, 22.22] / (vect, sec, speed(if > 0.02 - fast), quality (if > 80 - ok))
                     prnt('get parts_gradient: ' + str(parts_gradient))
-                    parts_gradient = parts_gradient
                     if type(parts_gradient[0]) is str:
                         vect = str(parts_gradient[0])
+                        sec = str(parts_gradient[1])
+                        speed = str(parts_gradient[2])
+                        quality = str(parts_gradient[3])
                     else:
                         vect = str(parts_gradient[-1][0])
-                    if vect.lower() != 'up'.lower():
-                        prnt('Проверка на ML не пройдена т.к. вектор не UP')
+                        sec = str(parts_gradient[-1][1])
+                        speed = str(parts_gradient[-1][2])
+                        quality = str(parts_gradient[-1][3])
+                    prnt('ml get data: vect:{}, sec:{}, speed:{}, quality:{}'.format(vect, sec, speed, quality))
+                    err_msg = ''
+                    if vect:
+                        if vect.lower() != 'up'.lower():
+                            err_msg = err_msg + 'вектор не UP\n'
+                    if sec:
+                        if int(sec) < 300:
+                            err_msg = err_msg + 'Данных меньше 300 сек.\n'
+                    if speed:
+                        if float(speed) < 0.02:
+                            err_msg = err_msg + 'Скорость меньше 0.02\n'
+                    if quality:
+                        if float(quality) < 0.80:
+                            err_msg = err_msg + 'Качество меньше 80%\n'
+                    if err_msg:
+                        prnt('Проверка на ML не пройдена т.к:\n' + err_msg)
+                        # buf = ml.save_to_mem(plt)
                         return False
                     # else:
                     # str(ACC_ID) + '/' + datetime.datetime.now().strftime('%d.%m.%Y'),

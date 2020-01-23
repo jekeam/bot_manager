@@ -235,6 +235,25 @@ def send_message_bot(user_id: int, msg: str, admin_list=None):
                 }).execute()
     return True
 
+    
+# def send_img(admin_list, img):
+#     # bot.send_photo(chat_id, photo=bio)
+#     # Message.insert({
+#     #     Message.to_user: user_id,
+#     #     Message.text: msg.strip(),
+#     #     Message.file_type: 'message'
+#     # }).execute()
+
+#     if admin_list:
+#         for admin_id in admin_list:
+#             # Message.insert({
+#             #     Message.to_user: admin_id,
+#             #     Message.text: msg.strip(),
+#             #     Message.file_type: 'message'
+#             # }).execute()
+#             bot.send_photo(admin_id, photo=img)
+#     return True    
+
 
 if __name__ == '__main__':
     pass

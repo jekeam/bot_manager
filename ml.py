@@ -4,6 +4,8 @@ import matplotlib.pyplot as plt
 import os
 import time
 
+import io
+
 
 def str_to_list_int(s: str) -> list:
     """
@@ -76,6 +78,15 @@ def save_plt(folder: str, filename: str, plt):
     if not os.path.exists(folder):
         os.makedirs(folder)
     plt.savefig(os.path.join(folder, filename))
+    
+def save_to_mem(plt):
+    buf = io.BytesIO()
+    plt.savefig(buf, format='png')
+    buf.seek(0)
+    # im = Image.open(buf)
+    # im.show()
+    # buf.close()
+    return buf
 
 def get_label(gradient:float):
     """Метка самого распространненого движения участка ряда"""
