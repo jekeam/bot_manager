@@ -575,7 +575,11 @@ def go_bets(wag_ol, wag_fb, key, deff_max, vect1, vect2, sc1, sc2, created, even
         if 'шибка баланса' in msg_errs:
             if key not in msg_by_fork:
                 msg_by_fork.append(key)
-                send_message_bot(USER_ID, str(ACC_ID) + ': ' + msg_errs, ADMINS)
+                try:
+                    re.findall(r'(^\d+:  BkOppBetError: Ошибка: BetIsLost - Ошибка баланса:\s)(.*)(Traceback .*)', msg_errs)[0][1]
+                    send_message_bot(USER_ID, str(ACC_ID) + ': ' + msg_errs + ' - вилка ' + key + ' исключена'  , ADMINS)
+                except Exception as e:
+                    prnt('Error 582: ' + str(e))
         if not 'BkOppBetError'.lower() in msg_errs.lower():
             if get_prop('ml_noise') == 'вкл' and vect and plt:
                 ml.save_plt(
