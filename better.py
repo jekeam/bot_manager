@@ -708,16 +708,16 @@ def run_client():
 
 def recalc_bets(hide=True):
     global k1, k2, total_bet, bal1, bet1, bet2, round_bet, fonbet_maxbet_fact
-    prnt('Get sum bets', hide)
-    prnt('total_bet: {}, round_bet: {}, bal1:{}, bal2:{}, bet1:{},  bet2:{}'.format(total_bet, round_bet, bal1, bal2, bet1, bet2), hide)
+    # prnt('Get sum bets', hide, True, 'calc')
+    # prnt('total_bet: {}, round_bet: {}, bal1:{}, bal2:{}, bet1:{},  bet2:{}'.format(total_bet, round_bet, bal1, bal2, bet1, bet2), hide, True, 'calc')
     bet1, bet2 = get_sum_bets(k1, k2, total_bet, round_bet, hide)
     if bet1 > bal1 or bet2 > bal2:
         if bal1 < bal2:
-            prnt('recalc bet (bal1 < bal2)', hide)
+            # prnt('recalc bet (bal1 < bal2)', hide, True, 'calc')
             bet1, bet2 = get_new_sum_bets(k1, k2, bal1, bal2, hide, round_bet)
             total_bet = bet1 + bet2
         else:
-            prnt('recalc bet (bal1 > bal2)', hide)
+            # prnt('recalc bet (bal1 > bal2)', hide, True, 'calc')
             bet2, bet1 = get_new_sum_bets(k2, k1, bal2, bal1, hide, round_bet)
             total_bet = bet1 + bet2
 
@@ -725,12 +725,12 @@ def recalc_bets(hide=True):
     if get_prop('maxbet_fact', 'выкл') == 'вкл':
         if fonbet_maxbet_fact > 0:
             if bet2 > fonbet_maxbet_fact:
-                prnt('recalc bet (fonbet_maxbet_fact)', hide)
+                # prnt('recalc bet (fonbet_maxbet_fact)', hide, True, 'calc')
                 bet2, bet1 = get_new_sum_bets(k2, k1, max_bet_fonbet, bal1, hide, round_bet)
                 total_bet = bet1 + bet2
 
     if bet2 > max_bet_fonbet > 0:
-        prnt('recalc bet (max_bet_fonbet)', hide)
+        # prnt('recalc bet (max_bet_fonbet)', hide, True, 'calc')
         bet2, bet1 = get_new_sum_bets(k2, k1, max_bet_fonbet, bal1, hide, round_bet)
         total_bet = bet1 + bet2
 
