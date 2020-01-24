@@ -204,7 +204,7 @@ def check_fork(key, L, k1, k2, live_fork, live_fork_total, bk1_score, bk2_score,
         max_kof = float(get_prop('max_kof'))
         if k1 > max_kof or k2 > max_kof:
             fork_exclude_text = fork_exclude_text + 'Вилка ' + key + ' исключена т.к. коэф-большой: ({}/{}) > {})\n'.format(k1, k2, max_kof)
-            
+
     if get_prop('min_kof'):
         min_kof = float(get_prop('min_kof'))
         if k1 < min_kof or k2 < min_kof:
@@ -597,7 +597,7 @@ def go_bets(wag_ol, wag_fb, key, deff_max, vect1, vect2, sc1, sc2, created, even
                 msg_by_fork.append(key)
                 try:
                     re.findall(r'(^\d+:  BkOppBetError: Ошибка: BetIsLost - Ошибка баланса:\s)(.*)(Traceback .*)', msg_errs)[0][1]
-                    send_message_bot(USER_ID, str(ACC_ID) + ': ' + msg_errs + ' - вилка ' + key + ' исключена'  , ADMINS)
+                    send_message_bot(USER_ID, str(ACC_ID) + ': ' + msg_errs + ' - вилка ' + key + ' исключена', ADMINS)
                 except Exception as e:
                     prnt('Error 582: ' + str(e))
         if not 'BkOppBetError'.lower() in msg_errs.lower():
@@ -1022,11 +1022,6 @@ if __name__ == '__main__':
                         cnt_fork_fail_old = cnt_fail
 
                     msg_err = ''
-                    if bk2.get_acc_info('bet').lower() != 'Нет'.lower():
-                        msg_err = msg_err + '\n' + 'обнаружена блокировка ставки в Фонбет, аккаунт остановлен!'
-
-                    if bk2.get_acc_info('pay').lower() != 'Нет'.lower():
-                        msg_err = msg_err + '\n' + 'обнаружена блокировка вывода, нужно пройти верификацию в Фонбет, аккаунт остановлен!'
 
                     if bal_small and not DEBUG:
                         last_fork_time_min = (int(time.time()) - last_fork_time) / 60
@@ -1046,6 +1041,12 @@ if __name__ == '__main__':
                                 msg_bal = msg_bal.format(last_fork_time_min, bal1, bal2, bal_small)
                                 prnt(msg_bal)
                                 send_message_bot(USER_ID, str(ACC_ID) + ': ' + msg_bal, ADMINS)
+                                
+                    if bk2.get_acc_info('bet').lower() != 'Нет'.lower():
+                        msg_err = msg_err + '\n' + 'обнаружена блокировка ставки в Фонбет, аккаунт остановлен!'
+
+                    if bk2.get_acc_info('pay').lower() != 'Нет'.lower():
+                        msg_err = msg_err + '\n' + 'обнаружена блокировка вывода, нужно пройти верификацию в Фонбет, аккаунт остановлен!'
 
                     if msg_str != msg_str_old:
                         msg_str_old = msg_str
@@ -1229,7 +1230,7 @@ if __name__ == '__main__':
                                                     msg_excule_pushed.append(key)
                                                     prnt(
                                                         vstr='Вилка ' + str(key) + ' исключена, т.к. мы ее пытались проставить не успешно, но прошло менее 60 секунд и есть еще вилки,'
-                                                                                   'now:{}, last:{}, diff:{}'.format(now_timestamp, last_timestamp, now_timestamp-last_timestamp),
+                                                                                   'now:{}, last:{}, diff:{}'.format(now_timestamp, last_timestamp, now_timestamp - last_timestamp),
                                                         hide=None,
                                                         to_cl=True,
                                                         type_='fork'
