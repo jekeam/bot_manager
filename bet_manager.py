@@ -924,6 +924,7 @@ class BetManager:
                             shared[self.bk_name]['sale_profit'] = bk_oop_sale.sale_profit
                         else:
                             shared[self.bk_name]['sale_profit'] = 0
+                            BetIsLost(err_msg)
                         is_go = False
                         break
                     except CouponBlocked as e:
