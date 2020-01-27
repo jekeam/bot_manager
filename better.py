@@ -676,7 +676,6 @@ def run_client():
     except Exception as e:
         msg_err = 'run_client: ' + str(e.__class__.__name__) + ' - ' + str(e)
         prnt(str(e.__class__.__name__) + ' - ' + msg_err)
-        prnt('connection_error_cnt: {}, time_out_cnt: {}, send_msg: {}'.format(connection_error_cnt, time_out_cnt, send_msg))
         server_forks = {}
         conn.close()
 
@@ -701,7 +700,7 @@ def run_client():
                     # msg_err = str(ACC_ID) + ': Возникла ошибка соединения, при запросе катировок со сканнера, просьба проверить, ' + str(msg_err)
                     send_message_bot(admin, msg_err.replace('_', '\\_'))
                 send_msg = True
-
+        prnt('connection_error_cnt: {}, time_out_cnt: {}, send_msg: {}'.format(connection_error_cnt, time_out_cnt, send_msg))
         time.sleep(long_pool_wait)
         return run_client()
 
