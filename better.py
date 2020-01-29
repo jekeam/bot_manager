@@ -237,7 +237,7 @@ def check_fork(key, L, k1, k2, live_fork, live_fork_total, bk1_score, bk2_score,
         if live_fork_total > long_livers_max:
             fork_exclude_text = fork_exclude_text + 'Вилка ' + key + ' исключена т.к. живет в общем больше ' + str(long_livers) + ' сек. \n'
 
-    if get_prop('top', 'выкл') == 'вкл' and not is_top:
+    if get_prop('top', 'выкл') == 'вкл' and is_top != 'top':
         fork_exclude_text = fork_exclude_text + 'Вилка исключена т.к. это не топовый матч: ' + name_rus + '\n'
 
     if get_prop('hot', 'выкл') == 'вкл' and not is_hot:
