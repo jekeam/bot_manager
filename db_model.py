@@ -30,6 +30,8 @@ sport_list = [
 ]
 sport_list_str = ';'.join(x for x in sport_list)
 
+top_type = ['top', 'middle', 'any']
+
 prop_abr = {
     "FONBET_U": {"abr": "УЗ Фонбет", "type": "account:fonbet", "max": "", "min": "", "error": ""},
     "FONBET_P": {"abr": "Прокси Фонбет", "type": "proxi:fonbet", "max": "", "min": "", "error": ""},
@@ -75,7 +77,7 @@ prop_abr = {
     "TEAM_FEMALE": {"abr": "Жен. команды", "type": "str", "max": "", "min": "", "access_list": on_off, "error": ""},
     "TEAM_JUNIOR": {"abr": "Юнош. команды", "type": "str", "max": "", "min": "", "access_list": on_off, "error": ""},
 
-    "TOP": {"abr": "Только TOP матчи", "type": "str", "max": "", "min": "", "access_list": on_off, "error": ""},
+    "TOP": {"abr": "Уровень лиги", "type": "str", "max": "", "min": "", "access_list": top_type, "default": "any", "error": ""},
     "HOT": {"abr": "Только TOP катировки", "type": "str", "max": "", "min": "", "access_list": on_off, "error": ""},
     "ONE_BET": {"abr": "1 ставка на матч", "type": "str", "max": "", "min": "", "access_list": on_off, "error": ""},
     "RANDOM_SUMM_PROC": {"abr": "% Разброс ставки", "type": "int", "max": "30", "min": "0", "access_list": [], "error": ""},
@@ -95,7 +97,7 @@ prop_abr = {
             "access_list": ["0", "50", "90", "100", "200", "300", "400", "500", "600", "700", "800", "900", "1000"], "error": ""
         },
     # "SERVER_OLIMP": {"abr": "Сервер Олимп", "type": "str", "max": "", "min": "", "access_list": [], "error": ""},
-    "SPORT_LIST": {"abr": "Виды спорта", "type": "strs", "max": "", "min": "", "access_list": sport_list_str, "default": "football;hockey", "error": ""}, # sport_list_str
+    "SPORT_LIST": {"abr": "Виды спорта", "type": "strs", "max": "", "min": "", "access_list": sport_list_str, "default": "football;hockey", "error": ""},  # sport_list_str
 
     "PLACE": {"abr": "Ставить на прематч", "type": "str", "max": "", "min": "", "access_list": ["any", "live", "pre"], "default": "live", "error": ""},
     "PLACE_TIME": {"abr": "Прематчи до(часов)", "type": "int", "max": "24", "min": "1", "access_list": "", "default": "2", "error": ""},
