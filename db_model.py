@@ -18,6 +18,18 @@ on_off = ["вкл", "выкл"]
 flex_bet_arr = ["any", "up", "no"]
 flex_kof_arr = ["yes", "no"]
 
+sport_list = [
+    'football',
+    'hockey',
+    'basketball',
+    'tennis',
+    'volleyball',
+    'table-tennis',
+    'esports',
+    'futsal',
+]
+sport_list_str = ';'.join(x for x in sport_list)
+
 prop_abr = {
     "FONBET_U": {"abr": "УЗ Фонбет", "type": "account:fonbet", "max": "", "min": "", "error": ""},
     "FONBET_P": {"abr": "Прокси Фонбет", "type": "proxi:fonbet", "max": "", "min": "", "error": ""},
@@ -83,7 +95,7 @@ prop_abr = {
             "access_list": ["0", "50", "90", "100", "200", "300", "400", "500", "600", "700", "800", "900", "1000"], "error": ""
         },
     # "SERVER_OLIMP": {"abr": "Сервер Олимп", "type": "str", "max": "", "min": "", "access_list": [], "error": ""},
-    "TEST_OTH_SPORT": {"abr": "Новые виды спорта", "type": "str", "max": "", "min": "", "access_list": on_off, "error": ""},
+    "SPORT_LIST": {"abr": "Виды спорта", "type": "strs", "max": "", "min": "", "access_list": sport_list_str, "default": "football;hockey", "error": ""}, # sport_list_str
 
     "PLACE": {"abr": "Ставить на прематч", "type": "str", "max": "", "min": "", "access_list": ["any", "live", "pre"], "default": "live", "error": ""},
     "PLACE_TIME": {"abr": "Прематчи до(часов)", "type": "int", "max": "24", "min": "1", "access_list": "", "default": "2", "error": ""},
@@ -111,7 +123,7 @@ prop_spr = {
 
 exclude_copy = ('FONBET_P', 'FONBET_S', 'FONBET_U', 'OLIMP_P', 'OLIMP_U')
 exclude_all = ('ML_NOISE', 'TOTAL_FIRST', 'FLEX_BET1', 'FLEX_BET2', 'FLEX_KOF1', 'FLEX_KOF2', 'PLACE', 'PLACE_TIME')
-exclude_user = ('TEST_OTH_SPORT', 'MAXBET_FACT')
+exclude_user = ('SPORT_LIST', 'MAXBET_FACT')
 
 
 def get_trunc_sysdate(days=0):

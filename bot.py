@@ -155,7 +155,7 @@ def check_type(val: str, type_: str, min_: str, max_: str, access_list):
     err_str = ''
     err_limits = ''
 
-    type_exclude = ['mirror', 'proxi', 'account']
+    type_exclude = ['mirror', 'proxi', 'account', 'strs']
 
     try:
         if type_ in type_exclude:
@@ -197,6 +197,12 @@ def check_type(val: str, type_: str, min_: str, max_: str, access_list):
     if 'mirror' in str(type_):
         if val.count('.') != 1:
             err_str = 'Неверный формат зеркала, ожидается: fonbet-ХХХХХ.com'
+    if 'strs' in str(type_):
+        val_ls = val.split(';')
+        val_ls_acc = access_list.split(';')
+        for v in val_ls:
+            if v not in val_ls_acc:
+                err_str = 'Значения ' + v + ' недопустипо, можно только: ' + ','.join(val_ls_acc)
 
     return err_str.strip()
 

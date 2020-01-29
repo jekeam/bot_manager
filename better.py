@@ -856,7 +856,7 @@ if __name__ == '__main__':
                     err_msg = 'Минимальная общая ставка не должена быть больше или равена максимальному'
                     raise ValueError(err_msg)
 
-                test_oth_sport = get_prop('test_oth_sport', 'выкл')
+                sport_list = get_prop('sport_list').replace(';;',';').split(';')
 
                 if not DEBUG:
                     server_ip = get_prop('server_ip')
@@ -1160,8 +1160,7 @@ if __name__ == '__main__':
                                 prnt('vect1: ' + str(vect1))
                                 prnt('vect2: ' + str(vect2))
                                 info = ''
-                            if (event_type in ('football', 'hockey') and test_oth_sport == 'выкл') or test_oth_sport == 'вкл':
-                                # or ((event_type not in ('football', 'hockey') and test_oth_sport == 'вкл' and str(USER_ID) in list(map(str, ADMINS)))) \
+                            if event_type in sport_list:
                                 if vect1 and vect2:
                                     max_deff = 3
                                     if place == 'pre':
