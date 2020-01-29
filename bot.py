@@ -177,7 +177,8 @@ def check_type(val: str, type_: str, min_: str, max_: str, access_list):
         err_str = 'Неверный тип значения, ожидается: {}'.format(str(type_))
 
     try:
-        err_limits = check_limits(val, type_, min_, max_, access_list)
+        if type_ not in type_exclude:
+            err_limits = check_limits(val, type_, min_, max_, access_list)
     except TypeError as e:
         exc_type, exc_value, exc_traceback = sys.exc_info()
         err_str = str(e) + ' ' + str(repr(traceback.format_exception(exc_type, exc_value, exc_traceback)))
