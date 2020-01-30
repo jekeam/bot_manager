@@ -949,7 +949,7 @@ def matches(update, context):
         msg = msg + '\n' + place.upper() +' ('+place.upper()+')\n'
         s = 0
         for match_type, match_cnt in collections.OrderedDict(sorted(data.items(), key=lambda item: '1' if item[0]=='Football' else '2' if item[0]=='Hockey' else item[0])).items():
-            msg = msg + (match_type + ': ' + str(match_cnt.get('cnt'))).ljust(21, ' ') + 'top: ' + str(match_cnt.get('top')).ljust(9, ' ') + 'middle: ' + str(match_cnt.get('middle')) + '\n'
+            msg = msg + (match_type + ': ' + str(match_cnt.get('cnt'))).ljust(19, ' ') + 'top: ' + str(match_cnt.get('top')).ljust(9, ' ') + 'middle: ' + str(match_cnt.get('middle')) + '\n'
             s = s + match_cnt.get('cnt')
         msg = msg.replace('('+place.upper()+')',  '(' + str(s) + ')')
     msg = msg.strip()
