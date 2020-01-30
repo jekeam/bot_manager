@@ -932,7 +932,7 @@ def matches(update, context):
             'top': matches_dict[place].get(match_type, {}).get('top', 0) + is_top
         }
     for place, data in matches_dict.items():
-        msg = msg + '\n' + place + ': \n'
+        msg = msg + '\n' + place.upper() + '\n'
         for match_type, match_cnt in data.items():
             msg = msg + match_type + ': ' + str(match_cnt.get('cnt')) + ', top: ' + str(match_cnt.get('top')) + '\n'
     msg = msg + '\n Активность ' + str(cnt[-1]) + ' куп./сек.'
