@@ -79,7 +79,7 @@ class FonbetBot:
         if self.bk_type == 'com':
             self.app_ver = '5.1.3b'
             self.user_agent = 'Fonbet/5.1.3b (Android 21; Phone; com.bkfonbet)'
-            self.not_url = 'fonbet-76863.com'
+            self.not_url = 'bk-fonbet.com'
             self.url_api = 'clients-api'  # maybe 'common'?
         elif self.bk_type == 'ru':
             self.app_ver = '5.2.1r'
@@ -1073,13 +1073,18 @@ def get_new_bets_fonbet(match_id, proxies, time_out):
         prnt(e)
         raise ValueError(e)
 
+def get_cupon_id():
+    FONBET_USER = {"login": 5987993, "password": "qRVcRUXz23", "mirror": "bk-fonbet.com"}
 
-if __name__ == '__main__':
-    PROXIES = dict()
-
-    FONBET_USER = {"login": 7836658, "password": "VQ1YPcV9", "mirror": "fonbet-76863.com"}
-
-    wager_fonbet = {"event": 18449923, "factor": 927, "value": 1.5, "score": "1:0"}
+    wager_fonbet = {"time_req": 1580371264,
+    "event": 19140613,
+    "value": 1.42,
+    "param": "",
+    "factor": "921",
+    "base_line": True,
+    "score": "0:0",
+    "vector": "UP",
+    "is_hot": False}
     # {'time_req': 1576767538, 'event': 18425760, 'value': 2.15, 'param': -350, 'factor': '989', 'score': '1:0', 'vector': 'UP', 'is_hot': False}
     # {eventId: 18449923, factorId: 927, place: "live"}
     obj = {}
@@ -1089,8 +1094,36 @@ if __name__ == '__main__':
 
     fonbet = FonbetBot(FONBET_USER)
     fonbet.sign_in()
-    # fonbet.place_bet(obj)
-    # time.sleep(3)
-    # fonbet.sale_bet(1386768572)
-    # fonbet_reg_id = fonbet.place_bet(amount_fonbet, wager_fonbet)
-    # {'e': 12264423, 'f': 931, 'v': 1.4, 'p': 250, 'pt': '2.5', 'isLive': True}
+    return fonbet._get_request_id()
+
+
+if __name__ == '__main__':
+    print(get_cupon_id())
+    # PROXIES = dict()
+
+    # FONBET_USER = {"login": 5987993, "password": "qRVcRUXz23", "mirror": "bk-fonbet.com"}
+
+    # wager_fonbet = {"time_req": 1580371264,
+    # "event": 19140613,
+    # "value": 1.42,
+    # "param": "",
+    # "factor": "921",
+    # "base_line": True,
+    # "score": "0:0",
+    # "vector": "UP",
+    # "is_hot": False}
+    # # {'time_req': 1576767538, 'event': 18425760, 'value': 2.15, 'param': -350, 'factor': '989', 'score': '1:0', 'vector': 'UP', 'is_hot': False}
+    # # {eventId: 18449923, factorId: 927, place: "live"}
+    # obj = {}
+    # obj['wager_fonbet'] = wager_fonbet
+    # obj['amount_fonbet'] = 30
+    # obj['fonbet_bet_type'] = None  # 'ТМ(2.5)'
+
+    # fonbet = FonbetBot(FONBET_USER)
+    # fonbet.sign_in()
+    # print(fonbet._get_request_id())
+    # # fonbet.place_bet(obj)
+    # # time.sleep(3)
+    # # fonbet.sale_bet(1386768572)
+    # # fonbet_reg_id = fonbet.place_bet(amount_fonbet, wager_fonbet)
+    # # {'e': 12264423, 'f': 931, 'v': 1.4, 'p': 250, 'pt': '2.5', 'isLive': True}

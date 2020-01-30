@@ -123,6 +123,9 @@ def prnt(vstr=None, hide=None, to_cl=False, type_='bet'):
             if vstr:
                 global dtOld
                 global ACC_ID
+                
+                if ACC_ID == 0:
+                    return
 
                 if not hide:
                     dtDeff = round((datetime.datetime.now() - dtOld).total_seconds())
