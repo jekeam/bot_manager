@@ -935,7 +935,7 @@ def matches(update, context):
         msg = msg + '\n' + place.upper() + '\n'
         for match_type, match_cnt in data.items():
             msg = msg + match_type + ': ' + str(match_cnt.get('cnt')) + ', top: ' + str(match_cnt.get('top')) + '\n'
-    msg = msg + '\n Активность ' + str(cnt[-1]) + ' куп./сек.'
+    msg = msg + '\n Активность ' + str(cnt[-1])
     msg = msg.strip()
 
     update.message.reply_text(text=msg)
