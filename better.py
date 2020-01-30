@@ -122,7 +122,7 @@ def get_team_type(name_rus: str, name: str):
 fork_exclude_list = []
 
 
-def check_fork(key, L, k1, k2, live_fork, live_fork_total, bk1_score, bk2_score, event_type, minute, time_break_fonbet, period, team_type, team_names, curr_deff, is_top, is_hot, info=''):
+def check_fork(key, L, k1, k2, live_fork, live_fork_total, bk1_score, bk2_score, event_type, minute, time_break_fonbet, period, team_type, team_names, curr_deff, level_liga, is_hot, info=''):
     global bal1, bal2, bet1, bet2, cnt_fork_success, black_list_matches, matchs_success, summ_min, fonbet_maxbet_fact, vect1, vect2, group_limit_id, place, max_deff, start_after_min
     global fork_exclude_list, vect_check_ok
     global USER_ID, ACC_ID, ADMINS, msg_by_fork
@@ -237,8 +237,10 @@ def check_fork(key, L, k1, k2, live_fork, live_fork_total, bk1_score, bk2_score,
         if live_fork_total > long_livers_max:
             fork_exclude_text = fork_exclude_text + 'Вилка ' + key + ' исключена т.к. живет в общем больше ' + str(long_livers) + ' сек. \n'
 
-    if get_prop('top', 'выкл') == 'вкл' and not is_top:
-        fork_exclude_text = fork_exclude_text + 'Вилка исключена т.к. это не топовый матч: ' + name_rus + '\n'
+    if get_prop('top') == 'top' and level_liga != 'top':
+        fork_exclude_text = fork_exclude_text + 'Вилка исключена т.к. это не топ лига: ' + name_rus + '\n'
+    elif get_prop('top') == 'middle' and level_liga not in ('top', 'middle'):
+        fork_exclude_text = fork_exclude_text + 'Вилка исключена т.к. это шлак лига: ' + name_rus + '\n'
 
     if get_prop('hot', 'выкл') == 'вкл' and not is_hot:
         fork_exclude_text = fork_exclude_text + 'Вилка исключена т.к. это не популярная катировка: ' + key + '\n'
@@ -320,7 +322,7 @@ def save_plt(folder, filename, plt):
     plt.savefig(os.path.join(folder, filename))
 
 
-def go_bets(wag_ol, wag_fb, key, deff_max, vect1, vect2, sc1, sc2, created, event_type, l, l_fisrt, is_top, fork_slice, cnt_act_acc, info_csv):
+def go_bets(wag_ol, wag_fb, key, deff_max, vect1, vect2, sc1, sc2, created, event_type, l, l_fisrt, level_liga, fork_slice, cnt_act_acc, info_csv):
     global bal1, bal2, cnt_fail, cnt_fork_success, k1, k2, total_bet, bet1, bet2, OLIMP_USER, FONBET_USER, ACC_ID, summ_min
     global USER_ID, ACC_ID, ADMINS, msg_by_fork
 
@@ -551,7 +553,7 @@ def go_bets(wag_ol, wag_fb, key, deff_max, vect1, vect2, sc1, sc2, created, even
         fork_info[fork_id]['fonbet']['first_bet_in'] = info_csv.get('first_bet_in', '')
         fork_info[fork_id]['fonbet']['total_first'] = info_csv.get('total_first', '')
 
-        fork_info[fork_id]['fonbet']['is_top'] = is_top
+        fork_info[fork_id]['fonbet']['is_top'] = level_liga
         fork_info[fork_id]['fonbet']['is_hot'] = wag_fb.get('is_hot')
         fork_info[fork_id]['fonbet']['fork_slice'] = fork_slice
         fork_info[fork_id]['fonbet']['cnt_act_acc'] = cnt_act_acc
@@ -856,7 +858,7 @@ if __name__ == '__main__':
                     err_msg = 'Минимальная общая ставка не должена быть больше или равена максимальному'
                     raise ValueError(err_msg)
 
-                sport_list = get_prop('sport_list').replace(';;',';').split(';')
+                sport_list = get_prop('sport_list').replace(';;', ';').split(';')
 
                 if not DEBUG:
                     server_ip = get_prop('server_ip')
@@ -1040,7 +1042,7 @@ if __name__ == '__main__':
                                 msg_bal = msg_bal.format(last_fork_time_min, bal1, bal2, bal_small)
                                 prnt(msg_bal)
                                 # send_message_bot(USER_ID, str(ACC_ID) + ': ' + msg_bal, ADMINS)
-                                
+
                     if bk2.get_acc_info('bet').lower() != 'Нет'.lower():
                         msg_err = msg_err + '\n' + 'обнаружена блокировка ставки в Фонбет, аккаунт остановлен!'
 
@@ -1086,7 +1088,7 @@ if __name__ == '__main__':
                             v_time = val_json.get('time', 'v_time')
                             minute = val_json.get('minute', 0)
                             time_break_fonbet = val_json.get('time_break_fonbet')
-                            is_top = val_json.get('is_top')
+                            level_liga = val_json.get('is_top')
                             period = val_json.get('period')
                             time_last_upd = val_json.get('time_last_upd', 1)
                             live_fork_total = val_json.get('live_fork_total', 0)
@@ -1218,7 +1220,7 @@ if __name__ == '__main__':
                                         # Проверим вилку на исключения
                                         if check_fork(
                                                 key, l, k1, k2, live_fork, live_fork_total, bk1_score, bk2_score, event_type, minute, time_break_fonbet, period, team_type, team_names, curr_deff,
-                                                is_top, is_hot, info
+                                                level_liga, is_hot, info
                                         ) or DEBUG:
                                             prnt('OK - check_fork', 'hide')
                                             now_timestamp = int(time.time())
@@ -1249,7 +1251,7 @@ if __name__ == '__main__':
                                                         .replace(':cur_proc', str(cur_proc)) \
                                                         .replace(':live_fork', str(live_fork)) \
                                                         .replace(':team_type', str(team_type)) \
-                                                        .replace(':is_top', str(is_top)) \
+                                                        .replace(':is_top', str(level_liga)) \
                                                         .replace(':acc_id', str(ACC_ID))
 
                                                     prnt('SQL:\n', 'hide')
@@ -1289,7 +1291,7 @@ if __name__ == '__main__':
                                                     fork_success = go_bets(
                                                         val_json.get('kof_olimp'), val_json.get('kof_fonbet'),
                                                         key, curr_deff, vect1, vect2, sc1, sc2, created_fork, event_type,
-                                                        l, l_fisrt, is_top, str(fork_slice), str(cnt_act_acc), info_csv
+                                                        l, l_fisrt, level_liga, str(fork_slice), str(cnt_act_acc), info_csv
                                                     )
                                         else:
                                             prnt('ERR - check_fork', 'hide')
