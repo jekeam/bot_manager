@@ -934,9 +934,12 @@ def matches(update, context):
             'top': matches_dict[place].get(match_type, {}).get('top', 0) + is_top
         }
     for place, data in collections.OrderedDict(sorted(matches_dict.items())).items():
-        msg = msg + '\n' + place.upper() +' (' + str(len(matches_dict.get(place))) + ')\n'
+        msg = msg + '\n' + place.upper() +' ('+place.upper()+')\n'
+        s = 0
         for match_type, match_cnt in collections.OrderedDict(sorted(data.items(), key=lambda item: '1' if item[0]=='Football' else '2' if item[0]=='Hockey' else item[0])).items():
             msg = msg + match_type + ': ' + str(match_cnt.get('cnt')) + ', top: ' + str(match_cnt.get('top')) + '\n'
+            s = s + match_cnt.get('cnt')
+        msg = msg.replace('('+place.upper()+')',  '(' + str(s) + ')')
     msg = msg.strip()
     update.message.reply_text(text=msg)
 
