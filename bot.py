@@ -935,7 +935,7 @@ def matches(update, context):
         }
     for place, data in collections.OrderedDict(sorted(matches_dict.items())).items():
         msg = msg + '\n' + place.upper() + '\n'
-        for match_type, match_cnt in collections.OrderedDict(sorted(data.items())).items():
+        for match_type, match_cnt in collections.OrderedDict(sorted(data.items(), key=lambda item: '1' if item=='Football' else '2' if item=='Hockey' else item)).items():
             msg = msg + match_type + ': ' + str(match_cnt.get('cnt')) + ', top: ' + str(match_cnt.get('top')) + '\n'
     msg = msg.strip()
     update.message.reply_text(text=msg)
