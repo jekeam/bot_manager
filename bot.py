@@ -29,6 +29,7 @@ import json
 import ast
 from utils import build_menu
 from uuid import uuid1
+import collections
 
 type_user = ('user', 'junior', 'investor')
 
@@ -931,7 +932,7 @@ def matches(update, context):
             'cnt': matches_dict[place].get(match_type, {}).get('cnt', 0) + 1,
             'top': matches_dict[place].get(match_type, {}).get('top', 0) + is_top
         }
-    for place, data in matches_dict.items():
+    for place, data in collections.OrderedDict(sorted(matches_dict.items())).items():
         msg = msg + '\n' + place.upper() + '\n'
         for match_type, match_cnt in data.items():
             msg = msg + match_type + ': ' + str(match_cnt.get('cnt')) + ', top: ' + str(match_cnt.get('top')) + '\n'
