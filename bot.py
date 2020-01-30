@@ -921,6 +921,7 @@ def matches(update, context):
         update.message.reply_text(text='Ошибка при запросе кол-ва TOP матчей: ' + str(e))
 
     msg = 'Кол-во матчей: ' + str(len(cnt)) + ' \n'
+    msg = msg + 'Активность ' + str(cnt[-1]) + '\n'
     matches_dict = {}
     for match in cnt[0:-1]:
         match_type = match[2][0:1].upper() + match[2][1:]
@@ -936,9 +937,7 @@ def matches(update, context):
         msg = msg + '\n' + place.upper() + '\n'
         for match_type, match_cnt in collections.OrderedDict(sorted(data.items())).items():
             msg = msg + match_type + ': ' + str(match_cnt.get('cnt')) + ', top: ' + str(match_cnt.get('top')) + '\n'
-    msg = msg + '\n Активность ' + str(cnt[-1])
     msg = msg.strip()
-
     update.message.reply_text(text=msg)
 
 
