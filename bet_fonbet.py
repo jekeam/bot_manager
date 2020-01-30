@@ -75,11 +75,13 @@ class FonbetBot:
         self.sell_blocked = None
 
         session_proxies = get_proxies().get('fonbet', {})
+        if not session_proxies:
+            session_proxies = {'https' : self.account.get('proxy')}
 
         if self.bk_type == 'com':
             self.app_ver = '5.1.3b'
             self.user_agent = 'Fonbet/5.1.3b (Android 21; Phone; com.bkfonbet)'
-            self.not_url = 'bkfonbet.com'
+            self.not_url = 'fonbet.com'
             self.url_api = 'clients-api'  # maybe 'common'?
         elif self.bk_type == 'ru':
             self.app_ver = '5.2.1r'
@@ -1074,7 +1076,8 @@ def get_new_bets_fonbet(match_id, proxies, time_out):
         raise ValueError(e)
 
 def get_cupon_id():
-    FONBET_USER = {"login": 5987993, "password": "qRVcRUXz23", "mirror": "bkfonbet.com"}
+    from bot_prop import new_proxy_http
+    FONBET_USER = {"login": 5987993, "password": "qRVcRUXz23", "mirror": "fonbet.com", "proxy": new_proxy_http}
 
     wager_fonbet = {"time_req": 1580371264,
     "event": 19140613,
@@ -1101,7 +1104,7 @@ if __name__ == '__main__':
     print(get_cupon_id())
     # PROXIES = dict()
 
-    # FONBET_USER = {"login": 5987993, "password": "qRVcRUXz23", "mirror": "bkfonbet.com"}
+    # FONBET_USER = {"login": 5987993, "password": "qRVcRUXz23", "mirror": "fonbet.com"}
 
     # wager_fonbet = {"time_req": 1580371264,
     # "event": 19140613,

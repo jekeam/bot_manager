@@ -919,7 +919,7 @@ def matches(update, context):
         prntb(str(err_str))
         update.message.reply_text(text='Ошибка при запросе кол-ва TOP матчей: ' + str(e))
 
-    msg = 'Кол-во матчей: ' + str(len(cnt)) + ' \n'
+    msg = 'Кол-во матчей: ' + str(len(cnt)) + ' \n\n'
     matches_dict = {}
     for match in cnt[0:-1]:
         match_type = match[2][0:1].upper() + match[2][1:]
@@ -932,10 +932,10 @@ def matches(update, context):
             'top': matches_dict[place].get(match_type, {}).get('top', 0) + is_top
         }
     for place, data in matches_dict.items():
-        msg = msg + place + ': \n'
+        msg = msg + '\n' + place + ': \n'
         for match_type, match_cnt in data.items():
             msg = msg + match_type + ': ' + str(match_cnt.get('cnt')) + ', top: ' + str(match_cnt.get('top')) + '\n'
-    msg = msg + '\n Активность ' + str(cnt[-1]) + ' куп./сек.'
+    msg = msg + '\n Активность ' + str(cnt[-1]) + ' куп-в/сек.'
     msg = msg.strip()
 
     update.message.reply_text(text=msg)
