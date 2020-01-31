@@ -1077,7 +1077,7 @@ def get_new_bets_fonbet(match_id, proxies, time_out):
 
 def get_cupon_id():
     from bot_prop import new_proxy_http
-    FONBET_USER = {"login": 5987993, "password": "qRVcRUXz23", "mirror": "fonbet.com", "proxy": new_proxy_http}
+    FONBET_USER = {"login": 4604319, "password": "ft1304Abcft", "mirror": "fonbet.com", "proxy": new_proxy_http}
 
     wager_fonbet = {"time_req": 1580371264,
     "event": 19140613,
