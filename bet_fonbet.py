@@ -76,7 +76,7 @@ class FonbetBot:
 
         session_proxies = get_proxies().get('fonbet', {})
         if not session_proxies:
-            session_proxies = {'https' : self.account.get('proxy')}
+            session_proxies = {'https': self.account.get('proxy')}
 
         if self.bk_type == 'com':
             self.app_ver = '5.1.3b'
@@ -1075,19 +1075,21 @@ def get_new_bets_fonbet(match_id, proxies, time_out):
         prnt(e)
         raise ValueError(e)
 
+
 def get_cupon_id():
     from bot_prop import new_proxy_http
-    FONBET_USER = {"login": 4604319, "password": "ft1304Abcft", "mirror": "fonbet.ru", "proxy": new_proxy_http}
+    # FONBET_USER = {"login": 4604319, "password": "ft1304Abcft", "mirror": "fonbet.ru", "proxy": new_proxy_http}
+    FONBET_USER = {"login": 5987993, "password": "qRVcRUXz23", "mirror": "fonbet.com", "proxy": new_proxy_http}
 
     wager_fonbet = {"time_req": 1580371264,
-    "event": 19140613,
-    "value": 1.42,
-    "param": "",
-    "factor": "921",
-    "base_line": True,
-    "score": "0:0",
-    "vector": "UP",
-    "is_hot": False}
+                    "event": 19140613,
+                    "value": 1.42,
+                    "param": "",
+                    "factor": "921",
+                    "base_line": True,
+                    "score": "0:0",
+                    "vector": "UP",
+                    "is_hot": False}
     # {'time_req': 1576767538, 'event': 18425760, 'value': 2.15, 'param': -350, 'factor': '989', 'score': '1:0', 'vector': 'UP', 'is_hot': False}
     # {eventId: 18449923, factorId: 927, place: "live"}
     obj = {}
