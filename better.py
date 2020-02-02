@@ -1204,7 +1204,6 @@ if __name__ == '__main__':
                                                 pass
                                             else:
                                                 vect_check_ok = False
-                                        prnt('{} - Первая ставка в {}: vect1: {}->{}, vect2: {}->{}'.format(key, v_first_bet_in, vect1_old, vect1, vect2_old, vect2), 'hide')
 
                                         round_bet = int(get_prop('round_fork'))
                                         total_bet = round(randint(total_bet_min, total_bet_max) / round_bet) * round_bet
@@ -1222,6 +1221,7 @@ if __name__ == '__main__':
                                                 key, l, k1, k2, live_fork, live_fork_total, bk1_score, bk2_score, event_type, minute, time_break_fonbet, period, team_type, team_names, curr_deff,
                                                 level_liga, is_hot, info
                                         ) or DEBUG:
+                                            prnt('{} - Первая ставка в {}: vect1: {}->{}, vect2: {}->{}'.format(key, v_first_bet_in, vect1_old, vect1, vect2_old, vect2), 'hide')
                                             prnt('OK - check_fork', 'hide')
                                             now_timestamp = int(time.time())
                                             last_timestamp = temp_lock_fork.get(key, now_timestamp)
