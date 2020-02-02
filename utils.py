@@ -123,16 +123,14 @@ def prnt(vstr=None, hide=None, to_cl=False, type_='bet'):
             if vstr:
                 global dtOld
                 global ACC_ID
-                
-                if ACC_ID == 0:
-                    return
 
                 if not hide:
                     dtDeff = round((datetime.datetime.now() - dtOld).total_seconds())
-                    strLog = datetime.datetime.now().strftime('%d %H:%M:%S.%f ') + '[' + str(dtDeff).rjust(2,
-                                                                                                           '0') + ']    ' + str(
-                        ACC_ID) + ': ' + str(vstr)
-                    print(strLog)
+                    strLog = datetime.datetime.now().strftime('%d %H:%M:%S.%f ') + '[' + str(dtDeff).rjust(2, '0') + ']    ' + str(ACC_ID) + ': ' + str(vstr)
+                    if ACC_ID == 0:
+                        pass
+                    else:
+                        print(strLog)
                     dtOld = datetime.datetime.now()
                     Outfile = open(str(ACC_ID) + '_client.log', "a+", encoding='utf-8')
                     Outfile.write(strLog + '\n')

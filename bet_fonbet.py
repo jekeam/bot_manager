@@ -1076,10 +1076,29 @@ def get_new_bets_fonbet(match_id, proxies, time_out):
         raise ValueError(e)
 
 
-def get_cupon_id():
+def check_acc(login: str = None, password: str = None, domain: str = None, proxy: str = None):
     from bot_prop import new_proxy_http
-    # FONBET_USER = {"login": 4604319, "password": "ft1304Abcft", "mirror": "fonbet.ru", "proxy": new_proxy_http}
-    FONBET_USER = {"login": 5987993, "password": "qRVcRUXz23", "mirror": "fonbet.com", "proxy": new_proxy_http}
+    FONBET_USER = {"login": login, "password": password, "mirror": "fonbet." + domain, "proxy": new_proxy_http}
+    fonbet = FonbetBot(FONBET_USER)
+    try:
+        fonbet.sign_in()
+        return 'ok'
+    except Exception as e:
+        return str(e)
+
+
+def get_cupon_id(login: str = None, password: str = None, domain: str = None):
+    from bot_prop import new_proxy_http
+    with open('acc_list.csv', 'r+') as file:
+        accs = file.readlines()
+    acc_str = choice(accs)
+
+    login, password, domain = acc_str.split(';')
+
+    if login and password and domain:
+        FONBET_USER = {"login": int(login), "password": password, "mirror": "fonbet." + domain, "proxy": new_proxy_http}
+    else:
+        FONBET_USER = {"login": 5987993, "password": "qRVcRUXz23", "mirror": "fonbet.com", "proxy": new_proxy_http}
 
     wager_fonbet = {"time_req": 1580371264,
                     "event": 19140613,
