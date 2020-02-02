@@ -163,8 +163,8 @@ def check_fork(key, L, k1, k2, live_fork, live_fork_total, bk1_score, bk2_score,
     if not bet_type_is_work(key, event_type, group_limit_id):
         fork_exclude_text = fork_exclude_text + 'Вилка исключена, т.к. я еще не умею работать с этой ставкой: ' + str(key) + ', event_type: ' + str(event_type) + ', group_limit_id: ' + str(group_limit_id) + '\n'
 
-    if curr_deff > max_deff:
-        fork_exclude_text = fork_exclude_text + 'Вилка исключена, т.к. deff_max (' + str(curr_deff) + ' > ' + str(max_deff) + ')\n'
+    # if curr_deff > max_deff:
+    #     fork_exclude_text = fork_exclude_text + 'Вилка исключена, т.к. deff_max (' + str(curr_deff) + ' > ' + str(max_deff) + ')\n'
 
     if get_prop('double_bet', 'выкл') == 'выкл':
         if cnt_fork_success.count(key) > 0:
@@ -1164,9 +1164,9 @@ if __name__ == '__main__':
                                 info = ''
                             if event_type in sport_list:
                                 if vect1 and vect2:
-                                    max_deff = 3
+                                    max_deff = 6
                                     if place == 'pre':
-                                        max_deff = 33
+                                        max_deff = 60
                                     if curr_deff <= curr_deff and k1 > 0 < k2:
                                         vect1_old = vect1
                                         vect2_old = vect2
