@@ -323,7 +323,7 @@ def choose_prop(update, context):
             account_srt = Account.select().where(Account.id == acc_id).get().accounts.replace('`', '"')
             prntb(account_srt)
             account_json = json.loads(account_srt)
-            cur_val = account_json.get(account, 'BK not found').get('login', 'login not found') + '/' + account_json.get(account, 'BK not found').get('password', 'password not found')
+            cur_val = str(account_json.get(account, 'BK not found').get('login', 'login not found')) + '/' + str(account_json.get(account, 'BK not found').get('password', 'password not found'))
         else:
             cur_val = get_val_prop_id(acc_id, v_key)
     except Exception as e:
