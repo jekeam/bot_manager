@@ -311,7 +311,7 @@ def choose_prop(update, context):
                 dop_indo = 'только https прокси формата user:password@ip:port или ip:port'
             elif 'account:' in val.get('type'):
                 account = val.get('type').split(':')[1]
-                dop_indo = 'логин и пароль через / (слеш) в формате: login/password'
+                dop_indo = 'логин и пароль через / (слеш) в формате: login/password - без пробелов и переносов строк'
     acc_id = context.user_data.get('acc_id')
     cur_val = ''
     try:
@@ -320,7 +320,7 @@ def choose_prop(update, context):
             prntb(proxy_str)
             cur_val = json.loads(proxy_str).get(proxy, 'Proxy not found').get('https', 'HTTPS Proxy not found')
         elif account:
-            account_srt = Account.select().where(Account.id == acc_id).get().accounts.replace('`', '"').replace('https://', '')
+            account_srt = Account.select().where(Account.id == acc_id).get().accounts.replace('`', '"')
             prntb(account_srt)
             account_json = json.loads(account_srt)
             cur_val = account_json.get(account, 'BK not found').get('login', 'login not found') + '/' + account_json.get(account, 'BK not found').get('password', 'password not found')
