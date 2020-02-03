@@ -265,7 +265,8 @@ def set_prop(update, context):
                         else:
                             data = [(acc_id, key, prop_val), ]
                             Properties.insert_many(data, fields=[Properties.acc_id, Properties.key, Properties.val]).execute()
-                        if account:
+                        
+                        if 'account' in type_:
                             new_val_disp = str(login) + '/' + str(prop_val)
                         else:
                             new_val_disp = Properties.select().where((Properties.acc_id == acc_id) & (Properties.key == key)).get().val
