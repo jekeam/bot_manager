@@ -265,8 +265,11 @@ def set_prop(update, context):
                         else:
                             data = [(acc_id, key, prop_val), ]
                             Properties.insert_many(data, fields=[Properties.acc_id, Properties.key, Properties.val]).execute()
-
-                        msg_main = str(acc_id) + ': Новое значение *' + prop_name + '*\nустановлено:\n' + Properties.select().where((Properties.acc_id == acc_id) & (Properties.key == key)).get().val
+                        if account:
+                            new_val_disp = str(login) + '/' + str(prop_val)
+                        else:
+                            new_val_disp = Properties.select().where((Properties.acc_id == acc_id) & (Properties.key == key)).get().val
+                        msg_main = str(acc_id) + ': Новое значение *' + prop_name + '*\nустановлено:\n' + new_val_disp
 
                         keyboard = []
                         keyboard.append([InlineKeyboardButton(text=bot_prop.BTN_SETTINGS, callback_data='pror_edit')])
