@@ -35,7 +35,7 @@ def olimp_get_hist(OLIMP_USER):
 
     def get_chank(offset=0):
         coupot_list_chank = dict()
-        bet_list = olimp.get_history_bet(filter="0011", offset=offset).get('bet_list')
+        bet_list = olimp.get_history_bet(filter="0111", offset=offset).get('bet_list')
         for bets in bet_list:
             if bets.get('bet_id') >= olimp_bet_min:
                 ts = int(bets.get('dttm'))
