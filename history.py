@@ -285,7 +285,7 @@ def export_hist(OLIMP_USER, FONBET_USER):
             if not os.path.isfile(new_file_name_log):
                 os.rename(file_name_log, new_file_name_log)
             else:
-                os.rename(file_name_log, new_file_name_log.replace('.', datetime.now().strftime('%H_%M'))
+                os.rename(file_name_log, new_file_name_log.replace('.', datetime.now().strftime('%H_%M')))
         except Exception as e:
             prnt(e)
 
