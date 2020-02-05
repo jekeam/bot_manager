@@ -274,7 +274,7 @@ def get_new_bets_fonbet(match_id, proxies, time_out=50):
 
                 half = ''
                 if 'st half' in name or 'nd half' in name:
-                    half = name.replace('st half', '').repoalce('nd half', '')
+                    half = name.replace('st half', '').replace('nd half', '')
 
                 for cat in event.get('subcategories'):
 
