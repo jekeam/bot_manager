@@ -91,10 +91,10 @@ prop_abr = {
     "ML_NOISE": {"abr": "ML. Olimp UP", "type": "str", "max": "", "min": "", "access_list": on_off, "error": "", "default": "выкл", },
     # "POUR_INTO": {"abr": "Перелить в", "type": "str", "max": "", "min": "", "access_list": bks, "error": ""},
     "DOUBLE_BET": {"abr": "Дубли ставок", "type": "str", "max": "", "min": "", "access_list": on_off, "error": ""},
-    "MAX_BET_FONBET":
+    "ROUND_FONBET":
         {
-            "abr": "MAX BET в Fonbet", "type": "int", "max": "1000", "min": "0",
-            "access_list": ["0", "50", "90", "100", "200", "300", "400", "500", "600", "700", "800", "900", "1000"], "error": ""
+            "abr": "Округление в Fonbet", "type": "int", "max": "1000", "min": "0",
+            "access_list": ["0", "5", "10", "50", "100", "1000"], "error": ""
         },
     # "SERVER_OLIMP": {"abr": "Сервер Олимп", "type": "str", "max": "", "min": "", "access_list": [], "error": ""},
     "SPORT_LIST": {"abr": "Виды спорта", "type": "strs", "max": "", "min": "", "access_list": sport_list_str, "default": "football;hockey", "error": ""},  # sport_list_str
