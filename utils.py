@@ -198,7 +198,7 @@ def get_sum_bets(k1, k2, total_bet, round_fork=5, hide=False, debug=False):
     bet_2 = total_bet - bet_1
     if debug:
         prnt('L: ' + str(round((1 - l) * 100, 2)) + '% (' + str(l) + ') ', hide)
-        prnt('bet1: ' + str(bet_1) + ', bet2: ' + str(bet_2) + '|' + ' bet_sum: ' + str(bet_1 + bet_2), hide)
+        prnt('bet1: ' + str(bet_1) + ', bet2: ' + str(bet_2) + '|' + ' bet_sum: ' + str(bet_1 + bet_2) + '\n', hide)
 
     return bet_1, bet_2
 
@@ -208,18 +208,22 @@ def floor_to_2(num: float):
 
 
 def get_new_sum_bets(bk1, bk2, max_bet, bal2, hide=False, round_fork=5, debug=False):
+    if debug:
+        prnt('info: max_bet:{}, bal2:{} '.format(max_bet, bal2), hide)
     if get_prop('round_fork'):
         round_fork = int(get_prop('round_fork'))
     l = 1 / bk1 + 1 / bk2
-    total_bet = floor(((max_bet * bk1 * l) / round_fork) - round_fork) * round_fork
+    total_bet = floor((max_bet * bk1 * l) / round_fork) * round_fork
     total_bet_max = (max_bet + bal2)
     if total_bet > total_bet_max:
+        if debug:
+            prnt('info: total_bet > total_bet_max, {}>{}'.format(total_bet, total_bet_max), hide)
         total_bet = total_bet_max
-        prnt('Error, total_bet > total_bet_max, {}>{}'.format(total_bet, total_bet_max), hide)
     sum_bk1, sum_bk2 = get_sum_bets(bk1, bk2, total_bet, round_fork, hide, debug)
     if sum_bk2 > bal2:
-        prnt('Error, sum_bk2 > bal2, {}>{}, sum_bk1: {}, max_bet: {}'.format(sum_bk2, bal2, sum_bk1, max_bet), hide)
-        sum_bk2, sum_bk1 = get_new_sum_bets(bk2, bk1, bal2, max_bet, hide, round_fork, debug)
+        if debug:
+            prnt('info: sum_bk2 > bal2, {}>{}, sum_bk1: {}, max_bet: {}'.format(sum_bk2, bal2, sum_bk1, max_bet), hide)
+        sum_bk2, sum_bk1 = get_new_sum_bets(bk2, bk1, floor(bal2 / round_fork) * round_fork, max_bet, hide, round_fork, debug)
     return sum_bk1, sum_bk2
 
 
