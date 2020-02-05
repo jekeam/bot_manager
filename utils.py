@@ -183,21 +183,22 @@ def get_kof_from_serv(bk_name, match_id, kof, server_ip=''):
     return answer
 
 
-def get_sum_bets(k1, k2, total_bet, round_fork=5, hide=False):
+def get_sum_bets(k1, k2, total_bet, round_fork=5, hide=False, debug=False):
     if get_prop('round_fork'):
         round_fork = int(get_prop('round_fork'))
 
     k1 = float(k1)
     k2 = float(k2)
-    # prnt('k1:{}, k2:{}'.format(k1, k2), hide)
+    if debug:
+        prnt('k1:{}, k2:{}'.format(k1, k2), hide)
     l = (1 / k1) + (1 / k2)
 
     # Округление проставления в БК1 происходит по правилам математики
     bet_1 = round(total_bet / (k1 * l) / round_fork) * round_fork
     bet_2 = total_bet - bet_1
-
-    # prnt('L: ' + str(round((1 - l) * 100, 2)) + '% (' + str(l) + ') ', hide)
-    # prnt('bet1: ' + str(bet_1) + ', bet2: ' + str(bet_2) + '|' + ' bet_sum: ' + str(bet_1 + bet_2), hide)
+    if debug:
+        prnt('L: ' + str(round((1 - l) * 100, 2)) + '% (' + str(l) + ') ', hide)
+        prnt('bet1: ' + str(bet_1) + ', bet2: ' + str(bet_2) + '|' + ' bet_sum: ' + str(bet_1 + bet_2), hide)
 
     return bet_1, bet_2
 
@@ -206,7 +207,7 @@ def floor_to_2(num: float):
     return floor(num / 100) * 100.
 
 
-def get_new_sum_bets(bk1, bk2, max_bet, bal2, hide=False, round_fork=5):
+def get_new_sum_bets(bk1, bk2, max_bet, bal2, hide=False, round_fork=5, debug=False):
     if get_prop('round_fork'):
         round_fork = int(get_prop('round_fork'))
     l = 1 / bk1 + 1 / bk2
@@ -215,10 +216,10 @@ def get_new_sum_bets(bk1, bk2, max_bet, bal2, hide=False, round_fork=5):
     if total_bet > total_bet_max:
         total_bet = total_bet_max
         prnt('Error, total_bet > total_bet_max, {}>{}'.format(total_bet, total_bet_max), hide)
-    sum_bk1, sum_bk2 = get_sum_bets(bk1, bk2, total_bet, round_fork, hide)
+    sum_bk1, sum_bk2 = get_sum_bets(bk1, bk2, total_bet, round_fork, hide, debug)
     if sum_bk2 > bal2:
         prnt('Error, sum_bk2 > bal2, {}>{}, sum_bk1: {}, max_bet: {}'.format(sum_bk2, bal2, sum_bk1, max_bet), hide)
-        sum_bk2, sum_bk1 = get_new_sum_bets(bk2, bk1, bal2, max_bet, hide, round_fork)
+        sum_bk2, sum_bk1 = get_new_sum_bets(bk2, bk1, bal2, max_bet, hide, round_fork, debug)
     return sum_bk1, sum_bk2
 
 

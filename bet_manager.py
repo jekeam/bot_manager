@@ -334,7 +334,7 @@ class BetManager:
         if sum_bet_by_max_bet < max_bet_fonbet or max_bet_fonbet == 0:
             prnt(self.msg.format(self.tread_id + ': ' + sys._getframe().f_code.co_name, 'RECALC_SUM_BY_MAXBET: sum_bet_by_max_bet:{}({}%)->{}'.format(self.max_bet, get_prop('proc_by_max', '90'), sum_bet_by_max_bet)))
             prnt(self.msg.format(self.tread_id + ': ' + sys._getframe().f_code.co_name, 'RECALC_SUM_BY_MAXBET: bal1:{}, bal2:{}, k1:{}, k2:{}, sum_bet_by_max_bet:{}'.format(bal1, bal2, k1, k2, sum_bet_by_max_bet)))
-            sum1, sum2 = get_new_sum_bets(k1, k2, sum_bet_by_max_bet, bal1)
+            sum1, sum2 = get_new_sum_bets(k1, k2, sum_bet_by_max_bet, bal1, False, 5, True)
 
         if (sum1 + sum2) >= int(get_prop('summ')):
             prnt(self.msg.format(self.tread_id + ': ' + sys._getframe().f_code.co_name, 'Сумма после пересчета по максбету, больше общей ставки, уменьшаем ее: {}->{}'.format((sum1 + sum2), int(get_prop('summ')))))
@@ -342,11 +342,11 @@ class BetManager:
 
         if sum1 >= bal1:
             prnt(self.msg.format(self.tread_id + ': ' + sys._getframe().f_code.co_name, 'Сумма ставки 1й бк после пересчета по максбету, больше баланса 1й бк, уменьшаем ее: {}->{}'.format(sum1, bal1)))
-            sum1, sum2 = get_new_sum_bets(k1, k2, bal1, bal2)
+            sum1, sum2 = get_new_sum_bets(k1, k2, bal1, bal2, False, 5, True)
 
         if sum2 >= bal2:
             prnt(self.msg.format(self.tread_id + ': ' + sys._getframe().f_code.co_name, 'Сумма ставки 2й бк после пересчета по максбету, больше баланса 2й бк, уменьшаем ее: {}->{}'.format(sum2, bal2)))
-            sum2, sum1 = get_new_sum_bets(k2, k1, bal2, bal1, bal2)
+            sum2, sum1 = get_new_sum_bets(k2, k1, bal2, bal1, False, 5, True)
 
         if sum1 > bal1 or sum2 > bal2:
             raise BetIsLost('Ошибка баланса: Одна из ставок больше баланса: {}>{}, {}>{}'.format(sum1, bal1, sum2, bal2))
