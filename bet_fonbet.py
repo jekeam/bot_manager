@@ -323,6 +323,7 @@ class FonbetBot:
             # 'currency': {'currency': 'RUB', 'fracSize': 0, 'betRoundAccuracy': 1, 'rate': 1}
             self.currency = res.get("currency").get("currency")
             self.balance = float(res.get("saldo"))
+            self.balance_in_play = float(res.get("scopeMarket", 0))
             if self.currency == 'RUB':
                 self.balance = self.balance // 1
             else:
@@ -354,7 +355,6 @@ class FonbetBot:
             else:
                 self.sell_blocked = 'Нет'
 
-            # self.balance_in_play = 0.0
             self.payload = payload
             prnt('BET_FONBET.PY: balance: ' + str(self.balance))
 
@@ -373,10 +373,14 @@ class FonbetBot:
             time.sleep(5)
             return self.sign_in()
 
-    def get_balance(self):
+    def get_balance(self, in_play:bool=False):
         if self.balance == 0.0:
             self.sign_in()
-        return round(self.balance)
+        
+        if in_play:
+            return round(self.balance_in_play)
+        else:
+            return round(self.balance)
 
     def get_acc_info(self, param):
         if param == 'bet':

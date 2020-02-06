@@ -117,12 +117,14 @@ class OlimpBot:
             prnt(e)
             raise ValueError(e)
 
-    def get_balance(self):
+    def get_balance(self, in_play:bool=False):
         if self.balance == 0.0:
             self.sign_in()
-            return round(self.balance)
+        
+        if in_play:
+            return round(self.balance_in_play)
         else:
-            return self.balance
+            return round(self.balance)
 
     def get_bk_name(self):
         return self.bk_name
