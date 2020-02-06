@@ -622,10 +622,10 @@ def botlist(update, context, edit=False):
             date_end = datetime.datetime.fromtimestamp(acc.date_end)
             date_end_str = '[до ' + date_end.strftime('%d.%m.%Y') + ']'
             # check for date
-            if date_end < datetime.datetime.now():
-                work_stat_inactive = emojize(':x:', use_aliases=True) + ' Не активен' + ' ' + date_end_str
-            elif acc.status == 'pause':
+            if acc.status == 'pause':
                 work_stat_inactive = emojize(':double_vertical_bar:', use_aliases=True) + ' На паузе'
+            elif date_end < datetime.datetime.now():
+                work_stat_inactive = emojize(':x:', use_aliases=True) + ' Не активен' + ' ' + date_end_str
             elif acc.status == 'inactive':
                 work_stat_inactive = emojize(':x:', use_aliases=True) + ' Не активен' + ' ' + date_end_str
         else:
