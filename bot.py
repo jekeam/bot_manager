@@ -906,7 +906,7 @@ def matches(update, context):
     msg = ''
     cnt = []
     try:
-        resp = requests.get('http://' + bot_prop.IP_SERVER + '/get_cnt_matches', timeout=15)
+        resp = requests.get('http://' + bot_prop.IP_SERVER + '/get_cnt_matches', timeout=500)
         cnt = ast.literal_eval(resp.text)
     except Exception as e:
         exc_type, exc_value, exc_traceback = sys.exc_info()
@@ -916,7 +916,7 @@ def matches(update, context):
 
     top = []
     try:
-        resp_t = requests.get('http://' + bot_prop.IP_SERVER + '/get_cnt_top_matches', timeout=15)
+        resp_t = requests.get('http://' + bot_prop.IP_SERVER + '/get_cnt_top_matches', timeout=500)
         top = ast.literal_eval(resp_t.text)
     except Exception as e:
         exc_type, exc_value, exc_traceback = sys.exc_info()
@@ -926,7 +926,7 @@ def matches(update, context):
 
     middle = []
     try:
-        resp_t = requests.get('http://' + bot_prop.IP_SERVER + '/get_middle', timeout=15)
+        resp_t = requests.get('http://' + bot_prop.IP_SERVER + '/get_middle', timeout=500)
         middle = ast.literal_eval(resp_t.text)
     except Exception as e:
         exc_type, exc_value, exc_traceback = sys.exc_info()
