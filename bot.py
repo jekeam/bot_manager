@@ -912,7 +912,7 @@ def matches(update, context):
         exc_type, exc_value, exc_traceback = sys.exc_info()
         err_str = str(e) + ' ' + str(repr(traceback.format_exception(exc_type, exc_value, exc_traceback)))
         prntb(str(err_str))
-        update.message.reply_text(text='Ошибка при запросе кол-ва матчей: ' + str(e))
+        # update.message.reply_text(text='Ошибка при запросе кол-ва матчей: ' + str(e))
 
     top = []
     try:
@@ -922,7 +922,7 @@ def matches(update, context):
         exc_type, exc_value, exc_traceback = sys.exc_info()
         err_str = str(e) + ' ' + str(repr(traceback.format_exception(exc_type, exc_value, exc_traceback)))
         prntb(str(err_str))
-        update.message.reply_text(text='Ошибка при запросе кол-ва TOP матчей: ' + str(e))
+        # update.message.reply_text(text='Ошибка при запросе кол-ва TOP матчей: ' + str(e))
 
     middle = []
     try:
@@ -932,7 +932,7 @@ def matches(update, context):
         exc_type, exc_value, exc_traceback = sys.exc_info()
         err_str = str(e) + ' ' + str(repr(traceback.format_exception(exc_type, exc_value, exc_traceback)))
         prntb(str(err_str))
-        update.message.reply_text(text='Ошибка при запросе кол-ва MIDDLE матчей: ' + str(e))
+        # update.message.reply_text(text='Ошибка при запросе кол-ва MIDDLE матчей: ' + str(e))
 
     msg = 'Кол-во матчей: ' + str(len(cnt)) + ' \n'
     msg = msg + 'Активность ' + str(cnt[-1]) + '\n'
