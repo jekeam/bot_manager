@@ -126,8 +126,10 @@ def check_fork(key, L, k1, k2, live_fork, live_fork_total, bk1_score, bk2_score,
     global bal1, bal2, bet1, bet2, cnt_fork_success, black_list_matches, matchs_success, summ_min, fonbet_maxbet_fact, vect1, vect2, group_limit_id, place, max_deff, start_after_min
     global fork_exclude_list, vect_check_ok
     global USER_ID, ACC_ID, ADMINS, msg_by_fork
+    global bal_small
 
     fork_exclude_text = ''
+    msg_temp = ''
     v = True
 
     place_prop = str(get_prop('place'))
@@ -179,29 +181,12 @@ def check_fork(key, L, k1, k2, live_fork, live_fork_total, bk1_score, bk2_score,
 
     # Проверяем корректная ли сумма
     if bet1 < 30 or bet2 < 30:
-        msg_temp = 'Вилка ' + key + '  исключена, т.к сумма одной из ставок меньше 30р\n'
-        if key not in msg_by_fork and fork_exclude_text == '':
-            msg_by_fork.append(key)
-            for admin in ADMINS:
-                send_message_bot(admin, str(ACC_ID) + ': ' + msg_temp, ADMINS)
-        fork_exclude_text = fork_exclude_text + msg_temp
-
+        msg_temp = msg_temp + 'Вилка ' + key + '  исключена, т.к сумма одной из ставок меньше 30р\n'
     if (bet1 + bet2) < summ_min:
-        msg_temp = 'Общая сумма ставки: {}, меньше нижнего предела: {}.\n'.format((bet1 + bet2), summ_min)
-        if key not in msg_by_fork and fork_exclude_text == '':
-            msg_by_fork.append(key)
-            for admin in ADMINS:
-                send_message_bot(admin, str(ACC_ID) + ': ' + msg_temp, ADMINS)
-        fork_exclude_text = fork_exclude_text + msg_temp
-
+        msg_temp = msg_temp + 'Общая сумма ставки: {}, меньше нижнего предела: {}.\n'.format((bet1 + bet2), summ_min)
     # Проверяем хватить денег для ставки
     if (bal1 < bet1) or (bal2 < bet2):
-        msg_temp = 'Для проставления вилки ' + key + ' недостаточно средств, bal1=' + str(bal1) + ', bet1=' + str(bet1) + ', bal2=' + str(bal2) + ', bet2=' + str(bet2) + ', k1=' + str(k1) + ', k2=' + str(k2) +  '\n'
-        if key not in msg_by_fork and fork_exclude_text == '':
-            msg_by_fork.append(key)
-            for admin in ADMINS:
-                send_message_bot(admin, str(ACC_ID) + ': ' + msg_temp, ADMINS)
-        fork_exclude_text = fork_exclude_text + msg_temp
+        msg_temp = msg_temp + 'Для проставления вилки ' + key + ' недостаточно средств, bal1=' + str(bal1) + ', bet1=' + str(bet1) + ', bal2=' + str(bal2) + ', bet2=' + str(bet2) + ', k1=' + str(k1) + ', k2=' + str(k2) +  '\n'
 
     if get_prop('max_kof'):
         max_kof = float(get_prop('max_kof'))
@@ -256,6 +241,14 @@ def check_fork(key, L, k1, k2, live_fork, live_fork_total, bk1_score, bk2_score,
             fork_exclude_text = fork_exclude_text + 'Вилка исключена т.к. задан перелив в {}, а коф-т менее вероятен: k_ol:{} < k_fb:{}\n'.format(pour_into, k1, k2)
 
     fork_exclude_text = fork_exclude_text + check_l(L)
+    
+    if msg_temp != '':
+        fork_exclude_text = msg_temp
+        if key not in msg_by_fork and fork_exclude_text == '' and not bal_small:
+            msg_by_fork.append(key)
+            msg_temp = msg_temp + 'bal1={}, bet1={}, bal2={}, bet2={}, k1={}, k2={}, summ_min={}'.format(bal1, bet1, bal2, bet2, k1, k2, summ_min)
+            for admin in ADMINS:
+                send_message_bot(admin, str(ACC_ID) + ': ' + msg_temp, ADMINS)
 
     if fork_exclude_text != '':
         v = False
