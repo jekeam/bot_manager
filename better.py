@@ -1024,9 +1024,11 @@ if __name__ == '__main__':
                     if bal_small and not DEBUG:
                         last_fork_time_min = (int(time.time()) - last_fork_time) / 60
                         if last_fork_time_min >= 120:
+                            msg_bal = 'C момента последней ставки прошло {} мин. обновляю балансы ' + str(bal1) + '->{}, ' + str(bal2) + '->{}, дисбаланс:{}'
                             bal1 = bk1.get_balance()
                             bal2 = bk2.get_balance()
-                            bal_small = ref_bal_small(bal1, bal2)
+                            msg_bal = msg_bal.format(last_fork_time_min, bal1, bal2, bal_small)
+                            prnt(msg_bal)
                             if bal_small:
                                 msg_err = msg_err + '\nаккаунт остановлен: денег в одной из БК не достаточно для работы, просьба выровнять балансы.\n' + bk1_name + ': ' + str(bal1) + '\n' + bk2_name + ': ' + str(bal2)
                         else:
