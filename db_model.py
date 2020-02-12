@@ -94,7 +94,7 @@ prop_abr = {
     "ROUND_FONBET":
         {
             "abr": "Округление в Fonbet", "type": "int", "max": "1000", "min": "0",
-            "access_list": ["0", "5", "10", "50", "100", "1000"], "error": "", "default": "0"
+            "access_list": ["0", "1", "5", "10", "50", "100", "500", "1000"], "error": "", "default": "0"
         },
     # "SERVER_OLIMP": {"abr": "Сервер Олимп", "type": "str", "max": "", "min": "", "access_list": [], "error": ""},
     "SPORT_LIST": {"abr": "Виды спорта", "type": "strs", "max": "", "min": "", "access_list": sport_list_str, "default": "football;hockey", "error": ""},  # sport_list_str

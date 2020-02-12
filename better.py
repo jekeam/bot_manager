@@ -22,6 +22,7 @@ import ml
 import random
 import subprocess
 import pandas as pd
+import math
 
 if __name__ == '__main__':
     from history import export_hist
@@ -719,17 +720,18 @@ def recalc_bets(hide=True):
             bet2, bet1 = get_new_sum_bets(k2, k1, bal2, bal1, hide, round_bet)
             total_bet = bet1 + bet2
 
-    max_bet_fonbet = int(get_prop('max_bet_fonbet', '0'))
     if get_prop('maxbet_fact', 'выкл') == 'вкл':
         if fonbet_maxbet_fact > 0:
             if bet2 > fonbet_maxbet_fact:
                 # prnt('recalc bet (fonbet_maxbet_fact)', hide, True, 'calc')
-                bet2, bet1 = get_new_sum_bets(k2, k1, max_bet_fonbet, bal1, hide, round_bet)
+                bet2, bet1 = get_new_sum_bets(k2, k1, fonbet_maxbet_fact, bal1, hide, round_bet)
                 total_bet = bet1 + bet2
 
-    if bet2 > max_bet_fonbet > 0:
+    round_fonbet = int(get_prop('round_fonbet', '0'))
+    if round_fonbet > 0:
         # prnt('recalc bet (max_bet_fonbet)', hide, True, 'calc')
-        bet2, bet1 = get_new_sum_bets(k2, k1, max_bet_fonbet, bal1, hide, round_bet)
+        bet2 = math.floor(bet2 / round_fonbet) * round_fonbet
+        bet2, bet1 = get_new_sum_bets(k2, k1, bet2, bal1, hide, round_bet)
         total_bet = bet1 + bet2
 
 

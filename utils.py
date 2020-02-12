@@ -183,7 +183,7 @@ def get_kof_from_serv(bk_name, match_id, kof, server_ip=''):
     return answer
 
 
-def get_sum_bets(k1, k2, total_bet, round_fork=5, hide=False, debug=False):
+def get_sum_bets(k1, k2, total_bet, round_fork=5, hide=False, debug=False, round_floor=False):
     if get_prop('round_fork'):
         round_fork = int(get_prop('round_fork'))
 
@@ -194,9 +194,12 @@ def get_sum_bets(k1, k2, total_bet, round_fork=5, hide=False, debug=False):
     l = (1 / k1) + (1 / k2)
 
     # Округление проставления в БК1 происходит по правилам математики
-    bet_1 = floor(total_bet / (k1 * l) / round_fork) * round_fork
-    # bet_2 = total_bet - bet_1
-    bet_2 = floor(total_bet / (k2 * l) / round_fork) * round_fork
+    if round_floor:
+        bet_1 = floor(total_bet / (k1 * l) / round_fork) * round_fork
+        bet_2 = floor(total_bet / (k2 * l) / round_fork) * round_fork
+    else:
+        bet_1 = round(total_bet / (k1 * l) / round_fork) * round_fork
+        bet_2 = total_bet - bet_1
     if debug:
         prnt('L: ' + str(round((1 - l) * 100, 2)) + '% (' + str(l) + ') ', hide)
         prnt('bet1: ' + str(bet_1) + ', bet2: ' + str(bet_2) + '|' + ' bet_sum: ' + str(bet_1 + bet_2) + '\n', hide)
@@ -208,7 +211,7 @@ def floor_to_2(num: float):
     return floor(num / 100) * 100.
 
 
-def get_new_sum_bets(bk1, bk2, max_bet, bal2, hide=False, round_fork=5, debug=False):
+def get_new_sum_bets(bk1, bk2, max_bet, bal2, hide=False, round_fork=5, debug=False, round_floor=False):
     if debug:
         prnt('info: max_bet:{}, bal2:{} '.format(max_bet, bal2), hide)
     if get_prop('round_fork'):
@@ -220,11 +223,11 @@ def get_new_sum_bets(bk1, bk2, max_bet, bal2, hide=False, round_fork=5, debug=Fa
         if debug:
             prnt('info: total_bet > total_bet_max, {}>{}'.format(total_bet, total_bet_max), hide)
         total_bet = total_bet_max
-    sum_bk1, sum_bk2 = get_sum_bets(bk1, bk2, total_bet, round_fork, hide, debug)
+    sum_bk1, sum_bk2 = get_sum_bets(bk1, bk2, total_bet, round_fork, hide, debug, round_floor)
     if sum_bk2 > bal2:
         if debug:
             prnt('info: sum_bk2 > bal2, {}>{}, sum_bk1: {}, max_bet: {}'.format(sum_bk2, bal2, sum_bk1, max_bet), hide)
-        sum_bk2, sum_bk1 = get_new_sum_bets(bk2, bk1, floor(bal2 / round_fork) * round_fork, max_bet, hide, round_fork, debug)
+        sum_bk2, sum_bk1 = get_new_sum_bets(bk2, bk1, floor(bal2 / round_fork) * round_fork, max_bet, hide, round_fork, debug, True)
     return sum_bk1, sum_bk2
 
 

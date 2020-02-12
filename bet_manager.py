@@ -27,6 +27,8 @@ from exceptions import Retry
 from random import uniform
 import os
 
+import math
+
 if get_prop('debug'):
     DEBUG = True
 else:
@@ -63,6 +65,7 @@ class BetManager:
         self.bk_name_opposite = bk_container['opposite']
         self.vector = bk_container['vect']
         self.order_bet = 0
+        self.round_bet = int(get_prop('round_fork'))
 
         self.flex_bet = None
         self.flex_kof = None
@@ -328,13 +331,17 @@ class BetManager:
         k2 = self_opp_data.cur_val_bet
 
         sum_bet_by_max_bet = self.max_bet * (int(get_prop('proc_by_max', 90)) / 100)
-        max_bet_fonbet = int(get_prop('max_bet_fonbet', '0'))
-
+        
         sum1, sum2 = self.sum_bet, self_opp_data.sum_bet
-        if sum_bet_by_max_bet < max_bet_fonbet or max_bet_fonbet == 0:
-            prnt(self.msg.format(self.tread_id + ': ' + sys._getframe().f_code.co_name, 'RECALC_SUM_BY_MAXBET: sum_bet_by_max_bet:{}({}%)->{}'.format(self.max_bet, get_prop('proc_by_max', '90'), sum_bet_by_max_bet)))
-            prnt(self.msg.format(self.tread_id + ': ' + sys._getframe().f_code.co_name, 'RECALC_SUM_BY_MAXBET: bal1:{}, bal2:{}, k1:{}, k2:{}, sum_bet_by_max_bet:{}'.format(bal1, bal2, k1, k2, sum_bet_by_max_bet)))
-            sum1, sum2 = get_new_sum_bets(k1, k2, sum_bet_by_max_bet, bal1, False, 5, True)
+        
+        prnt(self.msg.format(self.tread_id + ': ' + sys._getframe().f_code.co_name, 'RECALC_SUM_BY_MAXBET: sum_bet_by_max_bet:{}({}%)->{}'.format(self.max_bet, get_prop('proc_by_max', '90'), sum_bet_by_max_bet)))
+        prnt(self.msg.format(self.tread_id + ': ' + sys._getframe().f_code.co_name, 'RECALC_SUM_BY_MAXBET: bal1:{}, bal2:{}, k1:{}, k2:{}, sum_bet_by_max_bet:{}'.format(bal1, bal2, k1, k2, sum_bet_by_max_bet)))
+        sum1, sum2 = get_new_sum_bets(k1, k2, sum_bet_by_max_bet, bal1, False, self.round_bet, True)
+        
+        round_fonbet = int(get_prop('round_fonbet', '0'))
+        if round_fonbet > 0:
+            sum1 = math.floor(sum1 / round_fonbet) * round_fonbet
+            sum1, sum2 = get_new_sum_bets(k2, k1, sum1, bal1, False, self.round_bet, 'debug', False)
 
         if (sum1 + sum2) >= int(get_prop('summ')):
             prnt(self.msg.format(self.tread_id + ': ' + sys._getframe().f_code.co_name, 'Сумма после пересчета по максбету, больше общей ставки, уменьшаем ее: {}->{}'.format((sum1 + sum2), int(get_prop('summ')))))
@@ -342,11 +349,11 @@ class BetManager:
 
         if sum1 >= bal1:
             prnt(self.msg.format(self.tread_id + ': ' + sys._getframe().f_code.co_name, 'Сумма ставки 1й бк после пересчета по максбету, больше баланса 1й бк, уменьшаем ее: {}->{}'.format(sum1, bal1)))
-            sum1, sum2 = get_new_sum_bets(k1, k2, bal1, bal2, False, 5, True)
+            sum1, sum2 = get_new_sum_bets(k1, k2, bal1, bal2, False, self.round_bet, 'debug', 'roud_floor')
 
         if sum2 >= bal2:
             prnt(self.msg.format(self.tread_id + ': ' + sys._getframe().f_code.co_name, 'Сумма ставки 2й бк после пересчета по максбету, больше баланса 2й бк, уменьшаем ее: {}->{}'.format(sum2, bal2)))
-            sum2, sum1 = get_new_sum_bets(k2, k1, bal2, bal1, False, 5, True)
+            sum2, sum1 = get_new_sum_bets(k2, k1, bal2, bal1, False, self.round_bet, 'debug', 'roud_floor')
 
         if sum1 > bal1 or sum2 > bal2:
             raise BetIsLost('Ошибка баланса: Одна из ставок больше баланса: {}>{}, {}>{}'.format(sum1, bal1, sum2, bal2))
