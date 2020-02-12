@@ -341,7 +341,7 @@ class BetManager:
         round_fonbet = int(get_prop('round_fonbet', '0'))
         if round_fonbet > 0:
             sum1 = math.floor(sum1 / round_fonbet) * round_fonbet
-            sum1, sum2 = get_new_sum_bets(k2, k1, sum1, bal1, False, self.round_bet, 'debug', False)
+            sum1, sum2 = get_new_sum_bets(k1, k2, sum1, bal2, False, self.round_bet, 'debug', False)
 
         if (sum1 + sum2) >= int(get_prop('summ')):
             prnt(self.msg.format(self.tread_id + ': ' + sys._getframe().f_code.co_name, 'Сумма после пересчета по максбету, больше общей ставки, уменьшаем ее: {}->{}'.format((sum1 + sum2), int(get_prop('summ')))))
