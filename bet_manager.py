@@ -341,6 +341,7 @@ class BetManager:
         round_fonbet = int(get_prop('round_fonbet', '0'))
         if round_fonbet > 0:
             sum1 = math.floor(sum1 / round_fonbet) * round_fonbet
+            prnt(self.msg.format(self.tread_id + ': ' + sys._getframe().f_code.co_name, 'RECALC_SUM_BY_ROUND_FONBET: bal1:{}, bal2:{}, k1:{}, k2:{}, round_fonbet:{}'.format(bal1, bal2, k1, k2, round_fonbet)))
             sum1, sum2 = get_new_sum_bets(k1, k2, sum1, bal2, False, self.round_bet, 'debug', False)
 
         if (sum1 + sum2) >= int(get_prop('summ')):
