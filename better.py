@@ -122,9 +122,26 @@ def get_team_type(name_rus: str, name: str):
 
 fork_exclude_list = []
 
+def is_bet_done(forks:list, key:str, check_type: str):
+    id1 = key.split('@')[0]
+    id2 = key.split('@')[1]
+    cur_kof = key.split('@')[2]
+    for fork in forks:
+        opp_kof = fork.split('@')[3]
+        if check_type == 'match':
+            if id1 in fork:
+                return id1
+            if id2 in fork:
+                return id2
+        # if '(' in cur_kof:
+        #     cur_kof = re.findall(r'(^.*\()', cur_kof)[0]
+        if cur_kof in opp_kof:
+            return cur_kof
+    return False
+
 
 def check_fork(key, L, k1, k2, live_fork, live_fork_total, bk1_score, bk2_score, event_type, minute, time_break_fonbet, period, team_type, team_names, curr_deff, level_liga, is_hot, info=''):
-    global bal1, bal2, bet1, bet2, cnt_fork_success, black_list_matches, matchs_success, summ_min, fonbet_maxbet_fact, vect1, vect2, group_limit_id, place, max_deff, start_after_min
+    global bal1, bal2, bet1, bet2, cnt_fork_success, black_list_matches, summ_min, fonbet_maxbet_fact, vect1, vect2, group_limit_id, place, max_deff, start_after_min
     global fork_exclude_list, vect_check_ok
     global USER_ID, ACC_ID, ADMINS, msg_by_fork
     global bal_small
@@ -168,14 +185,16 @@ def check_fork(key, L, k1, k2, live_fork, live_fork_total, bk1_score, bk2_score,
 
     # if curr_deff > max_deff:
     #     fork_exclude_text = fork_exclude_text + 'Вилка исключена, т.к. deff_max (' + str(curr_deff) + ' > ' + str(max_deff) + ')\n'
-
-    if get_prop('double_bet', 'выкл') == 'выкл':
+    
+    exclude_bet = get_prop('exclude_bet')
+    is_bet_exclude = is_bet_done(cnt_fork_success, key, exclude_bet)
+    if exclude_bet == 'kof':
         if cnt_fork_success.count(key) > 0:
-            fork_exclude_text = fork_exclude_text + 'Вилка не проставлена, т.к. уже проставляли на эту вилку: ' + key + '\n'
-
-    if get_prop('one_bet', 'выкл') == 'вкл':
-        if matchs_success.count(str(key.split('@')[0])) > 0 or matchs_success.count(str(key.split('@')[1])) > 0:
-            fork_exclude_text = fork_exclude_text + 'Вилка не проставлена, т.к. уже ставили 1 вилку на данный матч: ' + str(matchs_success) + '\n'
+            fork_exclude_text = fork_exclude_text + 'Вилка ' + key + ' не проставлена, т.к. мы уже ставили на это событие: ' + str(cnt_fork_success) + '\n'
+    # for exclude_bet set 'match' or 'off'
+    elif is_bet_exclude:
+        fork_exclude_text = fork_exclude_text + 'Вилка ' + key + ' не проставлена, т.к. уже делали 1 ставку на данный матч ( ' + str(is_bet_exclude) + ' ): ' + str(cnt_fork_success) + '\n'
+            
 
     if black_list_matches.count(key) > 0:
         fork_exclude_text = fork_exclude_text + 'Вилка исключена, т.к. событие анесено в blacklist: ' + key + ', ' + str(black_list_matches) + '\n'
@@ -268,7 +287,7 @@ def upd_last_fork_time(v_time: int = None):
 
 
 def set_statistics(key, err_bk1, err_bk2, fork_info=None, bk1_sale_profit=0, bk2_sale_profit=0):
-    global cnt_fail, black_list_matches, cnt_fork_success, matchs_success
+    global cnt_fail, black_list_matches, cnt_fork_success
     bet_skip = False
     if err_bk1 and err_bk2:
         if 'BkOppBetError'.lower() in str(err_bk1).lower() + str(err_bk2).lower() and 'ttempt limit exceeded'.lower() not in str(err_bk1).lower() + str(err_bk2).lower():
@@ -286,8 +305,6 @@ def set_statistics(key, err_bk1, err_bk2, fork_info=None, bk1_sale_profit=0, bk2
             upd_last_fork_time()
     elif not bet_skip:
         cnt_fork_success.append(key)
-        matchs_success.append(str(key.split('@')[0]))
-        matchs_success.append(str(key.split('@')[1]))
         upd_last_fork_time()
 
 
@@ -758,7 +775,6 @@ time_live = datetime.datetime.now()
 cnt_fail = 0
 black_list_matches = []
 cnt_fork_success = []
-matchs_success = []
 msg_excule_pushed = []
 printed = False
 last_fork_time = 0

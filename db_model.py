@@ -79,7 +79,6 @@ prop_abr = {
 
     "TOP": {"abr": "Уровень лиги", "type": "str", "max": "", "min": "", "access_list": top_type, "default": "any", "error": ""},
     "HOT": {"abr": "Только TOP катировки", "type": "str", "max": "", "min": "", "access_list": on_off, "error": ""},
-    "ONE_BET": {"abr": "1 ставка на матч", "type": "str", "max": "", "min": "", "access_list": on_off, "error": ""},
     "RANDOM_SUMM_PROC": {"abr": "% Разброс ставки", "type": "int", "max": "30", "min": "0", "access_list": [], "error": ""},
     # "FORK_TIME_TYPE": {"abr": "Тип времени вилки", "type": "str", "max": "", "min": "", "access_list": ["текущее", "общее"], "error": ""},
     "FIRST_BET_IN": {"abr": "Первая ставка в", "type": "str", "max": "", "min": "", "access_list": first_bet_in, "default": "auto", "error": ""},
@@ -90,7 +89,7 @@ prop_abr = {
 
     "ML_NOISE": {"abr": "ML. Olimp UP", "type": "str", "max": "", "min": "", "access_list": on_off, "error": "", "default": "выкл", },
     # "POUR_INTO": {"abr": "Перелить в", "type": "str", "max": "", "min": "", "access_list": bks, "error": ""},
-    "DOUBLE_BET": {"abr": "Дубли ставок", "type": "str", "max": "", "min": "", "access_list": on_off, "error": ""},
+    "EXCLUDE_BET": {"abr": "Исключать ставку по", "type": "str", "max": "", "min": "", "access_list": ["off", "match", "kof"], "default": "kof", "error": ""},
     "ROUND_FONBET":
         {
             "abr": "Округление в Fonbet", "type": "int", "max": "1000", "min": "0",
