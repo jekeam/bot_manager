@@ -89,7 +89,7 @@ prop_abr = {
 
     "ML_NOISE": {"abr": "ML. Olimp UP", "type": "str", "max": "", "min": "", "access_list": on_off, "error": "", "default": "выкл", },
     # "POUR_INTO": {"abr": "Перелить в", "type": "str", "max": "", "min": "", "access_list": bks, "error": ""},
-    "EXCLUDE_BET": {"abr": "Исключать ставку по", "type": "str", "max": "", "min": "", "access_list": ["off", "match", "kof"], "default": "kof", "error": ""},
+    "EXCLUDE_BET": {"abr": "Исключать ставку по", "type": "str", "max": "", "min": "", "access_list": ["off", "match", "kof"], "default": "off", "error": ""},
     "ROUND_FONBET":
         {
             "abr": "Округление в Fonbet", "type": "int", "max": "1000", "min": "0",

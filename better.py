@@ -195,7 +195,6 @@ def check_fork(key, L, k1, k2, live_fork, live_fork_total, bk1_score, bk2_score,
     elif is_bet_exclude:
         fork_exclude_text = fork_exclude_text + 'Вилка ' + key + ' не проставлена, т.к. уже делали 1 ставку на данный матч ( ' + str(is_bet_exclude) + ' ): ' + str(cnt_fork_success) + '\n'
             
-
     if black_list_matches.count(key) > 0:
         fork_exclude_text = fork_exclude_text + 'Вилка исключена, т.к. событие анесено в blacklist: ' + key + ', ' + str(black_list_matches) + '\n'
 
