@@ -113,7 +113,7 @@ class OlimpBot:
             prnt('BET_OLIMP.PY: balance: ' + str(self.balance))
         except Exception as e:
             if 'str() takes at most 3 arguments (5 given)' in str(e):
-                raise ValueError('БК Олимп по адресу {}, данный сайт не отвечает или у прокси нет доступа к сайту, рекомендую попробовать позже и проверить/поменять прокси.'.format(req_url))
+                raise ValueError('БК Олимп по адресу {}, данный сайт не отвечает или у прокси нет доступа к сайту, рекомендую попробовать позже и проверить/поменять прокси или зеркало: @olimpbet_bot.'.format(req_url))
             prnt(e)
             raise ValueError(e)
 
