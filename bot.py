@@ -290,57 +290,62 @@ def set_prop(update, context):
 
 
 def choose_prop(update, context):
-    markup = ReplyKeyboardRemove()
-    text = update.message.text
-    v_key = ''
-    proxy = ''
-    account = ''
-    dop_indo = ''
-    for key, val in prop_abr.items():
-        if val.get('abr') == text:
-            v_key = key
-            str_r = ''
-            if val.get('min'):
-                str_r = str_r + 'min: ' + val.get('min')
-            if val.get('min'):
-                str_r = str_r + ', max: ' + val.get('max')
-            dop_indo = str_r
-
-            if val.get('access_list'):
-                if dop_indo:
-                    dop_indo = dop_indo + ', '
-                dop_indo = 'допустимые значения: ' + str(val.get('access_list')).replace("'", '')
-            elif 'proxi:' in val.get('type'):
-                proxy = val.get('type').split(':')[1]
-                dop_indo = 'только https прокси формата user:password@ip:port или ip:port'
-            elif 'account:' in val.get('type'):
-                account = val.get('type').split(':')[1]
-                dop_indo = 'логин и пароль через / (слеш) в формате: login/password - без пробелов и переносов строк'
-    acc_id = context.user_data.get('acc_id')
-    cur_val = ''
     try:
-        if proxy:
-            proxy_str = Account.select().where(Account.id == acc_id).get().proxies.replace('`', '"').replace('https://', '')
-            prntb(proxy_str)
-            cur_val = json.loads(proxy_str).get(proxy, 'Proxy not found').get('https', 'HTTPS Proxy not found')
-        elif account:
-            account_srt = Account.select().where(Account.id == acc_id).get().accounts.replace('`', '"')
-            prntb(account_srt)
-            account_json = json.loads(account_srt)
-            cur_val = str(account_json.get(account, 'BK not found').get('login', 'login not found')) + '/' + str(account_json.get(account, 'BK not found').get('password', 'password not found'))
-        else:
-            cur_val = get_val_prop_id(acc_id, v_key)
+        markup = ReplyKeyboardRemove()
+        text = update.message.text
+        v_key = ''
+        proxy = ''
+        account = ''
+        dop_indo = ''
+        for key, val in prop_abr.items():
+            if val.get('abr') == text:
+                v_key = key
+                str_r = ''
+                if val.get('min'):
+                    str_r = str_r + 'min: ' + val.get('min')
+                if val.get('min'):
+                    str_r = str_r + ', max: ' + val.get('max')
+                dop_indo = str_r
+
+                if val.get('access_list'):
+                    if dop_indo:
+                        dop_indo = dop_indo + ', '
+                    dop_indo = 'допустимые значения: ' + str(val.get('access_list')).replace("'", '')
+                elif 'proxi:' in val.get('type'):
+                    proxy = val.get('type').split(':')[1]
+                    dop_indo = 'только https прокси формата user:password@ip:port или ip:port'
+                elif 'account:' in val.get('type'):
+                    account = val.get('type').split(':')[1]
+                    dop_indo = 'логин и пароль через / (слеш) в формате: login/password - без пробелов и переносов строк'
+        acc_id = context.user_data.get('acc_id')
+        cur_val = ''
+        try:
+            if proxy:
+                proxy_str = Account.select().where(Account.id == acc_id).get().proxies.replace('`', '"').replace('https://', '')
+                prntb(proxy_str)
+                cur_val = json.loads(proxy_str).get(proxy, 'Proxy not found').get('https', 'HTTPS Proxy not found')
+            elif account:
+                account_srt = Account.select().where(Account.id == acc_id).get().accounts.replace('`', '"')
+                prntb(account_srt)
+                account_json = json.loads(account_srt)
+                cur_val = str(account_json.get(account, 'BK not found').get('login', 'login not found')) + '/' + str(account_json.get(account, 'BK not found').get('password', 'password not found'))
+            else:
+                cur_val = get_val_prop_id(acc_id, v_key)
+        except Exception as e:
+            exc_type, exc_value, exc_traceback = sys.exc_info()
+            err_str = str(e) + ' ' + str(repr(traceback.format_exception(exc_type, exc_value, exc_traceback)))
+            prntb(str(err_str))
+        update.message.reply_text(
+            text='*' + text + '*: ' + str(cur_val) +
+                 '\n\n''*Ограничения по настройке*:\n' + str(dop_indo) + '\n\n' + str(bot_prop.MSG_PUT_VAL),
+            reply_markup=markup,
+            parse_mode=telegram.ParseMode.MARKDOWN
+        )
+        context.user_data['choice'] = text
     except Exception as e:
         exc_type, exc_value, exc_traceback = sys.exc_info()
         err_str = str(e) + ' ' + str(repr(traceback.format_exception(exc_type, exc_value, exc_traceback)))
         prntb(str(err_str))
-    update.message.reply_text(
-        text='*' + text + '*: ' + str(cur_val) +
-             '\n\n''*Ограничения по настройке*:\n' + str(dop_indo) + '\n\n' + str(bot_prop.MSG_PUT_VAL),
-        reply_markup=markup,
-        parse_mode=telegram.ParseMode.MARKDOWN
-    )
-    context.user_data['choice'] = text
 
 
 def start(update, context):
