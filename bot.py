@@ -331,6 +331,7 @@ def choose_prop(update, context):
                 cur_val = str(account_json.get(account, 'BK not found').get('login', 'login not found')) + '/' + str(account_json.get(account, 'BK not found').get('password', 'password not found'))
             else:
                 cur_val = get_val_prop_id(acc_id, v_key)
+            cur_val = cur_val.replace("_", "\\_").replace("*", "\\*").replace("[", "\\[").replace("`", "\\`")
         except Exception as e:
             exc_type, exc_value, exc_traceback = sys.exc_info()
             err_str = str(e) + ' ' + str(repr(traceback.format_exception(exc_type, exc_value, exc_traceback)))
