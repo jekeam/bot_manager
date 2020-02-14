@@ -255,6 +255,10 @@ def set_prop(update, context):
                             account_json = json.loads(Account.select().where(Account.id == acc_id).get().accounts.replace('`', '"'))
 
                             prop_val = prop_val.strip().lower().replace('http://', '').replace('https://', '')
+                            try:
+                                prop_val = re.findall(r'(^.*)(\?.*)', prop_val)[0][0]
+                            except:
+                                pass
                             mirror = prop_val
                             account_json[bk_name]['mirror'] = mirror
                             account_str = json.dumps(account_json).replace('"', '`')
