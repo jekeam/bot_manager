@@ -198,7 +198,7 @@ def check_type(val: str, type_: str, min_: str, max_: str, access_list):
             err_str = 'Неверный формат аккаунта'
     if 'mirror' in str(type_):
         if val.count('.') != 1:
-            err_str = 'Неверный формат зеркала, ожидается: fonbet-ХХХХХ.com'
+            err_str = 'Неверный формат зеркала, ожидается формат: имя_сервера.домен'
     if 'strs' in str(type_):
         val_ls = val.split(';')
         val_ls_acc = access_list.split(';')
@@ -428,7 +428,7 @@ def add(update, context):
                     raise ValueError('Неверный формат прокси')
 
                 proxies = '{`fonbet`:{`http`:`http://' + proxy + '`,`https`:`https://' + proxy + '`},`olimp`:{`http`:`http://' + proxy + '`,`https`:`https://' + proxy + '`}}'
-                accounts = '{`olimp`:{`login`:`' + olu + '`,`password`:`' + olp + '`,`mirror`:`olimp.com`},`fonbet`:{`login`:' + fbu + ',`password`:`' + fbp + '`,`mirror`:``}}'
+                accounts = '{`olimp`:{`login`:`' + olu + '`,`password`:`' + olp + '`,`mirror`:``},`fonbet`:{`login`:' + fbu + ',`password`:`' + fbp + '`,`mirror`:``}}'
                 try:
                     user_info = User.select().where(User.id == id_).get()
                     prop_new = Account.select().where(Account.id == acc_copy).get()
@@ -740,7 +740,7 @@ def button(update, context):
                             abr = val.get('abr')
                     elif key not in exclude_all and key not in exclude_user:
                         if user_role == 'junior':
-                            if key in ('SUMM', 'WORK_HOUR_END', 'FONBET_MIRROR', 'FONBET_S', 'WORK_HOUR_END', 'SUMM', 'MAX_FORK', 'FONBET_P', 'OLIMP_P'):
+                            if key in ('SUMM', 'WORK_HOUR_END', 'FONBET_MIRROR', 'SERVER_OLIMP', 'FONBET_S', 'WORK_HOUR_END', 'SUMM', 'MAX_FORK', 'FONBET_P', 'OLIMP_P'):
                                 abr = val.get('abr')
                         else:
                             abr = val.get('abr')

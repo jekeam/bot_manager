@@ -41,6 +41,8 @@ prop_abr = {
 
     "FONBET_MIRROR": {"abr": "Зеркало Фонбета", "type": "mirror:fonbet", "max": "", "min": "", "error": ""},
     "FONBET_S": {"abr": "Сервер Фонбета", "type": "str", "max": "", "min": "", "access_list": ["ru", "com"], "default":"ru", "error": ""},
+    
+    "SERVER_OLIMP": {"abr": "Зеркало Фонбета", "type": "mirror:olimp", "max": "", "min": "", "default": "olimp.com", "error": ""},
 
     "FLEX_BET1": {"abr": "1. Измен-е коэф-та", "type": "str", "max": "", "min": "", "access_list": flex_bet_arr, "default": "up", "error": ""},
     "FLEX_BET2": {"abr": "2. Измен-е коэф-та", "type": "str", "max": "", "min": "", "access_list": flex_bet_arr, "default": "no", "error": ""},
@@ -95,7 +97,6 @@ prop_abr = {
             "abr": "Округление в Fonbet", "type": "int", "max": "1000", "min": "0",
             "access_list": ["0", "1", "5", "10", "50", "100", "500", "1000"], "error": "", "default": "0"
         },
-    # "SERVER_OLIMP": {"abr": "Сервер Олимп", "type": "str", "max": "", "min": "", "access_list": [], "error": ""},
     "SPORT_LIST": {"abr": "Виды спорта", "type": "strs", "max": "", "min": "", "access_list": sport_list_str, "default": "football;hockey", "error": ""},  # sport_list_str
 
     "PLACE": {"abr": "Ставить на прематч", "type": "str", "max": "", "min": "", "access_list": ["any", "live", "pre"], "default": "live", "error": ""},
