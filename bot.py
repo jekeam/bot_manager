@@ -269,7 +269,7 @@ def set_prop(update, context):
                         else:
                             data = [(acc_id, key, prop_val), ]
                             Properties.insert_many(data, fields=[Properties.acc_id, Properties.key, Properties.val]).execute()
-                        
+
                         if 'account' in type_:
                             new_val_disp = str(login) + '/' + str(prop_val)
                         else:
@@ -329,16 +329,16 @@ def choose_prop(update, context):
                 prntb(account_srt)
                 account_json = json.loads(account_srt)
                 cur_val = str(account_json.get(account, 'BK not found').get('login', 'login not found')) + '/' + str(account_json.get(account, 'BK not found').get('password', 'password not found'))
-                prntb(cur_val)
             else:
                 cur_val = get_val_prop_id(acc_id, v_key)
         except Exception as e:
             exc_type, exc_value, exc_traceback = sys.exc_info()
             err_str = str(e) + ' ' + str(repr(traceback.format_exception(exc_type, exc_value, exc_traceback)))
             prntb(str(err_str))
+        msgt = '*' + text + '*: ' + str(cur_val) + '\n\n''*Ограничения по настройке*:\n' + str(dop_indo) + '\n\n' + str(bot_prop.MSG_PUT_VAL)
+        prntb(msgt)
         update.message.reply_text(
-            text='*' + text + '*: ' + str(cur_val) +
-                 '\n\n''*Ограничения по настройке*:\n' + str(dop_indo) + '\n\n' + str(bot_prop.MSG_PUT_VAL),
+            text=msgt,
             reply_markup=markup,
             parse_mode=telegram.ParseMode.MARKDOWN
         )
@@ -960,12 +960,12 @@ def matches(update, context):
                 'middle': matches_dict[place].get(match_type, {}).get('middle', 0) + is_middle,
             }
         for place, data in collections.OrderedDict(sorted(matches_dict.items())).items():
-            msg = msg + '\n' + place.upper() +' ('+place.upper()+')\n'
+            msg = msg + '\n' + place.upper() + ' (' + place.upper() + ')\n'
             s = 0
-            for match_type, match_cnt in collections.OrderedDict(sorted(data.items(), key=lambda item: '1' if item[0]=='Football' else '2' if item[0]=='Hockey' else item[0])).items():
+            for match_type, match_cnt in collections.OrderedDict(sorted(data.items(), key=lambda item: '1' if item[0] == 'Football' else '2' if item[0] == 'Hockey' else item[0])).items():
                 msg = msg + str(match_type + ': ' + str(match_cnt.get('cnt'))).ljust(17, ' ') + 'top: ' + str(match_cnt.get('top')).ljust(7, ' ') + 'middle: ' + str(match_cnt.get('middle')) + '\n'
                 s = s + match_cnt.get('cnt')
-            msg = msg.replace('('+place.upper()+')',  '(' + str(s) + ')')
+            msg = msg.replace('(' + place.upper() + ')', '(' + str(s) + ')')
         msg = msg.strip()
     else:
         msg = 'Ошибка, повторите попыку позже'
