@@ -910,7 +910,7 @@ def matches(update, context):
     msg = ''
     cnt = []
     try:
-        resp = requests.get('http://' + bot_prop.IP_SERVER + '/get_cnt_matches', timeout=500)
+        resp = requests.get('http://' + bot_prop.IP_SERVER + '/get_cnt_matches', timeout=10)
         cnt = ast.literal_eval(resp.text)
     except Exception as e:
         exc_type, exc_value, exc_traceback = sys.exc_info()
@@ -920,7 +920,7 @@ def matches(update, context):
 
     top = []
     try:
-        resp_t = requests.get('http://' + bot_prop.IP_SERVER + '/get_cnt_top_matches', timeout=500)
+        resp_t = requests.get('http://' + bot_prop.IP_SERVER + '/get_cnt_top_matches', timeout=10)
         top = ast.literal_eval(resp_t.text)
     except Exception as e:
         exc_type, exc_value, exc_traceback = sys.exc_info()
@@ -937,30 +937,32 @@ def matches(update, context):
         err_str = str(e) + ' ' + str(repr(traceback.format_exception(exc_type, exc_value, exc_traceback)))
         prntb(str(err_str))
         # update.message.reply_text(text='Ошибка при запросе кол-ва MIDDLE матчей: ' + str(e))
-
-    msg = 'Кол-во матчей: ' + str(len(cnt)) + ' \n'
-    msg = msg + 'Активность ' + str(cnt[-1]) + '\n'
-    matches_dict = {}
-    for match in cnt[0:-1]:
-        match_type = match[2][0:1].upper() + match[2][1:]
-        place = match[3][0:1].upper() + match[3][1:]
-        is_top = 1 if int(match[0]) in top or int(match[1]) in top else 0
-        is_middle = 1 if int(match[0]) in middle or int(match[1]) in middle else 0
-        if not matches_dict.get(place):
-            matches_dict[place] = {}
-        matches_dict[place][match_type] = {
-            'cnt': matches_dict[place].get(match_type, {}).get('cnt', 0) + 1,
-            'top': matches_dict[place].get(match_type, {}).get('top', 0) + is_top,
-            'middle': matches_dict[place].get(match_type, {}).get('middle', 0) + is_middle,
-        }
-    for place, data in collections.OrderedDict(sorted(matches_dict.items())).items():
-        msg = msg + '\n' + place.upper() +' ('+place.upper()+')\n'
-        s = 0
-        for match_type, match_cnt in collections.OrderedDict(sorted(data.items(), key=lambda item: '1' if item[0]=='Football' else '2' if item[0]=='Hockey' else item[0])).items():
-            msg = msg + str(match_type + ': ' + str(match_cnt.get('cnt'))).ljust(17, ' ') + 'top: ' + str(match_cnt.get('top')).ljust(7, ' ') + 'middle: ' + str(match_cnt.get('middle')) + '\n'
-            s = s + match_cnt.get('cnt')
-        msg = msg.replace('('+place.upper()+')',  '(' + str(s) + ')')
-    msg = msg.strip()
+    if cnt:
+        msg = 'Кол-во матчей: ' + str(len(cnt)) + ' \n'
+        msg = msg + 'Активность ' + str(cnt[-1]) + '\n'
+        matches_dict = {}
+        for match in cnt[0:-1]:
+            match_type = match[2][0:1].upper() + match[2][1:]
+            place = match[3][0:1].upper() + match[3][1:]
+            is_top = 1 if int(match[0]) in top or int(match[1]) in top else 0
+            is_middle = 1 if int(match[0]) in middle or int(match[1]) in middle else 0
+            if not matches_dict.get(place):
+                matches_dict[place] = {}
+            matches_dict[place][match_type] = {
+                'cnt': matches_dict[place].get(match_type, {}).get('cnt', 0) + 1,
+                'top': matches_dict[place].get(match_type, {}).get('top', 0) + is_top,
+                'middle': matches_dict[place].get(match_type, {}).get('middle', 0) + is_middle,
+            }
+        for place, data in collections.OrderedDict(sorted(matches_dict.items())).items():
+            msg = msg + '\n' + place.upper() +' ('+place.upper()+')\n'
+            s = 0
+            for match_type, match_cnt in collections.OrderedDict(sorted(data.items(), key=lambda item: '1' if item[0]=='Football' else '2' if item[0]=='Hockey' else item[0])).items():
+                msg = msg + str(match_type + ': ' + str(match_cnt.get('cnt'))).ljust(17, ' ') + 'top: ' + str(match_cnt.get('top')).ljust(7, ' ') + 'middle: ' + str(match_cnt.get('middle')) + '\n'
+                s = s + match_cnt.get('cnt')
+            msg = msg.replace('('+place.upper()+')',  '(' + str(s) + ')')
+        msg = msg.strip()
+    else:
+        msg = 'Ошибка, повторите попыку позже'
     update.message.reply_text(text=msg)
 
 
