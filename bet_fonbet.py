@@ -45,7 +45,7 @@ class FonbetBot:
     """Use to place bets on fonbet site."""
 
     def __init__(self, account: dict = DEFAULT_ACCOUNT) -> None:
-        self.bk_type = get_prop('fonbet_s', 'com')
+        self.bk_type = get_prop('fonbet_s')
         self.bk_name = 'Fonbet'
         self.attempt_login = 0
         self.account = account

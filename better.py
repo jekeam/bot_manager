@@ -578,7 +578,7 @@ def go_bets(wag_ol, wag_fb, key, deff_max, vect1, vect2, sc1, sc2, created, even
         fork_info[fork_id]['fonbet']['max_proc'] = get_prop('max_proc', 20)
 
         fork_info[fork_id]['fonbet']['user_id'] = info_csv.get('user_id', '')
-        fork_info[fork_id]['fonbet']['fb_bk_type'] = info_csv.get('fb_bk_type', 'com')
+        fork_info[fork_id]['fonbet']['fb_bk_type'] = info_csv.get('fb_bk_type')
         fork_info[fork_id]['fonbet']['group_limit_id'] = info_csv.get('group_limit_id', '')
         fork_info[fork_id]['fonbet']['live_fork'] = info_csv.get('live_fork', '')
         fork_info[fork_id]['fonbet']['team_type'] = info_csv.get('team_type', '')
@@ -903,7 +903,7 @@ if __name__ == '__main__':
                 prnt('Блокировка продажи: ' + str(bk2.get_acc_info('sale')))
                 group_limit_id = str(bk2.get_acc_info('group'))
                 prnt('Группа лимита: ' + group_limit_id)
-                prnt('Тип БК: ' + get_prop('fonbet_s', 'com'))
+                prnt('Тип БК: ' + get_prop('fonbet_s'))
 
                 prnt('Жесткость ставки 1 плеча: ' + get_prop('flex_bet1'))
                 prnt('Жесткость ставки 2 плеча: ' + get_prop('flex_bet2'))
@@ -1295,7 +1295,7 @@ if __name__ == '__main__':
                                                         'summ_min': summ_min_stat,
                                                         'maxbet_fact': get_prop('maxbet_fact', 'выкл'),
                                                         'fonbet_maxbet_fact': fonbet_maxbet_fact,
-                                                        'fb_bk_type': get_prop('fonbet_s', 'com'),
+                                                        'fb_bk_type': get_prop('fonbet_s'),
                                                         'first_bet_in': get_prop('first_bet_in', 'auto'),
                                                         'total_first': get_prop('total_first', 'auto'),
                                                         'place': place
