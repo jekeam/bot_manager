@@ -59,208 +59,213 @@ def run_bets(shared: dict):
 class BetManager:
 
     def __init__(self, shared: dict, bk_name: str, bk_container: dict):
-        self.tread_id = str(current_thread().getName())
-        self.acc_id = shared.get(bk_name, {}).get('acc_id')
-        self.bk_name = bk_name
-        self.bk_container = bk_container
-        self.wager = bk_container['wager']
-        self.created_fork = bk_container.get('created', '')
-        self.bk_name_opposite = bk_container['opposite']
-        self.vector = bk_container['vect']
-        self.order_bet = 0
-        self.round_bet = int(get_prop('round_fork'))
+        try:
+            self.tread_id = str(current_thread().getName())
+            self.acc_id = shared.get(bk_name, {}).get('acc_id')
+            self.bk_name = bk_name
+            self.bk_container = bk_container
+            self.wager = bk_container['wager']
+            self.created_fork = bk_container.get('created', '')
+            self.bk_name_opposite = bk_container['opposite']
+            self.vector = bk_container['vect']
+            self.order_bet = 0
+            self.round_bet = int(get_prop('round_fork'))
 
-        self.flex_bet = None
-        self.flex_kof = None
+            self.flex_bet = None
+            self.flex_kof = None
 
-        self.override_bet = True
+            self.override_bet = True
 
-        self.msg_err = self.bk_name + '. {}, err: {}'
-        self.msg = self.bk_name + '. {}, msg: {}'
-        prnt(self.msg.format(self.tread_id + ': ' + sys._getframe().f_code.co_name, self.bk_name + ' start'))
+            self.msg_err = self.bk_name + '. {}, err: {}'
+            self.msg = self.bk_name + '. {}, msg: {}'
+            prnt(self.msg.format(self.tread_id + ': ' + sys._getframe().f_code.co_name, self.bk_name + ' start'))
 
-        self.total_bet = bk_container.get('bet_total')
-        self.side_team = bk_container['side_team']
-        self.bet_type = bk_container['bet_type']
-        self.event_type = bk_container['event_type']
-        self.key = bk_container.get('key', '')
-        self.place = bk_container.get('place', '')
-        self.summ_min = int(bk_container.get('summ_min', '0'))
-        self.round = int(bk_container.get('round', 1))
-        self.dop_stat = dict()
-        # dynamic params
-        self.cur_sc = None
-        self.cur_sc_main = None
-        self.cur_total = None
-        self.cur_total_new = None
-        self.cur_half = None
-        self.cur_val_bet = bk_container.get('wager', {}).get('value')
-        self.cur_val_bet_resp = None
-        self.match_id = bk_container.get('wager', {}).get('event', 0)
-        self.val_bet_stat = self.cur_val_bet
-        self.val_bet_old = self.cur_val_bet
-        self.cur_minute = None
-        self.total_stock = None
+            self.total_bet = bk_container.get('bet_total')
+            self.side_team = bk_container['side_team']
+            self.bet_type = bk_container['bet_type']
+            self.event_type = bk_container['event_type']
+            self.key = bk_container.get('key', '')
+            self.place = bk_container.get('place', '')
+            self.summ_min = int(bk_container.get('summ_min', '0'))
+            self.round = int(bk_container.get('round', 1))
+            self.dop_stat = dict()
+            # dynamic params
+            self.cur_sc = None
+            self.cur_sc_main = None
+            self.cur_total = None
+            self.cur_total_new = None
+            self.cur_half = None
+            self.cur_val_bet = bk_container.get('wager', {}).get('value')
+            self.cur_val_bet_resp = None
+            self.match_id = bk_container.get('wager', {}).get('event', 0)
+            self.val_bet_stat = self.cur_val_bet
+            self.val_bet_old = self.cur_val_bet
+            self.cur_minute = None
+            self.total_stock = None
 
-        self.strat_name = 'main'
+            self.strat_name = 'main'
 
-        self.account = get_account_info(self.bk_name)
-        self.timeout = 20
-        self.reg_id = None
-        self.reqId = None
-        self.reqIdSale = None
-        self.payload = None
-        self.sum_bet = bk_container.get('amount')
-        self.sum_bet_stat = self.sum_bet
-        self.sum_sell = None
+            self.account = get_account_info(self.bk_name)
+            self.timeout = 20
+            self.reg_id = None
+            self.reqId = None
+            self.reqIdSale = None
+            self.payload = None
+            self.sum_bet = bk_container.get('amount')
+            self.sum_bet_stat = self.sum_bet
+            self.sum_sell = None
 
-        self.group_limit_id = 0
-        self.sell_blocked = False
-        self.bet_to_bet_timeout = 120
-        self.session = ''
-        self.balance = 0.0
-        self.cur_rate = 1.0
-        self.currency = ''
+            self.group_limit_id = 0
+            self.sell_blocked = False
+            self.bet_to_bet_timeout = 120
+            self.session = ''
+            self.balance = 0.0
+            self.cur_rate = 1.0
+            self.currency = ''
 
-        self.sum_sell_divider = 1
+            self.sum_sell_divider = 1
 
-        self.bk_type = 'com'
-        if self.bk_name == 'fonbet':
-            self.sum_sell_divider = 100
-            self.bk_type = get_prop('fonbet_s')
+            self.bk_type = 'com'
+            if self.bk_name == 'fonbet':
+                self.sum_sell_divider = 100
+                self.bk_type = get_prop('fonbet_s')
 
-            if self.bk_type == 'com':
-                self.app_ver = '5.1.3b'
-                self.user_agent = 'Fonbet/5.1.3b (Android 21; Phone; com.bkfonbet)'
-                self.not_url = 'fonbet.com'
-                self.url_api = 'clients-api'  # maybe 'common'?
-            elif self.bk_type == 'ru':
-                self.app_ver = '5.2.1r'
-                self.user_agent = 'Fonbet/5.2.1r (Android 21; Phone; ru.bkfon)'
-                self.not_url = 'fonbet.ru'
-                self.url_api = 'common'
+                if self.bk_type == 'com':
+                    self.app_ver = '5.1.3b'
+                    self.user_agent = 'Fonbet/5.1.3b (Android 21; Phone; com.bkfonbet)'
+                    self.not_url = 'fonbet.com'
+                    self.url_api = 'clients-api'  # maybe 'common'?
+                elif self.bk_type == 'ru':
+                    self.app_ver = '5.2.1r'
+                    self.user_agent = 'Fonbet/5.2.1r (Android 21; Phone; ru.bkfon)'
+                    self.not_url = 'fonbet.ru'
+                    self.url_api = 'common'
 
-            if self.bk_type == 'com':
-                self.base_payload = {
-                    "appVersion": self.app_ver,
-                    "lang": "ru",
-                    "rooted": False,
-                    "sdkVersion": 21,
-                    "sysId": 4
+                if self.bk_type == 'com':
+                    self.base_payload = {
+                        "appVersion": self.app_ver,
+                        "lang": "ru",
+                        "rooted": False,
+                        "sdkVersion": 21,
+                        "sysId": 4
+                    }
+                elif self.bk_type == 'ru':
+                    self.base_payload = {
+                        "appVersion": self.app_ver,
+                        "carrier": "MegaFon",
+                        "deviceManufacturer": "LENOVO",
+                        "deviceModel": "Lenovo ",
+                        "lang": "ru",
+                        "rooted": False,
+                        "sdkVersion": 21,
+                        "sysId": 4
+                    }
+
+                self.fonbet_headers = {
+                    "User-Agent": self.user_agent,
+                    "Content-Type": "application/json; charset=UTF-8",
+                    "Connection": "Keep-Alive",
+                    "Accept-Encoding": "gzip"
                 }
-            elif self.bk_type == 'ru':
-                self.base_payload = {
+
+                self.payload_bet = {
+                    "coupon":
+                        {
+                            "flexBet": "up",  # Изменения коэф-в, any - все, up - вверх
+                            "flexParam": False,  # Изменения фор и тоталов, True - принимать, False - не принимать
+                            "bets":
+                                [
+                                    {
+                                        "lineType": "LIVE",
+                                        "score": "",
+                                        "value": 0,
+                                        "event": 0,
+                                        "factor": 0,
+                                        "num": 0
+                                    },
+                                ],
+                            "amount": 0.0,
+                            "system": 0
+                        },
                     "appVersion": self.app_ver,
-                    "carrier": "MegaFon",
+                    "carrier": "",
                     "deviceManufacturer": "LENOVO",
-                    "deviceModel": "Lenovo ",
+                    "deviceModel": "Lenovo " + LENOVO_MODEL,
+                    "fsid": "",
                     "lang": "ru",
+                    "platform": "mobile_android",
                     "rooted": False,
                     "sdkVersion": 21,
-                    "sysId": 4
+                    "sysId": 4,
+                    "clientId": 0
                 }
 
-            self.fonbet_headers = {
-                "User-Agent": self.user_agent,
-                "Content-Type": "application/json; charset=UTF-8",
-                "Connection": "Keep-Alive",
-                "Accept-Encoding": "gzip"
-            }
+                self.payload_req = {
+                    "client": {"id": 0},
+                    "appVersion": self.app_ver,
+                    "carrier": "",
+                    "deviceManufacturer": "LENOVO",
+                    "deviceModel": "Lenovo " + LENOVO_MODEL,
+                    "fsid": "",
+                    "lang": "ru",
+                    "platform": "mobile_android",
+                    "rooted": False,
+                    "sdkVersion": 21,
+                    "sysId": 4,
+                    "clientId": 0
+                }
 
-            self.payload_bet = {
-                "coupon":
-                    {
-                        "flexBet": "up",  # Изменения коэф-в, any - все, up - вверх
-                        "flexParam": False,  # Изменения фор и тоталов, True - принимать, False - не принимать
-                        "bets":
-                            [
-                                {
-                                    "lineType": "LIVE",
-                                    "score": "",
-                                    "value": 0,
-                                    "event": 0,
-                                    "factor": 0,
-                                    "num": 0
-                                },
-                            ],
-                        "amount": 0.0,
-                        "system": 0
-                    },
-                "appVersion": self.app_ver,
-                "carrier": "",
-                "deviceManufacturer": "LENOVO",
-                "deviceModel": "Lenovo " + LENOVO_MODEL,
-                "fsid": "",
-                "lang": "ru",
-                "platform": "mobile_android",
-                "rooted": False,
-                "sdkVersion": 21,
-                "sysId": 4,
-                "clientId": 0
-            }
+            self.cashout_allowed = None
+            self.attempt_login = 1
+            self.attempt_bet = 1
+            self.attempt_sale = 1
+            self.attempt_sale_lost = 1
+            self.sleep_bet = 3.51
+            self.sleep_add = 0
+            self.proxies = self.get_proxy()
+            self.server_olimp = '08'
+            self.server_fb = {}
+            self.mirror = self.account.get('mirror')
+            if not self.mirror:
+                self.mirror = self.not_url
 
-            self.payload_req = {
-                "client": {"id": 0},
-                "appVersion": self.app_ver,
-                "carrier": "",
-                "deviceManufacturer": "LENOVO",
-                "deviceModel": "Lenovo " + LENOVO_MODEL,
-                "fsid": "",
-                "lang": "ru",
-                "platform": "mobile_android",
-                "rooted": False,
-                "sdkVersion": 21,
-                "sysId": 4,
-                "clientId": 0
-            }
+            self.session_file = 'session.' + self.bk_name
 
-        self.cashout_allowed = None
-        self.attempt_login = 1
-        self.attempt_bet = 1
-        self.attempt_sale = 1
-        self.attempt_sale_lost = 1
-        self.sleep_bet = 3.51
-        self.sleep_add = 0
-        self.proxies = self.get_proxy()
-        self.server_olimp = '08'
-        self.server_fb = {}
-        self.mirror = self.account.get('mirror')
-        if not self.mirror:
-            self.mirror = self.not_url
+            self.time_start = round(time())
 
-        self.session_file = 'session.' + self.bk_name
+            self.sale_profit = 0
+            self.bet_profit = 0
 
-        self.time_start = round(time())
+            self.max_bet = 0
+            self.min_bet = 0
 
-        self.sale_profit = 0
-        self.bet_profit = 0
+            self.first_bet_in = get_prop('first_bet_in')
 
-        self.max_bet = 0
-        self.min_bet = 0
+            self.time_req = 0
+            self.time_req_opp = 0
 
-        self.first_bet_in = get_prop('first_bet_in')
+            err_msg = ''
 
-        self.time_req = 0
-        self.time_req_opp = 0
+            bk_work = ('olimp', 'fonbet')
+            if self.bk_name not in bk_work or self.bk_name_opposite not in bk_work:
+                err_msg = 'bk not defined: bk1={}, bk2={}'.format(self.bk_name, self.bk_name_opposite)
 
-        err_msg = ''
+            elif not self.mirror and self.bk_name == 'fonbet':
+                err_msg = 'mirror not defined: {}'.format(self.mirror)
 
-        bk_work = ('olimp', 'fonbet')
-        if self.bk_name not in bk_work or self.bk_name_opposite not in bk_work:
-            err_msg = 'bk not defined: bk1={}, bk2={}'.format(self.bk_name, self.bk_name_opposite)
+            if err_msg != '':
+                err_str = self.msg_err.format(self.tread_id + ': ' + sys._getframe().f_code.co_name, err_msg)
+                prnt(err_str)
+                raise ValueError(err_str)
 
-        elif not self.mirror and self.bk_name == 'fonbet':
-            err_msg = 'mirror not defined: {}'.format(self.mirror)
-
-        if err_msg != '':
-            err_str = self.msg_err.format(self.tread_id + ': ' + sys._getframe().f_code.co_name, err_msg)
-            prnt(err_str)
-            raise ValueError(err_str)
-
-        # self.manager(shared)
-        shared[self.bk_name]['self'] = self
-        prnt(self.msg.format(self.tread_id + ': ' + sys._getframe().f_code.co_name, self.bk_name + ' end'))
-        self.bet_simple(shared)
+            # self.manager(shared)
+            shared[self.bk_name]['self'] = self
+            prnt(self.msg.format(self.tread_id + ': ' + sys._getframe().f_code.co_name, self.bk_name + ' end'))
+            self.bet_simple(shared)
+        except Exception as e:
+            exc_type, exc_value, exc_traceback = sys.exc_info()
+            err_msg = 'Неизвестная ошибка: ' + str(e.__class__.__name__) + ' - ' + str(e) + '. ' + str(repr(traceback.format_exception(exc_type, exc_value, exc_traceback)))
+            prnt(err_msg)
 
     def wait_sign_in_opp(self, shared: dict):
         sign_stat = shared.get('sign_in_' + self.bk_name_opposite, 'wait')
