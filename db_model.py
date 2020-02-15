@@ -40,8 +40,8 @@ prop_abr = {
     "OLIMP_P": {"abr": "Прокси Олимп", "type": "proxi:olimp", "max": "", "min": "", "error": ""},
 
     "FONBET_MIRROR": {"abr": "Зеркало Фонбет", "type": "mirror:fonbet", "max": "", "min": "", "error": ""},
-    "FONBET_S": {"abr": "Сервер Фонбета", "type": "str", "max": "", "min": "", "access_list": ["ru", "com"], "default":"ru", "error": ""},
-    
+    "FONBET_S": {"abr": "Сервер Фонбета", "type": "str", "max": "", "min": "", "access_list": ["ru", "com"], "default": "ru", "error": ""},
+
     "SERVER_OLIMP": {"abr": "Зеркало Олимп", "type": "mirror:olimp", "max": "", "min": "", "default": "olimp.com", "error": ""},
 
     "FLEX_BET1": {"abr": "1. Измен-е коэф-та", "type": "str", "max": "", "min": "", "access_list": flex_bet_arr, "default": "up", "error": ""},
