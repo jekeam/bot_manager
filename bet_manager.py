@@ -220,7 +220,7 @@ class BetManager:
         self.proxies = self.get_proxy()
         self.server_olimp = '08'
         self.server_fb = {}
-        self.mirror = self.account.get('mirror', '')
+        self.mirror = self.account.get('mirror')
         if not self.mirror:
             self.mirror = self.not_url
 
@@ -245,7 +245,7 @@ class BetManager:
         if self.bk_name not in bk_work or self.bk_name_opposite not in bk_work:
             err_msg = 'bk not defined: bk1={}, bk2={}'.format(self.bk_name, self.bk_name_opposite)
 
-        elif not self.mirror:
+        elif not self.mirror and self.bk_name == 'fonbet':
             err_msg = 'mirror not defined: {}'.format(self.mirror)
 
         if err_msg != '':
@@ -331,13 +331,13 @@ class BetManager:
         k2 = self_opp_data.cur_val_bet
 
         sum_bet_by_max_bet = self.max_bet * (int(get_prop('proc_by_max', 90)) / 100)
-        
+
         sum1, sum2 = self.sum_bet, self_opp_data.sum_bet
-        
+
         prnt(self.msg.format(self.tread_id + ': ' + sys._getframe().f_code.co_name, 'RECALC_SUM_BY_MAXBET: sum_bet_by_max_bet:{}({}%)->{}'.format(self.max_bet, get_prop('proc_by_max', '90'), sum_bet_by_max_bet)))
         prnt(self.msg.format(self.tread_id + ': ' + sys._getframe().f_code.co_name, 'RECALC_SUM_BY_MAXBET: bal1:{}, bal2:{}, k1:{}, k2:{}, sum_bet_by_max_bet:{}'.format(bal1, bal2, k1, k2, sum_bet_by_max_bet)))
         sum1, sum2 = get_new_sum_bets(k1, k2, sum_bet_by_max_bet, bal1, False, self.round_bet, True)
-        
+
         round_fonbet = int(get_prop('round_fonbet', '0'))
         if round_fonbet > 0:
             sum1 = math.floor(sum1 / round_fonbet) * round_fonbet
@@ -622,7 +622,7 @@ class BetManager:
             prnt(self.msg.format(
                 self.tread_id + ': ' + sys._getframe().f_code.co_name,
                 'sum_bet_stat:{}, val_bet_stat:{}, cur_val_bet:{}, round:{}'.format(
-                self.sum_bet_stat, self.val_bet_stat, self.cur_val_bet, self.round)
+                    self.sum_bet_stat, self.val_bet_stat, self.cur_val_bet, self.round)
             ))
 
             total_new_sum = self.sum_bet + sum_opp
@@ -1199,7 +1199,6 @@ class BetManager:
                     self.cur_val_bet_resp = float(re.search('(\(.*)(=>)(.*\))', err_msg).group(3).replace(')', ''))
                 except:
                     prnt(self.msg.format(self.tread_id + ': ' + sys._getframe().f_code.co_name, 'Ошибка при парсинге "Сменился коэффициент на событие": ' + str(err_msg)))
-
 
             self.check_responce(shared, err_msg)
 
