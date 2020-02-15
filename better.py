@@ -1190,7 +1190,7 @@ if __name__ == '__main__':
                                             vect1, vect2 = normalized_vector(vect1, k1, vect2, k2)
                                             prnt('{} - Нормализация векторов: vect1: {}->{}, vect2: {}->{}'.format(key, vect1_old, vect1, vect2_old, vect2), 'hide')
                                         # TODO: binding for BK_NAME from kofs an not left/rigth side
-                                        v_first_bet_in = get_prop('first_bet_in', 'auto')
+                                        v_first_bet_in = get_prop('first_bet_in')
                                         vect_check_ok = True
                                         if v_first_bet_in != 'auto':
                                             if v_first_bet_in == 'fonbet':
@@ -1296,7 +1296,7 @@ if __name__ == '__main__':
                                                         'maxbet_fact': get_prop('maxbet_fact', 'выкл'),
                                                         'fonbet_maxbet_fact': fonbet_maxbet_fact,
                                                         'fb_bk_type': get_prop('fonbet_s'),
-                                                        'first_bet_in': get_prop('first_bet_in', 'auto'),
+                                                        'first_bet_in': get_prop('first_bet_in'),
                                                         'total_first': get_prop('total_first', 'auto'),
                                                         'place': place
                                                     })

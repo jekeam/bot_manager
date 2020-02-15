@@ -43,13 +43,16 @@ LENOVO_MODEL = ''
 
 
 def run_bets(shared: dict):
+    prnt('run_bets start')
     ps = []
     for bk_name, bk_container in shared.items():
         bk = Thread(target=BetManager, args=(shared, bk_name, bk_container))
         ps.append(bk)
+        prnt('run_bets start bk: ' + str(bk_name))
         bk.start()
 
     for bk in ps:
+        prnt('run_bets join bk: ' + str(bk))
         bk.join()
 
 
@@ -59,6 +62,7 @@ class BetManager:
         self.tread_id = str(current_thread().getName())
         self.acc_id = shared.get(bk_name, {}).get('acc_id')
         self.bk_name = bk_name
+        prnt(self.msg.format(self.tread_id + ': ' + sys._getframe().f_code.co_name, self.bk_name + ' start'))
         self.bk_container = bk_container
         self.wager = bk_container['wager']
         self.created_fork = bk_container.get('created', '')
@@ -234,7 +238,7 @@ class BetManager:
         self.max_bet = 0
         self.min_bet = 0
 
-        self.first_bet_in = get_prop('first_bet_in', 'auto')
+        self.first_bet_in = get_prop('first_bet_in')
 
         self.time_req = 0
         self.time_req_opp = 0
@@ -255,6 +259,7 @@ class BetManager:
 
         # self.manager(shared)
         shared[self.bk_name]['self'] = self
+        prnt(self.msg.format(self.tread_id + ': ' + sys._getframe().f_code.co_name, self.bk_name + ' end'))
         self.bet_simple(shared)
 
     def wait_sign_in_opp(self, shared: dict):
@@ -435,6 +440,7 @@ class BetManager:
         prnt(self.msg.format(self.tread_id + ': ' + sys._getframe().f_code.co_name, 'order_bet: ' + str(order_bet)))
 
     def bet_simple(self, shared: dict):
+        prnt(self.msg.format(self.tread_id + ': ' + sys._getframe().f_code.co_name, self.bk_name + ' start'))
 
         def sale_opp(e, shared):
             prnt(self.msg.format(self.tread_id + ': ' + sys._getframe().f_code.co_name, e))
@@ -475,7 +481,9 @@ class BetManager:
 
         try:
             try:
+                prnt(self.msg.format(self.tread_id + ': ' + sys._getframe().f_code.co_name, self.bk_name + ' befor sign in'))
                 self.sign_in(shared)
+                prnt(self.msg.format(self.tread_id + ': ' + sys._getframe().f_code.co_name, self.bk_name + ' after sign in'))
                 self.wait_sign_in_opp(shared)
 
                 recalc_sum_if_maxbet = get_prop('sum_by_max', 'выкл')
@@ -566,6 +574,7 @@ class BetManager:
             err_str = self.msg_err.format(self.tread_id + ': ' + sys._getframe().f_code.co_name, err_msg)
             prnt(err_str)
         finally:
+            prnt(self.msg.format(self.tread_id + ': ' + sys._getframe().f_code.co_name, self.bk_name + ' end'))
             bet_done(shared)
 
     def set_param(self):
