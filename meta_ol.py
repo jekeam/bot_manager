@@ -5,7 +5,7 @@ import re
 import utils
 
 # ol_url_api = "https://{}.olimp-proxy.ru/api/{}"
-ol_url_api = 'https://' + get_prop('server_olimp', 'api2.olimp.bet') + '/api/{}'
+ol_url_api = 'https://' + get_prop('server_olimp') + '/api/{}'
 # ol_url_api_http = 'http://' + get_prop('server_olimp', 'olimpkzapi.ru')
 # olimp_url_https = 'https://10.olimp-proxy.ru'
 # olimp_url_random = 'https://{}.olimp-proxy.ru'  # c 13 по 18й
