@@ -62,7 +62,6 @@ class BetManager:
         self.tread_id = str(current_thread().getName())
         self.acc_id = shared.get(bk_name, {}).get('acc_id')
         self.bk_name = bk_name
-        prnt(self.msg.format(self.tread_id + ': ' + sys._getframe().f_code.co_name, self.bk_name + ' start'))
         self.bk_container = bk_container
         self.wager = bk_container['wager']
         self.created_fork = bk_container.get('created', '')
@@ -78,6 +77,7 @@ class BetManager:
 
         self.msg_err = self.bk_name + '. {}, err: {}'
         self.msg = self.bk_name + '. {}, msg: {}'
+        prnt(self.msg.format(self.tread_id + ': ' + sys._getframe().f_code.co_name, self.bk_name + ' start'))
 
         self.total_bet = bk_container.get('bet_total')
         self.side_team = bk_container['side_team']
