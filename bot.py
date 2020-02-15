@@ -310,7 +310,7 @@ def choose_prop(update, context):
                 if val.get('access_list'):
                     if dop_indo:
                         dop_indo = dop_indo + ', '
-                    dop_indo = 'допустимые значения: ' + str(val.get('access_list')).replace("'", '')
+                    dop_indo = dop_indo + 'допустимые значения: ' + str(val.get('access_list')).replace("'", '')
                 elif 'proxi:' in val.get('type'):
                     proxy = val.get('type').split(':')[1]
                     dop_indo = 'только https прокси формата user:password@ip:port или ip:port'
@@ -362,7 +362,7 @@ def add_day(update, context):
     user_sender = update.message.chat.id
     if User.select().where(User.id == user_sender).get().role == 'admin':
         try:
-            comm = update.message.text
+            comm = update.message.text.replace('\n', '')
 
             c, acc_id, days = comm.split(' ')
 
@@ -404,7 +404,7 @@ def add(update, context):
 
     if User.select().where(User.id == user_sender).get().role == 'admin':
         try:
-            comm = update.message.text
+            comm = update.message.text.replace('\n', '')
             c, type_, id_, new_val = comm.split(' ')
             admin_list = User.select().where(User.role == 'admin')
             if type_ == 'user':
@@ -497,7 +497,7 @@ def change(update, context):
 
     if User.select().where(User.id == user_sender).get().role == 'admin':
         try:
-            comm = update.message.text
+            comm = update.message.text.replace('\n', '')
             c, type_, id_, new_val = comm.split(' ')
 
             admin_list = User.select().where(User.role == 'admin')
