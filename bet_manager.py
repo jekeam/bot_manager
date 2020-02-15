@@ -123,7 +123,7 @@ class BetManager:
         self.bk_type = 'com'
         if self.bk_name == 'fonbet':
             self.sum_sell_divider = 100
-            self.bk_type = self.bk_type = get_prop('fonbet_s', 'com')
+            self.bk_type = get_prop('fonbet_s', 'com')
 
             if self.bk_type == 'com':
                 self.app_ver = '5.1.3b'
