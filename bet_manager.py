@@ -226,7 +226,7 @@ class BetManager:
             self.server_olimp = '08'
             self.server_fb = {}
             self.mirror = self.account.get('mirror')
-            if not self.mirror:
+            if not self.mirror and self.bk_name == 'fonbet':
                 self.mirror = self.not_url
 
             self.session_file = 'session.' + self.bk_name
