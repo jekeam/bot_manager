@@ -955,7 +955,7 @@ if __name__ == '__main__':
                 #     if k:
                 #         prnt(k.get('abr', '') + ': ' + prop.val)
                 for key, val in prop_abr.items():
-                    prnt(val.get('abr', '') + ': ' + get_prop(key))
+                    prnt(val.get('abr', '') + ': ' + str(get_prop(key)))
                 prnt(' ')
                 try:
                     with open(str(ACC_ID) + '_id_forks.txt') as f:
