@@ -949,13 +949,13 @@ if __name__ == '__main__':
                     err_msg = 'Обшая сумма ставки должна превышать ' + str(summ_min_stat) + ' руб.'
                     raise ValueError(err_msg)
 
-                acc_info = Account.select().where(Account.key == KEY)
-                prnt('acc_info: ' + str(acc_info))
-                for prop in acc_info.get().properties:
-                    k = prop_abr.get(prop.key)
-                    prnt('prop: ' + str(prop) + ', k: ' + str(k))
-                    if k:
-                        prnt(k.get('abr', '') + ': ' + prop.val)
+                # acc_info = Account.select().where(Account.key == KEY)
+                # for prop in acc_info.get().properties:
+                #     k = prop_abr.get(prop.key)
+                #     if k:
+                #         prnt(k.get('abr', '') + ': ' + prop.val)
+                for key, val in prop_abr.items():
+                    prnt(val.get('abr', '') + ': ' + get_prop(key))
                 prnt(' ')
                 try:
                     with open(str(ACC_ID) + '_id_forks.txt') as f:
