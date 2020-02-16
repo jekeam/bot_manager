@@ -122,7 +122,8 @@ def get_team_type(name_rus: str, name: str):
 
 fork_exclude_list = []
 
-def is_bet_done(forks:list, key:str, check_type: str):
+
+def is_bet_done(forks: list, key: str, check_type: str):
     id1 = key.split('@')[0]
     id2 = key.split('@')[1]
     cur_kof = key.split('@')[2]
@@ -185,7 +186,7 @@ def check_fork(key, L, k1, k2, live_fork, live_fork_total, bk1_score, bk2_score,
 
     # if curr_deff > max_deff:
     #     fork_exclude_text = fork_exclude_text + 'Вилка исключена, т.к. deff_max (' + str(curr_deff) + ' > ' + str(max_deff) + ')\n'
-    
+
     exclude_bet = get_prop('exclude_bet')
     is_bet_exclude = is_bet_done(cnt_fork_success, key, exclude_bet)
     if exclude_bet == 'kof':
@@ -194,7 +195,7 @@ def check_fork(key, L, k1, k2, live_fork, live_fork_total, bk1_score, bk2_score,
     # for exclude_bet set 'match' or 'off'
     elif is_bet_exclude:
         fork_exclude_text = fork_exclude_text + 'Вилка ' + key + ' не проставлена, т.к. уже делали 1 ставку на данный матч ( ' + str(is_bet_exclude) + ' ): ' + str(cnt_fork_success) + '\n'
-            
+
     if black_list_matches.count(key) > 0:
         fork_exclude_text = fork_exclude_text + 'Вилка исключена, т.к. событие анесено в blacklist: ' + key + ', ' + str(black_list_matches) + '\n'
 
@@ -205,7 +206,10 @@ def check_fork(key, L, k1, k2, live_fork, live_fork_total, bk1_score, bk2_score,
         msg_temp = msg_temp + 'Общая сумма ставки: {}, меньше нижнего предела: {}.\n'.format((bet1 + bet2), summ_min)
     # Проверяем хватить денег для ставки
     if (bal1 < bet1) or (bal2 < bet2):
-        msg_temp = msg_temp + 'Для проставления вилки ' + key + ' недостаточно средств, bal1=' + str(bal1) + ', bet1=' + str(bet1) + ', bal2=' + str(bal2) + ', bet2=' + str(bet2) + ', k1=' + str(k1) + ', k2=' + str(k2) +  '\n'
+        msg_temp = msg_temp + 'Для проставления вилки ' + key + ' недостаточно средств, ' + \
+                   'bal1=' + str(bal1) + ', bet1=' + str(bet1) + \
+                   ', bal2=' + str(bal2) + ', bet2=' + str(bet2) + \
+                   ', k1=' + str(k1) + ', k2=' + str(k2) + '\n'
 
     if get_prop('max_kof'):
         max_kof = float(get_prop('max_kof'))
@@ -260,7 +264,7 @@ def check_fork(key, L, k1, k2, live_fork, live_fork_total, bk1_score, bk2_score,
             fork_exclude_text = fork_exclude_text + 'Вилка исключена т.к. задан перелив в {}, а коф-т менее вероятен: k_ol:{} < k_fb:{}\n'.format(pour_into, k1, k2)
 
     fork_exclude_text = fork_exclude_text + check_l(L)
-    
+
     if msg_temp != '':
         fork_exclude_text = msg_temp
         if key not in msg_by_fork and fork_exclude_text == '' and not bal_small:
@@ -827,7 +831,8 @@ cnt_acc_sql = "select count(*)\n" + \
 # wag_fb:{'apid': '1144260386:45874030:1:3:-9999:3:NULL:NULL:1', 'factor': '1.66', 'sport_id': 1, 'event': '45874030'}
 
 def ref_bal_small(bal1, bal2):
-    return (bal1 <= 400 or bal2 <= 400)
+    min_sum = int(get_prop('summ')) / 2
+    return (bal1 <= min_sum or bal2 <= min_sum)
 
 
 if __name__ == '__main__':
