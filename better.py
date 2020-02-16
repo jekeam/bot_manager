@@ -123,7 +123,7 @@ def get_team_type(name_rus: str, name: str):
 fork_exclude_list = []
 
 
-def is_bet_done(forks: list, key: str, check_type: str):
+def check_bet_by(forks: list, key: str, check_type: str):
     id1 = key.split('@')[0]
     id2 = key.split('@')[1]
     cur_kof = key.split('@')[2]
@@ -187,18 +187,18 @@ def check_fork(key, L, k1, k2, live_fork, live_fork_total, bk1_score, bk2_score,
     # if curr_deff > max_deff:
     #     fork_exclude_text = fork_exclude_text + 'Вилка исключена, т.к. deff_max (' + str(curr_deff) + ' > ' + str(max_deff) + ')\n'
 
-    # TODO FOR FB = black_list_matches
     exclude_bet = get_prop('exclude_bet')
-    is_bet_exclude = is_bet_done(cnt_fork_success, key, exclude_bet)
     if exclude_bet == 'kof':
         if cnt_fork_success.count(key) > 0:
             fork_exclude_text = fork_exclude_text + 'Вилка ' + key + ' не проставлена, т.к. мы уже ставили на это событие: ' + str(cnt_fork_success) + '\n'
     # for exclude_bet set 'match' or 'off'
-    elif is_bet_exclude:
+    is_bet_exclude = check_bet_by(cnt_fork_success, key, exclude_bet)
+    if is_bet_exclude:
         fork_exclude_text = fork_exclude_text + 'Вилка ' + key + ' не проставлена, т.к. уже делали 1 ставку на данный матч ( ' + str(is_bet_exclude) + ' ): ' + str(cnt_fork_success) + '\n'
 
-    if black_list_matches.count(key) > 0:
-        fork_exclude_text = fork_exclude_text + 'Вилка исключена, т.к. событие анесено в blacklist: ' + key + ', ' + str(black_list_matches) + '\n'
+    is_bet_exclude_bl = check_bet_by(black_list_matches, key, exclude_bet)
+    if is_bet_exclude_bl:
+        fork_exclude_text = fork_exclude_text + 'Вилка ' + key + ' т.к. это черный список ( ' + str(is_bet_exclude_bl) + ' ): ' + str(black_list_matches) + '\n'
 
     # Проверяем корректная ли сумма
     if bet1 < 30 or bet2 < 30:
