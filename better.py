@@ -191,7 +191,7 @@ def check_fork(key, L, k1, k2, live_fork, live_fork_total, bk1_score, bk2_score,
     if exclude_bet == 'kof':
         if cnt_fork_success.count(key) > 0:
             fork_exclude_text = fork_exclude_text + 'Вилка ' + key + ' не проставлена, т.к. мы уже ставили на это событие: ' + str(cnt_fork_success) + '\n'
-    # for exclude_bet set 'match' or 'off'
+    # for exclude_bet set 'match' or 'off' and global check
     is_bet_exclude = check_bet_by(cnt_fork_success, key, exclude_bet)
     if is_bet_exclude:
         fork_exclude_text = fork_exclude_text + 'Вилка ' + key + ' не проставлена, т.к. уже делали 1 ставку на данный матч ( ' + str(is_bet_exclude) + ' ): ' + str(cnt_fork_success) + '\n'
