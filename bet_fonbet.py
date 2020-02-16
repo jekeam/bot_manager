@@ -45,13 +45,14 @@ class FonbetBot:
     """Use to place bets on fonbet site."""
 
     def __init__(self, account: dict = DEFAULT_ACCOUNT) -> None:
-        self.bk_type = get_prop('fonbet_s')
-        self.bk_name = 'Fonbet'
-        self.attempt_login = 0
         self.account = account
-        self.balance = 0.0
-        self.cur_rate = 1.0
-        self.currency = ''
+        if account.get('bk_type'):
+            self.bk_type = account.get('bk_type')
+        else:
+            self.bk_type = get_prop('fonbet_s')
+        print(self.bk_type)
+        self.bk_name = 'fonbet'
+        self.attempt_login = 0
         self.balance_in_play = 0.0
         # self.session = get_session_with_proxy('fonbet')
         self.reg_id = None
@@ -80,7 +81,7 @@ class FonbetBot:
 
         if self.bk_type == 'com':
             self.app_ver = '5.1.3b'
-            self.user_agent = 'Fonbet/5.1.3b (Android 21; Phone; com.bkfonbet)'
+            self.user_agent = 'fonbet/5.1.3b (android 21; phone; com.bkfonbet)'
             self.not_url = 'fonbet.com'
             self.url_api = 'clients-api'  # maybe 'common'?
         elif self.bk_type == 'ru':
@@ -1098,11 +1099,11 @@ def get_cupon_id(login: str = None, password: str = None, domain: str = None):
     acc_str = choice(accs)
 
     login, password, domain = acc_str.split(';')
-
+    domain = domain.strip()
     if login and password and domain:
-        FONBET_USER = {"login": int(login), "password": password, "mirror": "fonbet." + domain, "proxy": new_proxy_http}
+        FONBET_USER = {"login": int(login), "password": password, "mirror": "fonbet." + domain, "proxy": new_proxy_http, "bk_type": domain}
     else:
-        FONBET_USER = {"login": 5987993, "password": "qRVcRUXz23", "mirror": "fonbet.com", "proxy": new_proxy_http}
+        FONBET_USER = {"login": 5987993, "password": "qRVcRUXz23", "mirror": "fonbet.com", "proxy": new_proxy_http, "bk_type": "com"}
 
     wager_fonbet = {"time_req": 1580371264,
                     "event": 19140613,
