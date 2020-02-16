@@ -50,7 +50,6 @@ class FonbetBot:
             self.bk_type = account.get('bk_type')
         else:
             self.bk_type = get_prop('fonbet_s')
-        print(self.bk_type)
         self.bk_name = 'fonbet'
         self.attempt_login = 0
         self.balance_in_play = 0.0
