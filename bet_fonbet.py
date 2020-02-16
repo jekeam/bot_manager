@@ -45,11 +45,15 @@ class FonbetBot:
     """Use to place bets on fonbet site."""
 
     def __init__(self, account: dict = DEFAULT_ACCOUNT) -> None:
-        self.account = account
         if account.get('bk_type'):
             self.bk_type = account.get('bk_type')
         else:
             self.bk_type = get_prop('fonbet_s')
+        self.attempt_login = 0
+        self.account = account
+        self.balance = 0.0
+        self.cur_rate = 1.0
+        self.currency = ''
         self.bk_name = 'fonbet'
         self.attempt_login = 0
         self.balance_in_play = 0.0
@@ -80,7 +84,7 @@ class FonbetBot:
 
         if self.bk_type == 'com':
             self.app_ver = '5.1.3b'
-            self.user_agent = 'fonbet/5.1.3b (android 21; phone; com.bkfonbet)'
+            self.user_agent = 'Fonbet/5.1.3b (Android 21; Phone; com.bkfonbet)'
             self.not_url = 'fonbet.com'
             self.url_api = 'clients-api'  # maybe 'common'?
         elif self.bk_type == 'ru':
