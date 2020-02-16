@@ -367,13 +367,13 @@ class BetManager:
             sum2, sum1 = get_new_sum_bets(k2, k1, bal2, bal1, False, self.round_bet, 'debug', 'roud_floor')
 
         if sum1 > bal1 or sum2 > bal2:
-            raise BetIsLost('Ошибка баланса: Одна из ставок больше баланса: {}>{}, {}>{}.'.format(sum1, bal1, sum2, bal2))
+            raise BetIsLost('Ошибка баланса: Одна из ставок больше баланса: {}>{}, {}>{}.|'.format(sum1, bal1, sum2, bal2))
         elif sum1 < self.min_bet:
-            raise BetIsLost('Ошибка баланса: Сумма после пересчета меньше min_bet: {} < {}.'.format(sum1, self.min_bet))
+            raise BetIsLost('Ошибка баланса: Сумма после пересчета меньше min_bet: {} < {}.|'.format(sum1, self.min_bet))
         elif sum1 < 30 or sum2 < 30:
-            raise BetIsLost('Ошибка баланса: Сумма одной из ставок после пересчета меньше 30 рублей, {}, {}.'.format(sum1, sum2))
+            raise BetIsLost('Ошибка баланса: Сумма одной из ставок после пересчета меньше 30 рублей, {}, {}.|'.format(sum1, sum2))
         elif self.summ_min > (sum1 + sum2):
-            raise BetIsLost('Ошибка баланса: Сумма общей ставки: {}, после пересчета меньше допустимой: {}.'.format((sum1 + sum2), self.summ_min))
+            raise BetIsLost('Ошибка баланса: Сумма общей ставки: {}, после пересчета меньше допустимой: {}.|'.format((sum1 + sum2), self.summ_min))
         else:
             self.sum_bet, self_opp_data.sum_bet = sum1, sum2
             self.sum_bet_stat, self_opp_data.sum_bet_stat = sum1, sum2
