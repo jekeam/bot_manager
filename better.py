@@ -187,6 +187,7 @@ def check_fork(key, L, k1, k2, live_fork, live_fork_total, bk1_score, bk2_score,
     # if curr_deff > max_deff:
     #     fork_exclude_text = fork_exclude_text + 'Вилка исключена, т.к. deff_max (' + str(curr_deff) + ' > ' + str(max_deff) + ')\n'
 
+    # TODO FOR FB = black_list_matches
     exclude_bet = get_prop('exclude_bet')
     is_bet_exclude = is_bet_done(cnt_fork_success, key, exclude_bet)
     if exclude_bet == 'kof':
@@ -315,6 +316,7 @@ def get_statistics():
     global cnt_fail, black_list_matches, cnt_fork_success
 
     prnt('Успешных ставок: ' + str(len(cnt_fork_success)))
+    prnt('cnt_fork_success: ' + str(cnt_fork_success))
     prnt('Кол-во ставок с ошибками/выкупом: ' + str(cnt_fail))
     prnt('Черный список матчей: ' + str(black_list_matches))
 
@@ -948,8 +950,10 @@ if __name__ == '__main__':
                     raise ValueError(err_msg)
 
                 acc_info = Account.select().where(Account.key == KEY)
+                prnt('acc_info: ' + str(acc_info))
                 for prop in acc_info.get().properties:
                     k = prop_abr.get(prop.key)
+                    prnt('prop: ' + str(prop) + ', k: ' + str(k))
                     if k:
                         prnt(k.get('abr', '') + ': ' + prop.val)
                 prnt(' ')
