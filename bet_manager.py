@@ -1600,17 +1600,8 @@ class BetManager:
 
         shared[self.bk_name]['max_bet'] = self.max_bet
 
-        prnt(self.msg.format(self.tread_id + ': ' + sys._getframe().f_code.co_name, 'sum bet=' + str(self.sum_bet)))
-        prnt(self.msg.format(self.tread_id + ': ' + sys._getframe().f_code.co_name, 'min_amount=' + str(self.min_bet) + ', max_amount=' + str(self.max_bet)))
-        if self.min_bet > self.sum_bet:
-            err_str = self.msg_err.format(self.tread_id + ': ' + sys._getframe().f_code.co_name, 'min bet')
-            raise BetIsLost(err_str)
-        if self.sum_bet > self.max_bet:
-            err_str = self.msg_err.format(self.tread_id + ': ' + sys._getframe().f_code.co_name, 'max bet')
-            raise BetIsLost(err_str)
-        if self.balance and self.balance < self.sum_bet:
-            err_str = self.msg_err.format(self.tread_id + ': ' + sys._getframe().f_code.co_name, 'mo money')
-            raise NoMoney(err_str)
+        prnt(self.msg.format(self.tread_id + ': ' + sys._getframe().f_code.co_name, 'min_amount=' + str(self.min_bet) + ', max_amount=' + str(self.max_bet) + ', sum bet=' + str(self.sum_bet)))
+
         if self.limit_revet_maxbet > 0:
             revet_maxbet = ((k - 1) * self.max_bet)
             if revet_maxbet < self.limit_revet_maxbet:
@@ -1629,6 +1620,15 @@ class BetManager:
                 self.tread_id + ': ' + sys._getframe().f_code.co_name,
                 'ТОП в у.е. - not work: limit_revet_maxbet={}'.format(self.limit_revet_maxbet)
             ))
+        if self.min_bet > self.sum_bet:
+            err_str = self.msg_err.format(self.tread_id + ': ' + sys._getframe().f_code.co_name, 'min bet')
+            raise BetIsLost(err_str)
+        if self.sum_bet > self.max_bet:
+            err_str = self.msg_err.format(self.tread_id + ': ' + sys._getframe().f_code.co_name, 'max bet')
+            raise BetIsLost(err_str)
+        if self.balance and self.balance < self.sum_bet:
+            err_str = self.msg_err.format(self.tread_id + ': ' + sys._getframe().f_code.co_name, 'mo money')
+            raise NoMoney(err_str)
 
     def check_result(self, shared: dict):
 
