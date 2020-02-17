@@ -857,7 +857,7 @@ if __name__ == '__main__':
                 wait_before_start_sec = wait_before_start_sec - 0.5
                 time.sleep(0.5)
             else:
-                prnt('version code: ' + str(subprocess.check_output(["git", "describe"]).strip()))
+                prnt('version code: ' + str(subprocess.check_output(["git", "rev-parse", "HEAD"]).strip()))
                 Account.update(pid=os.getpid(), time_start=round(time.time())).where(Account.key == KEY).execute()
                 prnt('DEBUG: ' + str(DEBUG))
 
