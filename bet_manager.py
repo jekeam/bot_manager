@@ -1611,7 +1611,10 @@ class BetManager:
             raise NoMoney(err_str)
         if self.limit_revet_maxbet > 0:
             if ((k - 1) * self.max_bet) < self.limit_revet_maxbet:
-                err_str = self.msg_err.format(self.tread_id + ': ' + sys._getframe().f_code.co_name, '(k-1) * max_bet < PROP: k1={}, max_bet={}, prop_val={}'.format(k, self.max_bet, self.limit_revet_maxbet))
+                err_str = self.msg_err.format(
+                    self.tread_id + ': ' + sys._getframe().f_code.co_name,
+                    'ТОП в у.е. ниже необходимого: k1={}, max_bet={}, prop_val={}'.format(k, self.max_bet, self.limit_revet_maxbet)
+                )
                 raise BetIsLost(err_str)
 
     def check_result(self, shared: dict):
