@@ -1601,6 +1601,7 @@ class BetManager:
         shared[self.bk_name]['max_bet'] = self.max_bet
 
         prnt(self.msg.format(self.tread_id + ': ' + sys._getframe().f_code.co_name, 'min_amount=' + str(self.min_bet) + ', max_amount=' + str(self.max_bet) + ', sum bet=' + str(self.sum_bet)))
+        prnt(self.msg.format(self.tread_id + ': ' + sys._getframe().f_code.co_name, 'limit_revet_maxbet:{}, k:{}'.format(self.limit_revet_maxbet, k)))
 
         if self.limit_revet_maxbet > 0:
             revet_maxbet = ((k - 1) * self.max_bet)
@@ -1609,6 +1610,7 @@ class BetManager:
                     self.tread_id + ': ' + sys._getframe().f_code.co_name,
                     'ТОП в у.е. - error: k1={}, max_bet={}, prop_val={}, cur_val={}'.format(k, self.max_bet, self.limit_revet_maxbet, revet_maxbet)
                 )
+                prnt(err_str)
                 raise BetIsLost(err_str)
             else:
                 prnt(self.msg.format(
