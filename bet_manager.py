@@ -240,6 +240,7 @@ class BetManager:
             self.min_bet = 0
 
             self.first_bet_in = get_prop('first_bet_in')
+            self.limit_revet_maxbet = get_prop('limit_revet_maxbet')
 
             self.time_req = 0
             self.time_req_opp = 0
@@ -492,7 +493,7 @@ class BetManager:
                 self.wait_sign_in_opp(shared)
 
                 recalc_sum_if_maxbet = get_prop('sum_by_max', 'выкл')
-                if get_prop('check_max_bet', 'выкл') == 'вкл' or recalc_sum_if_maxbet == 'вкл':
+                if get_prop('check_max_bet', 'выкл') == 'вкл' or recalc_sum_if_maxbet == 'вкл' or self.limit_revet_maxbet > 0:
                     if self.bk_name == 'fonbet':
                         prnt(' ')
                         prnt(self.msg.format(self.tread_id + ': ' + sys._getframe().f_code.co_name, 'CHECK MAX-BET, BEFORE BET'))
@@ -1557,7 +1558,8 @@ class BetManager:
         if self.wager.get('param'):
             payload['coupon']['bets'][0]['param'] = int(self.wager['param'])
         payload['coupon']['bets'][0]['score'] = self.wager['score']
-        payload['coupon']['bets'][0]['value'] = float(self.wager['value'])
+        k = float(self.wager['value'])
+        payload['coupon']['bets'][0]['value'] = k
         payload['coupon']['bets'][0]['event'] = int(self.wager['event'])
         payload['coupon']['bets'][0]['factor'] = int(self.wager['factor'])
         payload['coupon']['amount'] = 0.0
@@ -1591,22 +1593,26 @@ class BetManager:
             raise BetIsLost(err_str)
 
         min_amount, max_amount = round(res['min'] * self.cur_rate // 100, 2), round(res['max'] * self.cur_rate // 100, 2)
-
-        shared[self.bk_name]['max_bet'] = max_amount
         self.min_bet = min_amount
         self.max_bet = max_amount
 
+        shared[self.bk_name]['max_bet'] = self.max_bet
+
         prnt(self.msg.format(self.tread_id + ': ' + sys._getframe().f_code.co_name, 'sum bet=' + str(self.sum_bet)))
-        prnt(self.msg.format(self.tread_id + ': ' + sys._getframe().f_code.co_name, 'min_amount=' + str(min_amount) + ', max_amount=' + str(max_amount)))
-        if min_amount > self.sum_bet:
+        prnt(self.msg.format(self.tread_id + ': ' + sys._getframe().f_code.co_name, 'min_amount=' + str(self.min_bet) + ', max_amount=' + str(self.max_bet)))
+        if self.min_bet > self.sum_bet:
             err_str = self.msg_err.format(self.tread_id + ': ' + sys._getframe().f_code.co_name, 'min bet')
             raise BetIsLost(err_str)
-        if self.sum_bet > max_amount:
+        if self.sum_bet > self.max_bet:
             err_str = self.msg_err.format(self.tread_id + ': ' + sys._getframe().f_code.co_name, 'max bet')
             raise BetIsLost(err_str)
         if self.balance and self.balance < self.sum_bet:
             err_str = self.msg_err.format(self.tread_id + ': ' + sys._getframe().f_code.co_name, 'mo money')
             raise NoMoney(err_str)
+        if self.limit_revet_maxbet > 0:
+            if ((k - 1) * self.max_bet) < self.limit_revet_maxbet:
+                err_str = self.msg_err.format(self.tread_id + ': ' + sys._getframe().f_code.co_name, '(k-1) * max_bet < PROP: k1={}, max_bet={}, prop_val={}'.format(k, self.max_bet, self.limit_revet_maxbet))
+                raise BetIsLost(err_str)
 
     def check_result(self, shared: dict):
 
