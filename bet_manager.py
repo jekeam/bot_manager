@@ -241,6 +241,8 @@ class BetManager:
 
             self.first_bet_in = get_prop('first_bet_in')
             self.limit_revet_maxbet = get_prop('limit_revet_maxbet')
+            if self.limit_revet_maxbet:
+                self.limit_revet_maxbet = int(self.limit_revet_maxbet)
 
             self.time_req = 0
             self.time_req_opp = 0
