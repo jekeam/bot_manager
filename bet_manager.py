@@ -1592,7 +1592,7 @@ class BetManager:
 
         if 'min' not in res:
             err_str = self.msg_err.format(self.tread_id + ': ' + sys._getframe().f_code.co_name, 'min sum not found')
-            raise BetIsLost(err_str)
+            raise BetError(err_str)
 
         min_amount, max_amount = round(res['min'] * self.cur_rate // 100, 2), round(res['max'] * self.cur_rate // 100, 2)
         self.min_bet = min_amount
@@ -1611,7 +1611,7 @@ class BetManager:
                     'ТОП в у.е. - error: k1={}, max_bet={}, prop_val={}, cur_val={}'.format(k, self.max_bet, self.limit_revet_maxbet, revet_maxbet)
                 )
                 prnt(err_str)
-                raise BetIsLost(err_str)
+                raise BetError(err_str)
             else:
                 prnt(self.msg.format(
                     self.tread_id + ': ' + sys._getframe().f_code.co_name,
