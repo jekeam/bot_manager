@@ -839,7 +839,7 @@ def ref_bal_small(bal1, bal2):
 
 if __name__ == '__main__':
     try:
-
+        prnt('version code: ' + str(subprocess.check_output(["git", "describe"]).strip()))
         random_time = uniform(0, 1)
         prnt('random_time: ' + str(random_time))
         time.sleep(random_time)

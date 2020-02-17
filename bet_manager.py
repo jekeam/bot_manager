@@ -1287,12 +1287,7 @@ class BetManager:
             self.payload['requestId'] = self.reqId
 
             # Изменения коэф-в, any - все, up - вверх, no - не принимать при изменении
-            if self.flex_bet == 'any':
-                self.payload['coupon']['flexBet'] = 'any'
-            elif self.flex_bet == 'up':
-                self.payload['coupon']['flexBet'] = 'up'
-            elif self.flex_bet == 'no':
-                self.payload['coupon']['flexBet'] = 'no'
+            self.payload['coupon']['flexBet'] = self.flex_bet
 
             # Изменения фор и тоталов, True - принимать, False - не принимать         
             if self.flex_kof == 'no':
