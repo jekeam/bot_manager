@@ -1618,11 +1618,17 @@ class BetManager:
                     self.tread_id + ': ' + sys._getframe().f_code.co_name,
                     'ТОП в у.е. - error: k1={}, max_bet={}, prop_val={}, cur_val={}'.format(k, self.max_bet, self.limit_revet_maxbet, revet_maxbet)
                 )
+                raise BetIsLost(err_str)
             else:
                 prnt(self.msg.format(
                     self.tread_id + ': ' + sys._getframe().f_code.co_name,
                     'ТОП в у.е. - success: k1={}, max_bet={}, prop_val={}, cur_val={}'.format(k, self.max_bet, self.limit_revet_maxbet, revet_maxbet)
                 ))
+        else:
+            prnt(self.msg.format(
+                self.tread_id + ': ' + sys._getframe().f_code.co_name,
+                'ТОП в у.е. - not work: limit_revet_maxbet={}'.format(self.limit_revet_maxbet)
+            ))
 
     def check_result(self, shared: dict):
 
