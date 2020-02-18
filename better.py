@@ -628,9 +628,8 @@ def go_bets(wag_ol, wag_fb, key, deff_max, vect1, vect2, sc1, sc2, created, even
                         if m:
                             prnt('msg_errs post: ' + str(m))
                             for admin in ADMINS:
-                                send_message_bot(admin, str(ACC_ID) + ': ' + m + ' - вилка ' + key + ' исключена')
+                                send_message_bot(admin, str(ACC_ID) + ': ' + m + ' - вилка ' + key + ' исключена,  k1={}, k2={}, bal1={}, bal2={}'.format(k1, k2, bal1, bal2))
                             break
-                            
                 except Exception as e:
                     prnt('Error parse msg: ' + str(msg_errs) + ', ' + str(e))
         if not 'BkOppBetError'.lower() in msg_errs.lower():
