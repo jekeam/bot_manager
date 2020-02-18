@@ -1243,7 +1243,7 @@ if __name__ == '__main__':
                                             prnt('OK - check_fork', 'hide')
                                             now_timestamp = int(time.time())
                                             last_timestamp = temp_lock_fork.get(key, now_timestamp)
-                                            if group_limit_id == '':
+                                            if group_limit_id == '4':
                                                 timeout_temp_sec = 60 * 15
                                             else:
                                                 timeout_temp_sec = 60
