@@ -834,7 +834,10 @@ cnt_acc_sql = "select count(*)\n" + \
 # wag_fb:{'apid': '1144260386:45874030:1:3:-9999:3:NULL:NULL:1', 'factor': '1.66', 'sport_id': 1, 'event': '45874030'}
 
 def ref_bal_small(bal1, bal2):
-    min_sum = int(get_prop('summ')) / 2
+    if int(get_prop('proc_by_max')) > 0:
+        min_sum = get_prop('summ_min') * 3 
+    else:
+        min_sum = int(get_prop('summ')) / 2
     return (bal1 <= min_sum or bal2 <= min_sum)
 
 
@@ -1003,13 +1006,14 @@ if __name__ == '__main__':
                     bal_small = ref_bal_small(bal1, bal2)
 
                     msg_str = ''
-
+                    
                     if group_limit_id == '4' and not start_message_send:
                         msg_str = msg_str + 'Обнаружена порезка до 4й группы\n'
                         summ_min_stat = 60
                         summ_min = 60
                     elif bk2.get_acc_info('sale').lower() == 'да' and not start_message_send:
                         msg_str = msg_str + 'Обнаружена неявная порезка до 4й группы, т.к. есть блокировка выкупа ставки\n'
+                        group_limit_id = '4'
 
                     if not start_message_send:
                         cnt_fork_success_old = len(cnt_fork_success)

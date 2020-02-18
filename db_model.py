@@ -71,7 +71,7 @@ prop_abr = {
     "CHECK_MAX_BET": {"abr": "Проверка maxbet", "type": "str", "max": "", "min": "", "access_list": on_off, "error": ""},
     "LIMIT_REVET_MAXBET": {"abr": "ТОП в у.е. (руб)", "type": "int", "max": "", "min": "", "access_list": [], "default": 0, "error": ""},
     "SUM_BY_MAX": {"abr": "Пересчет maxbet", "type": "str", "max": "", "min": "", "access_list": on_off, "error": ""},
-    "PROC_BY_MAX": {"abr": "% от maxbet", "type": "int", "max": "100", "min": "10", "access_list": [], "error": ""},
+    "PROC_BY_MAX": {"abr": "% от maxbet", "type": "int", "max": "100", "min": "0", "access_list": [], "default": 0, "error": ""},
 
     "TIMEOUT_FORK": {"abr": "Ждать после ставки", "type": "int", "max": "5400", "min": "120", "default": 180, "access_list": [], "error": ""},
 
