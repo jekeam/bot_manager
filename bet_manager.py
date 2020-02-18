@@ -349,7 +349,7 @@ class BetManager:
 
         prnt(self.msg.format(self.tread_id + ': ' + sys._getframe().f_code.co_name, 'RECALC_SUM_BY_MAXBET: sum_bet_by_max_bet:{}({}%)->{}'.format(self.max_bet, get_prop('proc_by_max', '90'), sum_bet_by_max_bet)))
         prnt(self.msg.format(self.tread_id + ': ' + sys._getframe().f_code.co_name, 'RECALC_SUM_BY_MAXBET: bal1:{}, bal2:{}, k1:{}, k2:{}, sum_bet_by_max_bet:{}'.format(bal1, bal2, k1, k2, sum_bet_by_max_bet)))
-        sum1, sum2 = get_new_sum_bets(k1, k2, sum_bet_by_max_bet, bal1, False, self.round_bet, True)
+        sum1, sum2 = get_new_sum_bets(k1, k2, sum_bet_by_max_bet, bal1, False, self.round_bet, 'debug', False)
 
         round_fonbet = int(get_prop('round_fonbet', '0'))
         if round_fonbet > 0:
