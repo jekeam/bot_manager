@@ -835,7 +835,7 @@ cnt_acc_sql = "select count(*)\n" + \
 
 def ref_bal_small(bal1, bal2):
     if int(get_prop('proc_by_max')) > 0:
-        min_sum = get_prop('summ_min') * 3 
+        min_sum = int(get_prop('summ_min')) * 3 
     else:
         min_sum = int(get_prop('summ')) / 2
     return (bal1 <= min_sum or bal2 <= min_sum)
