@@ -1243,11 +1243,15 @@ if __name__ == '__main__':
                                             prnt('OK - check_fork', 'hide')
                                             now_timestamp = int(time.time())
                                             last_timestamp = temp_lock_fork.get(key, now_timestamp)
-                                            if 0 < (now_timestamp - last_timestamp) < 60 and len(server_forks) > 1:
+                                            if group_limit_id == '':
+                                                timeout_temp_sec = 60 * 15
+                                            else:
+                                                timeout_temp_sec = 60
+                                            if 0 < (now_timestamp - last_timestamp) < timeout_temp_sec and len(server_forks) > 1:
                                                 if key not in msg_excule_pushed:
                                                     msg_excule_pushed.append(key)
                                                     prnt(
-                                                        vstr='Вилка ' + str(key) + ' исключена, т.к. мы ее пытались проставить не успешно, но прошло менее 60 секунд и есть еще вилки,'
+                                                        vstr='Вилка ' + str(key) + ' исключена, т.к. мы ее пытались проставить не успешно, но прошло менее ' + str(timeout_temp_sec) +  ' секунд и есть еще вилки,'
                                                                                    'now:{}, last:{}, diff:{}'.format(now_timestamp, last_timestamp, now_timestamp - last_timestamp),
                                                         hide=None,
                                                         to_cl=True,
