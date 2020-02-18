@@ -618,7 +618,8 @@ def go_bets(wag_ol, wag_fb, key, deff_max, vect1, vect2, sc1, sc2, created, even
                 msg_by_fork.append(key)
                 try:
                     prnt('msg_errs: ' + str(msg_errs))
-                    msg_errs = re.findall(r'(Ошибка: BetIsLost - Ошибка баланса:.*\.\|)', msg_errs)[0]
+                    msg_errs = re.findall(r'(Ошибка: BetIsLost - Ошибка баланса:.*\.\|\.\s\[)', str(msg_errs))[0].replace('.|. [', '')
+                    prnt('msg_errs post: ' + str(msg_errs))
                     for admin in ADMINS:
                         send_message_bot(admin, str(ACC_ID) + ': ' + msg_errs + ' - вилка ' + key + ' исключена')
                 except Exception as e:
