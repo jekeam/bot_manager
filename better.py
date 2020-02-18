@@ -634,7 +634,7 @@ def go_bets(wag_ol, wag_fb, key, deff_max, vect1, vect2, sc1, sc2, created, even
             # SAVE INFO
             save_fork(fork_info)
             # WAITING AFTER BET
-            sleep_post_work = int(get_prop('timeout_fork', 30))
+            sleep_post_work = max(shared.get('fonbet', {}).get('timeout_fork', 0), int(get_prop('timeout_fork')))
             prnt(vstr='Ожидание ' + str(sleep_post_work) + ' сек.', hide=None, to_cl=True)
             time.sleep(sleep_post_work)
             # GET NEW BALANCE

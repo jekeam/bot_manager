@@ -1091,6 +1091,7 @@ class BetManager:
                 self.group_limit_id = res.get('limitGroup', '0')
                 self.currency = res.get('currency').get('currency', 'RUB')
                 self.sell_blocked = res.get('attributes', {}).get("sellBlocked")
+                shared[self.bk_name]['timeout_fork'] = res.get('attributes', {}).get("betToBetDelay")
 
             if not self.session:
                 raise SessionNotDefined(self.msg_err.format(self.tread_id + ': ' + sys._getframe().f_code.co_name, 'session_id not defined'))
