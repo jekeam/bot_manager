@@ -627,6 +627,8 @@ def go_bets(wag_ol, wag_fb, key, deff_max, vect1, vect2, sc1, sc2, created, even
                         , msg_errs)[0]:
                         if m:
                             prnt('msg_errs post: ' + str(m))
+                            bal1 = OlimpBot(OLIMP_USER).get_balance()  # Баланс в БК1
+                            bal2 = FonbetBot(FONBET_USER).get_balance()  # Баланс в БК2
                             for admin in ADMINS:
                                 send_message_bot(admin, str(ACC_ID) + ': ' + m + ' - вилка ' + key + ' исключена,  k1={}, k2={}, bal1={}, bal2={}'.format(k1, k2, bal1, bal2))
                             break
