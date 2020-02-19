@@ -1097,249 +1097,256 @@ if __name__ == '__main__':
                             name = val_json.get('name', 'name')
                             name_rus = val_json.get('name_rus', 'name_rus')
                             pair_math = val_json.get('pair_math', 'pair_math')
+                            name_bk1 = val_json.get('name_bk1')
+                            name_bk2 = val_json.get('name_bk2')
+                            
+                            if name_bk1 == 'olimp' and name_bk2 == 'fonbet':
 
-                            bk1_score = str(val_json.get('bk1_score', 'bk1_score'))
-                            bk2_score = str(val_json.get('bk2_score', 'bk2_score'))
-                            score = '[' + bk1_score + '|' + bk2_score + ']'
-
-                            sc1 = 0
-                            sc2 = 0
-                            try:
-                                sc1 = int(bk2_score.split(':')[0])
-                            except BaseException:
-                                pass
-
-                            try:
-                                sc2 = int(bk2_score.split(':')[1])
-                            except BaseException:
-                                pass
-
-                            v_time = val_json.get('time', 'v_time')
-                            minute = val_json.get('minute', 0)
-                            time_break_fonbet = val_json.get('time_break_fonbet')
-                            level_liga = val_json.get('is_top')
-                            period = val_json.get('period')
-                            time_last_upd = val_json.get('time_last_upd', 1)
-                            live_fork_total = val_json.get('live_fork_total', 0)
-                            live_fork = val_json.get('live_fork', 0)
-                            created_fork = val_json.get('created_fork', '')
-                            event_type = val_json.get('event_type')
-                            place = val_json.get('place')
-
-                            # prnt(' ', 'hide')
-                            # prnt('GET ' + place.upper() + ' FORK: ' + name + ', ' + key, 'end')
-
-                            fonbet_maxbet_fact = val_json.get('fonbet_maxbet_fact', {}).get(str(group_limit_id), 0)
-
-                            deff_olimp = round(float(time.time() - float(val_json.get('time_req_olimp', 0.0))))
-                            deff_fonbet = round(float(time.time() - float(val_json.get('time_req_fonbet', 0.0))))
-                            curr_deff = max(0, deff_olimp, deff_fonbet)
-
-                            bk1_bet_json = val_json.get('kof_olimp', {})
-                            bk2_bet_json = val_json.get('kof_fonbet', {})
-                            start_after_min = val_json.get('start_after_min', 0)
-
-                            bk1_hist = bk1_bet_json.get('hist', {})
-                            bk2_hist = bk2_bet_json.get('hist', {})
-
-                            base_line = bk2_bet_json.get('base_line', False)
-                            is_hot = bk2_bet_json.get('is_hot', False)
-
-                            bk1_avg_change = bk1_hist.get('avg_change')
-                            bk2_avg_change = bk2_hist.get('avg_change')
-
-                            bk1_kof_order = bk1_hist.get('order')
-                            bk2_kof_order = bk2_hist.get('order')
-
-                            k1 = bk1_bet_json.get('factor', 0)
-                            k2 = bk2_bet_json.get('value', 0)
-
-                            vect1 = bk1_bet_json.get('vector')
-                            vect2 = bk2_bet_json.get('vector')
-                            try:
-                                info = key + ': ' + name + ', ' + \
-                                       'place: ' + str(place) + ', ' + \
-                                       'created: ' + created_fork + ', ' + \
-                                       k1_type + '=' + str(k1) + '/' + \
-                                       k2_type + '=' + str(k2) + ', ' + \
-                                       v_time + ' (' + str(minute) + ') ' + \
-                                       score + ' ' + str(pair_math) + \
-                                       ', live_fork: ' + str(live_fork) + \
-                                       ', live_fork_total: ' + str(live_fork_total) + \
-                                       ', max deff: ' + str(curr_deff) + \
-                                       ', event_type: ' + event_type + \
-                                       ', fonbet_maxbet_fact: ' + str(fonbet_maxbet_fact)
-                            except Exception as e:
-                                exc_type, exc_value, exc_traceback = sys.exc_info()
-                                err_str = str(e) + ' ' + str(repr(traceback.format_exception(exc_type, exc_value, exc_traceback)))
-                                prnt('better: ' + err_str)
-                                prnt('event_type: ' + event_type)
-                                prnt('deff max: ' + str(curr_deff))
-                                prnt('live fork total: ' + str(live_fork_total))
-                                prnt('live fork: ' + str(live_fork))
-                                prnt('pair_math: ' + str(pair_math))
-                                prnt('score: ' + str(score))
-                                prnt('minute: ' + str(minute))
-                                prnt('time: ' + str(v_time))
-                                prnt('k1: ' + str(k1))
-                                prnt('k1_type: ' + str(k1_type))
-                                prnt('k2: ' + str(k2))
-                                prnt('k2_type: ' + str(k2_type))
-                                prnt('name: ' + str(name))
-                                prnt('key: ' + str(key))
-                                prnt('val_json: ' + str(val_json))
-                                prnt('vect1: ' + str(vect1))
-                                prnt('vect2: ' + str(vect2))
-                                info = ''
-                            if event_type in sport_list:
-                                if vect1 and vect2:
-                                    max_deff = 6
-                                    if place == 'pre':
-                                        max_deff = 60
-                                    if curr_deff <= curr_deff and k1 > 0 < k2:
-                                        vect1_old = vect1
-                                        vect2_old = vect2
-                                        if vect1 == vect2:
-                                            vect1, vect2 = normalized_vector(vect1, k1, vect2, k2)
-                                            prnt('{} - Нормализация векторов: vect1: {}->{}, vect2: {}->{}'.format(key, vect1_old, vect1, vect2_old, vect2), 'hide')
-                                        # TODO: binding for BK_NAME from kofs an not left/rigth side
-                                        v_first_bet_in = get_prop('first_bet_in')
-                                        vect_check_ok = True
-                                        if v_first_bet_in != 'auto':
-                                            if v_first_bet_in == 'fonbet':
-                                                vect1 = 'UP'
-                                                vect2 = 'DOWN'
-                                                if 'ТМ' in k2_type.upper() or 'ТБ' in k2_type.upper():
-                                                    if get_prop('total_first') not in k2_type:
-                                                        vect_check_ok = False
-                                            elif v_first_bet_in == 'olimp':
-                                                vect1 = 'DOWN'
-                                                vect2 = 'UP'
-                                                if 'ТМ' in k1_type.upper() or 'ТБ' in k1_type.upper():
-                                                    if get_prop('total_first') not in k1_type:
-                                                        vect_check_ok = False
-                                            if not vect_check_ok and get_prop('total_first') == 'any':
-                                                vect_check_ok = True
-                                        elif get_prop('total_first') in key:
-                                            # FB
-                                            if get_prop('total_first') in k2_type:
-                                                vect1 = 'UP'
-                                                vect2 = 'DOWN'
-                                            # OL
-                                            elif get_prop('total_first') in k1_type:
-                                                vect1 = 'DOWN'
-                                                vect2 = 'UP'
-                                            elif get_prop('total_first') == 'any':
-                                                pass
+                                bk1_score = str(val_json.get('bk1_score', 'bk1_score'))
+                                bk2_score = str(val_json.get('bk2_score', 'bk2_score'))
+                                score = '[' + bk1_score + '|' + bk2_score + ']'
+    
+                                sc1 = 0
+                                sc2 = 0
+                                try:
+                                    sc1 = int(bk2_score.split(':')[0])
+                                except BaseException:
+                                    pass
+    
+                                try:
+                                    sc2 = int(bk2_score.split(':')[1])
+                                except BaseException:
+                                    pass
+    
+                                v_time = val_json.get('time', 'v_time')
+                                minute = val_json.get('minute', 0)
+                                time_break_fonbet = val_json.get('time_break_fonbet')
+                                level_liga = val_json.get('is_top')
+                                period = val_json.get('period')
+                                time_last_upd = val_json.get('time_last_upd', 1)
+                                live_fork_total = val_json.get('live_fork_total', 0)
+                                live_fork = val_json.get('live_fork', 0)
+                                created_fork = val_json.get('created_fork', '')
+                                event_type = val_json.get('event_type')
+                                place = val_json.get('place')
+    
+                                # prnt(' ', 'hide')
+                                # prnt('GET ' + place.upper() + ' FORK: ' + name + ', ' + key, 'end')
+    
+                                fonbet_maxbet_fact = val_json.get('fonbet_maxbet_fact', {}).get(str(group_limit_id), 0)
+    
+                                deff_olimp = round(float(time.time() - float(val_json.get('time_req_olimp', 0.0))))
+                                deff_fonbet = round(float(time.time() - float(val_json.get('time_req_fonbet', 0.0))))
+                                curr_deff = max(0, deff_olimp, deff_fonbet)
+    
+                                bk1_bet_json = val_json.get('kof_olimp', {})
+                                bk2_bet_json = val_json.get('kof_fonbet', {})
+                                start_after_min = val_json.get('start_after_min', 0)
+    
+                                bk1_hist = bk1_bet_json.get('hist', {})
+                                bk2_hist = bk2_bet_json.get('hist', {})
+    
+                                base_line = bk2_bet_json.get('base_line', False)
+                                is_hot = bk2_bet_json.get('is_hot', False)
+    
+                                bk1_avg_change = bk1_hist.get('avg_change')
+                                bk2_avg_change = bk2_hist.get('avg_change')
+    
+                                bk1_kof_order = bk1_hist.get('order')
+                                bk2_kof_order = bk2_hist.get('order')
+    
+                                k1 = bk1_bet_json.get('factor', 0)
+                                k2 = bk2_bet_json.get('value', 0)
+    
+                                vect1 = bk1_bet_json.get('vector')
+                                vect2 = bk2_bet_json.get('vector')
+                                try:
+                                    info = key + ': ' + name + ', ' + \
+                                           'place: ' + str(place) + ', ' + \
+                                           'created: ' + created_fork + ', ' + \
+                                           k1_type + '=' + str(k1) + '/' + \
+                                           k2_type + '=' + str(k2) + ', ' + \
+                                           v_time + ' (' + str(minute) + ') ' + \
+                                           score + ' ' + str(pair_math) + \
+                                           ', live_fork: ' + str(live_fork) + \
+                                           ', live_fork_total: ' + str(live_fork_total) + \
+                                           ', max deff: ' + str(curr_deff) + \
+                                           ', event_type: ' + event_type + \
+                                           ', fonbet_maxbet_fact: ' + str(fonbet_maxbet_fact)
+                                except Exception as e:
+                                    exc_type, exc_value, exc_traceback = sys.exc_info()
+                                    err_str = str(e) + ' ' + str(repr(traceback.format_exception(exc_type, exc_value, exc_traceback)))
+                                    prnt('better: ' + err_str)
+                                    prnt('event_type: ' + event_type)
+                                    prnt('deff max: ' + str(curr_deff))
+                                    prnt('live fork total: ' + str(live_fork_total))
+                                    prnt('live fork: ' + str(live_fork))
+                                    prnt('pair_math: ' + str(pair_math))
+                                    prnt('score: ' + str(score))
+                                    prnt('minute: ' + str(minute))
+                                    prnt('time: ' + str(v_time))
+                                    prnt('k1: ' + str(k1))
+                                    prnt('k1_type: ' + str(k1_type))
+                                    prnt('k2: ' + str(k2))
+                                    prnt('k2_type: ' + str(k2_type))
+                                    prnt('name: ' + str(name))
+                                    prnt('key: ' + str(key))
+                                    prnt('val_json: ' + str(val_json))
+                                    prnt('vect1: ' + str(vect1))
+                                    prnt('vect2: ' + str(vect2))
+                                    info = ''
+                                if event_type in sport_list:
+                                    if vect1 and vect2:
+                                        max_deff = 6
+                                        if place == 'pre':
+                                            max_deff = 60
+                                        if curr_deff <= curr_deff and k1 > 0 < k2:
+                                            vect1_old = vect1
+                                            vect2_old = vect2
+                                            if vect1 == vect2:
+                                                vect1, vect2 = normalized_vector(vect1, k1, vect2, k2)
+                                                prnt('{} - Нормализация векторов: vect1: {}->{}, vect2: {}->{}'.format(key, vect1_old, vect1, vect2_old, vect2), 'hide')
+                                            # TODO: binding for BK_NAME from kofs an not left/rigth side
+                                            v_first_bet_in = get_prop('first_bet_in')
+                                            vect_check_ok = True
+                                            if v_first_bet_in != 'auto':
+                                                if v_first_bet_in == 'fonbet':
+                                                    vect1 = 'UP'
+                                                    vect2 = 'DOWN'
+                                                    if 'ТМ' in k2_type.upper() or 'ТБ' in k2_type.upper():
+                                                        if get_prop('total_first') not in k2_type:
+                                                            vect_check_ok = False
+                                                elif v_first_bet_in == 'olimp':
+                                                    vect1 = 'DOWN'
+                                                    vect2 = 'UP'
+                                                    if 'ТМ' in k1_type.upper() or 'ТБ' in k1_type.upper():
+                                                        if get_prop('total_first') not in k1_type:
+                                                            vect_check_ok = False
+                                                if not vect_check_ok and get_prop('total_first') == 'any':
+                                                    vect_check_ok = True
+                                            elif get_prop('total_first') in key:
+                                                # FB
+                                                if get_prop('total_first') in k2_type:
+                                                    vect1 = 'UP'
+                                                    vect2 = 'DOWN'
+                                                # OL
+                                                elif get_prop('total_first') in k1_type:
+                                                    vect1 = 'DOWN'
+                                                    vect2 = 'UP'
+                                                elif get_prop('total_first') == 'any':
+                                                    pass
+                                                else:
+                                                    vect_check_ok = False
+    
+                                            round_bet = int(get_prop('round_fork'))
+                                            total_bet = round(randint(total_bet_min, total_bet_max) / round_bet) * round_bet
+                                            # prnt('total_bet random: ' + str(total_bet), 'hide')
+                                            # prnt('start recalc_bets: ' + key, 'end')
+                                            recalc_bets()
+                                            # prnt('end recalc_bets: ' + key, 'end')
+                                            team_type, team_names = get_team_type(name_rus, name)
+                                            # team_junior - юнош.команды
+                                            # team_female - жен.команды
+                                            # team_stud - студ.команды
+                                            # team_res - рез - екоманды
+                                            # Проверим вилку на исключения
+                                            if check_fork(
+                                                    key, l, k1, k2, live_fork, live_fork_total, bk1_score, bk2_score, event_type, minute, time_break_fonbet, period, team_type, team_names, curr_deff,
+                                                    level_liga, is_hot, info
+                                            ) or DEBUG:
+                                                prnt('{} - Первая ставка в {}: vect1: {}->{}, vect2: {}->{}'.format(key, v_first_bet_in, vect1_old, vect1, vect2_old, vect2), 'hide')
+                                                prnt('OK - check_fork', 'hide')
+                                                now_timestamp = int(time.time())
+                                                last_timestamp = temp_lock_fork.get(key, now_timestamp)
+                                                if group_limit_id == '4':
+                                                    timeout_temp_sec = 60 * 15
+                                                else:
+                                                    timeout_temp_sec = 60
+                                                if 0 < (now_timestamp - last_timestamp) < timeout_temp_sec and len(server_forks) > 1:
+                                                    if key not in msg_excule_pushed:
+                                                        msg_excule_pushed.append(key)
+                                                        prnt(
+                                                            vstr='Вилка ' + str(key) + ' исключена, т.к. мы ее пытались проставить не успешно, но прошло менее ' + str(timeout_temp_sec) +  ' секунд и есть еще вилки,'
+                                                                                       'now:{}, last:{}, diff:{}'.format(now_timestamp, last_timestamp, now_timestamp - last_timestamp),
+                                                            hide=None,
+                                                            to_cl=True,
+                                                            type_='fork'
+                                                        )
+                                                else:
+                                                    if key in msg_excule_pushed:
+                                                        msg_excule_pushed.remove(key)
+                                                    temp_lock_fork.update({key: now_timestamp})
+                                                    cnt_act_acc = 0
+                                                    is_bet = 0
+                                                    cur_proc = round((1 - l) * 100, 2)
+                                                    fork_slice = int(get_prop('FORK_SLICE', 50))
+    
+                                                    prnt('% уникальности: ' + str(fork_slice))
+    
+                                                    if fork_slice:
+                                                        sql = cnt_acc_sql \
+                                                            .replace(':cur_proc', str(cur_proc)) \
+                                                            .replace(':live_fork', str(live_fork)) \
+                                                            .replace(':team_type', str(team_type)) \
+                                                            .replace(':is_top', str(level_liga)) \
+                                                            .replace(':acc_id', str(ACC_ID))
+    
+                                                        prnt('SQL:\n', 'hide')
+                                                        prnt(sql, 'hide')
+    
+                                                        cursor = db.execute_sql(sql)
+                                                        cnt_act_acc = cursor.fetchone()[0]
+    
+                                                        prnt('cnt_act_acc: ' + str(cnt_act_acc))
+    
+                                                        is_bet = randint(1, 100)
+    
+                                                        prnt('Активных акаунтов на вилку: ' + str(cnt_act_acc))
+                                                        prnt('Случайное число: ' + str(is_bet) + ', => ' + str(fork_slice))
+    
+                                                    if fork_slice <= is_bet or cnt_act_acc <= 5 or fork_slice == 0:
+                                                        prnt(vstr=' ' + key + ' ' + info, hide=None, to_cl=True)
+                                                        prnt(vstr='Делаю ставку: ' + key + ' ' + info, hide=None, to_cl=True)
+    
+                                                        info_csv.update({
+                                                            'user_id': str(USER_ID),
+                                                            'group_limit_id': group_limit_id,
+                                                            'live_fork': live_fork,
+                                                            'team_type': team_type,
+                                                            'summ_min': summ_min_stat,
+                                                            'maxbet_fact': get_prop('maxbet_fact', 'выкл'),
+                                                            'fonbet_maxbet_fact': fonbet_maxbet_fact,
+                                                            'fb_bk_type': get_prop('fonbet_s'),
+                                                            'first_bet_in': get_prop('first_bet_in'),
+                                                            'total_first': get_prop('total_first', 'auto'),
+                                                            'place': place
+                                                        })
+                                                        prnt('info_csv: ' + str(info_csv))
+                                                        prnt('{} - Первая ставка в {}: vect1-olimp: {}->{}, vect2-fonbet: {}->{}'.format(
+                                                            key, v_first_bet_in, vect1_old, vect1, vect2_old, vect2)
+                                                        )
+                                                        fork_success = go_bets(
+                                                            val_json.get('kof_olimp'), val_json.get('kof_fonbet'),
+                                                            key, curr_deff, vect1, vect2, sc1, sc2, created_fork, event_type,
+                                                            l, l_fisrt, level_liga, str(fork_slice), str(cnt_act_acc), info_csv
+                                                        )
                                             else:
-                                                vect_check_ok = False
-
-                                        round_bet = int(get_prop('round_fork'))
-                                        total_bet = round(randint(total_bet_min, total_bet_max) / round_bet) * round_bet
-                                        # prnt('total_bet random: ' + str(total_bet), 'hide')
-                                        # prnt('start recalc_bets: ' + key, 'end')
-                                        recalc_bets()
-                                        # prnt('end recalc_bets: ' + key, 'end')
-                                        team_type, team_names = get_team_type(name_rus, name)
-                                        # team_junior - юнош.команды
-                                        # team_female - жен.команды
-                                        # team_stud - студ.команды
-                                        # team_res - рез - екоманды
-                                        # Проверим вилку на исключения
-                                        if check_fork(
-                                                key, l, k1, k2, live_fork, live_fork_total, bk1_score, bk2_score, event_type, minute, time_break_fonbet, period, team_type, team_names, curr_deff,
-                                                level_liga, is_hot, info
-                                        ) or DEBUG:
-                                            prnt('{} - Первая ставка в {}: vect1: {}->{}, vect2: {}->{}'.format(key, v_first_bet_in, vect1_old, vect1, vect2_old, vect2), 'hide')
-                                            prnt('OK - check_fork', 'hide')
-                                            now_timestamp = int(time.time())
-                                            last_timestamp = temp_lock_fork.get(key, now_timestamp)
-                                            if group_limit_id == '4':
-                                                timeout_temp_sec = 60 * 15
-                                            else:
-                                                timeout_temp_sec = 60
-                                            if 0 < (now_timestamp - last_timestamp) < timeout_temp_sec and len(server_forks) > 1:
-                                                if key not in msg_excule_pushed:
-                                                    msg_excule_pushed.append(key)
-                                                    prnt(
-                                                        vstr='Вилка ' + str(key) + ' исключена, т.к. мы ее пытались проставить не успешно, но прошло менее ' + str(timeout_temp_sec) +  ' секунд и есть еще вилки,'
-                                                                                   'now:{}, last:{}, diff:{}'.format(now_timestamp, last_timestamp, now_timestamp - last_timestamp),
-                                                        hide=None,
-                                                        to_cl=True,
-                                                        type_='fork'
-                                                    )
-                                            else:
-                                                if key in msg_excule_pushed:
-                                                    msg_excule_pushed.remove(key)
-                                                temp_lock_fork.update({key: now_timestamp})
-                                                cnt_act_acc = 0
-                                                is_bet = 0
-                                                cur_proc = round((1 - l) * 100, 2)
-                                                fork_slice = int(get_prop('FORK_SLICE', 50))
-
-                                                prnt('% уникальности: ' + str(fork_slice))
-
-                                                if fork_slice:
-                                                    sql = cnt_acc_sql \
-                                                        .replace(':cur_proc', str(cur_proc)) \
-                                                        .replace(':live_fork', str(live_fork)) \
-                                                        .replace(':team_type', str(team_type)) \
-                                                        .replace(':is_top', str(level_liga)) \
-                                                        .replace(':acc_id', str(ACC_ID))
-
-                                                    prnt('SQL:\n', 'hide')
-                                                    prnt(sql, 'hide')
-
-                                                    cursor = db.execute_sql(sql)
-                                                    cnt_act_acc = cursor.fetchone()[0]
-
-                                                    prnt('cnt_act_acc: ' + str(cnt_act_acc))
-
-                                                    is_bet = randint(1, 100)
-
-                                                    prnt('Активных акаунтов на вилку: ' + str(cnt_act_acc))
-                                                    prnt('Случайное число: ' + str(is_bet) + ', => ' + str(fork_slice))
-
-                                                if fork_slice <= is_bet or cnt_act_acc <= 5 or fork_slice == 0:
-                                                    prnt(vstr=' ' + key + ' ' + info, hide=None, to_cl=True)
-                                                    prnt(vstr='Делаю ставку: ' + key + ' ' + info, hide=None, to_cl=True)
-
-                                                    info_csv.update({
-                                                        'user_id': str(USER_ID),
-                                                        'group_limit_id': group_limit_id,
-                                                        'live_fork': live_fork,
-                                                        'team_type': team_type,
-                                                        'summ_min': summ_min_stat,
-                                                        'maxbet_fact': get_prop('maxbet_fact', 'выкл'),
-                                                        'fonbet_maxbet_fact': fonbet_maxbet_fact,
-                                                        'fb_bk_type': get_prop('fonbet_s'),
-                                                        'first_bet_in': get_prop('first_bet_in'),
-                                                        'total_first': get_prop('total_first', 'auto'),
-                                                        'place': place
-                                                    })
-                                                    prnt('info_csv: ' + str(info_csv))
-                                                    prnt('{} - Первая ставка в {}: vect1-olimp: {}->{}, vect2-fonbet: {}->{}'.format(
-                                                        key, v_first_bet_in, vect1_old, vect1, vect2_old, vect2)
-                                                    )
-                                                    fork_success = go_bets(
-                                                        val_json.get('kof_olimp'), val_json.get('kof_fonbet'),
-                                                        key, curr_deff, vect1, vect2, sc1, sc2, created_fork, event_type,
-                                                        l, l_fisrt, level_liga, str(fork_slice), str(cnt_act_acc), info_csv
-                                                    )
-                                        else:
-                                            prnt('ERR - check_fork', 'hide')
-                                    elif curr_deff > max_deff:
+                                                prnt('ERR - check_fork', 'hide')
+                                        elif curr_deff > max_deff:
+                                            pass
+                                            prnt('ERR T - check_fork', 'hide')
+                                            # if key not in sleeping_forks:
+                                            #     sleeping_forks.append(key)
+                                            #     prnt('Sleeping forks: ' + str(deff_max) + ' sec (' + str(time.time()) + '), ' + str(key) + ': ' + str(val_json))
+                                    else:
+                                        # prnt('Вектор направления коф-та не определен: VECT1=' + str(vect1) + ', VECT2=' + str(vect2))
                                         pass
-                                        prnt('ERR T - check_fork', 'hide')
-                                        # if key not in sleeping_forks:
-                                        #     sleeping_forks.append(key)
-                                        #     prnt('Sleeping forks: ' + str(deff_max) + ' sec (' + str(time.time()) + '), ' + str(key) + ': ' + str(val_json))
                                 else:
-                                    # prnt('Вектор направления коф-та не определен: VECT1=' + str(vect1) + ', VECT2=' + str(vect2))
+                                    # prnt('Вилка исключена, т.к. вид спорта: ' + event_type + ', base_line: ' + str(base_line))
                                     pass
                             else:
-                                # prnt('Вилка исключена, т.к. вид спорта: ' + event_type + ', base_line: ' + str(base_line))
-                                pass
+                                for admin in ADMINS:
+                                    send_message_bot(admin, str(ACC_ID) + ': ' + 'Получена вилка с БК, с которыми я еще не умею работать: ' + name_bk1 + ' ' + name_bk2)
                     else:
                         pass
                     # ts = round(uniform(1, 3), 2)
