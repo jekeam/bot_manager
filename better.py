@@ -1345,8 +1345,8 @@ if __name__ == '__main__':
                                     # prnt('Вилка исключена, т.к. вид спорта: ' + event_type + ', base_line: ' + str(base_line))
                                     pass
                             else:
-                                for admin in ADMINS:
-                                    send_message_bot(admin, str(ACC_ID) + ': ' + 'Получена вилка с БК, с которыми я еще не умею работать: ' + name_bk1 + ' ' + name_bk2)
+                                prnt('Вилка исключена, c перепутанными БК, name_bk1: ' + name_bk1 + ', name_bk2: ' + str(name_bk2))
+                                
                     else:
                         pass
                     # ts = round(uniform(1, 3), 2)
