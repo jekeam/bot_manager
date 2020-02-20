@@ -115,7 +115,7 @@ class BetManager:
             self.sum_bet_stat = self.sum_bet
             self.sum_sell = None
 
-            self.group_limit_id = 0
+            self.group_limit_id = '0'
             self.sell_blocked = False
             self.bet_to_bet_timeout = 120
             self.session = ''
@@ -1088,7 +1088,7 @@ class BetManager:
 
                 self.session = res.get('fsid', '')
                 self.balance = float(res.get('saldo', 0.0))
-                self.group_limit_id = res.get('limitGroup', '0')
+                self.group_limit_id = str(res.get('limitGroup', '0'))
                 self.currency = res.get('currency').get('currency', 'RUB')
                 self.sell_blocked = res.get('attributes', {}).get("sellBlocked")
                 shared[self.bk_name]['timeout_fork'] = res.get('attributes', {}).get("betToBetDelay")
@@ -1601,6 +1601,8 @@ class BetManager:
 
         if self.limit_revet_maxbet > 0:
             revet_maxbet = ((k - 1) * self.max_bet)
+            if self.place == 'pre':
+                revet_maxbet = revet_maxbet / 10
             if revet_maxbet < self.limit_revet_maxbet:
                 err_str = self.msg_err.format(
                     self.tread_id + ': ' + sys._getframe().f_code.co_name,
@@ -1688,7 +1690,7 @@ class BetManager:
                 shared[self.bk_name + '_err'] = 'ok'
                 prnt(vstr='Ставка в ' + self.bk_name + ' успешно завершена, id = ' + str(self.reg_id), hide='hide', to_cl=True)
                 try:
-                    url_rq = 'http://' + get_prop('server_ip') + ':8888/set/fonbet_maxbet_fact/' + self.key + '/' + str(self.group_limit_id) + '/' + str(self.sum_bet * self.cur_rate)
+                    url_rq = 'http://' + get_prop('server_ip') + ':8888/set/fonbet_maxbet_fact/' + self.key + '/' + self.group_limit_id + '/' + str(self.sum_bet * self.cur_rate)
                     rs = requests.get(url=url_rq, timeout=1).text
                     prnt(self.msg.format(self.tread_id + ': ' + sys._getframe().f_code.co_name, 'save url_rq: {}, answer: {}'.format(url_rq, rs)))
                 except Exception as e:
