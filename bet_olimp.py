@@ -6,14 +6,14 @@ from math import floor
 import time
 from retry_requests import requests_retry_session, requests_retry_session_post
 from exceptions import FonbetBetError
-from meta_ol import get_xtoken_bet
+from meta_ol import get_xtoken_bet, olimp_prot
 
 urllib3.disable_warnings(urllib3.exceptions.InsecureRequestWarning)
 
 DEFAULT_ACCOUNT = {"login": 0, "passw": ""}
 
 # olimp_url = "https://194.135.82.124/api/{}"
-olimp_url2 = 'https://' + get_prop('server_olimp') + '/api/{}'
+olimp_url2 = olimp_prot + get_prop('server_olimp') + '/api/{}'
 # base_url = "https://olimp.com/api/{}"
 
 url_test = "http://httpbin.org/delay/3"
@@ -117,10 +117,10 @@ class OlimpBot:
             prnt(e)
             raise ValueError(e)
 
-    def get_balance(self, in_play:bool=False):
+    def get_balance(self, in_play: bool = False):
         if self.balance == 0.0:
             self.sign_in()
-        
+
         if in_play:
             return round(self.balance_in_play)
         else:
@@ -337,7 +337,7 @@ class OlimpBot:
 
         payload = {}
 
-        payload["filter"] = filter # только не расчитанные
+        payload["filter"] = filter  # только не расчитанные
         payload["offset"] = offset
         payload["session"] = self.session_payload["session"]
         payload["lang_id"] = "0"
