@@ -620,17 +620,19 @@ def go_bets(wag_ol, wag_fb, key, deff_max, vect1, vect2, sc1, sc2, created, even
                     prnt('msg_errs: ' + str(msg_errs))
                     # msg_errs = re.findall(r'(Ошибка: BetIsLost - Ошибка баланса:.*\.\|\.\s\[)', str(msg_errs))[0].replace('.|. [', '')
                     for m in re.findall(
-                        r'(Ошибка баланса: Одна из ставок больше баланса \d*>\d* \d*\d*)|' + \
-                           '(Ошибка баланса: Сумма после пересчета меньше min_bet \d* < \d*)|'  + \
+                            r'(Ошибка баланса: Одна из ставок больше баланса \d*>\d* \d*\d*)|' + \
+                            '(Ошибка баланса: Сумма после пересчета меньше min_bet \d* < \d*)|' + \
                             '(Ошибка баланса: Сумма одной из ставок после пересчета меньше \d* рублей \d* \d*)|'
                             '(Ошибка баланса: Сумма общей ставки \d* после пересчета меньше допустимой \d*)'
-                        , msg_errs)[0]:
+                            , msg_errs)[0]:
                         if m:
                             prnt('msg_errs post: ' + str(m))
                             bal1 = OlimpBot(OLIMP_USER).get_balance()  # Баланс в БК1
                             bal2 = FonbetBot(FONBET_USER).get_balance()  # Баланс в БК2
-                            for admin in ADMINS:
-                                send_message_bot(admin, str(ACC_ID) + ': ' + m + ' - вилка ' + key + ' исключена,  k1={}, k2={}, bal1={}, bal2={}'.format(k1, k2, bal1, bal2))
+                            bal_small = ref_bal_small(bal1, bal2)
+                            if not bal_small:
+                                for admin in ADMINS:
+                                    send_message_bot(admin, str(ACC_ID) + ': ' + m + ' - вилка ' + key + ' исключена,  k1={}, k2={}, bal1={}, bal2={}'.format(k1, k2, bal1, bal2))
                             break
                 except Exception as e:
                     prnt('Error parse msg: ' + str(msg_errs) + ', ' + str(e))
@@ -846,7 +848,7 @@ cnt_acc_sql = "select count(*)\n" + \
 
 def ref_bal_small(bal1, bal2):
     if int(get_prop('proc_by_max')) > 0:
-        min_sum = int(get_prop('summ_min')) * 3 
+        min_sum = int(get_prop('summ_min')) * 3
     else:
         min_sum = int(get_prop('summ')) / 2
     return (bal1 <= min_sum or bal2 <= min_sum)
@@ -1017,7 +1019,7 @@ if __name__ == '__main__':
                     bal_small = ref_bal_small(bal1, bal2)
 
                     msg_str = ''
-                    
+
                     if group_limit_id == '4' and not start_message_send:
                         msg_str = msg_str + 'Обнаружена порезка до 4й группы\n'
                         summ_min_stat = 60
@@ -1099,25 +1101,25 @@ if __name__ == '__main__':
                             pair_math = val_json.get('pair_math', 'pair_math')
                             name_bk1 = val_json.get('name_bk1')
                             name_bk2 = val_json.get('name_bk2')
-                            
+
                             if name_bk1 == 'olimp' and name_bk2 == 'fonbet':
 
                                 bk1_score = str(val_json.get('bk1_score', 'bk1_score'))
                                 bk2_score = str(val_json.get('bk2_score', 'bk2_score'))
                                 score = '[' + bk1_score + '|' + bk2_score + ']'
-    
+
                                 sc1 = 0
                                 sc2 = 0
                                 try:
                                     sc1 = int(bk2_score.split(':')[0])
                                 except BaseException:
                                     pass
-    
+
                                 try:
                                     sc2 = int(bk2_score.split(':')[1])
                                 except BaseException:
                                     pass
-    
+
                                 v_time = val_json.get('time', 'v_time')
                                 minute = val_json.get('minute', 0)
                                 time_break_fonbet = val_json.get('time_break_fonbet')
@@ -1129,35 +1131,35 @@ if __name__ == '__main__':
                                 created_fork = val_json.get('created_fork', '')
                                 event_type = val_json.get('event_type')
                                 place = val_json.get('place')
-    
+
                                 # prnt(' ', 'hide')
                                 # prnt('GET ' + place.upper() + ' FORK: ' + name + ', ' + key, 'end')
-    
+
                                 fonbet_maxbet_fact = val_json.get('fonbet_maxbet_fact', {}).get(str(group_limit_id), 0)
-    
+
                                 deff_olimp = round(float(time.time() - float(val_json.get('time_req_olimp', 0.0))))
                                 deff_fonbet = round(float(time.time() - float(val_json.get('time_req_fonbet', 0.0))))
                                 curr_deff = max(0, deff_olimp, deff_fonbet)
-    
+
                                 bk1_bet_json = val_json.get('kof_olimp', {})
                                 bk2_bet_json = val_json.get('kof_fonbet', {})
                                 start_after_min = val_json.get('start_after_min', 0)
-    
+
                                 bk1_hist = bk1_bet_json.get('hist', {})
                                 bk2_hist = bk2_bet_json.get('hist', {})
-    
+
                                 base_line = bk2_bet_json.get('base_line', False)
                                 is_hot = bk2_bet_json.get('is_hot', False)
-    
+
                                 bk1_avg_change = bk1_hist.get('avg_change')
                                 bk2_avg_change = bk2_hist.get('avg_change')
-    
+
                                 bk1_kof_order = bk1_hist.get('order')
                                 bk2_kof_order = bk2_hist.get('order')
-    
+
                                 k1 = bk1_bet_json.get('factor', 0)
                                 k2 = bk2_bet_json.get('value', 0)
-    
+
                                 vect1 = bk1_bet_json.get('vector')
                                 vect2 = bk2_bet_json.get('vector')
                                 try:
@@ -1237,7 +1239,7 @@ if __name__ == '__main__':
                                                     pass
                                                 else:
                                                     vect_check_ok = False
-    
+
                                             round_bet = int(get_prop('round_fork'))
                                             total_bet = round(randint(total_bet_min, total_bet_max) / round_bet) * round_bet
                                             # prnt('total_bet random: ' + str(total_bet), 'hide')
@@ -1266,8 +1268,10 @@ if __name__ == '__main__':
                                                     if key not in msg_excule_pushed:
                                                         msg_excule_pushed.append(key)
                                                         prnt(
-                                                            vstr='Вилка ' + str(key) + ' исключена, т.к. мы ее пытались проставить не успешно, но прошло менее ' + str(timeout_temp_sec) +  ' секунд и есть еще вилки,'
-                                                                                       'now:{}, last:{}, diff:{}'.format(now_timestamp, last_timestamp, now_timestamp - last_timestamp),
+                                                            vstr='Вилка ' + str(key) + ' исключена, т.к. мы ее пытались проставить не успешно, но прошло менее ' + str(timeout_temp_sec) + ' секунд и есть еще вилки,'
+                                                                                                                                                                                           'now:{}, last:{}, diff:{}'.format(now_timestamp,
+                                                                                                                                                                                                                             last_timestamp,
+                                                                                                                                                                                                                             now_timestamp - last_timestamp),
                                                             hide=None,
                                                             to_cl=True,
                                                             type_='fork'
@@ -1280,9 +1284,9 @@ if __name__ == '__main__':
                                                     is_bet = 0
                                                     cur_proc = round((1 - l) * 100, 2)
                                                     fork_slice = int(get_prop('FORK_SLICE', 50))
-    
+
                                                     prnt('% уникальности: ' + str(fork_slice))
-    
+
                                                     if fork_slice:
                                                         sql = cnt_acc_sql \
                                                             .replace(':cur_proc', str(cur_proc)) \
@@ -1290,24 +1294,24 @@ if __name__ == '__main__':
                                                             .replace(':team_type', str(team_type)) \
                                                             .replace(':is_top', str(level_liga)) \
                                                             .replace(':acc_id', str(ACC_ID))
-    
+
                                                         prnt('SQL:\n', 'hide')
                                                         prnt(sql, 'hide')
-    
+
                                                         cursor = db.execute_sql(sql)
                                                         cnt_act_acc = cursor.fetchone()[0]
-    
+
                                                         prnt('cnt_act_acc: ' + str(cnt_act_acc))
-    
+
                                                         is_bet = randint(1, 100)
-    
+
                                                         prnt('Активных акаунтов на вилку: ' + str(cnt_act_acc))
                                                         prnt('Случайное число: ' + str(is_bet) + ', => ' + str(fork_slice))
-    
+
                                                     if fork_slice <= is_bet or cnt_act_acc <= 5 or fork_slice == 0:
                                                         prnt(vstr=' ' + key + ' ' + info, hide=None, to_cl=True)
                                                         prnt(vstr='Делаю ставку: ' + key + ' ' + info, hide=None, to_cl=True)
-    
+
                                                         info_csv.update({
                                                             'user_id': str(USER_ID),
                                                             'group_limit_id': group_limit_id,
@@ -1346,7 +1350,7 @@ if __name__ == '__main__':
                                     pass
                             else:
                                 prnt('Вилка исключена, c перепутанными БК, name_bk1: ' + name_bk1 + ', name_bk2: ' + str(name_bk2))
-                                
+
                     else:
                         pass
                     # ts = round(uniform(1, 3), 2)
