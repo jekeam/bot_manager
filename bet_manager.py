@@ -1091,6 +1091,8 @@ class BetManager:
                 self.group_limit_id = str(res.get('limitGroup', '0'))
                 self.currency = res.get('currency').get('currency', 'RUB')
                 self.sell_blocked = res.get('attributes', {}).get("sellBlocked")
+                if self.sell_blocked:
+                    self.group_limit_id = '4'
                 shared[self.bk_name]['timeout_fork'] = res.get('attributes', {}).get("betToBetDelay")
 
             if not self.session:
@@ -1602,7 +1604,11 @@ class BetManager:
         if self.limit_revet_maxbet > 0:
             revet_maxbet = ((k - 1) * self.max_bet)
             if self.place == 'pre':
-                revet_maxbet = revet_maxbet / 10
+                if self.group_limit_id == '4':
+                    revet_maxbet = revet_maxbet
+                else:
+                    revet_maxbet = revet_maxbet / 10
+                    
             if revet_maxbet < self.limit_revet_maxbet:
                 err_str = self.msg_err.format(
                     self.tread_id + ': ' + sys._getframe().f_code.co_name,
