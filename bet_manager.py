@@ -86,7 +86,7 @@ class BetManager:
             self.event_type = bk_container['event_type']
             self.key = bk_container.get('key', '')
             self.place = bk_container.get('place', '')
-            self.level_liga = bk_container.get('level_liga', '')
+            self.level_liga = bk_container.get('level_liga')
             self.summ_min = int(bk_container.get('summ_min', '0'))
             self.round = int(bk_container.get('round', 1))
             self.dop_stat = dict()
