@@ -249,10 +249,16 @@ def check_fork(key, L, k1, k2, live_fork, live_fork_total, bk1_score, bk2_score,
         if live_fork_total > long_livers_max:
             fork_exclude_text = fork_exclude_text + 'Вилка ' + key + ' исключена т.к. живет в общем больше ' + str(long_livers) + ' сек. \n'
 
-    if get_prop('top') == 'top' and level_liga != 'top':
-        fork_exclude_text = fork_exclude_text + 'Вилка исключена т.к. это не топ лига: ' + name_rus + '\n'
-    elif get_prop('top') == 'middle' and level_liga not in ('top', 'middle'):
-        fork_exclude_text = fork_exclude_text + 'Вилка исключена т.к. это шлак лига: ' + name_rus + '\n'
+    try:
+        limit_revet_maxbet = max(map(int, get_prop('limit_revet_maxbet').replace(' ', '').split('-')))
+        if limit_revet_maxbet == 0:
+            raise ValueError('limit_revet_maxbet not found')
+    except:
+        # If "limit_revet_maxbet" is set, this check will be later
+        if get_prop('top') == 'top' and level_liga != 'top':
+            fork_exclude_text = fork_exclude_text + 'Вилка исключена т.к. это не топ лига: ' + name_rus + '\n'
+        elif get_prop('top') == 'middle' and level_liga not in ('top', 'middle'):
+            fork_exclude_text = fork_exclude_text + 'Вилка исключена т.к. это шлак лига: ' + name_rus + '\n'
 
     if get_prop('hot', 'выкл') == 'вкл' and not is_hot:
         fork_exclude_text = fork_exclude_text + 'Вилка исключена т.к. это не популярная катировка: ' + key + '\n'
@@ -498,6 +504,7 @@ def go_bets(wag_ol, wag_fb, key, deff_max, vect1, vect2, sc1, sc2, created, even
             'summ_min': summ_min,
             'round': int(get_prop('round_fork')),
             'place': info_csv['place'],
+            'level_liga': level_liga,
         }
         shared['fonbet'] = {
             'acc_id': ACC_ID,
@@ -517,6 +524,7 @@ def go_bets(wag_ol, wag_fb, key, deff_max, vect1, vect2, sc1, sc2, created, even
             'summ_min': summ_min,
             'round': int(get_prop('round_fork')),
             'place': info_csv['place'],
+            'level_liga': level_liga,
         }
         if '(' in fonbet_bet_type:
             shared['olimp']['bet_total'] = float(re.findall(r'\((.*)\)', fonbet_bet_type)[0])

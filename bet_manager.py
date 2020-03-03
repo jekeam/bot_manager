@@ -86,6 +86,7 @@ class BetManager:
             self.event_type = bk_container['event_type']
             self.key = bk_container.get('key', '')
             self.place = bk_container.get('place', '')
+            self.level_liga = bk_container.get('level_liga', '')
             self.summ_min = int(bk_container.get('summ_min', '0'))
             self.round = int(bk_container.get('round', 1))
             self.dop_stat = dict()
@@ -240,9 +241,16 @@ class BetManager:
             self.min_bet = 0
 
             self.first_bet_in = get_prop('first_bet_in')
-            self.limit_revet_maxbet = get_prop('limit_revet_maxbet')
-            if self.limit_revet_maxbet:
-                self.limit_revet_maxbet = int(self.limit_revet_maxbet)
+
+            self.limit_revet_minbet = 0
+            self.limit_revet_maxbet = 0
+            v_limit_revet_maxbet = get_prop('limit_revet_maxbet')
+            if v_limit_revet_maxbet != '0':
+                try:
+                    self.limit_revet_minbet = min(map(int, v_limit_revet_maxbet.replace(' ', '').split('-')))
+                    self.limit_revet_maxbet = max(map(int, v_limit_revet_maxbet.replace(' ', '').split('-')))
+                except:
+                    pass
 
             self.time_req = 0
             self.time_req_opp = 0
@@ -1599,7 +1607,7 @@ class BetManager:
         shared[self.bk_name]['max_bet'] = self.max_bet
 
         prnt(self.msg.format(self.tread_id + ': ' + sys._getframe().f_code.co_name, 'min_amount=' + str(self.min_bet) + ', max_amount=' + str(self.max_bet) + ', sum bet=' + str(self.sum_bet)))
-        prnt(self.msg.format(self.tread_id + ': ' + sys._getframe().f_code.co_name, 'limit_revet_maxbet:{}, k:{}'.format(self.limit_revet_maxbet, k)))
+        prnt(self.msg.format(self.tread_id + ': ' + sys._getframe().f_code.co_name, 'limit_revet_minbet:{}, limit_revet_maxbet:{}, k:{}'.format(self.limit_revet_minbet, self.limit_revet_maxbet, k)))
 
         if self.limit_revet_maxbet > 0:
             revet_maxbet = ((k - 1) * self.max_bet)
@@ -1609,11 +1617,28 @@ class BetManager:
                 else:
                     revet_maxbet = revet_maxbet / 10
                     
-            if revet_maxbet < self.limit_revet_maxbet:
+            if revet_maxbet < self.limit_revet_minbet:
                 err_str = self.msg_err.format(
                     self.tread_id + ': ' + sys._getframe().f_code.co_name,
-                    'ТОП в у.е. - error: k1={}, max_bet={}, prop_val={}, cur_val={}'.format(k, self.max_bet, self.limit_revet_maxbet, revet_maxbet)
+                    'ТОП в у.е. - error: k1={}, max_bet={}, prop_val_min={}, cur_val={}'.format(k, self.max_bet, self.limit_revet_minbet, revet_maxbet)
                 )
+                prnt(err_str)
+                raise BetError(err_str)
+            elif revet_maxbet >= self.limit_revet_minbet and revet_maxbet < self.limit_revet_maxbet:
+                err_str = ''
+                cur_prop_top = get_prop('top')
+                if (cur_prop_top == 'top' and self.level_liga != 'top') or (cur_prop_top == 'middle' and self.level_liga not in ('top', 'middle')):
+                    err_str = self.msg_err.format(
+                        self.tread_id + ': ' + sys._getframe().f_code.co_name,
+                        'ТОП в у.е. - error: Вилка исключена т.к. это лига {} не {}, k1={}, max_bet={}, prop_val_min={}, prop_val_max={}, cur_val={}'.format(
+                            self.level_liga,
+                            cur_prop_top,
+                            k, self.max_bet,
+                            self.limit_revet_minbet,
+                            self.limit_revet_maxbet, 
+                            revet_maxbet
+                        )
+                    )
                 prnt(err_str)
                 raise BetError(err_str)
             else:

@@ -69,7 +69,7 @@ prop_abr = {
 
     "MAXBET_FACT": {"abr": "Мaxbet по ведущему", "type": "str", "max": "", "min": "", "access_list": on_off, "error": ""},
     "CHECK_MAX_BET": {"abr": "Проверка maxbet", "type": "str", "max": "", "min": "", "access_list": on_off, "error": ""},
-    "LIMIT_REVET_MAXBET": {"abr": "ТОП в у.е. (руб)", "type": "int", "max": "", "min": "", "access_list": [], "default": 0, "error": ""},
+    "LIMIT_REVET_MAXBET": {"abr": "ТОП в у.е. (руб)", "type": "str", "max": "", "min": "", "access_list": [], "default": "0", "error": ""},
     "SUM_BY_MAX": {"abr": "Пересчет maxbet", "type": "str", "max": "", "min": "", "access_list": on_off, "error": ""},
     "PROC_BY_MAX": {"abr": "% от maxbet", "type": "int", "max": "100", "min": "0", "access_list": [], "default": 0, "error": ""},
 
