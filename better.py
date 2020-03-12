@@ -831,7 +831,8 @@ cnt_acc_sql = "select count(*)\n" + \
               "    sum(case when prop = 'FORK_LIFE_TIME' and val <= :live_fork then 1 else 0 end) as live_fork,\n" + \
               "    coalesce(sum(case when prop = 'FORK_LIFE_TIME_MAX' and val >= :live_fork then 1 else null end), 1) as live_fork_max,\n" + \
               "    sum(case when (prop = upper(':team_type') and val = 'ВКЛ') or ':team_type' = '' then 1 else 0 end) as team,\n" + \
-              "    1 as top\n" + \
+              "    coalesce(sum(case when prop = 'TOP' and val = 'top' and ':is_top' != 'top' then 0 else null end), 1) as top,\n" + \
+              "    coalesce(sum(case when prop = 'TOP' and val = 'middle' and ':is_top' not in ('top', 'middle') then 0 else null end), 1) as middle\n" + \
               "  from (\n" + \
               "    select a.id, upper(p.`key`) as prop, upper(p.val) as val\n" + \
               "    from properties p\n" + \
@@ -848,7 +849,8 @@ cnt_acc_sql = "select count(*)\n" + \
               "  and live_fork = 1\n" + \
               "  and live_fork_max = 1\n" + \
               "  and team >= 1\n" + \
-              "  and top = 1;"
+              "  and top = 1\n" + \
+              "  and middle = 1;"
               # TODO #   "    coalesce(sum(case when prop = 'TOP' and val = 'top' and ':is_top' != 'top' then 0 else null end), 1) as top\n" + \
 
 
@@ -1272,7 +1274,7 @@ if __name__ == '__main__':
                                                 if group_limit_id == '4':
                                                     timeout_temp_sec = 60 * 15
                                                 else:
-                                                    timeout_temp_sec = 60
+                                                    timeout_temp_sec = 60 * 5
                                                 if 0 < (now_timestamp - last_timestamp) < timeout_temp_sec and len(server_forks) > 1:
                                                     if key not in msg_excule_pushed:
                                                         msg_excule_pushed.append(key)
