@@ -831,7 +831,7 @@ cnt_acc_sql = "select count(*)\n" + \
               "    sum(case when prop = 'FORK_LIFE_TIME' and val <= :live_fork then 1 else 0 end) as live_fork,\n" + \
               "    coalesce(sum(case when prop = 'FORK_LIFE_TIME_MAX' and val >= :live_fork then 1 else null end), 1) as live_fork_max,\n" + \
               "    sum(case when (prop = upper(':team_type') and val = 'ВКЛ') or ':team_type' = '' then 1 else 0 end) as team,\n" + \
-              "    coalesce(sum(case when prop = 'TOP' and val = 'ВКЛ' and :is_top != 'True' then 0 else null end), 1) as top\n" + \
+              "    1 as top\n" + \
               "  from (\n" + \
               "    select a.id, upper(p.`key`) as prop, upper(p.val) as val\n" + \
               "    from properties p\n" + \
@@ -849,6 +849,7 @@ cnt_acc_sql = "select count(*)\n" + \
               "  and live_fork_max = 1\n" + \
               "  and team >= 1\n" + \
               "  and top = 1;"
+              # TODO #   "    coalesce(sum(case when prop = 'TOP' and val = 'top' and ':is_top' != 'top' then 0 else null end), 1) as top\n" + \
 
 
 # wag_fb:{'event': '12797479', 'factor': '921', 'param': '', 'score': '0:0', 'value': '2.35'}
