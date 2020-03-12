@@ -512,6 +512,7 @@ class BetManager:
                             if recalc_sum_if_maxbet == 'вкл':
                                 self.recalc_sum_by_maxbet(shared)
                         except BetIsLost as e:
+                            prnt(self.msg.format(self.tread_id + ': ' + sys._getframe().f_code.co_name, 'except BetIsLost as e: ' + str(e)))
                             if recalc_sum_if_maxbet == 'вкл':
                                 self.recalc_sum_by_maxbet(shared)
                             else:
