@@ -167,7 +167,7 @@ class Account(BaseModel):
 
 class Message(BaseModel):
     id = AutoField
-    to_user = IntegerField(null=False)
+    to_user = CharField(null=False, max_length=100)
     text = CharField(null=True, max_length=4096)
     blob = BlobField(default='')
     file_name = CharField(null=True)

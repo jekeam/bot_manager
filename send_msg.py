@@ -4,7 +4,7 @@ import db_model
 import bot_prop
 print(sys.argv)
 msg = sys.argv[1]
-channels_id = ['@auto_bro_scan', ]
+channels_id = ['-1001334950920', ]
 if msg:
     # for admin in bot_prop.ADMINS:
     #     db_model.send_message_bot(admin, msg)
