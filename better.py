@@ -249,10 +249,16 @@ def check_fork(key, L, k1, k2, live_fork, live_fork_total, bk1_score, bk2_score,
         if live_fork_total > long_livers_max:
             fork_exclude_text = fork_exclude_text + 'Вилка ' + key + ' исключена т.к. живет в общем больше ' + str(long_livers) + ' сек. \n'
 
-    if get_prop('top') == 'top' and level_liga != 'top':
-        fork_exclude_text = fork_exclude_text + 'Вилка исключена т.к. это не топ лига: ' + name_rus + '\n'
-    elif get_prop('top') == 'middle' and level_liga not in ('top', 'middle'):
-        fork_exclude_text = fork_exclude_text + 'Вилка исключена т.к. это шлак лига: ' + name_rus + '\n'
+    try:
+        limit_revet_maxbet = max(map(int, get_prop('limit_revet_maxbet').replace(' ', '').split('-')))
+        if limit_revet_maxbet == 0:
+            raise ValueError('limit_revet_maxbet not found')
+    except:
+        # If "limit_revet_maxbet" is set, this check will be later
+        if get_prop('top') == 'top' and level_liga != 'top':
+            fork_exclude_text = fork_exclude_text + 'Вилка исключена т.к. это не топ лига: ' + name_rus + '\n'
+        elif get_prop('top') == 'middle' and level_liga not in ('top', 'middle'):
+            fork_exclude_text = fork_exclude_text + 'Вилка исключена т.к. это шлак лига: ' + name_rus + '\n'
 
     if get_prop('hot', 'выкл') == 'вкл' and not is_hot:
         fork_exclude_text = fork_exclude_text + 'Вилка исключена т.к. это не популярная катировка: ' + key + '\n'
@@ -498,6 +504,7 @@ def go_bets(wag_ol, wag_fb, key, deff_max, vect1, vect2, sc1, sc2, created, even
             'summ_min': summ_min,
             'round': int(get_prop('round_fork')),
             'place': info_csv['place'],
+            'level_liga': level_liga,
         }
         shared['fonbet'] = {
             'acc_id': ACC_ID,
@@ -517,6 +524,7 @@ def go_bets(wag_ol, wag_fb, key, deff_max, vect1, vect2, sc1, sc2, created, even
             'summ_min': summ_min,
             'round': int(get_prop('round_fork')),
             'place': info_csv['place'],
+            'level_liga': level_liga,
         }
         if '(' in fonbet_bet_type:
             shared['olimp']['bet_total'] = float(re.findall(r'\((.*)\)', fonbet_bet_type)[0])
@@ -823,7 +831,8 @@ cnt_acc_sql = "select count(*)\n" + \
               "    sum(case when prop = 'FORK_LIFE_TIME' and val <= :live_fork then 1 else 0 end) as live_fork,\n" + \
               "    coalesce(sum(case when prop = 'FORK_LIFE_TIME_MAX' and val >= :live_fork then 1 else null end), 1) as live_fork_max,\n" + \
               "    sum(case when (prop = upper(':team_type') and val = 'ВКЛ') or ':team_type' = '' then 1 else 0 end) as team,\n" + \
-              "    coalesce(sum(case when prop = 'TOP' and val = 'ВКЛ' and :is_top != 'True' then 0 else null end), 1) as top\n" + \
+              "    coalesce(sum(case when prop = 'TOP' and val = 'top' and ':is_top' != 'top' then 0 else null end), 1) as top,\n" + \
+              "    coalesce(sum(case when prop = 'TOP' and val = 'middle' and ':is_top' not in ('top', 'middle') then 0 else null end), 1) as middle\n" + \
               "  from (\n" + \
               "    select a.id, upper(p.`key`) as prop, upper(p.val) as val\n" + \
               "    from properties p\n" + \
@@ -840,7 +849,9 @@ cnt_acc_sql = "select count(*)\n" + \
               "  and live_fork = 1\n" + \
               "  and live_fork_max = 1\n" + \
               "  and team >= 1\n" + \
-              "  and top = 1;"
+              "  and top = 1\n" + \
+              "  and middle = 1;"
+              # TODO #   "    coalesce(sum(case when prop = 'TOP' and val = 'top' and ':is_top' != 'top' then 0 else null end), 1) as top\n" + \
 
 
 # wag_fb:{'event': '12797479', 'factor': '921', 'param': '', 'score': '0:0', 'value': '2.35'}
@@ -1263,7 +1274,7 @@ if __name__ == '__main__':
                                                 if group_limit_id == '4':
                                                     timeout_temp_sec = 60 * 15
                                                 else:
-                                                    timeout_temp_sec = 60
+                                                    timeout_temp_sec = 60 * 5
                                                 if 0 < (now_timestamp - last_timestamp) < timeout_temp_sec and len(server_forks) > 1:
                                                     if key not in msg_excule_pushed:
                                                         msg_excule_pushed.append(key)

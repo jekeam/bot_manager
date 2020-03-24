@@ -6,7 +6,7 @@ import utils
 
 # ol_url_api = "https://{}.olimp-proxy.ru/api/{}"
 
-olimp_prot = 'http://'
+olimp_prot = 'https://'
 ol_url_api = olimp_prot + get_prop('server_olimp') + '/api/{}'
 
 # ol_url_api_http = 'http://' + get_prop('server_olimp', 'olimpkzapi.ru')
