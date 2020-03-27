@@ -872,7 +872,7 @@ def sender(context):
                 elif msg.file_type == 'message':
                     try:
                         try:
-                            context.bot.send_message(msg.to_user, msg.text[0:4000].strip(), parse_mode=telegram.ParseMode.MARKDOWN)
+                            context.bot.send_message(msg.to_user, msg.text[0:4000].strip(), parse_mode=telegram.ParseMode.MARKDOWN, disable_web_page_preview=False)
                         except Exception as e:
                             if 't parse entities: ' in str(e):
                                 context.bot.send_message(msg.to_user, msg.text[0:4000].strip().replace("_", "\\_").replace("*", "\\*").replace("[", "\\[").replace("`", "\\`"), parse_mode=telegram.ParseMode.MARKDOWN)
