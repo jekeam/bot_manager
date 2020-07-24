@@ -33,7 +33,7 @@ IP_SERVER = '193.176.79.17:8888'
 # }
 
 REQUEST_KWARGS = {
-    'proxy_url': new_proxy_http,
+    # 'proxy_url': new_proxy_http,
     'read_timeout': 60,
     'connect_timeout': 30
 }
